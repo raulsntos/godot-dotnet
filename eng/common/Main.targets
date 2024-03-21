@@ -1,0 +1,10 @@
+<Project>
+
+  <Import Project="tools\Empty.targets" Condition="'$(_SuppressAllTargets)' == 'true'" />
+
+  <Import Project="tools\Versions.targets" Condition="'$(_SuppressAllTargets)' != 'true'" />
+  <Import Project="tools\ProjectDefaults.targets" Condition="'$(_SuppressAllTargets)' != 'true'" />
+  <Import Project="tools\Tests.targets" Condition="'$(_SuppressAllTargets)' != 'true'" />
+  <Import Project="tools\Nuspec.targets" Condition="'$(_SuppressAllTargets)' != 'true'" />
+
+</Project>

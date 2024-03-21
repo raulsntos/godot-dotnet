@@ -1,0 +1,36 @@
+<Project>
+  <PropertyGroup>
+    <!-- Version for this repository. -->
+    <VersionPrefix>4.3.0</VersionPrefix>
+    <!-- Label to use when producing official prerelease builds. -->
+    <!-- Do not change. Use the command arguments to produce a build with a different label. -->
+    <PreReleaseVersionLabel>nightly</PreReleaseVersionLabel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- System -->
+    <SystemCommandLineVersion>2.0.0-beta4.23326.1</SystemCommandLineVersion>
+    <!-- MSBuild -->
+    <MicrosoftBuildTasksCoreVersion>17.8.3</MicrosoftBuildTasksCoreVersion>
+    <!-- Roslyn -->
+    <MicrosoftCodeAnalysisAnalyzersVersion>3.3.4</MicrosoftCodeAnalysisAnalyzersVersion>
+    <MicrosoftCodeAnalysisCSharpVersion>4.8.0</MicrosoftCodeAnalysisCSharpVersion>
+    <MIcrosoftCodeAnalysisTestingVerifiersVersion>1.1.2-beta1.24169.1</MIcrosoftCodeAnalysisTestingVerifiersVersion>
+    <MicrosoftCodeAnalysisCSharpCodeFixTestingVersion>1.1.2-beta1.24169.1</MicrosoftCodeAnalysisCSharpCodeFixTestingVersion>
+    <MicrosoftCodeAnalysisCSharpAnalyzerTestingVersion>1.1.2-beta1.24169.1</MicrosoftCodeAnalysisCSharpAnalyzerTestingVersion>
+    <MicrosoftCodeAnalysisCSharpSourceGeneratorsTestingVersion>1.1.2-beta1.24169.1</MicrosoftCodeAnalysisCSharpSourceGeneratorsTestingVersion>
+    <!-- NuGet -->
+    <NuGetVersioningVersion>6.8.1</NuGetVersioningVersion>
+    <!-- MSTest -->
+    <MicrosoftNETTestSdkVersion>17.9.0</MicrosoftNETTestSdkVersion>
+    <!-- XUnit -->
+    <XUnitVersion>2.7.0</XUnitVersion>
+    <XUnitAnalyzersVersion>1.11.0</XUnitAnalyzersVersion>
+    <XUnitAssertVersion>$(XUnitVersion)</XUnitAssertVersion>
+    <XUnitRunnerConsoleVersion>$(XUnitVersion)</XUnitRunnerConsoleVersion>
+    <XUnitRunnerVisualStudioVersion>2.5.7</XUnitRunnerVisualStudioVersion>
+    <!-- Coverlet -->
+    <CoverletCollectorVersion>6.0.0</CoverletCollectorVersion>
+    <!-- ClangSharp -->
+    <ClangSharpVersion>17.0.1</ClangSharpVersion>
+  </PropertyGroup>
+</Project>

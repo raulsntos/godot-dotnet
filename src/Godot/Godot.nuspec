@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    $CommonMetadataElements$
+    <dependencies>
+      <group targetFramework="net8.0">
+        <dependency id="Godot.Bindings" version="[$version$]" />
+        <dependency id="Godot.SourceGenerators" version="[$version$]" />
+      </group>
+    </dependencies>
+    <readme>README.md</readme>
+  </metadata>
+  <files>
+    $CommonFileElements$
+
+    <file src="$RepoRoot$src\Godot\README.md" target="" />
+  </files>
+</package>

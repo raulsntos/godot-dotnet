@@ -1,0 +1,24 @@
+<Project>
+
+  <!-- Import the build infrastructure. -->
+  <Import Project="eng/common/Main.props" />
+
+  <PropertyGroup>
+    <PackageTags>Godot Game Engine</PackageTags>
+  </PropertyGroup>
+
+  <!-- Language configuration. -->
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <Features>strict;nullablePublicOnly</Features>
+    <AnalysisLevel>latest-Recommended</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Avoid capturing the test output in CI so the results are displayed in the GitHub logs. -->
+    <TestCaptureOutput Condition="'$(ContinuousIntegrationBuild)' == 'true'">false</TestCaptureOutput>
+  </PropertyGroup>
+
+</Project>

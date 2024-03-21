@@ -1,0 +1,20 @@
+<Project>
+
+  <PropertyGroup>
+    <!--
+      Set PackageOutputPath based on the IsShippingPackage flag set by projects.
+      This distinction allows publishing tools to determine which assets to publish to official channels.
+    -->
+    <PackageOutputPath Condition="'$(IsShippingPackage)' == 'true'">$(ArtifactsShippingPackagesDir)</PackageOutputPath>
+    <PackageOutputPath Condition="'$(IsShippingPackage)' != 'true'">$(ArtifactsNonShippingPackagesDir)</PackageOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(IsPackable)' == 'true'">
+    <!-- Include package icon in the package. -->
+    <None Include="$(PackageIconFullPath)" Pack="true" PackagePath="$(PackageIcon)" Visible="false" />
+
+    <!-- Include readme file in the package. -->
+    <None Include="$(PackageReadmeFileFullPath)" Pack="true" PackagePath="$(PackageReadmeFile)" Visible="true" />
+  </ItemGroup>
+
+</Project>

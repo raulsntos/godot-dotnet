@@ -1,0 +1,13 @@
+<Project>
+
+  <PropertyGroup>
+    <_OverriddenCustomBeforeMicrosoftCommonTargets>$(CustomBeforeMicrosoftCommonTargets)</_OverriddenCustomBeforeMicrosoftCommonTargets>
+    <CustomBeforeMicrosoftCommonTargets>$(MSBuildThisFileDirectory)tools\BeforeCommonTargets.targets</CustomBeforeMicrosoftCommonTargets>
+  </PropertyGroup>
+
+  <Import Project="tools\RepoLayout.props" />
+  <Import Project="tools\Versions.props" />
+  <Import Project="tools\ProjectDefaults.props" />
+  <Import Project="tools\Tests.props" />
+
+</Project>

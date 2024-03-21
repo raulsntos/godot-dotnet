@@ -1,0 +1,44 @@
+<Project DefaultTargets="Publish">
+
+  <!--
+    Documentation for publishing is available here:
+      - https://github.com/dotnet/arcade/blob/master/Documentation/CorePackages/Publishing.md
+
+    Optional variables:
+      FinalVersionKind                  Global property that stores the type of the current build:
+                                        https://github.com/dotnet/arcade/blob/master/Documentation/CorePackages/Versioning.md#build-kind
+      OutputBlobFeedDir                 Local NuGet feed publishing directory
+  -->
+
+  <Import Project="RepoLayout.props" />
+  <!-- Allow for repo specific Publish properties such as add additional files to be published -->
+  <Import Project="$(RepositoryEngineeringDir)Publishing.props" Condition="Exists('$(RepositoryEngineeringDir)Publishing.props')" />
+
+  <PropertyGroup>
+    <PublishToLocalNuGetFeed>false</PublishToLocalNuGetFeed>
+    <PublishToLocalNuGetFeed Condition="'$(OutputBlobFeedDir)' != ''">true</PublishToLocalNuGetFeed>
+
+    <PublishDependsOnTargets Condition="$(PublishToLocalNuGetFeed)">$(PublishDependsOnTargets);PublishToLocalNuGetFeed</PublishDependsOnTargets>
+
+    <PublishDependsOnTargets>BeforePublish;$(PublishDependsOnTargets)</PublishDependsOnTargets>
+  </PropertyGroup>
+
+  <Target Name="Publish" DependsOnTargets="$(PublishDependsOnTargets)" />
+
+  <Target Name="BeforePublish">
+    <ItemGroup>
+      <!-- Packages. -->
+      <PackagesToPublish Include="$(ArtifactsShippingPackagesDir)**\*.nupkg" IsShipping="true" />
+      <PackagesToPublish Include="$(ArtifactsNonShippingPackagesDir)**\*.nupkg" IsShipping="false" />
+      <!-- Symbol packages. -->
+      <PackagesToPublish Include="$(ArtifactsShippingPackagesDir)**\*.snupkg" IsShipping="true" />
+      <PackagesToPublish Include="$(ArtifactsNonShippingPackagesDir)**\*.snupkg" IsShipping="false" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="PublishToLocalNuGetFeed">
+    <!-- Copy packages to the local NuGet feed storage. -->
+    <Copy SourceFiles="@(PackagesToPublish)" DestinationFolder="$(OutputBlobFeedDir)" />
+  </Target>
+
+</Project>

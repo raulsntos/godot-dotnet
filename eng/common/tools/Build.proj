@@ -1,0 +1,222 @@
+<Project DefaultTargets="Execute">
+
+  <!--
+  Required parameters:
+    RepoRoot                        Repository root.
+    Projects                        List of projects to build. Semicolon separated, may include globs.
+
+  Optional parameters:
+    Configuration                   Build configuration: "Debug", "Release", etc.
+
+    OutputBlobFeedDir               Directory to publish assets to (packages, symbol packages, installers, etc.).
+
+    ContinuousIntegrationBuild      "true" when building on a CI server (PR build or official build)
+    Restore                         "true" to restore toolset and solution
+    Build                           "true" to build solution
+    Rebuild                         "true" to rebuild solution
+    Test                            "true" to run tests
+    IntegrationTest                 "true" to run integration tests
+    PerformanceTest                 "true" to run performance tests
+    Pack                            "true" to build NuGet packages
+    Publish                         "true" to publish artifacts (e.g. packages, symbols)
+  -->
+
+  <PropertyGroup>
+    <_OriginalProjectsValue>$(Projects)</_OriginalProjectsValue>
+    <!-- Disable target framework filtering for top level projects -->
+    <NoTargetFrameworkFiltering>true</NoTargetFrameworkFiltering>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <ProjectToBuild>
+      <RestoreInParallel>true</RestoreInParallel>
+      <BuildInParallel>true</BuildInParallel>
+    </ProjectToBuild>
+  </ItemDefinitionGroup>
+
+  <Import Project="RepoLayout.props" />
+
+  <!-- Allow for repo specific Build properties such as the list of Projects to build -->
+  <Import Project="$(RepositoryEngineeringDir)Build.props" Condition="Exists('$(RepositoryEngineeringDir)Build.props')" />
+
+  <PropertyGroup>
+    <_ProjectsPropertyWasUpdatedInBuildProps Condition="'$(_OriginalProjectsValue)' != '$(Projects)'">true</_ProjectsPropertyWasUpdatedInBuildProps>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(Projects)' != ''">
+    <!-- Copy the original list so we can log diagnostics later. -->
+    <_OriginalProjectToBuild Include="@(ProjectToBuild)" />
+    <!-- Setting 'Projects' overrides the ProjectToBuild list. -->
+    <ProjectToBuild Remove="@(ProjectToBuild)" />
+    <ProjectToBuild Include="$(Projects)" />
+  </ItemGroup>
+
+  <!--
+    Default values.
+  -->
+  <!-- If Projects is unspecified and ProjectToBuild was not set via Build.props, fallback to building .sln files in the repo root. -->
+  <ItemGroup Condition="'@(ProjectToBuild)' == ''">
+    <ProjectToBuild Include="$(RepoRoot)*.sln" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <_OutputBlobFeedDir>$(OutputBlobFeedDir)</_OutputBlobFeedDir>
+    <_OutputBlobFeedDir Condition="'$(_OutputBlobFeedDir)' != '' and !HasTrailingSlash('$(_OutputBlobFeedDir)')">$(_OutputBlobFeedDir)\</_OutputBlobFeedDir>
+  </PropertyGroup>
+
+  <Target Name="Execute">
+    <Error Text="No projects were found to build. Either the 'Projects' property or 'ProjectToBuild' item group must be specified." Condition="'@(ProjectToBuild)' == ''" />
+    <Error Text="Property 'RepoRoot' must be specified" Condition="'$(RepoRoot)' == ''" />
+    <Error Text="File 'global.json' must exist in directory specified by RepoRoot: '$(RepoRoot)'" Condition="'$(RepoRoot)' != '' and !Exists('$(RepoRoot)global.json')" />
+
+    <PropertyGroup>
+      <!-- 'IsRunningFromVisualStudio' may be true even when running msbuild.exe from command line. This generally means that MSBuild is from a Visual Studio installation and therefore we need to find NuGet.targets in a different location. -->
+      <_NuGetRestoreTargets Condition="Exists('$(MSBuildToolsPath)\NuGet.targets')" >$(MSBuildToolsPath)\NuGet.targets</_NuGetRestoreTargets>
+      <_NuGetRestoreTargets Condition="'$([MSBuild]::IsRunningFromVisualStudio())' == 'true' And Exists('$(MSBuildToolsPath32)\..\..\..\Common7\IDE\CommonExtensions\Microsoft\NuGet\NuGet.targets')">$(MSBuildToolsPath32)\..\..\..\Common7\IDE\CommonExtensions\Microsoft\NuGet\NuGet.targets</_NuGetRestoreTargets>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <_SolutionBuildTargets Include="Rebuild" Condition="'$(Rebuild)' == 'true'" />
+      <_SolutionBuildTargets Include="Build" Condition="'$(Build)' == 'true' and '$(Rebuild)' != 'true'" />
+      <_SolutionBuildTargets Include="Test" Condition="'$(Test)' == 'true'" />
+      <!-- Pack before running integration and performance tests so that these tests can test packages produced by the repo. -->
+      <_SolutionBuildTargets Include="Pack" Condition="'$(Pack)' == 'true'" />
+      <_SolutionBuildTargets Include="IntegrationTest" Condition="'$(IntegrationTest)' == 'true'" />
+      <_SolutionBuildTargets Include="PerformanceTest" Condition="'$(PerformanceTest)' == 'true'" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <_RemoveProps>Projects;Restore;Publish;@(_SolutionBuildTargets)</_RemoveProps>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <_CommonProps Include="Configuration=$(Configuration)" />
+      <_CommonProps Include="ContinuousIntegrationBuild=$(ContinuousIntegrationBuild)" />
+      <_CommonProps Include="RepoRoot=$(RepoRoot)" />
+      <_CommonProps Include="VersionsPropsPath=$(VersionsPropsPath)" />
+
+      <!--
+        When building in product scenarios, some projects may have set ExcludeFromProductBuild=true.
+        NuGet Restore task reports a warning for such projects, which we suppress here.
+      -->
+      <_CommonProps Include="DisableWarnForInvalidRestoreProjects=true" Condition="'$(ProductBuild)' == 'true'"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(Restore)' == 'true'">
+      <_RestoreToolsProps Include="@(_CommonProps)" />
+      <_RestoreToolsProps Include="BaseIntermediateOutputPath=$(ArtifactsToolsetDir)Common\" />
+      <_RestoreToolsProps Include="ExcludeRestorePackageImports=true" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_PublishProps Include="@(_CommonProps)" />
+      <_PublishProps Include="OutputBlobFeedDir=$(_OutputBlobFeedDir)" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_SolutionBuildProps Include="@(_CommonProps)" />
+      <_SolutionBuildProps Include="__ImportPackTargets=true" Condition="'$(Pack)' == 'true'" />
+    </ItemGroup>
+
+    <!--
+      Restore built-in tools.
+    -->
+    <MSBuild Projects="$(RepositoryEngineeringDir)common\tasks\Tasks.csproj"
+             Targets="Restore;Build"
+             Properties="@(_RestoreToolsProps)"
+             Condition="'$(Restore)' == 'true'" />
+
+    <!--
+      Restore solutions and projects.
+
+      Run solution restore separately from the other targets, in a different build phase.
+      Since restore brings in new .props and .targets files we need to rerun evaluation.
+
+      Workarounds:
+      - Invoke restore using NuGet.targets directly (see https://github.com/NuGet/Home/issues/7648).
+        This avoids duplicate calls to RestoreTask and race conditions on writing restore results to disk.
+
+      - msbuild caches the metaproject for the solution (see https://github.com/Microsoft/msbuild/issues/1695)
+        We invalidate the cache by changing the value of __BuildPhase property.
+    -->
+
+    <ItemGroup>
+      <_SolutionRestoreProps Include="@(_SolutionBuildProps)" />
+      <_SolutionRestoreProps Include="__BuildPhase=SolutionRestore" />
+      <_SolutionRestoreProps Include="MSBuildRestoreSessionId=$([System.Guid]::NewGuid())" />
+      <_SolutionRestoreProps Include="RestoreUseStaticGraphEvaluation=$(RestoreUseStaticGraphEvaluation)" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <!-- This can be set to false as an optimization for repos that don't use NuGet. -->
+      <RestoreUsingNuGetTargets Condition="'$(RestoreUsingNuGetTargets)' == ''">true</RestoreUsingNuGetTargets>
+    </PropertyGroup>
+
+    <!--
+      Detect which projects support restoring with NuGet targets.
+      As a perf optimization, the Properties list here should match exactly with
+      the properties passed to the "Restore" target a few lines below.
+      This helps MSBuild cache the result of _IsProjectRestoreSupported.
+      No need to call into the nuget internal target when restoring using
+      the new msbuild static graph APIs (RestoreUseStaticGraphEvaluation=true).
+    -->
+    <MSBuild Projects="@(ProjectToBuild)"
+             Properties="@(_SolutionRestoreProps)"
+             RemoveProperties="$(_RemoveProps)"
+             Targets="_IsProjectRestoreSupported"
+             SkipNonexistentTargets="true"
+             BuildInParallel="true"
+             Condition="'$(RestoreUsingNuGetTargets)' != 'false' and '%(ProjectToBuild.Extension)' != '.sln' and '%(ProjectToBuild.Extension)' != '.slnf' and '$(RestoreUseStaticGraphEvaluation)' != 'true' and '$(Restore)' == 'true'">
+      <Output TaskParameter="TargetOutputs" ItemName="_ProjectToRestoreWithNuGet" />
+    </MSBuild>
+
+    <PropertyGroup>
+      <!-- Normalize paths to avoid false warnings by NuGet about missing project references. -->
+      <_ProjectToRestoreWithNuGetList>@(_ProjectToRestoreWithNuGet->'%(FullPath)')</_ProjectToRestoreWithNuGetList>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <_ProjectToRestore Include="$(_NuGetRestoreTargets)" Condition="'$(_ProjectToRestoreWithNuGetList)' != '' and '$(RestoreUsingNuGetTargets)' != 'false'">
+        <AdditionalProperties>RestoreGraphProjectInput=$(_ProjectToRestoreWithNuGetList)</AdditionalProperties>
+        <RestoreInParallel>true</RestoreInParallel>
+      </_ProjectToRestore>
+
+      <!-- Invoke the 'Restore' target on solutions and projects which do not support NuGet. -->
+      <_ProjectToRestore Include="@(ProjectToBuild)" Exclude="@(_ProjectToRestoreWithNuGet)" />
+    </ItemGroup>
+
+    <!-- Enable binlog generation during static graph restore evaluation -->
+    <ItemGroup Condition="'$(GenerateRestoreUseStaticGraphEvaluationBinlog)' == 'true'">
+      <_ProjectToRestore>
+        <AdditionalProperties>RESTORE_TASK_BINLOG_PARAMETERS=$(ArtifactsLogDir)Restore-%(Filename)%(Extension).binlog</AdditionalProperties>
+      </_ProjectToRestore>
+    </ItemGroup>
+
+    <MSBuild Projects="@(_ProjectToRestore)"
+             Properties="@(_SolutionRestoreProps)"
+             RemoveProperties="$(_RemoveProps);TreatWarningsAsErrors"
+             Targets="Restore"
+             SkipNonexistentTargets="true"
+             BuildInParallel="%(_ProjectToRestore.RestoreInParallel)"
+             Condition="'$(Restore)' == 'true'" />
+
+    <!--
+      Build solution.
+    -->
+    <MSBuild Projects="@(ProjectToBuild)"
+             Properties="@(_SolutionBuildProps);__BuildPhase=SolutionBuild"
+             RemoveProperties="$(_RemoveProps)"
+             Targets="@(_SolutionBuildTargets)"
+             BuildInParallel="%(ProjectToBuild.BuildInParallel)"
+             Condition="'@(_SolutionBuildTargets)' != ''" />
+
+    <!--
+      Publish artifacts.
+    -->
+    <MSBuild Projects="Publish.proj"
+             Properties="@(_PublishProps)"
+             Targets="Publish"
+             Condition="'$(Publish)' == 'true'" />
+  </Target>
+
+</Project>

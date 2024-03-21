@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeContentInPack>false</IncludeContentInPack>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsShippingPackage>false</IsShippingPackage>
+    <IsPackable>true</IsPackable>
+    <Description>
+      Godot Engine – Multi-platform 2D and 3D game engine.
+
+      This package is a meta package that simplifies referencing all recommended Godot packages.
+    </Description>
+    <NuspecFile>Godot.nuspec</NuspecFile>
+    <NuspecBasePath>$(OutputPath)</NuspecBasePath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Nothing in lib but that's expected since this is a meta package. -->
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <IncludeSymbols>false</IncludeSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <NuspecProperty Include="RepoRoot=$(RepoRoot)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Not a real dependency but it ensures correct build order. -->
+    <ProjectReference Include="..\Godot.Bindings\Godot.Bindings.csproj" />
+  </ItemGroup>
+
+</Project>

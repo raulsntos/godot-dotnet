@@ -1,0 +1,26 @@
+<Project DefaultTargets="Build">
+
+  <!--
+    Import this file to suppress all targets while allowing the project to participate in the build.
+    Workaround for https://github.com/dotnet/sdk/issues/2071.
+
+    The targets defined here are not sufficient for the project to be open in Visual Studio without issues though.
+  -->
+
+  <PropertyGroup>
+    <!-- Skip importing NuGet Pack targets which are imported from the Microsoft.NET.Sdk targets -->
+    <ImportNuGetBuildTasksPackTargetsFromSdk>false</ImportNuGetBuildTasksPackTargetsFromSdk>
+  </PropertyGroup>
+
+  <!--
+    We don't want to create this target if the before common targets hook is in use.
+    If we are using the hook, then we avoid creation of the target altogether, which is more
+    compatible with static graph restores.
+  -->
+  <Target Name="Restore" />
+  <Target Name="Build" />
+  <Target Name="Test" />
+  <Target Name="Pack" />
+  <Target Name="Publish" />
+
+</Project>

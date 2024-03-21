@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <IsTrimmable>true</IsTrimmable>
+    <IsAotCompatible>true</IsAotCompatible>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+    <EnableAotAnalyzer>true</EnableAotAnalyzer>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <EnablePackageValidation>true</EnablePackageValidation>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <Description>.NET bindings for the Godot game engine.</Description>
+  </PropertyGroup>
+
+  <!-- TODO: This should be uncommented to make it true by default, but make sure the task is incremental first. -->
+  <!-- <PropertyGroup>
+    <GenerateGodotBindings>true</GenerateGodotBindings>
+  </PropertyGroup> -->
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Godot.Bindings.Tests" />
+  </ItemGroup>
+
+  <!-- Reference the project that contains the MSBuild task to ensure the build order is correct. -->
+  <ItemGroup>
+    <ProjectReference Include="..\Godot.BindingsGenerator\Godot.BindingsGenerator.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <UsingTask TaskName="Godot.BindingsGenerator.GenerateTask" AssemblyFile="$(ArtifactsBinDir)\Godot.BindingsGenerator\$(Configuration)\net8.0\Godot.BindingsGenerator.dll" />
+
+  <!-- Generate the bindings before building the project. -->
+  <ItemGroup Condition="'$(GenerateGodotBindings)' == 'true'">
+    <Compile Remove="$(MSBuildThisFileDirectory)Generated\**\*.cs" />
+  </ItemGroup>
+  <Target Name="GenerateGodotBindings" Condition="'$(GenerateGodotBindings)' == 'true'" BeforeTargets="BeforeCompile">
+    <GenerateTask ExtensionApiPath="$(RepoRoot)gdextension\extension_api.json"
+                  ExtensionInterfacePath="$(RepoRoot)gdextension\gdextension_interface.h"
+                  OutputPath="$(MSBuildThisFileDirectory)Generated"
+                  TestOutputPath="$(RepoRoot)tests\Godot.Bindings.Tests\Generated" />
+    <ItemGroup>
+      <Compile Include="$(MSBuildThisFileDirectory)Generated\**\*.cs" />
+    </ItemGroup>
+  </Target>
+
+</Project>

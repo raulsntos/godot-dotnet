@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsTool>true</IsTool>
+    <Description>CLI tool to generate .NET bindings for the Godot game engine from a GDExtension API dump.</Description>
+  </PropertyGroup>
+
+  <!-- Automatically determine the Runtime Identifier from the .NET SDK -->
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == ''">
+    <RuntimeIdentifier>$(NETCoreSdkRuntimeIdentifier)</RuntimeIdentifier>
+  </PropertyGroup>
+  <!-- TODO: Since we also use this project from Godot.Bindings to execute the MSBuild task, we need to reference the assembly so we need to know the path and adding the runtime identifier to the path makes it more complicated. In the future we probably want to separate the MSBuild task to a separate project that can be more easily consumed. -->
+  <PropertyGroup>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <InternalsVisibleTo Include="Godot.BindingsGenerator.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Godot.BindingsGenerator.ApiDump\Godot.BindingsGenerator.ApiDump.csproj" />
+    <ProjectReference Include="..\Godot.BindingsGenerator.Reflection\Godot.BindingsGenerator.Reflection.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClangSharp" Version="$(ClangSharpVersion)" />
+    <PackageReference Include="ClangSharp.PInvokeGenerator" Version="$(ClangSharpVersion)" />
+    <PackageReference Include="System.CommandLine" Version="$(SystemCommandLineVersion)" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="$(MicrosoftBuildTasksCoreVersion)" PrivateAssets="all" ExcludeAssets="Runtime" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,41 @@
+name: 🌙 Nightly builds
+on: [workflow_dispatch]
+
+env:
+  AZURE_ARTIFACTS_FEED_URL: https://pkgs.dev.azure.com/godotengine/godot-dotnet/_packaging/godot-nightly/nuget/v3/index.json
+
+jobs:
+  az-artifacts-build-and-deploy:
+    name: Build and deploy nightly artifacts
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Linux dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -qqq build-essential pkg-config
+
+      - name: Setup NuGet feed authentication
+        uses: actions/setup-dotnet@v4
+        with:
+          source-url: ${{ env.AZURE_ARTIFACTS_FEED_URL }}
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.AZURE_DEVOPS_TOKEN }}
+
+      - name: Build nightly packages
+        run: |
+          ./build.sh --productBuild --test --publish --ci --warnaserror false /p:GenerateGodotBindings=true /p:OfficialBuildId=$(date '+%Y%m%d').1
+
+      - name: Publish NuGet packages
+        run: |
+          cd artifacts/packages/Release/Shipping
+          for pkg in "$@"; do
+            dotnet nuget push $pkg --api-key "az" --skip-duplicate
+          done

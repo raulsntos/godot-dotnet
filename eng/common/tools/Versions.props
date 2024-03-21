@@ -1,0 +1,21 @@
+<Project>
+
+  <!-- Properties describing the default version information for the repo. -->
+
+  <PropertyGroup>
+    <OfficialBuild>false</OfficialBuild>
+    <OfficialBuild Condition="'$(OfficialBuildId)' != ''">true</OfficialBuild>
+  </PropertyGroup>
+
+  <!-- Imports the Version.props file that contains specific version information. -->
+  <Import Project="$(VersionsPropsPath)" Condition="Exists('$(VersionsPropsPath)')" />
+
+  <!--
+    Prevent NuGet from using cached packages
+    Workaround for https://github.com/NuGet/Home/issues/3116
+  -->
+  <PropertyGroup>
+    <RestoreNoCache Condition="'$(ContinuousIntegrationBuild)' == 'true'">true</RestoreNoCache>
+  </PropertyGroup>
+
+</Project>

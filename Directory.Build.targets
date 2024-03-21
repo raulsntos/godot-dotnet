@@ -1,0 +1,6 @@
+<Project>
+
+  <!-- Import the build infrastructure. -->
+  <Import Project="eng/common/Main.targets" />
+
+</Project>
