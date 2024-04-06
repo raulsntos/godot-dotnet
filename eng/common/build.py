@@ -41,6 +41,7 @@ def _parse_args() -> Tuple[Namespace, List[str]]:
     parser.add_argument("--build", "-b", action="store_true", default=None)
     parser.add_argument("--rebuild", action="store_true", default=None)
     parser.add_argument("--test", "-t", action="store_true", default=None)
+    parser.add_argument("--generate", "-g", action="store_true", default=None)
     parser.add_argument("--pack", action="store_true", default=None)
     parser.add_argument("--publish", action="store_true", default=None)
     parser.add_argument("--clean", action="store_true", default=None)
@@ -82,6 +83,7 @@ def build(unknown_args: List[str]):
         f"/p:Build={tools.build}",
         f"/p:Rebuild={tools.rebuild}",
         f"/p:Test={tools.test}",
+        f"/p:GenerateGodotBindings={tools.generate}",
         f"/p:Pack={tools.pack}",
         f"/p:Publish={tools.publish}",
         f"/p:ProductBuild={tools.product_build}",

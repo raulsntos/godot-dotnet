@@ -31,7 +31,7 @@ jobs:
 
       - name: Build nightly packages
         run: |
-          ./build.sh --productBuild --test --publish --ci --warnaserror false /p:GenerateGodotBindings=true /p:OfficialBuildId=$(date '+%Y%m%d').1
+          ./build.sh --productBuild --test --publish --ci --warnaserror false --generate /p:OfficialBuildId=$(date '+%Y%m%d').1
 
       - name: Publish NuGet packages
         run: |
