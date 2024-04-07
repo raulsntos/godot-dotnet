@@ -30,6 +30,7 @@ internal sealed class CallBuiltInMethodVararg : VarargCallMethodBody<VarargCallM
             IsStatic = _engineMethod.IsStatic,
             Parameters = parameters,
             ReturnType = returnType,
+            MarshalReturnTypeAsPtr = true,
         };
     }
 
@@ -46,15 +47,7 @@ internal sealed class CallBuiltInMethodVararg : VarargCallMethodBody<VarargCallM
     protected override void InvokeMethodBind(VarargCallMethodBodyContext context, IndentedTextWriter writer)
     {
         string instanceVariable = !context.IsStatic ? context.InstanceVariableName : "null";
-        string returnVariable = "null";
-        if (context.ReturnType is not null)
-        {
-            returnVariable = $"&{context.ReturnVariableName}";
-            if (context.ReturnType != KnownTypes.NativeGodotVariant)
-            {
-                returnVariable += "Var";
-            }
-        }
+        string returnVariable = context.ReturnType is not null ? $"{context.ReturnVariableName}Ptr" : "null";
 
         writer.WriteLine($"_{_method.Name}_MethodBind({instanceVariable}, (void**){context.ArgsVariableName}, {returnVariable}, {context.ArgsCountVariableName});");
     }

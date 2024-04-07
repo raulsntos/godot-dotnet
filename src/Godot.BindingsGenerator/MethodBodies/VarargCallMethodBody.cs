@@ -48,17 +48,32 @@ internal abstract class VarargCallMethodBody<TContext> : CallMethodBody<TContext
             parameterMarshallers[i] = marshaller;
         }
 
-        VariantMarshallerWriter? returnTypeMarshaller = null;
+        PtrMarshallerWriter? returnPtrMarshaller = null;
+        VariantMarshallerWriter? returnVariantMarshaller = null;
         if (context.ReturnType is not null)
         {
-            var marshaller = TypeDB.GetVariantMarshaller(context.ReturnType);
-
-            if (marshaller.NeedsCleanup)
+            if (context.MarshalReturnTypeAsPtr)
             {
-                needsCleanup = true;
-            }
+                var marshaller = TypeDB.GetPtrMarshaller(context.ReturnType);
 
-            returnTypeMarshaller = marshaller;
+                if (marshaller.NeedsCleanup)
+                {
+                    needsCleanup = true;
+                }
+
+                returnPtrMarshaller = marshaller;
+            }
+            else
+            {
+                var marshaller = TypeDB.GetVariantMarshaller(context.ReturnType);
+
+                if (marshaller.NeedsCleanup)
+                {
+                    needsCleanup = true;
+                }
+
+                returnVariantMarshaller = marshaller;
+            }
         }
 
         if (needsCleanup)
@@ -67,7 +82,8 @@ internal abstract class VarargCallMethodBody<TContext> : CallMethodBody<TContext
         }
 
         context.ParameterMarshallers = parameterMarshallers;
-        context.ReturnTypeMarshaller = returnTypeMarshaller;
+        context.ReturnPtrMarshaller = returnPtrMarshaller;
+        context.ReturnVariantMarshaller = returnVariantMarshaller;
 
         context.ParametersWithPreSetup = new bool[argsCount];
 
@@ -129,20 +145,33 @@ internal abstract class VarargCallMethodBody<TContext> : CallMethodBody<TContext
                 writer.WriteLine($"global::System.Runtime.CompilerServices.Unsafe.SkipInit(out {context.ReturnVariableName});");
             }
 
-            var marshaller = context.ReturnTypeMarshaller!;
-            if (marshaller.WriteSetupToVariantUninitialized(writer, context.ReturnType, $"{context.ReturnVariableName}Native"))
+            if (context.MarshalReturnTypeAsPtr)
             {
-                context.ReturnTypeWithPreSetup = true;
-            }
+                var marshaller = context.ReturnPtrMarshaller!;
+                if (marshaller.WriteSetupToUnmanagedUninitialized(writer, context.ReturnType, $"{context.ReturnVariableName}Native"))
+                {
+                    context.ReturnTypeWithPreSetup = true;
+                }
 
-            if (context.ReturnType != KnownTypes.NativeGodotVariant)
+                writer.WriteLine($"{marshaller.UnmanagedPointerType.FullNameWithGlobal} {context.ReturnVariableName}Ptr = default;");
+            }
+            else
             {
-                // TODO: Can't skip init because NativeGodotVariant is a ref struct.
-                // Change when C# is able to use ref structs in generic type arguments.
-                // See: https://github.com/dotnet/csharplang/issues/1148
-                // writer.WriteLine($"global::Godot.NativeInterop.NativeGodotVariant {context.ReturnVariableName}Var;");
-                // writer.WriteLine($"global::System.Runtime.CompilerServices.Unsafe.SkipInit(out {context.ReturnVariableName}Var);");
-                writer.WriteLine($"global::Godot.NativeInterop.NativeGodotVariant {context.ReturnVariableName}Var = default;");
+                var marshaller = context.ReturnVariantMarshaller!;
+                if (marshaller.WriteSetupToVariantUninitialized(writer, context.ReturnType, $"{context.ReturnVariableName}Var"))
+                {
+                    context.ReturnTypeWithPreSetup = true;
+                }
+
+                if (context.ReturnType != KnownTypes.NativeGodotVariant)
+                {
+                    // TODO: Can't skip init because NativeGodotVariant is a ref struct.
+                    // Change when C# is able to use ref structs in generic type arguments.
+                    // See: https://github.com/dotnet/csharplang/issues/1148
+                    // writer.WriteLine($"global::Godot.NativeInterop.NativeGodotVariant {context.ReturnVariableName}Var;");
+                    // writer.WriteLine($"global::System.Runtime.CompilerServices.Unsafe.SkipInit(out {context.ReturnVariableName}Var);");
+                    writer.WriteLine($"global::Godot.NativeInterop.NativeGodotVariant {context.ReturnVariableName}Var = default;");
+                }
             }
         }
 
@@ -200,6 +229,18 @@ internal abstract class VarargCallMethodBody<TContext> : CallMethodBody<TContext
             writer.WriteLine($"{context.VarargParameter.Name}MovablePtr[i].DangerousSelfRef.GetUnsafeAddress();");
             writer.CloseBlock();
         }
+
+        if (context.ReturnType is not null && context.MarshalReturnTypeAsPtr)
+        {
+            var marshaller = context.ReturnPtrMarshaller!;
+
+            // If the marshaller initialized an aux variable, use that one instead.
+            string returnName = context.ReturnTypeWithPreSetup
+                ? $"{context.ReturnVariableName}Native"
+                : context.ReturnVariableName;
+
+            marshaller.WriteConvertToUnmanaged(writer, context.ReturnType, returnName, $"{context.ReturnVariableName}Ptr");
+        }
     }
 
     protected sealed override void UnmarshalParameters(TContext context, IndentedTextWriter writer)
@@ -209,9 +250,25 @@ internal abstract class VarargCallMethodBody<TContext> : CallMethodBody<TContext
             return;
         }
 
-        var marshaller = context.ReturnTypeMarshaller!;
+        if (context.MarshalReturnTypeAsPtr)
+        {
+            var marshaller = context.ReturnPtrMarshaller!;
 
-        marshaller.WriteConvertFromVariant(writer, context.ReturnType, $"&{context.ReturnVariableName}Var", context.ReturnVariableName);
+            if (marshaller.UnmanagedPointerType.PointedAtType == context.ReturnType)
+            {
+                // When the pointed at type is the same as the return type (e.g.: 'Color*')
+                // then we don't need to unmarshal because we already have the value.
+                return;
+            }
+
+            marshaller.WriteConvertFromUnmanaged(writer, context.ReturnType, $"{context.ReturnVariableName}Ptr", context.ReturnVariableName);
+        }
+        else
+        {
+            var marshaller = context.ReturnVariantMarshaller!;
+
+            marshaller.WriteConvertFromVariant(writer, context.ReturnType, $"&{context.ReturnVariableName}Var", context.ReturnVariableName);
+        }
     }
 
     protected override void Return(TContext context, IndentedTextWriter writer)
@@ -232,10 +289,18 @@ internal abstract class VarargCallMethodBody<TContext> : CallMethodBody<TContext
             marshaller.WriteFree(writer, parameter.Type, $"{context.ArgsVariableName}[{i}]");
         }
 
-        if (context.ReturnType is not null || context.ReturnType == KnownTypes.NativeGodotVariant)
+        if (context.ReturnType is not null)
         {
-            var marshaller = context.ReturnTypeMarshaller!;
-            marshaller.WriteFree(writer, context.ReturnType, $"&{context.ReturnVariableName}Var");
+            if (context.MarshalReturnTypeAsPtr)
+            {
+                var marshaller = context.ReturnPtrMarshaller!;
+                marshaller.WriteFree(writer, context.ReturnType, $"{context.ReturnVariableName}Ptr");
+            }
+            else
+            {
+                var marshaller = context.ReturnVariantMarshaller!;
+                marshaller.WriteFree(writer, context.ReturnType, $"&{context.ReturnVariableName}Var");
+            }
         }
     }
 

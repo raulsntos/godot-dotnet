@@ -24,6 +24,7 @@ internal sealed class CallMethodBindVararg : VarargCallMethodBody<VarargCallMeth
             IsStatic = owner.IsStatic,
             Parameters = owner.Parameters,
             ReturnType = returnType,
+            MarshalReturnTypeAsPtr = false,
         };
     }
 

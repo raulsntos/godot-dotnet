@@ -9,7 +9,14 @@ internal class VarargCallMethodBodyContext : CallMethodBodyContext
     public ParameterInfo VarargParameter { get; set; } = null!;
 
     public IList<VariantMarshallerWriter> ParameterMarshallers { get; set; } = [];
-    public VariantMarshallerWriter? ReturnTypeMarshaller { get; set; }
+    public PtrMarshallerWriter? ReturnPtrMarshaller { get; set; }
+    public VariantMarshallerWriter? ReturnVariantMarshaller { get; set; }
+
+    /// <summary>
+    /// Indicates whether the return value should be marshalled as an unmanaged
+    /// pointer. Otherwise, it will be marshalled as a Variant.
+    /// </summary>
+    public required bool MarshalReturnTypeAsPtr { get; set; }
 
     /// <summary>
     /// Indicates which parameters, if any, should use the aux variable
