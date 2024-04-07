@@ -8,30 +8,24 @@ namespace Godot.NativeInterop;
 /// </summary>
 internal unsafe readonly ref struct NativeGodotVariantPtrSpan
 {
-    private readonly ref NativeGodotVariant* _reference;
+    private readonly NativeGodotVariant** _reference;
     private readonly int _length;
 
     internal NativeGodotVariantPtrSpan(NativeGodotVariant** pointer, int length)
     {
-        _reference = ref *pointer;
-        _length = length;
-    }
-
-    internal NativeGodotVariantPtrSpan(ref NativeGodotVariant* reference, int length)
-    {
-        _reference = ref reference;
+        _reference = pointer;
         _length = length;
     }
 
     internal ref NativeGodotVariant* GetPinnableReference()
     {
-        return ref _reference;
+        return ref *_reference;
     }
 
     public ref NativeGodotVariant this[int index]
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => ref _reference[index];
+        get => ref *_reference[index];
     }
 
     /// <summary>

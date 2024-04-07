@@ -153,12 +153,19 @@ internal abstract class VarargCallMethodBody<TContext> : CallMethodBody<TContext
 
         writer.WriteLine("const int VarArgsSpanThreshold = 10;");
 
-        writer.WriteLine($"scoped global::System.Span<nint> {context.VarargParameter.Name}PtrSpan = ({parameters.Length} + {context.VarargParameter.Name}.Length) <= VarArgsSpanThreshold");
+        writer.WriteLine($"scoped global::System.Span<global::Godot.NativeInterop.NativeGodotVariant.Movable> {context.VarargParameter.Name}MovableSpan = {context.VarargParameter.Name}.Length <= VarArgsSpanThreshold");
         writer.Indent++;
-        writer.WriteLine($"? stackalloc nint[VarArgsSpanThreshold]");
-        writer.WriteLine($": new nint[{context.VarargParameter.Name}.Length];");
+        writer.WriteLine($"? stackalloc global::Godot.NativeInterop.NativeGodotVariant.Movable[VarArgsSpanThreshold]");
+        writer.WriteLine($": new global::Godot.NativeInterop.NativeGodotVariant.Movable[{context.VarargParameter.Name}.Length];");
         writer.Indent--;
 
+        writer.WriteLine($"scoped global::System.Span<nint> {context.VarargParameter.Name}PtrSpan = {context.ArgsCountVariableName} <= VarArgsSpanThreshold");
+        writer.Indent++;
+        writer.WriteLine($"? stackalloc nint[VarArgsSpanThreshold]");
+        writer.WriteLine($": new nint[{context.ArgsCountVariableName}];");
+        writer.Indent--;
+
+        writer.WriteLine($"fixed (global::Godot.NativeInterop.NativeGodotVariant.Movable* {context.VarargParameter.Name}MovablePtr = &global::System.Runtime.InteropServices.MemoryMarshal.GetReference({context.VarargParameter.Name}MovableSpan))");
         writer.WriteLine($"fixed (nint* {context.VarargParameter.Name}Ptr = &global::System.Runtime.InteropServices.MemoryMarshal.GetReference({context.VarargParameter.Name}PtrSpan))");
         writer.OpenBlock();
 
@@ -187,8 +194,10 @@ internal abstract class VarargCallMethodBody<TContext> : CallMethodBody<TContext
         {
             writer.WriteLine($"for (int i = 0; i < {context.VarargParameter.Name}.Length; i++)");
             writer.OpenBlock();
+            writer.Write($"{context.VarargParameter.Name}MovablePtr[i] = ");
+            writer.WriteLine("args[i].NativeValue;");
             writer.Write($"{context.ArgsVariableName}[{argsCount} + i] = ");
-            writer.WriteLine("args[i].NativeValue.DangerousSelfRef.GetUnsafeAddress();");
+            writer.WriteLine($"{context.VarargParameter.Name}MovablePtr[i].DangerousSelfRef.GetUnsafeAddress();");
             writer.CloseBlock();
         }
     }
