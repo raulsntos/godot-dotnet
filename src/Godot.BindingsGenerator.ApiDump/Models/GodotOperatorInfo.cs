@@ -12,6 +12,12 @@ public class GodotOperatorInfo
     public required string Name { get; set; }
 
     /// <summary>
+    /// Operator's description.
+    /// </summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>
     /// Name of the type in the right-hand side of the operator.
     /// For unary operators this is <see langword="null"/>.
     /// </summary>

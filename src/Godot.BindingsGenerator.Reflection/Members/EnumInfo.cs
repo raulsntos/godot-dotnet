@@ -22,7 +22,7 @@ public class EnumInfo : TypeInfo
     /// <summary>
     /// Collection of the values of this enumeration type.
     /// </summary>
-    public List<(string Name, long Value)> Values { get; set; } = [];
+    public List<(string Name, long Value, string? comment)> Values { get; set; } = [];
 
     /// <summary>
     /// Constructs a new <see cref="EnumInfo"/>.

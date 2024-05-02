@@ -17,6 +17,12 @@ public class GodotMemberInfo
     [JsonPropertyName("type")]
     public required string Type { get; set; }
 
+    /// <summary>
+    /// Member's description.
+    /// </summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
     /// <inheritdoc/>
     public override string ToString() => $"{Type} {Name}";
 }

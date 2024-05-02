@@ -34,7 +34,8 @@ internal sealed class GlobalEnumsBindingsDataCollector : BindingsDataCollector
 
             foreach (var (name, value) in globalEnum.Values)
             {
-                enumType.Values.Add((NamingUtils.SnakeToPascalCase(name), value));
+                /// Todo add comment to enum
+                enumType.Values.Add((NamingUtils.SnakeToPascalCase(name), value, null));
             }
 
             int enumPrefix = NamingUtils.DetermineEnumPrefix(globalEnum);

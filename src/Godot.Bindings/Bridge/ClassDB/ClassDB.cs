@@ -102,9 +102,9 @@ public static class ClassDB
             get_func = &Get_Native,
             get_property_list_func = &GetPropertyList_Native,
             free_property_list_func = &FreePropertyList_Native,
-            property_can_revert_func = &PropertyCanRevert_Native,
+            //property_can_revert_func = &PropertyCanRevert_Native, //Todo fix Stack overflow when node
             property_get_revert_func = &PropertyGetRevert_Native,
-            validate_property_func = &ValidateProperty_Native,
+            //validate_property_func = &ValidateProperty_Native,  //Todo fix Corrupted memory when node
             notification_func = &Notification_Native,
             to_string_func = &ToString_Native,
             reference_func = null,

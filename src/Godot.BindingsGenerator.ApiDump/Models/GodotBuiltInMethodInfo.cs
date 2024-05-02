@@ -37,6 +37,12 @@ public class GodotBuiltInMethodInfo
     public bool IsStatic { get; set; }
 
     /// <summary>
+    /// Method's description.
+    /// </summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>
     /// Method hash that must be used to invoke it.
     /// The hash is computed from the method signature ensuring that breaking changes
     /// result in different hashes. As long as the same hash is used and a compatibility

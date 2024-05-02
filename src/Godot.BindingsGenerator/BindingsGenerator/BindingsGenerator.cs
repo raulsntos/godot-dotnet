@@ -74,19 +74,22 @@ internal static partial class BindingsGenerator
         }
         else if (type is EnumInfo enumType)
         {
+            writer.WriteXMLComment(enumType);
             writer.WriteAttributes(enumType);
             writer.WriteTypeDeclaration(enumType);
             writer.WriteLine();
 
             writer.OpenBlock();
-            foreach (var (name, value) in enumType.Values)
+            foreach (var (name, value, comment) in enumType.Values)
             {
+                writer.WriteXMLComment(comment);
                 writer.WriteLine($"{name} = {value},");
             }
             writer.CloseBlock();
         }
         else
         {
+            writer.WriteXMLComment(type);
             writer.WriteAttributes(type);
             writer.WriteTypeDeclaration(type);
             writer.WriteLine();
@@ -100,6 +103,7 @@ internal static partial class BindingsGenerator
 
             foreach (var @event in type.DeclaredEvents)
             {
+                writer.WriteXMLComment(@event);
                 writer.WriteAttributes(@event);
                 writer.WriteEventDeclaration(@event);
 
@@ -132,6 +136,7 @@ internal static partial class BindingsGenerator
 
             foreach (var field in type.DeclaredFields)
             {
+                writer.WriteXMLComment(field);
                 writer.WriteAttributes(field);
                 writer.WriteFieldDeclaration(field);
                 writer.WriteLine(';');
@@ -144,6 +149,7 @@ internal static partial class BindingsGenerator
                     throw new InvalidOperationException($"Property '{type.Name}.{property.Name}' must have at least a getter or a setter.");
                 }
 
+                writer.WriteXMLComment(property);
                 writer.WriteAttributes(property);
                 writer.WritePropertyDeclaration(property);
                 writer.WriteLine();
@@ -182,6 +188,7 @@ internal static partial class BindingsGenerator
 
             foreach (var constructor in type.DeclaredConstructors)
             {
+                writer.WriteXMLComment(constructor);
                 writer.WriteAttributes(constructor);
                 writer.WriteConstructorSignature(constructor, type);
                 writer.WriteLine();
@@ -194,6 +201,7 @@ internal static partial class BindingsGenerator
             {
                 Debug.Assert(!method.IsConstructor);
 
+                writer.WriteXMLComment(method);
                 writer.WriteAttributes(method);
                 if (method.ReturnParameter is not null)
                 {

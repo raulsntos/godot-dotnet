@@ -406,8 +406,8 @@ internal static class NamingUtils
                 }
                 nameBuilder.Append(parts[j]);
             }
-
-            @enum.Values[i] = (SnakeToPascalCase(nameBuilder.ToString()), value);
+            /// Todo add comment to enum
+            @enum.Values[i] = (SnakeToPascalCase(nameBuilder.ToString()), value, null);
         }
     }
 

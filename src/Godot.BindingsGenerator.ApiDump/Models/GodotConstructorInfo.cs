@@ -13,6 +13,12 @@ public class GodotConstructorInfo
     public required int Index { get; set; }
 
     /// <summary>
+    /// Constructor's description.
+    /// </summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>
     /// Collection of argument information for the constructor.
     /// </summary>
     [JsonPropertyName("arguments")]

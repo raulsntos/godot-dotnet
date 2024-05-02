@@ -1,15 +1,21 @@
 namespace Godot.BindingsGenerator.ApiDump;
 
 /// <summary>
-/// Defines a Godot signal for an engine class.
+/// Defines a Godot signal/event for an engine class.
 /// </summary>
 public class GodotSignalInfo
 {
     /// <summary>
-    /// Name of the method.
+    /// Name of the signal/event.
     /// </summary>
     [JsonPropertyName("name")]
     public required string Name { get; set; }
+
+    /// <summary>
+    /// Signal/Event's description.
+    /// </summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
 
     /// <summary>
     /// Collection of argument information for the method.

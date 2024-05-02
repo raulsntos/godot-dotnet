@@ -1,4 +1,5 @@
 using Godot.BindingsGenerator.Reflection;
+using System.Text;
 
 namespace Godot.BindingsGenerator;
 
@@ -21,6 +22,13 @@ internal sealed class UtilityFunctionsBindingsDataCollector : BindingsDataCollec
                 VisibilityAttributes = VisibilityAttributes.Public,
                 IsStatic = true,
             };
+
+            if (engineMethod.Description is not null)
+            {
+                var comment = new StringBuilder();
+                comment.WriteSummary(engineMethod.Description);
+                method.XMLComment = comment.ToString();
+            }
 
             if (!string.IsNullOrEmpty(engineMethod.ReturnType))
             {
