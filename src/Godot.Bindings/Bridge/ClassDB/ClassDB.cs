@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Godot.NativeInterop;
+using Godot.NativeInterop.Marshallers;
 
 namespace Godot.Bridge;
 
@@ -215,14 +216,13 @@ public static class ClassDB
 
         instanceObj._GetPropertyList(propertyList);
 
-        fixed (GDExtensionPropertyInfo* propertyListPtr = propertyList.AsSpan())
+        GDExtensionPropertyInfo* propertyListPtr = PropertyInfoList.ConvertToNative(propertyList);
+
+        if (outCount is not null)
         {
-            if (outCount is not null)
-            {
-                *outCount = (uint)propertyList.Count;
-            }
-            return propertyListPtr;
+            *outCount = (uint)propertyList.Count;
         }
+        return propertyListPtr;
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
@@ -237,6 +237,8 @@ public static class ClassDB
 
             var propertyList = instanceObj.GetPropertyListStorage();
             propertyList.Clear();
+
+            PropertyInfoList.FreeNative(propertyListPtr);
         }
     }
 
@@ -291,27 +293,24 @@ public static class ClassDB
 
             // Convert internal property info to the public managed type.
             VariantType type = (VariantType)refProperty->type;
-            StringName name = StringName.CreateTakingOwnership(*refProperty->name);
-            PropertyHint hint = (PropertyHint)refProperty->hint;
-            string hintString = refProperty->hint_string->ToString();
-            StringName className = StringName.CreateTakingOwnership(*refProperty->class_name);
-            PropertyUsageFlags usage = (PropertyUsageFlags)refProperty->usage;
+            StringName? name = StringNameMarshaller.ConvertFromUnmanaged(refProperty->name);
+            Debug.Assert(name is not null);
             var propertyInfo = new PropertyInfo(name, type)
             {
-                Hint = hint,
-                HintString = hintString,
-                ClassName = className,
-                Usage = usage,
+                Hint = (PropertyHint)refProperty->hint,
+                HintString = StringMarshaller.ConvertFromUnmanaged(refProperty->hint_string),
+                ClassName = StringNameMarshaller.ConvertFromUnmanaged(refProperty->class_name),
+                Usage = (PropertyUsageFlags)refProperty->usage,
             };
 
             instanceObj._ValidateProperty(propertyInfo);
 
             // Update the property info with the data from the managed type.
             refProperty->type = (GDExtensionVariantType)propertyInfo.Type;
-            refProperty->name = propertyInfo.Name.NativeValue.DangerousSelfRef.GetUnsafeAddress();
+            StringNameMarshaller.WriteUnmanaged(refProperty->name, propertyInfo.Name);
             refProperty->hint = (uint)propertyInfo.Hint;
-            refProperty->hint_string = NativeGodotString.Create(propertyInfo.HintString).GetUnsafeAddress();
-            refProperty->class_name = propertyInfo.ClassName.NativeValue.DangerousSelfRef.GetUnsafeAddress();
+            StringMarshaller.WriteUnmanaged(refProperty->hint_string, propertyInfo.HintString);
+            StringNameMarshaller.WriteUnmanaged(refProperty->class_name, propertyInfo.ClassName);
             refProperty->usage = (uint)propertyInfo.Usage;
 
             return true;

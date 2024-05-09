@@ -15,8 +15,9 @@ internal unsafe static class StringNameMarshaller
 
     public static NativeGodotStringName* ConvertToUnmanaged(StringName? value)
     {
-        value ??= StringName.Empty;
-        return value.NativeValue.DangerousSelfRef.GetUnsafeAddress();
+        NativeGodotStringName* ptr = (NativeGodotStringName*)Marshal.AllocHGlobal(sizeof(NativeGodotStringName));
+        WriteUnmanaged(ptr, value);
+        return ptr;
     }
 
     public static StringName? ConvertFromUnmanaged(NativeGodotStringName* value)
@@ -27,7 +28,11 @@ internal unsafe static class StringNameMarshaller
             : null;
     }
 
-    public static void Free(NativeGodotStringName* value) { }
+    public static void Free(NativeGodotStringName* value)
+    {
+        Debug.Assert(value is not null);
+        Marshal.FreeHGlobal((nint)value);
+    }
 
     public static NativeGodotVariant* ConvertToVariant(StringName? value)
     {
@@ -52,4 +57,3 @@ internal unsafe static class StringNameMarshaller
         Marshal.FreeHGlobal((nint)value);
     }
 }
-

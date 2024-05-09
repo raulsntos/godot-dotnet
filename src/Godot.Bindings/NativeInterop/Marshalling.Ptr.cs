@@ -287,13 +287,13 @@ partial class Marshalling
 
         if (typeof(T) == typeof(GodotArray))
         {
-            *(NativeGodotArray*)destination = (UnsafeAs<GodotArray?>(value)?.NativeValue ?? default).DangerousSelfRef;
+            GodotArrayMarshaller.WriteUnmanaged((NativeGodotArray*)destination, UnsafeAs<GodotArray?>(value));
             return;
         }
 
         if (typeof(T) == typeof(GodotDictionary))
         {
-            *(NativeGodotDictionary*)destination = (UnsafeAs<GodotDictionary?>(value)?.NativeValue ?? default).DangerousSelfRef;
+            GodotDictionaryMarshaller.WriteUnmanaged((NativeGodotDictionary*)destination, UnsafeAs<GodotDictionary?>(value));
             return;
         }
 

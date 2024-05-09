@@ -1,33 +1,23 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using Godot.Bridge;
+using Godot.NativeInterop.Marshallers;
 
 namespace Godot.NativeInterop;
 
 internal sealed class PropertyInfoList : IList<PropertyInfo>
 {
-    private readonly List<PropertyInfo> _managedValues = [];
-    private readonly List<GDExtensionPropertyInfo> _nativeValues = [];
-
-    internal Span<GDExtensionPropertyInfo> AsSpan()
-    {
-        return CollectionsMarshal.AsSpan(_nativeValues);
-    }
+    private readonly List<PropertyInfo> _values = [];
 
     public PropertyInfo this[int index]
     {
-        get => _managedValues[index];
-        set
-        {
-            _managedValues[index] = value;
-            _nativeValues[index] = ConvertPropertyInfoToNative(value);
-        }
+        get => _values[index];
+        set => _values[index] = value;
     }
 
-    public int Count => _managedValues.Count;
+    public int Count => _values.Count;
 
     bool ICollection<PropertyInfo>.IsReadOnly => false;
 
@@ -35,49 +25,39 @@ internal sealed class PropertyInfoList : IList<PropertyInfo>
     {
         ArgumentNullException.ThrowIfNull(item);
 
-        _managedValues.Add(item);
-        _nativeValues.Add(ConvertPropertyInfoToNative(item));
+        _values.Add(item);
     }
 
     public void AddRange(IEnumerable<PropertyInfo> items)
     {
         ArgumentNullException.ThrowIfNull(items);
 
-        _managedValues.AddRange(items);
-        _nativeValues.AddRange(items.Select(ConvertPropertyInfoToNative));
+        _values.AddRange(items);
     }
 
     public void AddRange(ReadOnlySpan<PropertyInfo> items)
     {
-        _managedValues.AddRange(items);
-
-        int oldCount = _nativeValues.Count;
-        CollectionsMarshal.SetCount(_nativeValues, oldCount + items.Length);
-        for (int i = 0; i < items.Length; i++)
-        {
-            _nativeValues[oldCount + i] = ConvertPropertyInfoToNative(items[i]);
-        }
+        _values.AddRange(items);
     }
 
     public bool Contains(PropertyInfo item)
     {
-        return _managedValues.Contains(item);
+        return _values.Contains(item);
     }
 
     public void Clear()
     {
-        _managedValues.Clear();
-        _nativeValues.Clear();
+        _values.Clear();
     }
 
     public int IndexOf(PropertyInfo item)
     {
-        return _managedValues.IndexOf(item);
+        return _values.IndexOf(item);
     }
 
     public void Insert(int index, PropertyInfo item)
     {
-        _managedValues.Insert(index, item);
+        _values.Insert(index, item);
     }
 
     public bool Remove(PropertyInfo item)
@@ -94,32 +74,43 @@ internal sealed class PropertyInfoList : IList<PropertyInfo>
 
     public void RemoveAt(int index)
     {
-        _managedValues.RemoveAt(index);
-        _nativeValues.RemoveAt(index);
+        _values.RemoveAt(index);
     }
 
     void ICollection<PropertyInfo>.CopyTo(PropertyInfo[] array, int arrayIndex)
     {
-        _managedValues.CopyTo(array, arrayIndex);
+        _values.CopyTo(array, arrayIndex);
     }
 
     public IEnumerator<PropertyInfo> GetEnumerator()
     {
-        return _managedValues.GetEnumerator();
+        return _values.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-    private unsafe static GDExtensionPropertyInfo ConvertPropertyInfoToNative(PropertyInfo propertyInfo)
+    internal unsafe static GDExtensionPropertyInfo* ConvertToNative(PropertyInfoList value)
     {
-        return new GDExtensionPropertyInfo()
+        int count = value.Count;
+        GDExtensionPropertyInfo* ptr = (GDExtensionPropertyInfo*)Marshal.AllocHGlobal(sizeof(GDExtensionPropertyInfo) * count);
+        for (int i = 0; i < count; i++)
         {
-            type = (GDExtensionVariantType)propertyInfo.Type,
-            name = propertyInfo.Name.NativeValue.DangerousSelfRef.GetUnsafeAddress(),
-            hint = (uint)propertyInfo.Hint,
-            hint_string = NativeGodotString.Create(propertyInfo.HintString).GetUnsafeAddress(),
-            class_name = (propertyInfo.ClassName?.NativeValue ?? default).DangerousSelfRef.GetUnsafeAddress(),
-            usage = (uint)propertyInfo.Usage,
-        };
+            PropertyInfo propertyInfo = value[i];
+            ref GDExtensionPropertyInfo refProperty = ref ptr[i];
+
+            // Update the property info with the data from the managed type.
+            refProperty.type = (GDExtensionVariantType)propertyInfo.Type;
+            StringNameMarshaller.WriteUnmanaged(refProperty.name, propertyInfo.Name);
+            refProperty.hint = (uint)propertyInfo.Hint;
+            StringMarshaller.WriteUnmanaged(refProperty.hint_string, propertyInfo.HintString);
+            StringNameMarshaller.WriteUnmanaged(refProperty.class_name, propertyInfo.ClassName);
+            refProperty.usage = (uint)propertyInfo.Usage;
+        }
+        return ptr;
+    }
+
+    internal unsafe static void FreeNative(GDExtensionPropertyInfo* ptr)
+    {
+        Marshal.FreeHGlobal((nint)ptr);
     }
 }
