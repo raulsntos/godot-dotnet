@@ -31,14 +31,13 @@ public sealed class StringName : IDisposable, IEquatable<StringName?>
     private StringName(NativeGodotStringName nativeValueToOwn, bool isStatic = false)
     {
         NativeValue = nativeValueToOwn.AsMovable();
+        _isStatic = isStatic;
 
         // Static StringNames must not be disposed, so don't register the disposable.
         if (!_isStatic)
         {
             _weakReferenceToSelf = DisposablesTracker.RegisterDisposable(this);
         }
-
-        _isStatic = isStatic;
     }
 
     /// <summary>
