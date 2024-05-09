@@ -132,6 +132,8 @@ public static partial class GodotBridge
         {
             EditorPlugins.RemoveAllPlugins();
             ClassDB.UnregisterAllClasses();
+
+            DisposablesTracker.DisposeAll();
         }
     }
 }
