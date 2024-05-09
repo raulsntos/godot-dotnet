@@ -189,7 +189,7 @@ partial class GodotObject : IDisposable
     /// <summary>
     /// Disposes implementation of this <see cref="GodotObject"/>.
     /// </summary>
-    protected virtual void Dispose(bool disposing)
+    protected unsafe virtual void Dispose(bool disposing)
     {
         if (_disposed)
         {
@@ -200,16 +200,7 @@ partial class GodotObject : IDisposable
 
         if (NativePtr != 0)
         {
-            // Destroy the native object.
-            // If this object is RefCounted, decrease the reference count and only
-            // destroy the native object if the count has reached zero.
-            if (this is not RefCounted rc || rc.Unreference())
-            {
-                unsafe
-                {
-                    GodotBridge.GDExtensionInterface.object_destroy((void*)NativePtr);
-                }
-            }
+            GodotBridge.GDExtensionInterface.object_free_instance_binding((void*)NativePtr, GodotBridge.LibraryPtr);
 
             _gcHandle.Free();
             NativePtr = 0;
