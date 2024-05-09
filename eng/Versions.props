@@ -10,11 +10,13 @@
     <!-- System -->
     <SystemCommandLineVersion>2.0.0-beta4.23326.1</SystemCommandLineVersion>
     <!-- MSBuild -->
-    <MicrosoftBuildTasksCoreVersion>17.8.3</MicrosoftBuildTasksCoreVersion>
+    <MicrosoftBuildVersion>17.8.3</MicrosoftBuildVersion>
+    <MicrosoftBuildLocatorVersion>1.2.6</MicrosoftBuildLocatorVersion>
+    <MicrosoftBuildUtilitiesCoreVersion>$(MicrosoftBuildVersion)</MicrosoftBuildUtilitiesCoreVersion>
     <!-- Roslyn -->
     <MicrosoftCodeAnalysisAnalyzersVersion>3.3.4</MicrosoftCodeAnalysisAnalyzersVersion>
     <MicrosoftCodeAnalysisCSharpVersion>4.8.0</MicrosoftCodeAnalysisCSharpVersion>
-    <MIcrosoftCodeAnalysisTestingVerifiersVersion>1.1.2-beta1.24169.1</MIcrosoftCodeAnalysisTestingVerifiersVersion>
+    <MicrosoftCodeAnalysisTestingVerifiersVersion>1.1.2-beta1.24169.1</MicrosoftCodeAnalysisTestingVerifiersVersion>
     <MicrosoftCodeAnalysisCSharpCodeFixTestingVersion>1.1.2-beta1.24169.1</MicrosoftCodeAnalysisCSharpCodeFixTestingVersion>
     <MicrosoftCodeAnalysisCSharpAnalyzerTestingVersion>1.1.2-beta1.24169.1</MicrosoftCodeAnalysisCSharpAnalyzerTestingVersion>
     <MicrosoftCodeAnalysisCSharpSourceGeneratorsTestingVersion>1.1.2-beta1.24169.1</MicrosoftCodeAnalysisCSharpSourceGeneratorsTestingVersion>

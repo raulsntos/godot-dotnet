@@ -32,7 +32,7 @@
     <PackageReference Include="ClangSharp" Version="$(ClangSharpVersion)" />
     <PackageReference Include="ClangSharp.PInvokeGenerator" Version="$(ClangSharpVersion)" />
     <PackageReference Include="System.CommandLine" Version="$(SystemCommandLineVersion)" />
-    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="$(MicrosoftBuildTasksCoreVersion)" PrivateAssets="all" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="$(MicrosoftBuildUtilitiesCoreVersion)" PrivateAssets="all" ExcludeAssets="Runtime" />
   </ItemGroup>
 
 </Project>
