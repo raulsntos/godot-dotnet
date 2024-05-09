@@ -3,6 +3,7 @@
   <PropertyGroup>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Authors>Godot Engine contributors</Authors>
+    <Copyright>Copyright (c) Godot Engine contributors</Copyright>
     <PackageProjectUrl>https://godotengine.org</PackageProjectUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
