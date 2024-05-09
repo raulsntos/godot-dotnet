@@ -35,7 +35,6 @@ jobs:
 
       - name: Publish NuGet packages
         run: |
-          cd artifacts/packages/Release/Shipping
-          for pkg in "$@"; do
+          for pkg in artifacts/packages/Release/Shipping/*; do
             dotnet nuget push $pkg --api-key "az" --skip-duplicate
           done
