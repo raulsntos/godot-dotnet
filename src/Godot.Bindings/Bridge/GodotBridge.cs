@@ -126,5 +126,12 @@ public static partial class GodotBridge
     private unsafe static void DeinitializeLevel_Native(void* userData, GDExtensionInitializationLevel level)
     {
         _terminateCallback?.Invoke((InitializationLevel)level);
+
+        // Only free everything once at the last level.
+        if (level == 0)
+        {
+            EditorPlugins.RemoveAllPlugins();
+            ClassDB.UnregisterAllClasses();
+        }
     }
 }

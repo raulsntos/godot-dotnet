@@ -13,6 +13,7 @@ namespace Godot.Bridge;
 public static class ClassDB
 {
     private static readonly Dictionary<StringName, ClassDBRegistrationContext> _registeredClasses = [];
+    private static readonly Stack<StringName> _classRegisterStack = [];
 
     /// <summary>
     /// Registers a class with a configuration function that registers its members.
@@ -91,6 +92,7 @@ public static class ClassDB
 
         context = new ClassDBRegistrationContext(className);
         _registeredClasses[className] = context;
+        _classRegisterStack.Push(className);
 
         var creationInfo = new GDExtensionClassCreationInfo3()
         {
@@ -136,6 +138,18 @@ public static class ClassDB
         if (InteropUtils.RegisterVirtualOverridesHelpers.TryGetValue(baseClassName, out var registerVirtualOverrides))
         {
             registerVirtualOverrides(context);
+        }
+    }
+
+    internal unsafe static void UnregisterAllClasses()
+    {
+        while (_classRegisterStack.TryPop(out StringName? className))
+        {
+            NativeGodotStringName classNameNative = className.NativeValue.DangerousSelfRef;
+
+            GodotBridge.GDExtensionInterface.classdb_unregister_extension_class(GodotBridge.LibraryPtr, &classNameNative);
+
+            _registeredClasses.Remove(className);
         }
     }
 

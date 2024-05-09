@@ -10,6 +10,7 @@ namespace Godot.Bridge;
 public static class EditorPlugins
 {
     private static readonly HashSet<StringName> _registeredPlugins = [];
+    private static readonly Stack<StringName> _pluginRegisterStack = [];
 
     /// <summary>
     /// Register <typeparamref name="T"/> as an <see cref="EditorPlugin"/>
@@ -28,7 +29,21 @@ public static class EditorPlugins
             throw new InvalidOperationException($"Type '{typeof(T)}' has already been registered as an editor plugin.");
         }
 
+        _registeredPlugins.Add(className);
+        _pluginRegisterStack.Push(className);
+
         NativeGodotStringName classNameNative = className.NativeValue.DangerousSelfRef;
         GodotBridge.GDExtensionInterface.editor_add_plugin(classNameNative.GetUnsafeAddress());
+    }
+
+    internal unsafe static void RemoveAllPlugins()
+    {
+        while (_pluginRegisterStack.TryPop(out StringName? className))
+        {
+            NativeGodotStringName classNameNative = className.NativeValue.DangerousSelfRef;
+            GodotBridge.GDExtensionInterface.editor_remove_plugin(classNameNative.GetUnsafeAddress());
+
+            _registeredPlugins.Remove(className);
+        }
     }
 }
