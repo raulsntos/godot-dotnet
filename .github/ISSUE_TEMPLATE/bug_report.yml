@@ -26,7 +26,7 @@ body:
     label: Godot .NET packages version
     description: >
       Specify the Git commit hash if using a development build.
-    placeholder: 3.3.stable, 4.0.dev (3041becc6)
+    placeholder: 4.3.0, 4.3.0-nightly.24260.1, 4.3.0-dev (9a9dae2)
   validations:
     required: true
 
