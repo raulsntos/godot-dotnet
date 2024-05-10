@@ -22,19 +22,17 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -qqq build-essential pkg-config
 
-      - name: Setup NuGet feed authentication
-        uses: actions/setup-dotnet@v4
-        with:
-          source-url: ${{ env.AZURE_ARTIFACTS_FEED_URL }}
-        env:
-          NUGET_AUTH_TOKEN: ${{ secrets.AZURE_DEVOPS_TOKEN }}
-
       - name: Build nightly packages
         run: |
           ./build.sh --productBuild --test --publish --ci --warnaserror false /p:GenerateGodotBindings=true /p:OfficialBuildId=$(date '+%Y%m%d').1
 
+      - name: Setup NuGet feed authentication
+        run: dotnet nuget add source ${{ env.AZURE_ARTIFACTS_FEED_URL }} --name "godot-nightly" --username az --password $NUGET_AUTH_TOKEN --store-password-in-clear-text
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.AZURE_DEVOPS_TOKEN }}
+
       - name: Publish NuGet packages
         run: |
           for pkg in artifacts/packages/Release/Shipping/*; do
-            dotnet nuget push $pkg --api-key "az" --skip-duplicate
+            dotnet nuget push $pkg -s "godot-nightly" --api-key "az" --skip-duplicate
           done
