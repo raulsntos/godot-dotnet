@@ -242,6 +242,11 @@ partial class Marshalling
             return NativeGodotVariant.CreateFromPackedColorArrayCopying(UnsafeAs<PackedColorArray>(value).NativeValue.DangerousSelfRef);
         }
 
+        if (typeof(T) == typeof(PackedVector4Array))
+        {
+            return NativeGodotVariant.CreateFromPackedVector4ArrayCopying(UnsafeAs<PackedVector4Array>(value).NativeValue.DangerousSelfRef);
+        }
+
         if (typeof(T) == typeof(GodotArray))
         {
             return NativeGodotVariant.CreateFromArrayCopying(UnsafeAs<GodotArray>(value).NativeValue.DangerousSelfRef);
@@ -527,6 +532,11 @@ partial class Marshalling
         if (typeof(T) == typeof(PackedColorArray))
         {
             return UnsafeAsT(PackedColorArray.CreateTakingOwnership(NativeGodotVariant.ConvertToPackedColorArray(value)));
+        }
+
+        if (typeof(T) == typeof(PackedVector4Array))
+        {
+            return UnsafeAsT(PackedVector4Array.CreateTakingOwnership(NativeGodotVariant.ConvertToPackedVector4Array(value)));
         }
 
         if (typeof(T) == typeof(GodotArray))

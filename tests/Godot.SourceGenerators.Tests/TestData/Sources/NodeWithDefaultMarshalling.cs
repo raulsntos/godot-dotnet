@@ -168,6 +168,9 @@ public partial class NodeWithDefaultMarshalling : Node
     public PackedColorArray PropertyPackedColorArray { get; set; }
 
     [BindProperty]
+    public PackedVector4Array PropertyPackedVector4Array { get; set; }
+
+    [BindProperty]
     public GodotArray PropertyGodotArray { get; set; }
 
     [BindProperty]

@@ -96,4 +96,14 @@ public static class PackedArray
     {
         return new PackedColorArray(span);
     }
+
+    /// <summary>
+    /// Constructs a new <see cref="PackedVector4Array"/> from the given span.
+    /// </summary>
+    /// <param name="span">The elements to construct from.</param>
+    /// <returns>A new Packed Vector3 Array.</returns>
+    public static PackedVector4Array Create(ReadOnlySpan<Vector4> span)
+    {
+        return new PackedVector4Array(span);
+    }
 }

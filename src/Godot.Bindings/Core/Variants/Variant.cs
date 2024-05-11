@@ -173,6 +173,7 @@ public partial struct Variant : IDisposable
             VariantType.PackedVector2Array => AsPackedVector2Array(),
             VariantType.PackedVector3Array => AsPackedVector3Array(),
             VariantType.PackedColorArray => AsPackedColorArray(),
+            VariantType.PackedVector4Array => AsPackedVector4Array(),
             _ =>
                 throw new InvalidOperationException($"Invalid Variant type: {NativeValue.DangerousSelfRef.Type}"),
         };
@@ -350,6 +351,10 @@ public partial struct Variant : IDisposable
         PackedColorArray.CreateTakingOwnership(NativeGodotVariant.ConvertToPackedColorArray(NativeValue.DangerousSelfRef));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public PackedVector4Array AsPackedVector4Array() =>
+        PackedVector4Array.CreateTakingOwnership(NativeGodotVariant.ConvertToPackedVector4Array(NativeValue.DangerousSelfRef));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public GodotDictionary<TKey, TValue> AsGodotDictionary<[MustBeVariant] TKey, [MustBeVariant] TValue>()
     {
         return GodotDictionary<TKey, TValue>.CreateTakingOwnership(NativeGodotVariant.ConvertToDictionary(NativeValue.DangerousSelfRef));
@@ -519,6 +524,9 @@ public partial struct Variant : IDisposable
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator PackedColorArray(Variant from) => from.AsPackedColorArray();
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator PackedVector4Array(Variant from) => from.AsPackedVector4Array();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator GodotObject?(Variant from) => from.AsGodotObject();
@@ -831,6 +839,10 @@ public partial struct Variant : IDisposable
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator Variant(PackedColorArray from) =>
         CreateTakingOwnership(NativeGodotVariant.CreateFromPackedColorArrayCopying(from.NativeValue.DangerousSelfRef));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator Variant(PackedVector4Array from) =>
+        CreateTakingOwnership(NativeGodotVariant.CreateFromPackedVector4ArrayCopying(from.NativeValue.DangerousSelfRef));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator Variant(GodotObject? from)
