@@ -254,7 +254,7 @@ public static class ClassDB
 
             StringName nameManaged = StringName.CreateTakingOwnership(*name);
 
-            return instanceObj.PropertyCanRevert(nameManaged);
+            return instanceObj._PropertyCanRevert(nameManaged);
         }
 
         return false;
