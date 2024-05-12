@@ -4,3 +4,5 @@
 
 [node name="Main" type="Node"]
 script = ExtResource("1_ptcg0")
+
+[node name="SummatorNode" type="SummatorNode" parent="."]

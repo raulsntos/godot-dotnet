@@ -13,6 +13,7 @@ public class Main
         }
 
         ClassDB.RegisterClass<Summator>(Summator.BindMethods);
+        ClassDB.RegisterClass<SummatorNode>(SummatorNode.BindMethods);
     }
 
     public static void DeinitializeSummatorTypes(InitializationLevel level)
