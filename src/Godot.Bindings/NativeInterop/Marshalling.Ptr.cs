@@ -15,11 +15,6 @@ partial class Marshalling
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TTo UnsafeAs<TTo>(in T value) => Unsafe.As<T, TTo>(ref Unsafe.AsRef(in value));
 
-        var result = value is null;
-        if (result)
-        {
-            Console.WriteLine(new ArgumentNullException(nameof(value),$"Marshal is null value of type {typeof(T).FullName}."));
-        }
         if (typeof(T) == typeof(NodePath))
         {
             *(NativeGodotNodePath*)destination = (UnsafeAs<NodePath?>(value)?.NativeValue ?? default).DangerousSelfRef;
@@ -52,10 +47,17 @@ partial class Marshalling
             return;
         }
 
-        if (result)
+        try
         {
-           Console.WriteLine(new ArgumentNullException(nameof(value),$"Marshal is null value of type {typeof(T).FullName}."));
-           return;
+            if (value is null)
+            {
+                throw new ArgumentNullException(nameof(value),$"Marshal is null value of type {typeof(T).FullName}.");
+            }
+        }
+        catch (Exception e)
+        {
+            GD.PushError(e);
+            return;
         }
 
         // `typeof(T1) == typeof(T2)` is optimized away. We cannot cache `typeof(T)` in a local variable, as it's not optimized when done like that.
