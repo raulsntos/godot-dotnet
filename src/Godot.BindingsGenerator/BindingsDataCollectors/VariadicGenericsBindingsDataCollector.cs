@@ -49,13 +49,18 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
                         return;
                     }
 
+                    for (int i = 0; i < genericTypeArgumentCount; i++)
+                    {
+                        writer.WriteLine($"global::Godot.NativeInterop.NativeGodotVariant __arg{i} = global::Godot.NativeInterop.Marshalling.ConvertToVariant<T{i}>(in parameter{i});");
+                    }
+
                     writer.WriteLine($"global::Godot.NativeInterop.NativeGodotVariant** args = stackalloc global::Godot.NativeInterop.NativeGodotVariant*[{genericTypeArgumentCount}]");
                     writer.WriteLine('{');
                     writer.Indent++;
 
                     for (int i = 0; i < genericTypeArgumentCount; i++)
                     {
-                        writer.WriteLine($"global::Godot.NativeInterop.Marshalling.ConvertToVariant<T{i}>(in parameter{i}).GetUnsafeAddress(),");
+                        writer.WriteLine($"__arg{i}.GetUnsafeAddress(),");
                     }
 
                     writer.Indent--;
@@ -98,6 +103,10 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
                     }
                     else
                     {
+                        for (int i = 0; i < genericTypeArgumentCount; i++)
+                        {
+                            writer.WriteLine($"global::Godot.NativeInterop.NativeGodotVariant __arg{i} = global::Godot.NativeInterop.Marshalling.ConvertToVariant<T{i}>(in parameter{i});");
+                        }
 
                         writer.WriteLine($"global::Godot.NativeInterop.NativeGodotVariant** args = stackalloc global::Godot.NativeInterop.NativeGodotVariant*[{genericTypeArgumentCount}]");
                         writer.WriteLine('{');
@@ -105,7 +114,7 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
 
                         for (int i = 0; i < genericTypeArgumentCount; i++)
                         {
-                            writer.WriteLine($"global::Godot.NativeInterop.Marshalling.ConvertToVariant<T{i}>(in parameter{i}).GetUnsafeAddress(),");
+                            writer.WriteLine($"__arg{i}.GetUnsafeAddress(),");
                         }
 
                         writer.Indent--;
@@ -153,13 +162,18 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
                         return;
                     }
 
+                    for (int i = 0; i < genericTypeArgumentCount; i++)
+                    {
+                        writer.WriteLine($"global::Godot.NativeInterop.NativeGodotVariant __arg{i} = global::Godot.NativeInterop.Marshalling.ConvertToVariant<T{i}>(in parameter{i});");
+                    }
+
                     writer.WriteLine($"global::Godot.NativeInterop.NativeGodotVariant** args = stackalloc global::Godot.NativeInterop.NativeGodotVariant*[{genericTypeArgumentCount}]");
                     writer.WriteLine('{');
                     writer.Indent++;
 
                     for (int i = 0; i < genericTypeArgumentCount; i++)
                     {
-                        writer.WriteLine($"global::Godot.NativeInterop.Marshalling.ConvertToVariant<T{i}>(in parameter{i}).GetUnsafeAddress(),");
+                        writer.WriteLine($"__arg{i}.GetUnsafeAddress(),");
                     }
 
                     writer.Indent--;
@@ -198,13 +212,18 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
                     }
                     else
                     {
+                        for (int i = 0; i < genericTypeArgumentCount; i++)
+                        {
+                            writer.WriteLine($"global::Godot.NativeInterop.NativeGodotVariant __arg{i} = global::Godot.NativeInterop.Marshalling.ConvertToVariant<T{i}>(in parameter{i});");
+                        }
+
                         writer.WriteLine($"global::Godot.NativeInterop.NativeGodotVariant** args = stackalloc global::Godot.NativeInterop.NativeGodotVariant*[{genericTypeArgumentCount}]");
                         writer.WriteLine('{');
                         writer.Indent++;
 
                         for (int i = 0; i < genericTypeArgumentCount; i++)
                         {
-                            writer.WriteLine($"global::Godot.NativeInterop.Marshalling.ConvertToVariant<T{i}>(in parameter{i}).GetUnsafeAddress(),");
+                            writer.WriteLine($"__arg{i}.GetUnsafeAddress(),");
                         }
 
                         writer.Indent--;
