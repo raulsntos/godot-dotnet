@@ -771,12 +771,13 @@ internal sealed class BuiltInClassesBindingsDataCollector : BindingsDataCollecto
                 var dangerousSelfRefProperty = new PropertyInfo("DangerousSelfRef", type)
                 {
                     VisibilityAttributes = VisibilityAttributes.Assembly,
+                    IsReadOnly = true,
                     Getter = new MethodInfo("get_DangerousSelfRef")
                     {
                         ReturnParameter = ReturnInfo.FromType(type, RefKind.Ref),
                         Body = MethodBody.CreateUnsafe(writer =>
                         {
-                            writer.WriteLine($"return ref *({type.FullNameWithGlobal}*)global::System.Runtime.CompilerServices.Unsafe.AsPointer(ref this);");
+                            writer.WriteLine($"return ref *({type.FullNameWithGlobal}*)global::System.Runtime.CompilerServices.Unsafe.AsPointer(ref global::System.Runtime.CompilerServices.Unsafe.AsRef(in this));");
                         }),
                     },
                 };
