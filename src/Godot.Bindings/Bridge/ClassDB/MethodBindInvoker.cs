@@ -33,27 +33,50 @@ public readonly partial struct MethodBindInvoker
         return new MethodBindInvoker(@delegate, trampolineWithPtrArgs, trampolineWithVariantArgs);
     }
 
-    internal unsafe void CallWithPtrArgs(void* instance, void** args, void* outRet)
+    internal unsafe void CallWithPtrArgs(MethodInfo methodInfo, void* instance, void** args, void* outRet)
     {
-        var gcHandle = GCHandle.FromIntPtr((nint)instance);
-        var instanceObj = (GodotObject?)gcHandle.Target;
-
-        Debug.Assert(instanceObj is not null);
+        GodotObject instanceObj = GetInstanceObject(methodInfo, instance);
 
         _trampolineWithPtrArgs(instanceObj, _delegate, args, outRet);
     }
 
     internal unsafe void CallWithVariantArgs(MethodInfo methodInfo, void* instance, NativeGodotVariantPtrSpan args, NativeGodotVariant* outRet, GDExtensionCallError* outError)
     {
-        var gcHandle = GCHandle.FromIntPtr((nint)instance);
-        var instanceObj = (GodotObject?)gcHandle.Target;
-
-        Debug.Assert(instanceObj is not null);
+        GodotObject instanceObj = GetInstanceObject(methodInfo, instance);
 
         _trampolineWithVariantArgs(methodInfo, instanceObj, _delegate, args, out NativeGodotVariant ret);
         *outRet = ret;
 
         outError->error = GDExtensionCallErrorType.GDEXTENSION_CALL_OK;
+    }
+
+    internal unsafe void CallVirtualWithPtrArgs(void* instance, void** args, void* outRet)
+    {
+        GodotObject instanceObj = GetInstanceObject(instance);
+
+        _trampolineWithPtrArgs(instanceObj, _delegate, args, outRet);
+    }
+
+    private unsafe static GodotObject GetInstanceObject(MethodInfo methodInfo, void* instance)
+    {
+        if (methodInfo.IsStatic)
+        {
+            // Static methods don't have an instance.
+            Debug.Assert(instance is null);
+            return null!;
+        }
+
+        return GetInstanceObject(instance);
+    }
+
+    private unsafe static GodotObject GetInstanceObject(void* instance)
+    {
+        var gcHandle = GCHandle.FromIntPtr((nint)instance);
+        var instanceObj = (GodotObject?)gcHandle.Target;
+
+        Debug.Assert(instanceObj is not null);
+
+        return instanceObj;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

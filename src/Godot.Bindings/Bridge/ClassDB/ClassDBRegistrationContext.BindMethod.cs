@@ -143,7 +143,7 @@ partial class ClassDBRegistrationContext
 
         Debug.Assert(method is not null);
 
-        method.Invoker.CallWithPtrArgs(instance, args, outRet);
+        method.Invoker.CallWithPtrArgs(method, instance, args, outRet);
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]

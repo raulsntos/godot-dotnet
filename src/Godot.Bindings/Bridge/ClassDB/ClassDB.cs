@@ -401,6 +401,6 @@ public static class ClassDB
             throw new InvalidOperationException($"Virtual method '{methodNameStr}' has not been registered in class '{context.ClassName}'.");
         }
 
-        return (delegate* unmanaged[Cdecl]<void*, void**, void*, void>)Marshal.GetFunctionPointerForDelegate(virtualMethodInfo.Invoker.CallWithPtrArgs);
+        return (delegate* unmanaged[Cdecl]<void*, void**, void*, void>)Marshal.GetFunctionPointerForDelegate(virtualMethodInfo.Invoker.CallVirtualWithPtrArgs);
     }
 }
