@@ -32,29 +32,29 @@ internal sealed class NumberDefaultValueParser<T> : DefaultValueParser where T :
 
         if (typeof(T) == typeof(uint))
         {
-            return $"{value}U";
+            return string.Create(CultureInfo.InvariantCulture, $"{value}U");
         }
         if (typeof(T) == typeof(ulong))
         {
-            return $"{value}UL";
+            return string.Create(CultureInfo.InvariantCulture, $"{value}UL");
         }
         if (typeof(T) == typeof(long))
         {
-            return $"{value}L";
+            return string.Create(CultureInfo.InvariantCulture, $"{value}L");
         }
         if (typeof(T) == typeof(Half))
         {
-            return $"({KnownTypes.SystemHalf.FullNameWithGlobal})({value})";
+            return string.Create(CultureInfo.InvariantCulture, $"({KnownTypes.SystemHalf.FullNameWithGlobal})({value})");
         }
         if (typeof(T) == typeof(float))
         {
-            return $"{value}f";
+            return string.Create(CultureInfo.InvariantCulture, $"{value}f");
         }
         if (typeof(T) == typeof(double))
         {
-            return $"{value}D";
+            return string.Create(CultureInfo.InvariantCulture, $"{value}D");
         }
 
-        return $"{value}";
+        return string.Create(CultureInfo.InvariantCulture, $"{value}");
     }
 }
