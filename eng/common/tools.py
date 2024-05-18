@@ -292,7 +292,7 @@ def install_dotnet(dotnet_root: str, version: str, architecture: str = "", runti
         if os.name != "nt":
             exit_code = subprocess.call([install_script, *args])
         else:
-            exit_code = subprocess.call(["powershell.exe", install_script, *args])
+            exit_code = subprocess.call(["powershell.exe", "-File", install_script, *args])
         if exit_code == 0:
             install_success = True
             break
