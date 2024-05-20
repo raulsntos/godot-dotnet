@@ -26,8 +26,8 @@ jobs:
             cibuild-script: ./eng/common/CIBuild.cmd -warnAsError 0
 
           - name: 🍎 macOS (x64)
-            os: macos-11
-            rid: osx-x64
+            os: macos-latest
+            rid: osx-arm64
             run-sample-project: false
             cibuild-script: ./eng/common/cibuild.sh --warnaserror false
 
