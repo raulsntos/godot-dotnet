@@ -18,6 +18,12 @@ public class GodotEnumValueInfo
     public required long Value { get; set; }
 
     /// <summary>
+    /// Enum's member description.
+    /// </summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>
     /// Deconstructs the current enum member information.
     /// </summary>
     /// <param name="name">Name of the enum member.</param>

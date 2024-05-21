@@ -12,6 +12,18 @@ public class GodotBuiltInClassInfo
     public required string Name { get; set; }
 
     /// <summary>
+    /// Class's description.
+    /// </summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>
+    /// Class's brief description.
+    /// </summary>
+    [JsonPropertyName("brief_description")]
+    public string? BriefDescription { get; set; }
+
+    /// <summary>
     /// The name of the return type for the indexer if the class supports indexing,
     /// <see langword="null"/> otherwise.
     /// The index type is always <see langword="long"/>.

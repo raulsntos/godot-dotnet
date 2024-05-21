@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Godot.Bridge;
 
@@ -12,6 +13,7 @@ public class Main
             return;
         }
 
+        ClassDB.RegisterClass<SummatorNode>(SummatorNode.BindMethods);
         ClassDB.RegisterClass<Summator>(Summator.BindMethods);
     }
 

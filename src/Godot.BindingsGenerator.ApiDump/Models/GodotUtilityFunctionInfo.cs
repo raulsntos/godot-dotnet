@@ -12,6 +12,12 @@ public class GodotUtilityFunctionInfo
     public required string Name { get; set; }
 
     /// <summary>
+    /// Method's description.
+    /// </summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>
     /// Name of the return type for the function.
     /// </summary>
     [JsonPropertyName("return_type")]

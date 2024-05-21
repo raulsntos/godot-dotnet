@@ -12,6 +12,12 @@ public class GodotConstantInfo
     public required string Name { get; set; }
 
     /// <summary>
+    /// Constant's description.
+    /// </summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>
     /// Name of the type of this constant's value.
     /// </summary>
     [JsonPropertyName("type")]

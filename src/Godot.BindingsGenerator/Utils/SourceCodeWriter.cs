@@ -31,10 +31,37 @@ internal static class SourceCodeWriter
     }
 
     /// <summary>
+    /// Write the member's Comment.
+    /// </summary>
+    /// <param name="writer">The <see cref="TextWriter"/> to write to.</param>
+    /// <param name="member">The <see cref="MemberInfo"/> to get the comment from.</param>
+    public static void WriteXMLComment(this IndentedTextWriter writer, MemberInfo member)
+    {
+        WriteXMLComment(writer, member?.XMLComment);
+    }
+
+    /// <summary>
+    /// Write the member's Comment.
+    /// </summary>
+    /// <param name="writer">The <see cref="TextWriter"/> to write to.</param>
+    /// <param name="comment">The to get the comment from.</param>
+    public static void WriteXMLComment(this IndentedTextWriter writer, string? comment)
+    {
+        if (comment is null)
+        {
+            return;
+        }
+        foreach (var line in comment.Split('\n'))
+        {
+            writer.WriteLine("/// " + line);
+        }
+    }
+
+    /// <summary>
     /// Write the member's attributes.
     /// </summary>
     /// <param name="writer">The <see cref="TextWriter"/> to write to.</param>
-    /// <param name="type">The <see cref="TypeInfo"/> to get the attributes from.</param>
+    /// <param name="member">The <see cref="MemberInfo"/> to get the attributes from.</param>
     public static void WriteAttributes(this IndentedTextWriter writer, MemberInfo member)
     {
         if (member is EnumInfo { HasFlagsAttribute: true })

@@ -8,6 +8,12 @@ namespace Godot.BindingsGenerator.ApiDump;
 public class GodotMethodInfo
 {
     /// <summary>
+    /// Method's description.
+    /// </summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>
     /// Name of the method.
     /// </summary>
     [JsonPropertyName("name")]

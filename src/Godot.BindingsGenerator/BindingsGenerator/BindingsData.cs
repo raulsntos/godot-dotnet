@@ -51,9 +51,10 @@ internal sealed partial class BindingsData
     /// necessary information from the given <paramref name="api"/> to generate
     /// the C# API.
     /// </summary>
-    /// <param name="api">API information deserialized from the JSON dump.</param>
+    /// <param name="api">API information deSerialized from the JSON dump.</param>
     /// <param name="options">Options that configure the bindings generation.</param>
     /// <param name="logger">Logger that logs information messages, warnings, and errors.</param>
+    /// <param name="targetDocs">Target docs to load from</param>
     /// <returns>A populated instance of <see cref="BindingsData"/>.</returns>
     public static BindingsData Create(GodotApi api, BindingsGeneratorOptions options, ILogger? logger = null)
     {

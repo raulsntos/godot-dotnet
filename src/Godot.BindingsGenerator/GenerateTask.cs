@@ -34,6 +34,11 @@ public class GenerateTask : Task
     /// </summary>
     public string? TestOutputPath { get; set; }
 
+    /// <summary>
+    /// Path to the directory where godot docs is
+    /// </summary>
+    public string? TargetDocsPath { get; set; }
+
     public override bool Execute()
     {
         var logger = new MSBuildTaskLogger(Log);
@@ -48,6 +53,7 @@ public class GenerateTask : Task
             Log.LogError("Error parsing the Godot extension API dump.");
             return false;
         }
+
 
         Log.LogMessage(MessageImportance.High, $"Generating C# bindings for '{api.Header.VersionFullName}'.");
 

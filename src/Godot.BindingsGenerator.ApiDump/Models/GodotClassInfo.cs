@@ -13,6 +13,18 @@ public class GodotClassInfo
     public required string Name { get; set; }
 
     /// <summary>
+    /// Class's description.
+    /// </summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>
+    /// Class's brief description.
+    /// </summary>
+    [JsonPropertyName("brief_description")]
+    public string? BriefDescription { get; set; }
+
+    /// <summary>
     /// Indicates if the class derives from the RefCounted type and uses reference counting.
     /// </summary>
     [JsonPropertyName("is_refcounted")]

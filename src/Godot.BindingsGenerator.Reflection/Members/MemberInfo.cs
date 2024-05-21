@@ -8,6 +8,10 @@ namespace Godot.BindingsGenerator.Reflection;
 public class MemberInfo
 {
     /// <summary>
+    /// Comment to add to code
+    /// </summary>
+    public string? XMLComment { get; set; }
+    /// <summary>
     /// Member name.
     /// </summary>
     public string Name { get; set; }

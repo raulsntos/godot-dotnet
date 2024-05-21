@@ -6,6 +6,7 @@ using System.Linq;
 using Godot.BindingsGenerator.ApiDump;
 using Godot.BindingsGenerator.Reflection;
 using Godot.BindingsGenerator.Logging;
+using System.Text;
 
 namespace Godot.BindingsGenerator;
 
@@ -38,6 +39,14 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                 TypeAttributes = TypeAttributes.ReferenceType,
                 IsPartial = true,
             };
+
+            if (engineClass.Description is not null || engineClass.BriefDescription is not null)
+            {
+                var comment = new StringBuilder();
+                comment.WriteSummary(engineClass.Description, engineClass.BriefDescription);
+                type.XMLComment = comment.ToString();
+            }
+
 
             if (type.Name != engineClass.Name)
             {
@@ -240,7 +249,15 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                 VisibilityAttributes = VisibilityAttributes.Public,
                 IsStatic = engineMethod.IsStatic,
             };
+
             AddEngineClassMethodByEngineName(type, engineMethod.Name, method);
+
+            if (engineMethod.Description is not null)
+            {
+                var comment = new StringBuilder();
+                comment.WriteSummary(engineMethod.Description);
+                method.XMLComment = comment.ToString();
+            }
 
             if (engineMethod.ReturnValue is not null)
             {
@@ -328,6 +345,13 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                 VisibilityAttributes = VisibilityAttributes.Public,
                 IsNew = _propertiesAllowedToShadowMember.Contains($"{type.Name}.{propertyName}"),
             };
+
+            if (engineProperty.Description is not null)
+            {
+                var comment = new StringBuilder();
+                comment.WriteSummary(engineProperty.Description);
+                property.XMLComment = comment.ToString();
+            }
 
             // TODO: Some methods that are used as property accessors don't seem to be exposed in extensions_api.json
             // https://github.com/godotengine/godot/issues/64429
@@ -549,6 +573,15 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
             {
                 VisibilityAttributes = VisibilityAttributes.Public,
             };
+
+
+            if (engineSignal.Description is not null)
+            {
+                var comment = new StringBuilder();
+                comment.WriteSummary(engineSignal.Description);
+                @event.XMLComment = comment.ToString();
+            }
+
             @event.AddAccessor = new MethodInfo($"add_{@event.Name}")
             {
                 Parameters =
@@ -608,7 +641,8 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
 
             foreach (var (name, value) in engineEnum.Values)
             {
-                @enum.Values.Add((NamingUtils.SnakeToPascalCase(name), value));
+                /// Todo add comment to enum
+                @enum.Values.Add((NamingUtils.SnakeToPascalCase(name), value, null));
             }
 
             int enumPrefix = NamingUtils.DetermineEnumPrefix(engineEnum);
@@ -638,6 +672,13 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                 IsLiteral = true,
                 DefaultValue = engineConstant.Value,
             };
+
+            if (engineConstant.Description is not null)
+            {
+                var comment = new StringBuilder();
+                comment.WriteSummary(engineConstant.Description);
+                constant.XMLComment = comment.ToString();
+            }
 
             type.DeclaredFields.Add(constant);
         }

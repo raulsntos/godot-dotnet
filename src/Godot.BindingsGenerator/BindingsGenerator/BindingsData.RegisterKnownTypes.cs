@@ -4,7 +4,7 @@ using Godot.BindingsGenerator.Reflection;
 
 namespace Godot.BindingsGenerator;
 
-partial class BindingsData
+internal partial class BindingsData
 {
     private void RegisterKnownTypes()
     {

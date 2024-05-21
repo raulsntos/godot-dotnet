@@ -11,6 +11,11 @@ partial class Marshalling
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public unsafe static void WriteUnmanaged<[MustBeVariant] T>(void* destination, scoped ref readonly T value)
     {
+        if(value is null)
+        {
+            return;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TTo UnsafeAs<TTo>(in T value) => Unsafe.As<T, TTo>(ref Unsafe.AsRef(in value));
 

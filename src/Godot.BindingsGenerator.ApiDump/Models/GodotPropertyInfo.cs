@@ -21,6 +21,12 @@ public class GodotPropertyInfo
     public required string Type { get; set; }
 
     /// <summary>
+    /// Property's description.
+    /// </summary>
+    [JsonPropertyName("description")]
+    public string? Description { get; set; }
+
+    /// <summary>
     /// Name of the method used to set this property.
     /// The method should be available in <see cref="GodotClassInfo.Methods"/>.
     /// </summary>

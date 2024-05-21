@@ -23,7 +23,6 @@ internal sealed class BuiltInClassesBindingsDataCollector : BindingsDataCollecto
             {
                 continue;
             }
-
             var type = new TypeInfo($"NativeGodot{NamingUtils.PascalToPascalCase(engineClass.Name)}", "Godot.NativeInterop")
             {
                 VisibilityAttributes = VisibilityAttributes.Assembly,
@@ -74,6 +73,13 @@ internal sealed class BuiltInClassesBindingsDataCollector : BindingsDataCollecto
                 throw new InvalidOperationException($"Could not find enum field in 'GDExtensionVariantType' for Variant type '{engineClass.Name}'.");
             }
 
+            if (engineClass.Description is not null || engineClass.BriefDescription is not null)
+            {
+                var writer = new StringBuilder();
+                writer.WriteSummary(engineClass.Description, engineClass.BriefDescription);
+                type.XMLComment = writer.ToString();
+            }
+
             foreach (var engineConstructor in engineClass.Constructors)
             {
                 if (!ShouldGenerateBuiltInClass(engineClass.Name))
@@ -90,6 +96,13 @@ internal sealed class BuiltInClassesBindingsDataCollector : BindingsDataCollecto
                     ReturnParameter = ReturnInfo.FromType(type),
                     Body = new CallBuiltInConstructor(variantTypeName, engineConstructor.Index, context.TypeDB),
                 };
+
+                if (engineConstructor.Description is not null)
+                {
+                    var writer = new StringBuilder();
+                    writer.WriteSummary(engineConstructor.Description);
+                    method.XMLComment = writer.ToString();
+                }
 
                 foreach (var arg in engineConstructor.Arguments)
                 {
@@ -311,6 +324,13 @@ internal sealed class BuiltInClassesBindingsDataCollector : BindingsDataCollecto
                     IsStatic = true,
                 };
 
+                if (engineMethod.Description is not null)
+                {
+                    var comment = new StringBuilder();
+                    comment.WriteSummary(engineMethod.Description);
+                    type.XMLComment = comment.ToString();
+                }
+
                 // Hardcode renames to avoid conflicts with manually defined members.
                 method.Name = method.Name switch
                 {
@@ -410,6 +430,13 @@ internal sealed class BuiltInClassesBindingsDataCollector : BindingsDataCollecto
                     VisibilityAttributes = VisibilityAttributes.Assembly,
                     IsStatic = true,
                 };
+
+                if (engineOperator.Description is not null)
+                {
+                    var writer = new StringBuilder();
+                    writer.WriteSummary(engineOperator.Description);
+                    method.XMLComment = writer.ToString();
+                }
 
                 var valueParameter = new ParameterInfo("value", type)
                 {
@@ -553,6 +580,13 @@ internal sealed class BuiltInClassesBindingsDataCollector : BindingsDataCollecto
                     // Could not find the type in the enum.
                     Debug.Fail($"All the built-in types should exist in the enum, but '{engineClass.Name}' was not found.");
                     continue;
+                }
+
+                if (engineClass.Description is not null || engineClass.BriefDescription is not null)
+                {
+                    var writer = new StringBuilder();
+                    writer.WriteSummary(engineClass.Description, engineClass.BriefDescription);
+                    targetType.XMLComment = writer.ToString();
                 }
 
                 var variantToTypeConstructorField = new FieldInfo($"_variantTo{targetTypeName}Constructor", new TypeInfo("delegate* unmanaged[Cdecl]<void*, global::Godot.NativeInterop.NativeGodotVariant*, void>"))
