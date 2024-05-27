@@ -29,23 +29,43 @@ where TSourceGenerator : new()
         }
     }
 
-    public static Task Verify(ICollection<string> sources, ICollection<string> generatedSources)
+    private static (string FileName, string ContentFileName) MapFileNames(string source)
+    {
+        return (source, source);
+    }
+
+    public static Task Verify(IEnumerable<string> sources, IEnumerable<string> generatedSources)
     {
         return MakeVerifier(sources, generatedSources).RunAsync();
     }
 
-    public static Test MakeVerifier(ICollection<string> sources, ICollection<string> generatedSources)
+    public static Task Verify(IEnumerable<string> sources, IEnumerable<(string FileName, string ContentFileName)> generatedSources)
+    {
+        return MakeVerifier(sources.Select(MapFileNames), generatedSources).RunAsync();
+    }
+
+    public static Task Verify(IEnumerable<(string FileName, string ContentFileName)> sources, IEnumerable<(string FileName, string ContentFileName)> generatedSources)
+    {
+        return MakeVerifier(sources, generatedSources).RunAsync();
+    }
+
+    public static Test MakeVerifier(IEnumerable<string> sources, IEnumerable<string> generatedSources)
+    {
+        return MakeVerifier(sources.Select(MapFileNames), generatedSources.Select(MapFileNames));
+    }
+
+    public static Test MakeVerifier(IEnumerable<(string FileName, string ContentFileName)> sources, IEnumerable<(string FileName, string ContentFileName)> generatedSources)
     {
         var verifier = new Test();
 
         verifier.TestState.Sources.AddRange(sources.Select(source => (
-            source,
-            SourceText.From(File.ReadAllText(Path.Combine(Constants.SourceFolderPath, source)), Encoding.UTF8)
+            source.FileName,
+            SourceText.From(File.ReadAllText(Path.Combine(Constants.SourceFolderPath, source.ContentFileName)), Encoding.UTF8)
         )));
 
         verifier.TestState.GeneratedSources.AddRange(generatedSources.Select(generatedSource => (
-            FullGeneratedSourceName(generatedSource),
-            SourceText.From(File.ReadAllText(Path.Combine(Constants.GeneratedSourceFolderPath, generatedSource)), Encoding.UTF8)
+            FullGeneratedSourceName(generatedSource.FileName),
+            SourceText.From(File.ReadAllText(Path.Combine(Constants.GeneratedSourceFolderPath, generatedSource.ContentFileName)), Encoding.UTF8)
         )));
 
         return verifier;

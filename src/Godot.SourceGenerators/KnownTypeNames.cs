@@ -69,4 +69,5 @@ internal static class KnownTypeNames
     public const string BindMethodAttribute = "Godot.BindMethodAttribute";
     public const string BindPropertyAttribute = "Godot.BindPropertyAttribute";
     public const string SignalAttribute = "Godot.SignalAttribute";
+    public const string DisableGodotEntryPointGenerationAttribute = "Godot.DisableGodotEntryPointGenerationAttribute";
 }

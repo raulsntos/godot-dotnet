@@ -1,0 +1,3 @@
+using Godot;
+
+[assembly: DisableGodotEntryPointGeneration]

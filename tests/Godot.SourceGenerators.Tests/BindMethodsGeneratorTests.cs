@@ -4,7 +4,7 @@ namespace Godot.SourceGenerators.Tests;
 
 using Verifier = CSharpSourceGeneratorVerifier<BindMethodsGenerator>;
 
-public class GodotRegisterClassGeneratorTests
+public class BindMethodsGeneratorTests
 {
     [Fact]
     public async Task BindEveryKindOfMember()

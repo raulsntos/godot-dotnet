@@ -1,5 +1,11 @@
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Godot;
 using Godot.Bridge;
+using ClassDB = Godot.Bridge.ClassDB;
+
+[assembly: DisableGodotEntryPointGeneration]
+[assembly: DisableRuntimeMarshalling]
 
 namespace GDExtensionSummator;
 
