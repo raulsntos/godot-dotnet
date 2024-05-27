@@ -11,8 +11,54 @@ partial class Marshalling
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     public unsafe static void WriteUnmanaged<[MustBeVariant] T>(void* destination, scoped ref readonly T value)
     {
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TTo UnsafeAs<TTo>(in T value) => Unsafe.As<T, TTo>(ref Unsafe.AsRef(in value));
+
+        if (typeof(T) == typeof(NodePath))
+        {
+            *(NativeGodotNodePath*)destination = (UnsafeAs<NodePath?>(value)?.NativeValue ?? default).DangerousSelfRef;
+            return;
+        }
+        if (typeof(T) == typeof(StringName))
+        {
+            *(NativeGodotStringName*)destination = (UnsafeAs<StringName?>(value)?.NativeValue ?? default).DangerousSelfRef;
+            return;
+        }
+        if (typeof(T) == typeof(GodotArray))
+        {
+            GodotArrayMarshaller.WriteUnmanaged((NativeGodotArray*)destination, UnsafeAs<GodotArray?>(value));
+            return;
+        }
+
+        if (typeof(T) == typeof(GodotDictionary))
+        {
+            GodotDictionaryMarshaller.WriteUnmanaged((NativeGodotDictionary*)destination, UnsafeAs<GodotDictionary?>(value));
+            return;
+        }
+
+        // More complex checks here at the end, to avoid screwing the simple ones in case they're not optimized away.
+
+        // `typeof(T1).IsAssignableFrom(typeof(T2))` is optimized away.
+
+        if (typeof(GodotObject).IsAssignableFrom(typeof(T)))
+        {
+            GodotObjectMarshaller.WriteUnmanaged((nint*)destination, UnsafeAs<GodotObject?>(value));
+            return;
+        }
+
+        try
+        {
+            if (value is null)
+            {
+                throw new ArgumentNullException(nameof(value),$"Marshal is null value of type {typeof(T).FullName}.");
+            }
+        }
+        catch (Exception e)
+        {
+            GD.PushError(e);
+            return;
+        }
 
         // `typeof(T1) == typeof(T2)` is optimized away. We cannot cache `typeof(T)` in a local variable, as it's not optimized when done like that.
 
@@ -123,11 +169,6 @@ partial class Marshalling
             return;
         }
 
-        if (typeof(T) == typeof(NodePath))
-        {
-            *(NativeGodotNodePath*)destination = (UnsafeAs<NodePath?>(value)?.NativeValue ?? default).DangerousSelfRef;
-            return;
-        }
 
         if (typeof(T) == typeof(Plane))
         {
@@ -171,11 +212,7 @@ partial class Marshalling
             return;
         }
 
-        if (typeof(T) == typeof(StringName))
-        {
-            *(NativeGodotStringName*)destination = (UnsafeAs<StringName?>(value)?.NativeValue ?? default).DangerousSelfRef;
-            return;
-        }
+
 
         if (typeof(T) == typeof(Transform2D))
         {
@@ -285,27 +322,6 @@ partial class Marshalling
             return;
         }
 
-        if (typeof(T) == typeof(GodotArray))
-        {
-            GodotArrayMarshaller.WriteUnmanaged((NativeGodotArray*)destination, UnsafeAs<GodotArray?>(value));
-            return;
-        }
-
-        if (typeof(T) == typeof(GodotDictionary))
-        {
-            GodotDictionaryMarshaller.WriteUnmanaged((NativeGodotDictionary*)destination, UnsafeAs<GodotDictionary?>(value));
-            return;
-        }
-
-        // More complex checks here at the end, to avoid screwing the simple ones in case they're not optimized away.
-
-        // `typeof(T1).IsAssignableFrom(typeof(T2))` is optimized away.
-
-        if (typeof(GodotObject).IsAssignableFrom(typeof(T)))
-        {
-            GodotObjectMarshaller.WriteUnmanaged((nint*)destination, UnsafeAs<GodotObject?>(value));
-            return;
-        }
 
         // `typeof(T).IsEnum` is optimized away.
 
