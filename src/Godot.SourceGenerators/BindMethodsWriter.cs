@@ -129,10 +129,11 @@ internal static class BindMethodsWriter
             sb.OpenBlock();
             foreach (var signal in spec.Signals)
             {
+                string signalName = RemoveSignalDelegateSuffix(signal.SymbolName);
                 string value = !string.IsNullOrEmpty(signal.NameOverride)
                     ? signal.NameOverride!
-                    : signal.SymbolName;
-                AddCachedStringName(signal.SymbolName, value);
+                    : signalName;
+                AddCachedStringName(signalName, value);
             }
             sb.CloseBlock();
         }
@@ -346,7 +347,7 @@ internal static class BindMethodsWriter
         foreach (var signal in spec.Signals)
         {
             sb.Append("context.BindSignal(new global::Godot.Bridge.SignalInfo(");
-            sb.Append($"SignalName.@{signal.SymbolName})");
+            sb.Append($"SignalName.@{RemoveSignalDelegateSuffix(signal.SymbolName)})");
             if (signal.Parameters.Count == 0)
             {
                 sb.AppendLine(");");
@@ -494,5 +495,19 @@ internal static class BindMethodsWriter
 
         sb.Indent--;
         sb.Append('}');
+    }
+
+    /// <summary>
+    /// Removes the 'EventHandler' suffix from the name of a signal's delegate.
+    /// </summary>
+    /// <param name="delegateName">The name of the signal's delegate.</param>
+    private static string RemoveSignalDelegateSuffix(string delegateName)
+    {
+        if (!delegateName.EndsWith("EventHandler", StringComparison.Ordinal))
+        {
+            throw new ArgumentException("Signal delegate must end with 'EventHandler'.", nameof(delegateName));
+        }
+
+        return delegateName.Substring(0, delegateName.Length - "EventHandler".Length);
     }
 }

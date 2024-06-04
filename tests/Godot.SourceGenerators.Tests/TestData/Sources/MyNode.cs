@@ -9,7 +9,7 @@ public partial class MyNode : Node
     public static MyNode MyConstructorMethod() => new();
 
     [Signal]
-    public delegate void MySignal();
+    public delegate void MySignalEventHandler();
 
     [BindProperty]
     public int MyProperty { get; set; }
