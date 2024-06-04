@@ -24,7 +24,7 @@ partial class ClassDBRegistrationContext
     {
         if (!_registeredSignals.Add(signalInfo.Name))
         {
-            throw new ArgumentException($"Signal '{signalInfo.Name}' already registered in class '{ClassName}'.");
+            throw new ArgumentException($"Signal '{signalInfo.Name}' already registered in class '{ClassName}'.", nameof(signalInfo));
         }
 
         // Convert managed signal info to the internal unmanaged type.

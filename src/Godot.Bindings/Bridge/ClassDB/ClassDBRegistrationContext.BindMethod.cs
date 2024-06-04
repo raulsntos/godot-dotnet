@@ -27,7 +27,7 @@ partial class ClassDBRegistrationContext
     {
         if (!_registeredMethods.Add(methodInfo.Name))
         {
-            throw new ArgumentException($"Method '{methodInfo.Name}' already registered in class '{ClassName}'.");
+            throw new ArgumentException($"Method '{methodInfo.Name}' already registered in class '{ClassName}'.", nameof(methodInfo));
         }
 
         RegisteredMethodImplementations[methodInfo.Name] = methodInfo;

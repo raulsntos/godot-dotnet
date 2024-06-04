@@ -20,7 +20,7 @@ partial class ClassDBRegistrationContext
     {
         if (!_registeredMethods.Add(methodInfo.Name))
         {
-            throw new ArgumentException($"Method '{methodInfo.Name}' already registered in class '{ClassName}'.");
+            throw new ArgumentException($"Method '{methodInfo.Name}' already registered in class '{ClassName}'.", nameof(methodInfo));
         }
 
         // Convert managed method info to the internal unmanaged type.

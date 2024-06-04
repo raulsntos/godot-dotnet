@@ -24,7 +24,7 @@ partial class ClassDBRegistrationContext
     {
         if (!_registeredProperties.Add(propertyInfo.Name))
         {
-            throw new ArgumentException($"Property '{propertyInfo.Name}' already registered in class '{ClassName}'.");
+            throw new ArgumentException($"Property '{propertyInfo.Name}' already registered in class '{ClassName}'.", nameof(propertyInfo));
         }
 
         // Convert managed property info to the internal unmanaged type.
