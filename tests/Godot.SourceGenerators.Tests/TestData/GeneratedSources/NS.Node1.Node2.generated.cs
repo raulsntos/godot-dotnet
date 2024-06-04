@@ -6,7 +6,7 @@ partial class Node1
 {
     partial class Node2
     {
-        public new class PropertyName : global::Godot.Node.PropertyName
+        public new partial class PropertyName : global::Godot.Node.PropertyName
         {
             public static global::Godot.StringName @Node2Property { get; } = global::Godot.StringName.CreateStaticFromAscii("Node2Property"u8);
         }

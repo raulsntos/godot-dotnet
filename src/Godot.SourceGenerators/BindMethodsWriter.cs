@@ -66,7 +66,7 @@ internal static class BindMethodsWriter
 
         if (spec.Methods.Count > 0)
         {
-            sb.AppendLine($"public new class MethodName : {baseTypeFullName}.MethodName");
+            sb.AppendLine($"public new partial class MethodName : {baseTypeFullName}.MethodName");
             sb.OpenBlock();
             foreach (var method in spec.Methods)
             {
@@ -80,7 +80,7 @@ internal static class BindMethodsWriter
 
         if (spec.Properties.Count > 0)
         {
-            sb.AppendLine($"public new class PropertyName : {baseTypeFullName}.PropertyName");
+            sb.AppendLine($"public new partial class PropertyName : {baseTypeFullName}.PropertyName");
             sb.OpenBlock();
             foreach (var property in spec.Properties)
             {
@@ -94,7 +94,7 @@ internal static class BindMethodsWriter
 
         if (spec.Signals.Count > 0)
         {
-            sb.AppendLine($"public new class SignalName : {baseTypeFullName}.SignalName");
+            sb.AppendLine($"public new partial class SignalName : {baseTypeFullName}.SignalName");
             sb.OpenBlock();
             foreach (var signal in spec.Signals)
             {

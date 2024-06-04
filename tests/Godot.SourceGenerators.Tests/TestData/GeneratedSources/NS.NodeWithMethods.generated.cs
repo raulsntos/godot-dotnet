@@ -4,7 +4,7 @@ namespace NS;
 
 partial class NodeWithMethods
 {
-    public new class MethodName : global::Godot.Node.MethodName
+    public new partial class MethodName : global::Godot.Node.MethodName
     {
         public static global::Godot.StringName @MyMethod { get; } = global::Godot.StringName.CreateStaticFromAscii("MyMethod"u8);
         public static global::Godot.StringName @MyNamedMethod { get; } = global::Godot.StringName.CreateStaticFromAscii("my_named_method"u8);

@@ -4,7 +4,7 @@ namespace NS;
 
 partial class Node1
 {
-    public new class PropertyName : global::Godot.Node.PropertyName
+    public new partial class PropertyName : global::Godot.Node.PropertyName
     {
         public static global::Godot.StringName @Node1Property { get; } = global::Godot.StringName.CreateStaticFromAscii("Node1Property"u8);
     }

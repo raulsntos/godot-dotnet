@@ -4,7 +4,7 @@ namespace NS;
 
 partial class NodeWithDefaultMarshalling
 {
-    public new class PropertyName : global::Godot.Node.PropertyName
+    public new partial class PropertyName : global::Godot.Node.PropertyName
     {
         public static global::Godot.StringName @PropertyByte { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyByte"u8);
         public static global::Godot.StringName @PropertyBoolean { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyBoolean"u8);

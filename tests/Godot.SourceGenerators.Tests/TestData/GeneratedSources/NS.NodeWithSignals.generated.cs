@@ -4,7 +4,7 @@ namespace NS;
 
 partial class NodeWithSignals
 {
-    public new class SignalName : global::Godot.Node.SignalName
+    public new partial class SignalName : global::Godot.Node.SignalName
     {
         public static global::Godot.StringName @MySignal { get; } = global::Godot.StringName.CreateStaticFromAscii("MySignal"u8);
         public static global::Godot.StringName @MyNamedSignal { get; } = global::Godot.StringName.CreateStaticFromAscii("my_named_signal"u8);

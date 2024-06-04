@@ -4,7 +4,7 @@ namespace NS;
 
 partial class ParameterDefaultValues
 {
-    public new class MethodName : global::Godot.Node.MethodName
+    public new partial class MethodName : global::Godot.Node.MethodName
     {
         public static global::Godot.StringName @Method1 { get; } = global::Godot.StringName.CreateStaticFromAscii("Method1"u8);
         public static global::Godot.StringName @Method2 { get; } = global::Godot.StringName.CreateStaticFromAscii("Method2"u8);
