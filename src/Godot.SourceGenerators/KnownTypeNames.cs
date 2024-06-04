@@ -62,11 +62,16 @@ internal static class KnownTypeNames
     public const string GodotArray = "Godot.Collections.GodotArray";
     public const string GodotDictionary = "Godot.Collections.GodotDictionary";
 
+    // System attributes.
+    public const string SystemFlagsAttribute = "System.FlagsAttribute";
+
     // Godot attributes.
     public const string GodotNativeClassNameAttribute = "Godot.GodotNativeClassNameAttribute";
     public const string GodotClassAttribute = "Godot.GodotClassAttribute";
     public const string BindConstructorAttribute = "Godot.BindConstructorAttribute";
     public const string BindMethodAttribute = "Godot.BindMethodAttribute";
+    public const string BindEnumAttribute = "Godot.BindEnumAttribute";
+    public const string BindConstantAttribute = "Godot.BindConstantAttribute";
     public const string BindPropertyAttribute = "Godot.BindPropertyAttribute";
     public const string SignalAttribute = "Godot.SignalAttribute";
     public const string DisableGodotEntryPointGenerationAttribute = "Godot.DisableGodotEntryPointGenerationAttribute";

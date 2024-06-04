@@ -725,6 +725,21 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                 type.NestedTypes.Add(methodNamesType);
             }
 
+            if (engineClass.Name == "Object")
+            {
+                var constantNamesType = new TypeInfo("ConstantName")
+                {
+                    TypeAttributes = TypeAttributes.ReferenceType,
+                    VisibilityAttributes = VisibilityAttributes.Public,
+                    IsNew = engineClass.Name != "Object",
+                    BaseType = engineClass.Name != "Object"
+                        ? new TypeInfo("ConstantName") { ContainingType = type.BaseType }
+                        : null,
+                };
+
+                type.NestedTypes.Add(constantNamesType);
+            }
+
             if (engineClass.Name == "Object" || engineClass.Properties.Length > 0)
             {
                 var propertyNamesType = new TypeInfo("PropertyName")

@@ -25,6 +25,15 @@ public class BindMethodsGeneratorTests
     }
 
     [Fact]
+    public async Task BindConstants()
+    {
+        await Verifier.Verify(
+            ["NodeWithConstants.cs"],
+            ["NS.NodeWithConstants.generated.cs"]
+        );
+    }
+
+    [Fact]
     public async Task BindProperties()
     {
         await Verifier.Verify(

@@ -48,6 +48,11 @@ internal readonly record struct GodotClassSpec : IEquatable<GodotClassSpec>
     public GodotConstructorSpec? Constructor { get; init; }
 
     /// <summary>
+    /// Describes the constants that should be registered for the type.
+    /// </summary>
+    public EquatableArray<GodotConstantSpec> Constants { get; init; }
+
+    /// <summary>
     /// Describes the properties that should be registered for the type.
     /// </summary>
     public EquatableArray<GodotPropertySpec> Properties { get; init; }

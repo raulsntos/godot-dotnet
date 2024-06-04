@@ -13,6 +13,7 @@ internal static class ClassSpecCollector
 
         List<ContainingSymbol> containingTypeSymbols = [];
         GodotConstructorSpec? constructor = null;
+        List<GodotConstantSpec> constants = [];
         List<GodotPropertySpec> properties = [];
         List<GodotMethodSpec> methods = [];
         List<GodotSignalSpec> signals = [];
@@ -66,6 +67,24 @@ internal static class ClassSpecCollector
             }
         }
 
+        // Collect constant specs.
+        foreach (var fieldSymbol in members.OfType<IFieldSymbol>())
+        {
+            GodotConstantSpec? constantSpec = ConstantSpecCollector.Collect(compilation, fieldSymbol, cancellationToken);
+            if (constantSpec is not null)
+            {
+                constants.Add(constantSpec.Value);
+            }
+        }
+        foreach (var nestedTypeSymbol in members.OfType<INamedTypeSymbol>())
+        {
+            var constantSpecs = ConstantSpecCollector.Collect(compilation, nestedTypeSymbol, cancellationToken);
+            foreach (var constantSpec in constantSpecs)
+            {
+                constants.Add(constantSpec);
+            }
+        }
+
         // Collect property specs.
         foreach (var symbol in members)
         {
@@ -103,6 +122,7 @@ internal static class ClassSpecCollector
             ContainingTypeSymbols = [.. containingTypeSymbols],
             FullyQualifiedBaseTypeName = typeSymbol.BaseType?.FullNameWithGlobal() ?? KnownTypeNames.GodotObject,
             Constructor = constructor,
+            Constants = [.. constants],
             Properties = [.. properties],
             Methods = [.. methods],
             Signals = [.. signals],

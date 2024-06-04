@@ -46,6 +46,8 @@ internal static class BindMethodsWriter
 
         WriteBindMethods(sb, spec);
 
+        WriteBindConstants(sb, spec);
+
         WriteBindProperties(sb, spec);
 
         WriteBindSignals(sb, spec);
@@ -74,6 +76,35 @@ internal static class BindMethodsWriter
                     ? method.NameOverride!
                     : method.SymbolName;
                 AddCachedStringName(method.SymbolName, value);
+            }
+            sb.CloseBlock();
+        }
+
+        if (spec.Constants.Count > 0)
+        {
+            HashSet<string> visitedEnums = [];
+
+            sb.AppendLine($"public new partial class ConstantName : {baseTypeFullName}.ConstantName");
+            sb.OpenBlock();
+            foreach (var constant in spec.Constants)
+            {
+                if (!string.IsNullOrEmpty(constant.EnumSymbolName))
+                {
+                    if (visitedEnums.Add(constant.EnumSymbolName!))
+                    {
+                        string value = !string.IsNullOrEmpty(constant.EnumNameOverride)
+                            ? constant.EnumNameOverride!
+                            : constant.EnumSymbolName!;
+                        AddCachedStringName(constant.EnumSymbolName!, value);
+                    }
+                }
+
+                {
+                    string value = !string.IsNullOrEmpty(constant.NameOverride)
+                        ? constant.NameOverride!
+                        : constant.SymbolName;
+                    AddCachedStringName($"{constant.EnumSymbolName}{constant.SymbolName}", value);
+                }
             }
             sb.CloseBlock();
         }
@@ -263,6 +294,21 @@ internal static class BindMethodsWriter
         }
     }
 
+    private static void WriteBindConstants(IndentedStringBuilder sb, GodotClassSpec spec)
+    {
+        foreach (var constant in spec.Constants)
+        {
+            sb.Append("context.BindConstant(");
+            sb.Indent++;
+
+            sb.AppendConstantInfo(constant);
+
+            sb.AppendLine(");");
+
+            sb.Indent--;
+        }
+    }
+
     private static void WriteBindProperties(IndentedStringBuilder sb, GodotClassSpec spec)
     {
         foreach (var property in spec.Properties)
@@ -361,6 +407,37 @@ internal static class BindMethodsWriter
         }
         sb.Append(')');
         AppendPropertyInfoObjectInitializer(sb, parameter);
+    }
+
+    private static void AppendConstantInfo(this IndentedStringBuilder sb, GodotConstantSpec constant)
+    {
+        sb.Append($"new global::Godot.Bridge.ConstantInfo(");
+        sb.Append($"ConstantName.@{constant.EnumSymbolName}{constant.SymbolName}, ");
+        sb.Append("(long)(");
+        if (!string.IsNullOrEmpty(constant.EnumSymbolName))
+        {
+            sb.Append($"@{constant.EnumSymbolName}.");
+        }
+        sb.Append($"@{constant.SymbolName}))");
+
+        if (!string.IsNullOrEmpty(constant.EnumSymbolName))
+        {
+            sb.AppendLine();
+            sb.AppendLine('{');
+            sb.Indent++;
+
+            string enumName = !string.IsNullOrEmpty(constant.EnumNameOverride)
+                ? constant.EnumNameOverride!
+                : constant.EnumSymbolName!;
+            sb.AppendLine($"""EnumName = ConstantName.@{constant.EnumSymbolName},""");
+            if (constant.IsFlagsEnum)
+            {
+                sb.AppendLine($"""IsFlagsEnum = true,""");
+            }
+
+            sb.Indent--;
+            sb.Append('}');
+        }
     }
 
     private static void AppendPropertyInfo(this IndentedStringBuilder sb, GodotPropertySpec property)
