@@ -67,9 +67,18 @@ internal static class ClassSpecCollector
         }
 
         // Collect property specs.
-        foreach (var propertySymbol in members.OfType<IPropertySymbol>())
+        foreach (var symbol in members)
         {
-            GodotPropertySpec? propertySpec = PropertySpecCollector.Collect(compilation, propertySymbol, cancellationToken);
+            GodotPropertySpec? propertySpec = symbol switch
+            {
+                IPropertySymbol propertySymbol =>
+                    PropertySpecCollector.Collect(compilation, propertySymbol, cancellationToken),
+
+                IFieldSymbol fieldSymbol =>
+                    PropertySpecCollector.Collect(compilation, fieldSymbol, cancellationToken),
+
+                _ => null,
+            };
             if (propertySpec is not null)
             {
                 properties.Add(propertySpec.Value);

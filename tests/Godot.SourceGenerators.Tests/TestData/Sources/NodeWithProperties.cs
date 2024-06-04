@@ -15,4 +15,15 @@ public partial class NodeWithProperties : Node
 
     [BindProperty]
     public int MyPropertyWithDefaultValue { get; set; } = 42;
+
+    public int unexposedField;
+
+    [BindProperty]
+    public int myField;
+
+    [BindProperty(Name = "my_named_field")]
+    public int myNamedField;
+
+    [BindProperty]
+    public int myFieldWithDefaultValue = 42;
 }

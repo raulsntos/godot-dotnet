@@ -20,6 +20,17 @@ internal static class PropertySpecCollector
         return CollectCore(compilation, propertySymbol.Name, propertySymbol.Type, attribute, cancellationToken);
     }
 
+    public static GodotPropertySpec? Collect(Compilation compilation, IFieldSymbol fieldSymbol, CancellationToken cancellationToken = default)
+    {
+        if (!fieldSymbol.TryGetAttribute(KnownTypeNames.BindPropertyAttribute, out var attribute))
+        {
+            // Fields must have the attribute to be registered.
+            return null;
+        }
+
+        return CollectCore(compilation, fieldSymbol.Name, fieldSymbol.Type, attribute, cancellationToken);
+    }
+
     public static GodotPropertySpec Collect(Compilation compilation, IParameterSymbol parameterSymbol, CancellationToken cancellationToken = default)
     {
         parameterSymbol.TryGetAttribute(KnownTypeNames.BindPropertyAttribute, out var attribute);
