@@ -17,7 +17,7 @@ partial class ClassDBRegistrationContext
     /// </exception>
     public unsafe void BindConstant(ConstantInfo constantInfo)
     {
-        if (_registeredConstants.Add(constantInfo.Name))
+        if (!_registeredConstants.Add(constantInfo.Name))
         {
             throw new ArgumentException($"Constant '{constantInfo.Name}' already registered in class '{ClassName}'.", nameof(constantInfo));
         }
