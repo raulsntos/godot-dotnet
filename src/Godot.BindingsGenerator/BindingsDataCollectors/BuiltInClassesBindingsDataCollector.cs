@@ -911,6 +911,7 @@ internal sealed class BuiltInClassesBindingsDataCollector : BindingsDataCollecto
             "PackedVector2Array" => "GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR2_ARRAY",
             "PackedVector3Array" => "GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR3_ARRAY",
             "PackedColorArray" => "GDEXTENSION_VARIANT_TYPE_PACKED_COLOR_ARRAY",
+            "PackedVector4Array" => "GDEXTENSION_VARIANT_TYPE_PACKED_VECTOR4_ARRAY",
             _ => null,
         };
         return !string.IsNullOrEmpty(variantType);

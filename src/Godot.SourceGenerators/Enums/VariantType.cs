@@ -44,6 +44,7 @@ internal enum VariantType
     PackedVector2Array = 35,
     PackedVector3Array = 36,
     PackedColorArray = 37,
+    PackedVector4Array = 38,
 }
 
 internal static class VariantTypeExtensions
@@ -69,6 +70,7 @@ internal static class VariantTypeExtensions
             or VariantType.PackedStringArray
             or VariantType.PackedVector2Array
             or VariantType.PackedVector3Array
-            or VariantType.PackedColorArray;
+            or VariantType.PackedColorArray
+            or VariantType.PackedVector4Array;
     }
 }

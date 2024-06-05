@@ -226,7 +226,7 @@ public static class ClassDB
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static void FreePropertyList_Native(void* instance, GDExtensionPropertyInfo* propertyListPtr)
+    private unsafe static void FreePropertyList_Native(void* instance, GDExtensionPropertyInfo* propertyListPtr, uint count)
     {
         if (instance is not null)
         {

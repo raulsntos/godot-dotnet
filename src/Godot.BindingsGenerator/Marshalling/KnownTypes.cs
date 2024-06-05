@@ -336,6 +336,11 @@ internal static class KnownTypes
         TypeAttributes = TypeAttributes.ReferenceType,
     };
 
+    public static TypeInfo GodotPackedVector4Array { get; } = new TypeInfo("PackedVector4Array", "Godot.Collections")
+    {
+        TypeAttributes = TypeAttributes.ReferenceType,
+    };
+
     public static TypeInfo GodotArray { get; } = new TypeInfo("GodotArray", "Godot.Collections")
     {
         TypeAttributes = TypeAttributes.ReferenceType,
@@ -477,6 +482,11 @@ internal static class KnownTypes
     };
 
     public static TypeInfo NativeGodotPackedColorArray { get; } = new TypeInfo("NativeGodotPackedColorArray", "Godot.NativeInterop")
+    {
+        TypeAttributes = TypeAttributes.ByRefLikeType,
+    };
+
+    public static TypeInfo NativeGodotPackedVector4Array { get; } = new TypeInfo("NativeGodotPackedVector4Array", "Godot.NativeInterop")
     {
         TypeAttributes = TypeAttributes.ByRefLikeType,
     };

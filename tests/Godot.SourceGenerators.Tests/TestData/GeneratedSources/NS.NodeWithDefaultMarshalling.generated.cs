@@ -55,6 +55,7 @@ partial class NodeWithDefaultMarshalling
         public static global::Godot.StringName @PropertyPackedVector2Array { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyPackedVector2Array"u8);
         public static global::Godot.StringName @PropertyPackedVector3Array { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyPackedVector3Array"u8);
         public static global::Godot.StringName @PropertyPackedColorArray { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyPackedColorArray"u8);
+        public static global::Godot.StringName @PropertyPackedVector4Array { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyPackedVector4Array"u8);
         public static global::Godot.StringName @PropertyGodotArray { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotArray"u8);
         public static global::Godot.StringName @PropertyGodotDictionary { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionary"u8);
         public static global::Godot.StringName @PropertyGodotArrayOfByte { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotArrayOfByte"u8);
@@ -688,6 +689,20 @@ partial class NodeWithDefaultMarshalling
             static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.PackedColorArray value) =>
             {
                 __instance.@PropertyPackedColorArray = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyPackedVector4Array, global::Godot.VariantType.PackedVector4Array)
+            {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "12/0:",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyPackedVector4Array;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.PackedVector4Array value) =>
+            {
+                __instance.@PropertyPackedVector4Array = value;
             });
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotArray, global::Godot.VariantType.Array)
             {

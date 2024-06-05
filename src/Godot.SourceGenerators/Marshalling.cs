@@ -121,6 +121,7 @@ internal static class Marshalling
                     KnownTypeNames.GodotPackedVector2Array => VariantType.PackedVector2Array,
                     KnownTypeNames.GodotPackedVector3Array => VariantType.PackedVector3Array,
                     KnownTypeNames.GodotPackedColorArray => VariantType.PackedColorArray,
+                    KnownTypeNames.GodotPackedVector4Array => VariantType.PackedVector4Array,
 
                     _ => null,
                 };
@@ -172,6 +173,7 @@ internal static class Marshalling
                 KnownTypeNames.GodotPackedVector2Array => KnownTypeNames.GodotVector2,
                 KnownTypeNames.GodotPackedVector3Array => KnownTypeNames.GodotVector3,
                 KnownTypeNames.GodotPackedColorArray => KnownTypeNames.GodotColor,
+                KnownTypeNames.GodotPackedVector4Array => KnownTypeNames.GodotVector4,
 
                 _ => null,
             };

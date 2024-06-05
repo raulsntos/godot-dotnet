@@ -59,6 +59,7 @@ internal static class KnownTypeNames
     public const string GodotPackedVector2Array = "Godot.Collections.PackedVector2Array";
     public const string GodotPackedVector3Array = "Godot.Collections.PackedVector3Array";
     public const string GodotPackedColorArray = "Godot.Collections.PackedColorArray";
+    public const string GodotPackedVector4Array = "Godot.Collections.PackedVector4Array";
     public const string GodotArray = "Godot.Collections.GodotArray";
     public const string GodotDictionary = "Godot.Collections.GodotDictionary";
 
