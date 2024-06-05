@@ -39,6 +39,14 @@ internal sealed class DelegateCallable : CustomCallable, IEquatable<DelegateCall
         return 0;
     }
 
+    protected override bool TryGetArgumentCount(out long argCount)
+    {
+        // TODO: Replace with DiagnosticMethodInfo in .NET 9.0
+        // https://github.com/dotnet/runtime/issues/96528
+        argCount = _delegate.Method.GetParameters().Length;
+        return true;
+    }
+
     protected override CallError _Call(ReadOnlySpan<Variant> args, out Variant result)
     {
         // We implement the internal Call method so this will never be called.

@@ -15,11 +15,19 @@ namespace Godot.Bridge;
 /// </summary>
 public abstract class CustomCallable
 {
+    /// <summary>
+    /// Convert a <see cref="CustomCallable"/> into a <see cref="Callable"/>.
+    /// </summary>
+    public static implicit operator Callable(CustomCallable customCallable)
+    {
+        return Callable.CreateTakingOwnership(customCallable);
+    }
+
     internal unsafe NativeGodotCallable ConstructCallable()
     {
         var gcHandle = GCHandle.Alloc(this, GCHandleType.Weak);
 
-        var info = new GDExtensionCallableCustomInfo()
+        var info = new GDExtensionCallableCustomInfo2()
         {
             callable_userdata = (void*)GCHandle.ToIntPtr(gcHandle),
             token = GodotBridge.LibraryPtr,
@@ -31,10 +39,11 @@ public abstract class CustomCallable
             equal_func = &Equals_Native,
             less_than_func = &LessThan_Native,
             to_string_func = &ToString_Native,
+            get_argument_count_func = &GetArgumentCount_Native,
         };
 
         NativeGodotCallable callable = default;
-        GodotBridge.GDExtensionInterface.callable_custom_create(&callable, &info);
+        GodotBridge.GDExtensionInterface.callable_custom_create2(&callable, &info);
         return callable;
     }
 
@@ -49,6 +58,17 @@ public abstract class CustomCallable
     /// </summary>
     /// <returns><see langword="true"/> if the callable is valid.</returns>
     protected virtual bool IsValid() => true;
+
+    /// <summary>
+    /// Try to retrieve the argument count required by this callable.
+    /// </summary>
+    /// <param name="argCount">The number of parameters of the function.</param>
+    /// <returns><see langword="true"/> if the argument count was retrieved successfully.</returns>
+    protected virtual bool TryGetArgumentCount(out long argCount)
+    {
+        argCount = 0;
+        return false;
+    }
 
 #pragma warning disable CA1707 // Identifiers should not contain underscores
 #pragma warning disable IDE1006 // Naming Styles
@@ -186,5 +206,17 @@ public abstract class CustomCallable
             *outIsValid = true;
             *outStr = NativeGodotString.Create(callable.ToString());
         }
+    }
+
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
+    private unsafe static long GetArgumentCount_Native(void* userData, bool* outIsValid)
+    {
+        var gcHandle = GCHandle.FromIntPtr((nint)userData);
+        var callable = (CustomCallable?)gcHandle.Target;
+
+        Debug.Assert(callable is not null);
+
+        *outIsValid = callable.TryGetArgumentCount(out long argCount);
+        return argCount;
     }
 }
