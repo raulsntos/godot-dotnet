@@ -216,7 +216,7 @@ partial class BindingsData
         RegisterPackedArray("PackedVector2Array", KnownTypes.GodotVector2, KnownTypes.GodotPackedVector2Array, KnownTypes.NativeGodotPackedVector2Array);
         RegisterPackedArray("PackedVector3Array", KnownTypes.GodotVector3, KnownTypes.GodotPackedVector3Array, KnownTypes.NativeGodotPackedVector3Array);
         RegisterPackedArray("PackedColorArray", KnownTypes.GodotColor, KnownTypes.GodotPackedColorArray, KnownTypes.NativeGodotPackedColorArray);
-        RegisterPackedArray("PackedVector4Array", KnownTypes.GodotVector3, KnownTypes.GodotPackedVector4Array, KnownTypes.NativeGodotPackedVector4Array);
+        RegisterPackedArray("PackedVector4Array", KnownTypes.GodotVector4, KnownTypes.GodotPackedVector4Array, KnownTypes.NativeGodotPackedVector4Array);
         void RegisterPackedArray(string engineTypeName, TypeInfo itemType, TypeInfo type, TypeInfo unmanagedType)
         {
             RegisterType(engineTypeName, type, unmanagedType);
