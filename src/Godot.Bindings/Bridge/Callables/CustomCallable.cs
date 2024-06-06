@@ -86,8 +86,6 @@ public abstract class CustomCallable
 
     internal unsafe virtual void Call(NativeGodotVariantPtrSpan args, NativeGodotVariant* outRet, GDExtensionCallError* outError)
     {
-        outRet = default;
-
         Variant[] variantArgs = new Variant[args.Length];
         for (int i = 0; i < args.Length; i++)
         {
