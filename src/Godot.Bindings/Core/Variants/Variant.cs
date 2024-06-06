@@ -117,6 +117,20 @@ public partial struct Variant : IDisposable
     }
 
     /// <summary>
+    /// Enumerates the elements of the variant, if it can be enumerated.
+    /// </summary>
+    /// <returns>
+    /// An enumerator to enumerate the variant's elements.
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    /// The variant can't be enumerated.
+    /// </exception>
+    public readonly VariantEnumerator Enumerate()
+    {
+        return new VariantEnumerator(this);
+    }
+
+    /// <summary>
     /// The type contained in this Variant instance.
     /// </summary>
     public VariantType VariantType => NativeValue.DangerousSelfRef.Type;
