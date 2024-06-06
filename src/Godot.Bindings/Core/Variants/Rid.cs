@@ -34,6 +34,15 @@ public readonly struct Rid : IEquatable<Rid>
     }
 
     /// <summary>
+    /// Constructs a new <see cref="Rid"/> allocating a unique ID.
+    /// </summary>
+    public static Rid NewRid()
+    {
+        ulong id = (ulong)UtilityFunctions.RidAllocateId();
+        return new Rid(id);
+    }
+
+    /// <summary>
     /// Returns the ID of the referenced low-level resource.
     /// </summary>
     /// <returns>The ID of the referenced resource.</returns>
