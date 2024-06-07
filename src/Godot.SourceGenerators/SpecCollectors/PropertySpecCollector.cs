@@ -17,7 +17,11 @@ internal static class PropertySpecCollector
             return null;
         }
 
-        return CollectCore(compilation, propertySymbol.Name, propertySymbol.Type, attribute, cancellationToken);
+        return CollectCore(compilation, propertySymbol.Name, propertySymbol.Type, attribute, cancellationToken) with
+        {
+            GroupDefinition = PropertyGroupSpecCollector.Collect(compilation, propertySymbol, cancellationToken),
+            SubgroupDefinition = PropertySubgroupSpecCollector.Collect(compilation, propertySymbol, cancellationToken),
+        };
     }
 
     public static GodotPropertySpec? Collect(Compilation compilation, IFieldSymbol fieldSymbol, CancellationToken cancellationToken = default)
@@ -28,7 +32,11 @@ internal static class PropertySpecCollector
             return null;
         }
 
-        return CollectCore(compilation, fieldSymbol.Name, fieldSymbol.Type, attribute, cancellationToken);
+        return CollectCore(compilation, fieldSymbol.Name, fieldSymbol.Type, attribute, cancellationToken) with
+        {
+            GroupDefinition = PropertyGroupSpecCollector.Collect(compilation, fieldSymbol, cancellationToken),
+            SubgroupDefinition = PropertySubgroupSpecCollector.Collect(compilation, fieldSymbol, cancellationToken),
+        };
     }
 
     public static GodotPropertySpec Collect(Compilation compilation, IParameterSymbol parameterSymbol, CancellationToken cancellationToken = default)

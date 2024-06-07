@@ -98,4 +98,34 @@ partial class ClassDBRegistrationContext
             Usage = propertyInfo.Usage,
         });
     }
+
+    /// <summary>
+    /// Register a property group in the class.
+    /// </summary>
+    /// <param name="groupName">Name of the group to register.</param>
+    /// <param name="prefix">Prefix used by properties in the group.</param>
+    public unsafe void AddPropertyGroup(string groupName, string prefix = "")
+    {
+        using NativeGodotString groupNameNative = NativeGodotString.Create(groupName);
+        using NativeGodotString prefixNative = NativeGodotString.Create(prefix);
+
+        NativeGodotStringName classNameNative = ClassName.NativeValue.DangerousSelfRef;
+
+        GodotBridge.GDExtensionInterface.classdb_register_extension_class_property_group(GodotBridge.LibraryPtr, &classNameNative, &groupNameNative, &prefixNative);
+    }
+
+    /// <summary>
+    /// Register a property subgroup in the class.
+    /// </summary>
+    /// <param name="subgroupName">Name of the subgroup to register.</param>
+    /// <param name="prefix">Prefix used by properties in the subgroup.</param>
+    public unsafe void AddPropertySubgroup(string subgroupName, string prefix = "")
+    {
+        using NativeGodotString subgroupNameNative = NativeGodotString.Create(subgroupName);
+        using NativeGodotString prefixNative = NativeGodotString.Create(prefix);
+
+        NativeGodotStringName classNameNative = ClassName.NativeValue.DangerousSelfRef;
+
+        GodotBridge.GDExtensionInterface.classdb_register_extension_class_property_subgroup(GodotBridge.LibraryPtr, &classNameNative, &subgroupNameNative, &prefixNative);
+    }
 }

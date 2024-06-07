@@ -43,6 +43,15 @@ public class BindMethodsGeneratorTests
     }
 
     [Fact]
+    public async Task BindGroupedProperties()
+    {
+        await Verifier.Verify(
+            ["NodeWithGroupedProperties.cs"],
+            ["NS.NodeWithGroupedProperties.generated.cs"]
+        );
+    }
+
+    [Fact]
     public async Task BindSignals()
     {
         await Verifier.Verify(

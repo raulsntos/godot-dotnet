@@ -74,6 +74,8 @@ internal static class KnownTypeNames
     public const string BindEnumAttribute = "Godot.BindEnumAttribute";
     public const string BindConstantAttribute = "Godot.BindConstantAttribute";
     public const string BindPropertyAttribute = "Godot.BindPropertyAttribute";
+    public const string PropertyGroupAttribute = "Godot.PropertyGroupAttribute";
+    public const string PropertySubgroupAttribute = "Godot.PropertySubgroupAttribute";
     public const string SignalAttribute = "Godot.SignalAttribute";
     public const string DisableGodotEntryPointGenerationAttribute = "Godot.DisableGodotEntryPointGenerationAttribute";
 }

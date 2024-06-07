@@ -314,6 +314,32 @@ internal static class BindMethodsWriter
     {
         foreach (var property in spec.Properties)
         {
+            if (property.GroupDefinition is not null)
+            {
+                var groupSpec = property.GroupDefinition.Value;
+
+                sb.Append("context.AddPropertyGroup(");
+                sb.Append($"\"{groupSpec.Name}\"");
+                if (!string.IsNullOrEmpty(groupSpec.Prefix))
+                {
+                    sb.Append($", \"{groupSpec.Prefix}\"");
+                }
+                sb.AppendLine(");");
+            }
+
+            if (property.SubgroupDefinition is not null)
+            {
+                var subgroupSpec = property.SubgroupDefinition.Value;
+
+                sb.Append("context.AddPropertySubgroup(");
+                sb.Append($"\"{subgroupSpec.Name}\"");
+                if (!string.IsNullOrEmpty(subgroupSpec.Prefix))
+                {
+                    sb.Append($", \"{subgroupSpec.Prefix}\"");
+                }
+                sb.AppendLine(");");
+            }
+
             sb.Append("context.BindProperty(");
             sb.Indent++;
 

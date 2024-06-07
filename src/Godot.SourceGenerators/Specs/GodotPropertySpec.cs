@@ -44,4 +44,16 @@ internal readonly record struct GodotPropertySpec : IEquatable<GodotPropertySpec
     /// If unspecified the name of the property will be <see cref="SymbolName"/>.
     /// </summary>
     public string? NameOverride { get; init; }
+
+    /// <summary>
+    /// Group information specified in the <c>[PropertyGroup]</c> attribute,
+    /// if the property is annotated to define a group from this property.
+    /// </summary>
+    public GodotPropertyGroupSpec? GroupDefinition { get; init; }
+
+    /// <summary>
+    /// Subgroup information specified in the <c>[PropertySubgroup]</c> attribute,
+    /// if the property is annotated to define a subgroup from this property.
+    /// </summary>
+    public GodotPropertySubgroupSpec? SubgroupDefinition { get; init; }
 }
