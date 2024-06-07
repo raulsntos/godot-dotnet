@@ -8,31 +8,30 @@
   </PropertyGroup>
   <PropertyGroup>
     <!-- System -->
-    <SystemCommandLineVersion>2.0.0-beta4.23326.1</SystemCommandLineVersion>
+    <SystemCommandLineVersion>2.0.0-beta4.24209.3</SystemCommandLineVersion>
     <!-- MSBuild -->
-    <MicrosoftBuildVersion>17.8.3</MicrosoftBuildVersion>
-    <MicrosoftBuildLocatorVersion>1.2.6</MicrosoftBuildLocatorVersion>
+    <MicrosoftBuildVersion>17.10.4</MicrosoftBuildVersion>
+    <MicrosoftBuildLocatorVersion>1.7.8</MicrosoftBuildLocatorVersion>
     <MicrosoftBuildUtilitiesCoreVersion>$(MicrosoftBuildVersion)</MicrosoftBuildUtilitiesCoreVersion>
     <!-- Roslyn -->
     <MicrosoftCodeAnalysisAnalyzersVersion>3.3.4</MicrosoftCodeAnalysisAnalyzersVersion>
-    <MicrosoftCodeAnalysisCSharpVersion>4.8.0</MicrosoftCodeAnalysisCSharpVersion>
-    <MicrosoftCodeAnalysisTestingVerifiersVersion>1.1.2-beta1.24169.1</MicrosoftCodeAnalysisTestingVerifiersVersion>
+    <MicrosoftCodeAnalysisCSharpVersion>4.9.2</MicrosoftCodeAnalysisCSharpVersion>
     <MicrosoftCodeAnalysisCSharpCodeFixTestingVersion>1.1.2-beta1.24169.1</MicrosoftCodeAnalysisCSharpCodeFixTestingVersion>
     <MicrosoftCodeAnalysisCSharpAnalyzerTestingVersion>1.1.2-beta1.24169.1</MicrosoftCodeAnalysisCSharpAnalyzerTestingVersion>
     <MicrosoftCodeAnalysisCSharpSourceGeneratorsTestingVersion>1.1.2-beta1.24169.1</MicrosoftCodeAnalysisCSharpSourceGeneratorsTestingVersion>
     <!-- NuGet -->
-    <NuGetVersioningVersion>6.8.1</NuGetVersioningVersion>
+    <NuGetVersioningVersion>6.10.0</NuGetVersioningVersion>
     <!-- MSTest -->
-    <MicrosoftNETTestSdkVersion>17.9.0</MicrosoftNETTestSdkVersion>
+    <MicrosoftNETTestSdkVersion>17.10.0</MicrosoftNETTestSdkVersion>
     <!-- XUnit -->
-    <XUnitVersion>2.7.0</XUnitVersion>
-    <XUnitAnalyzersVersion>1.11.0</XUnitAnalyzersVersion>
+    <XUnitVersion>2.8.1</XUnitVersion>
+    <XUnitAnalyzersVersion>1.14.0</XUnitAnalyzersVersion>
     <XUnitAssertVersion>$(XUnitVersion)</XUnitAssertVersion>
     <XUnitRunnerConsoleVersion>$(XUnitVersion)</XUnitRunnerConsoleVersion>
-    <XUnitRunnerVisualStudioVersion>2.5.7</XUnitRunnerVisualStudioVersion>
+    <XUnitRunnerVisualStudioVersion>$(XUnitVersion)</XUnitRunnerVisualStudioVersion>
     <!-- Coverlet -->
-    <CoverletCollectorVersion>6.0.0</CoverletCollectorVersion>
+    <CoverletCollectorVersion>6.0.2</CoverletCollectorVersion>
     <!-- ClangSharp -->
-    <ClangSharpVersion>17.0.1</ClangSharpVersion>
+    <ClangSharpVersion>18.1.0</ClangSharpVersion>
   </PropertyGroup>
 </Project>

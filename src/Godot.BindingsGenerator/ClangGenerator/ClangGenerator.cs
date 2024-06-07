@@ -363,10 +363,10 @@ internal static class ClangGenerator
     }
 
     [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "GetTypeName")]
-    private extern static string GetTypeNameInternal(PInvokeGenerator generator, Cursor? cursor, Cursor? context, ClangSharp.Type type, bool ignoreTransparentStructsWhereRequired, out string nativeTypeName);
+    private extern static string GetTypeNameInternal(PInvokeGenerator generator, Cursor? cursor, Cursor? context, ClangSharp.Type type, bool ignoreTransparentStructsWhereRequired, bool isTemplate, out string nativeTypeName);
 
     private static string GetTypeName(PInvokeGenerator generator, Cursor cursor, ClangSharp.Type type)
     {
-        return GetTypeNameInternal(generator, cursor, null, type, false, out _);
+        return GetTypeNameInternal(generator, cursor, null, type, false, false, out _);
     }
 }
