@@ -122,12 +122,26 @@ public static class ClassDB
             class_userdata = (void*)GCHandle.ToIntPtr(context.GCHandle),
         };
 
-        StringName? baseClassName = GodotObject.GetGodotNativeName(typeof(T));
+        StringName? godotNativeName = GodotObject.GetGodotNativeName(typeof(T));
 
-        // The 'baseType' will never be null becase T has a constraint that
+        // The 'BaseType' will never be null becase T has a constraint that
         // it must derive from GodotObject, but we assert this anyway so the
         // null analysis doesn't complain about it being null.
-        Debug.Assert(baseClassName is not null, $"Type '{typeof(T)}' must derive from a Godot type.");
+        Debug.Assert(godotNativeName is not null, $"Type '{typeof(T)}' must derive from a Godot type.");
+
+        StringName baseClassName;
+        if (typeof(T).BaseType?.Assembly != typeof(GodotObject).Assembly)
+        {
+            // If the base type is not a built-in Godot type,
+            // construct the name from the type name.
+            baseClassName = new StringName(typeof(T).BaseType!.Name);
+        }
+        else
+        {
+            // Otherwise, use the retrieved Godot native name
+            // which may be different from the type name.
+            baseClassName = godotNativeName;
+        }
 
         NativeGodotStringName classNameNative = className.NativeValue.DangerousSelfRef;
         NativeGodotStringName baseClassNameNative = baseClassName.NativeValue.DangerousSelfRef;
@@ -136,7 +150,7 @@ public static class ClassDB
 
         configure(context);
 
-        if (InteropUtils.RegisterVirtualOverridesHelpers.TryGetValue(baseClassName, out var registerVirtualOverrides))
+        if (InteropUtils.RegisterVirtualOverridesHelpers.TryGetValue(godotNativeName, out var registerVirtualOverrides))
         {
             registerVirtualOverrides(context);
         }
