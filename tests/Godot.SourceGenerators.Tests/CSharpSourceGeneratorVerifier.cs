@@ -60,12 +60,12 @@ where TSourceGenerator : new()
 
         verifier.TestState.Sources.AddRange(sources.Select(source => (
             source.FileName,
-            SourceText.From(File.ReadAllText(Path.Combine(Constants.SourceFolderPath, source.ContentFileName)), Encoding.UTF8)
+            SourceText.From(File.ReadAllText(Path.Combine(Constants.SourceFolderPath, source.ContentFileName)).ReplaceLineEndings(), Encoding.UTF8)
         )));
 
         verifier.TestState.GeneratedSources.AddRange(generatedSources.Select(generatedSource => (
             FullGeneratedSourceName(generatedSource.FileName),
-            SourceText.From(File.ReadAllText(Path.Combine(Constants.GeneratedSourceFolderPath, generatedSource.ContentFileName)), Encoding.UTF8)
+            SourceText.From(File.ReadAllText(Path.Combine(Constants.GeneratedSourceFolderPath, generatedSource.ContentFileName)).ReplaceLineEndings(), Encoding.UTF8)
         )));
 
         return verifier;
