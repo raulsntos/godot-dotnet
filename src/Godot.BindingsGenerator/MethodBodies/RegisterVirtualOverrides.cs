@@ -29,7 +29,7 @@ internal sealed class RegisterVirtualOverrides : MethodBody
         {
             writer.WriteLine("{");
             writer.Indent++;
-            writer.WriteLine($"MethodInfo methodInfo = type.GetMethod(nameof(MethodName.{method.Name}), BindingFlags.Instance | BindingFlags.NonPublic);");
+            writer.WriteLine($"MethodInfo methodInfo = type.GetMethod(nameof(MethodName.{method.Name}), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);");
             writer.WriteLine($"if (methodInfo is not null && methodInfo.DeclaringType != typeof({_type.Name}))");
             writer.WriteLine('{');
             writer.Indent++;
