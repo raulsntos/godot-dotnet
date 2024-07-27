@@ -119,6 +119,23 @@ public struct Vector2I : IEquatable<Vector2I>
     }
 
     /// <summary>
+    /// Returns a new vector with all components clamped between the
+    /// <paramref name="min"/> and <paramref name="max"/> using
+    /// <see cref="int.Clamp(int, int, int)"/>.
+    /// </summary>
+    /// <param name="min">The minimum allowed value.</param>
+    /// <param name="max">The maximum allowed value.</param>
+    /// <returns>The vector with all components clamped.</returns>
+    public readonly Vector2I Clamp(int min, int max)
+    {
+        return new Vector2I
+        (
+            int.Clamp(X, min, max),
+            int.Clamp(Y, min, max)
+        );
+    }
+
+    /// <summary>
     /// Returns the squared distance between this vector and <paramref name="to"/>.
     /// This method runs faster than <see cref="DistanceTo"/>, so prefer it if
     /// you need to compare vectors or need the squared distance for some formula.
@@ -169,6 +186,66 @@ public struct Vector2I : IEquatable<Vector2I>
     }
 
     /// <summary>
+    /// Returns the result of the component-wise maximum between this vector
+    /// and <paramref name="with"/> using <see cref="int.Max(int, int)"/>.
+    /// </summary>
+    /// <param name="with">The other vector to use.</param>
+    /// <returns>The resulting maximum vector.</returns>
+    public readonly Vector2I Max(Vector2I with)
+    {
+        return new Vector2I
+        (
+            int.Max(X, with.X),
+            int.Max(Y, with.Y)
+        );
+    }
+
+    /// <summary>
+    /// Returns the result of the component-wise maximum between this vector
+    /// and <paramref name="with"/> using <see cref="int.Max(int, int)"/>.
+    /// </summary>
+    /// <param name="with">The other value to use.</param>
+    /// <returns>The resulting maximum vector.</returns>
+    public readonly Vector2I Max(int with)
+    {
+        return new Vector2I
+        (
+            int.Max(X, with),
+            int.Max(Y, with)
+        );
+    }
+
+    /// <summary>
+    /// Returns the result of the component-wise minimum between this vector
+    /// and <paramref name="with"/> using <see cref="int.Min(int, int)"/>.
+    /// </summary>
+    /// <param name="with">The other vector to use.</param>
+    /// <returns>The resulting minimum vector.</returns>
+    public readonly Vector2I Min(Vector2I with)
+    {
+        return new Vector2I
+        (
+            int.Min(X, with.X),
+            int.Min(Y, with.Y)
+        );
+    }
+
+    /// <summary>
+    /// Returns the result of the component-wise minimum between this vector
+    /// and <paramref name="with"/> using <see cref="int.Min(int, int)"/>.
+    /// </summary>
+    /// <param name="with">The other value to use.</param>
+    /// <returns>The resulting minimum vector.</returns>
+    public readonly Vector2I Min(int with)
+    {
+        return new Vector2I
+        (
+            int.Min(X, with),
+            int.Min(Y, with)
+        );
+    }
+
+    /// <summary>
     /// Returns the axis of the vector's highest value. See <see cref="Axis"/>.
     /// If both components are equal, this method returns <see cref="Axis.X"/>.
     /// </summary>
@@ -200,6 +277,35 @@ public struct Vector2I : IEquatable<Vector2I>
         (
             int.Sign(X),
             int.Sign(Y)
+        );
+    }
+
+    /// <summary>
+    /// Returns a new vector with each component snapped to the closest multiple of the corresponding component
+    /// in <paramref name="step"/>.
+    /// </summary>
+    /// <param name="step">A vector value representing the step size to snap to.</param>
+    /// <returns>The snapped vector.</returns>
+    public readonly Vector2I Snapped(Vector2I step)
+    {
+        return new Vector2I
+        (
+            (int)Mathf.Snapped(X, step.X),
+            (int)Mathf.Snapped(Y, step.Y)
+        );
+    }
+
+    /// <summary>
+    /// Returns a new vector with each component snapped to the closest multiple of <paramref name="step"/>.
+    /// </summary>
+    /// <param name="step">The step size to snap to.</param>
+    /// <returns>The snapped vector.</returns>
+    public readonly Vector2I Snapped(int step)
+    {
+        return new Vector2I
+        (
+            (int)Mathf.Snapped(X, step),
+            (int)Mathf.Snapped(Y, step)
         );
     }
 

@@ -182,6 +182,24 @@ public struct Vector3 : IEquatable<Vector3>
     }
 
     /// <summary>
+    /// Returns a new vector with all components clamped between the
+    /// <paramref name="min"/> and <paramref name="max"/> using
+    /// <see cref="real_t.Clamp(real_t, real_t, real_t)"/>.
+    /// </summary>
+    /// <param name="min">The minimum allowed value.</param>
+    /// <param name="max">The maximum allowed value.</param>
+    /// <returns>The vector with all components clamped.</returns>
+    public readonly Vector3 Clamp(real_t min, real_t max)
+    {
+        return new Vector3
+        (
+            real_t.Clamp(X, min, max),
+            real_t.Clamp(Y, min, max),
+            real_t.Clamp(Z, min, max)
+        );
+    }
+
+    /// <summary>
     /// Returns the cross product of this vector and <paramref name="with"/>.
     /// </summary>
     /// <param name="with">The other vector.</param>
@@ -440,6 +458,70 @@ public struct Vector3 : IEquatable<Vector3>
     }
 
     /// <summary>
+    /// Returns the result of the component-wise maximum between this vector
+    /// and <paramref name="with"/> using <see cref="real_t.Max(real_t, real_t)"/>.
+    /// </summary>
+    /// <param name="with">The other vector to use.</param>
+    /// <returns>The resulting maximum vector.</returns>
+    public readonly Vector3 Max(Vector3 with)
+    {
+        return new Vector3
+        (
+            real_t.Max(X, with.X),
+            real_t.Max(Y, with.Y),
+            real_t.Max(Z, with.Z)
+        );
+    }
+
+    /// <summary>
+    /// Returns the result of the component-wise maximum between this vector
+    /// and <paramref name="with"/> using <see cref="real_t.Max(real_t, real_t)"/>.
+    /// </summary>
+    /// <param name="with">The other value to use.</param>
+    /// <returns>The resulting maximum vector.</returns>
+    public readonly Vector3 Max(real_t with)
+    {
+        return new Vector3
+        (
+            real_t.Max(X, with),
+            real_t.Max(Y, with),
+            real_t.Max(Z, with)
+        );
+    }
+
+    /// <summary>
+    /// Returns the result of the component-wise minimum between this vector
+    /// and <paramref name="with"/> using <see cref="real_t.Min(real_t, real_t)"/>.
+    /// </summary>
+    /// <param name="with">The other vector to use.</param>
+    /// <returns>The resulting minimum vector.</returns>
+    public readonly Vector3 Min(Vector3 with)
+    {
+        return new Vector3
+        (
+            real_t.Min(X, with.X),
+            real_t.Min(Y, with.Y),
+            real_t.Min(Z, with.Z)
+        );
+    }
+
+    /// <summary>
+    /// Returns the result of the component-wise minimum between this vector
+    /// and <paramref name="with"/> using <see cref="real_t.Min(real_t, real_t)"/>.
+    /// </summary>
+    /// <param name="with">The other value to use.</param>
+    /// <returns>The resulting minimum vector.</returns>
+    public readonly Vector3 Min(real_t with)
+    {
+        return new Vector3
+        (
+            real_t.Min(X, with),
+            real_t.Min(Y, with),
+            real_t.Min(Z, with)
+        );
+    }
+
+    /// <summary>
     /// Returns the axis of the vector's highest value. See <see cref="Axis"/>.
     /// If all components are equal, this method returns <see cref="Axis.X"/>.
     /// </summary>
@@ -672,7 +754,8 @@ public struct Vector3 : IEquatable<Vector3>
     }
 
     /// <summary>
-    /// Returns this vector with each component snapped to the nearest multiple of <paramref name="step"/>.
+    /// Returns a new vector with each component snapped to the nearest multiple of the corresponding component
+    /// in <paramref name="step"/>.
     /// This can also be used to round to an arbitrary number of decimals.
     /// </summary>
     /// <param name="step">A vector value representing the step size to snap to.</param>
@@ -684,6 +767,22 @@ public struct Vector3 : IEquatable<Vector3>
             Mathf.Snapped(X, step.X),
             Mathf.Snapped(Y, step.Y),
             Mathf.Snapped(Z, step.Z)
+        );
+    }
+
+    /// <summary>
+    /// Returns a new vector with each component snapped to the nearest multiple of <paramref name="step"/>.
+    /// This can also be used to round to an arbitrary number of decimals.
+    /// </summary>
+    /// <param name="step">The step size to snap to.</param>
+    /// <returns>The snapped vector.</returns>
+    public readonly Vector3 Snapped(real_t step)
+    {
+        return new Vector3
+        (
+            Mathf.Snapped(X, step),
+            Mathf.Snapped(Y, step),
+            Mathf.Snapped(Z, step)
         );
     }
 

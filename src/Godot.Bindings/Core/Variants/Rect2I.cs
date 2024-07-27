@@ -62,12 +62,7 @@ public struct Rect2I : IEquatable<Rect2I>
     /// <returns>The modified <see cref="Rect2I"/>.</returns>
     public readonly Rect2I Abs()
     {
-        Vector2I end = End;
-        Vector2I topLeft = new Vector2I
-        (
-            int.Min(_position.X, end.X),
-            int.Min(_position.Y, end.Y)
-        );
+        Vector2I topLeft = End.Min(_position);
         return new Rect2I
         (
             topLeft,
@@ -93,14 +88,12 @@ public struct Rect2I : IEquatable<Rect2I>
             return new Rect2I();
         }
 
-        newRect._position.X = int.Max(b._position.X, _position.X);
-        newRect._position.Y = int.Max(b._position.Y, _position.Y);
+        newRect._position = b._position.Max(_position);
 
         Vector2I bEnd = b._position + b._size;
         Vector2I end = _position + _size;
 
-        newRect._size.X = int.Min(bEnd.X, end.X) - newRect._position.X;
-        newRect._size.Y = int.Min(bEnd.Y, end.Y) - newRect._position.Y;
+        newRect._size = bEnd.Min(end) - newRect._position;
 
         return newRect;
     }
@@ -310,11 +303,8 @@ public struct Rect2I : IEquatable<Rect2I>
     {
         Rect2I newRect;
 
-        newRect._position.X = int.Min(b._position.X, _position.X);
-        newRect._position.Y = int.Min(b._position.Y, _position.Y);
-
-        newRect._size.X = int.Max(b._position.X + b._size.X, _position.X + _size.X);
-        newRect._size.Y = int.Max(b._position.Y + b._size.Y, _position.Y + _size.Y);
+        newRect._position = b._position.Min(_position);
+        newRect._size = (b._position + b._size).Max(_position + _size);
 
         newRect._size -= newRect._position; // Make relative again
 

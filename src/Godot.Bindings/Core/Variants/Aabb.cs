@@ -65,9 +65,12 @@ public struct Aabb : IEquatable<Aabb>
     /// <returns>The modified <see cref="Aabb"/>.</returns>
     public readonly Aabb Abs()
     {
-        Vector3 end = End;
-        Vector3 topLeft = new Vector3(real_t.Min(_position.X, end.X), real_t.Min(_position.Y, end.Y), real_t.Min(_position.Z, end.Z));
-        return new Aabb(topLeft, _size.Abs());
+        Vector3 topLeft = End.Min(_position);
+        return new Aabb
+        (
+            topLeft,
+            _size.Abs()
+        );
     }
 
     /// <summary>
@@ -313,9 +316,9 @@ public struct Aabb : IEquatable<Aabb>
 
         return ofs + new Vector3
         (
-            dir.X > 0f ? -halfExtents.X : halfExtents.X,
-            dir.Y > 0f ? -halfExtents.Y : halfExtents.Y,
-            dir.Z > 0f ? -halfExtents.Z : halfExtents.Z
+            dir.X > 0f ? halfExtents.X : -halfExtents.X,
+            dir.Y > 0f ? halfExtents.Y : -halfExtents.Y,
+            dir.Z > 0f ? halfExtents.Z : -halfExtents.Z
         );
     }
 

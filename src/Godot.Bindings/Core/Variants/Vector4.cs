@@ -164,7 +164,7 @@ public struct Vector4 : IEquatable<Vector4>
     /// <summary>
     /// Returns a new vector with all components clamped between the
     /// components of <paramref name="min"/> and <paramref name="max"/> using
-    /// <see cref="Mathf.Clamp(real_t, real_t, real_t)"/>.
+    /// <see cref="real_t.Clamp(real_t, real_t, real_t)"/>.
     /// </summary>
     /// <param name="min">The vector with minimum allowed values.</param>
     /// <param name="max">The vector with maximum allowed values.</param>
@@ -177,6 +177,25 @@ public struct Vector4 : IEquatable<Vector4>
             real_t.Clamp(Y, min.Y, max.Y),
             real_t.Clamp(Z, min.Z, max.Z),
             real_t.Clamp(W, min.W, max.W)
+        );
+    }
+
+    /// <summary>
+    /// Returns a new vector with all components clamped between the
+    /// <paramref name="min"/> and <paramref name="max"/> using
+    /// <see cref="real_t.Clamp(real_t, real_t, real_t)"/>.
+    /// </summary>
+    /// <param name="min">The minimum allowed value.</param>
+    /// <param name="max">The maximum allowed value.</param>
+    /// <returns>The vector with all components clamped.</returns>
+    public readonly Vector4 Clamp(real_t min, real_t max)
+    {
+        return new Vector4
+        (
+            real_t.Clamp(X, min, max),
+            real_t.Clamp(Y, min, max),
+            real_t.Clamp(Z, min, max),
+            real_t.Clamp(W, min, max)
         );
     }
 
@@ -371,6 +390,74 @@ public struct Vector4 : IEquatable<Vector4>
     }
 
     /// <summary>
+    /// Returns the result of the component-wise maximum between this vector
+    /// and <paramref name="with"/> using <see cref="real_t.Max(real_t, real_t)"/>.
+    /// </summary>
+    /// <param name="with">The other vector to use.</param>
+    /// <returns>The resulting maximum vector.</returns>
+    public readonly Vector4 Max(Vector4 with)
+    {
+        return new Vector4
+        (
+            real_t.Max(X, with.X),
+            real_t.Max(Y, with.Y),
+            real_t.Max(Z, with.Z),
+            real_t.Max(W, with.W)
+        );
+    }
+
+    /// <summary>
+    /// Returns the result of the component-wise maximum between this vector
+    /// and <paramref name="with"/> using <see cref="real_t.Max(real_t, real_t)"/>.
+    /// </summary>
+    /// <param name="with">The other value to use.</param>
+    /// <returns>The resulting maximum vector.</returns>
+    public readonly Vector4 Max(real_t with)
+    {
+        return new Vector4
+        (
+            real_t.Max(X, with),
+            real_t.Max(Y, with),
+            real_t.Max(Z, with),
+            real_t.Max(W, with)
+        );
+    }
+
+    /// <summary>
+    /// Returns the result of the component-wise minimum between this vector
+    /// and <paramref name="with"/> using <see cref="real_t.Min(real_t, real_t)"/>.
+    /// </summary>
+    /// <param name="with">The other vector to use.</param>
+    /// <returns>The resulting minimum vector.</returns>
+    public readonly Vector4 Min(Vector4 with)
+    {
+        return new Vector4
+        (
+            real_t.Min(X, with.X),
+            real_t.Min(Y, with.Y),
+            real_t.Min(Z, with.Z),
+            real_t.Min(W, with.W)
+        );
+    }
+
+    /// <summary>
+    /// Returns the result of the component-wise minimum between this vector
+    /// and <paramref name="with"/> using <see cref="real_t.Min(real_t, real_t)"/>.
+    /// </summary>
+    /// <param name="with">The other value to use.</param>
+    /// <returns>The resulting minimum vector.</returns>
+    public readonly Vector4 Min(real_t with)
+    {
+        return new Vector4
+        (
+            real_t.Min(X, with),
+            real_t.Min(Y, with),
+            real_t.Min(Z, with),
+            real_t.Min(W, with)
+        );
+    }
+
+    /// <summary>
     /// Returns the axis of the vector's highest value. See <see cref="Axis"/>.
     /// If all components are equal, this method returns <see cref="Axis.X"/>.
     /// </summary>
@@ -478,10 +565,10 @@ public struct Vector4 : IEquatable<Vector4>
     /// <summary>
     /// Returns a vector with each component set to one or negative one, depending
     /// on the signs of this vector's components, or zero if the component is zero,
-    /// by calling <see cref="Mathf.Sign(real_t)"/> on each component.
+    /// by calling <see cref="real_t.Sign(real_t)"/> on each component.
     /// </summary>
     /// <returns>A vector with all components as either <c>1</c>, <c>-1</c>, or <c>0</c>.</returns>
-    public readonly Vector4 Sign()
+    public readonly Vector4I Sign()
     {
         return new Vector4I
         (
@@ -493,7 +580,8 @@ public struct Vector4 : IEquatable<Vector4>
     }
 
     /// <summary>
-    /// Returns this vector with each component snapped to the nearest multiple of <paramref name="step"/>.
+    /// Returns a new vector with each component snapped to the nearest multiple of the corresponding component
+    /// in <paramref name="step"/>.
     /// This can also be used to round to an arbitrary number of decimals.
     /// </summary>
     /// <param name="step">A vector value representing the step size to snap to.</param>
@@ -506,6 +594,22 @@ public struct Vector4 : IEquatable<Vector4>
             Mathf.Snapped(Y, step.Y),
             Mathf.Snapped(Z, step.Z),
             Mathf.Snapped(W, step.W)
+        );
+    }
+
+    /// <summary>
+    /// Returns a new vector with each component snapped to the nearest multiple of <paramref name="step"/>.
+    /// This can also be used to round to an arbitrary number of decimals.
+    /// </summary>
+    /// <param name="step">The step size to snap to.</param>
+    /// <returns>The snapped vector.</returns>
+    public readonly Vector4 Snapped(real_t step)
+    {
+        return new Vector4(
+            Mathf.Snapped(X, step),
+            Mathf.Snapped(Y, step),
+            Mathf.Snapped(Z, step),
+            Mathf.Snapped(W, step)
         );
     }
 

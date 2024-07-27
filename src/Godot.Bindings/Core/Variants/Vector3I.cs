@@ -126,6 +126,24 @@ public struct Vector3I : IEquatable<Vector3I>
     }
 
     /// <summary>
+    /// Returns a new vector with all components clamped between the
+    /// <paramref name="min"/> and <paramref name="max"/> using
+    /// <see cref="int.Clamp(int, int, int)"/>.
+    /// </summary>
+    /// <param name="min">The minimum allowed value.</param>
+    /// <param name="max">The maximum allowed value.</param>
+    /// <returns>The vector with all components clamped.</returns>
+    public readonly Vector3I Clamp(int min, int max)
+    {
+        return new Vector3I
+        (
+            int.Clamp(X, min, max),
+            int.Clamp(Y, min, max),
+            int.Clamp(Z, min, max)
+        );
+    }
+
+    /// <summary>
     /// Returns the squared distance between this vector and <paramref name="to"/>.
     /// This method runs faster than <see cref="DistanceTo"/>, so prefer it if
     /// you need to compare vectors or need the squared distance for some formula.
@@ -178,6 +196,70 @@ public struct Vector3I : IEquatable<Vector3I>
     }
 
     /// <summary>
+    /// Returns the result of the component-wise maximum between this vector
+    /// and <paramref name="with"/> using <see cref="int.Max(int, int)"/>.
+    /// </summary>
+    /// <param name="with">The other vector to use.</param>
+    /// <returns>The resulting maximum vector.</returns>
+    public readonly Vector3I Max(Vector3I with)
+    {
+        return new Vector3I
+        (
+            int.Max(X, with.X),
+            int.Max(Y, with.Y),
+            int.Max(Z, with.Z)
+        );
+    }
+
+    /// <summary>
+    /// Returns the result of the component-wise maximum between this vector
+    /// and <paramref name="with"/> using <see cref="int.Max(int, int)"/>.
+    /// </summary>
+    /// <param name="with">The other value to use.</param>
+    /// <returns>The resulting maximum vector.</returns>
+    public readonly Vector3I Max(int with)
+    {
+        return new Vector3I
+        (
+            int.Max(X, with),
+            int.Max(Y, with),
+            int.Max(Z, with)
+        );
+    }
+
+    /// <summary>
+    /// Returns the result of the component-wise minimum between this vector
+    /// and <paramref name="with"/> using <see cref="int.Min(int, int)"/>.
+    /// </summary>
+    /// <param name="with">The other vector to use.</param>
+    /// <returns>The resulting minimum vector.</returns>
+    public readonly Vector3I Min(Vector3I with)
+    {
+        return new Vector3I
+        (
+            int.Min(X, with.X),
+            int.Min(Y, with.Y),
+            int.Min(Z, with.Z)
+        );
+    }
+
+    /// <summary>
+    /// Returns the result of the component-wise minimum between this vector
+    /// and <paramref name="with"/> using <see cref="int.Min(int, int)"/>.
+    /// </summary>
+    /// <param name="with">The other value to use.</param>
+    /// <returns>The resulting minimum vector.</returns>
+    public readonly Vector3I Min(int with)
+    {
+        return new Vector3I
+        (
+            int.Min(X, with),
+            int.Min(Y, with),
+            int.Min(Z, with)
+        );
+    }
+
+    /// <summary>
     /// Returns the axis of the vector's highest value. See <see cref="Axis"/>.
     /// If all components are equal, this method returns <see cref="Axis.X"/>.
     /// </summary>
@@ -210,6 +292,36 @@ public struct Vector3I : IEquatable<Vector3I>
             int.Sign(X),
             int.Sign(Y),
             int.Sign(Z)
+        );
+    }
+
+    /// <summary>
+    /// Returns a new vector with each component snapped to the closest multiple of the corresponding component in <paramref name="step"/>.
+    /// </summary>
+    /// <param name="step">A vector value representing the step size to snap to.</param>
+    /// <returns>The snapped vector.</returns>
+    public readonly Vector3I Snapped(Vector3I step)
+    {
+        return new Vector3I
+        (
+            (int)Mathf.Snapped(X, step.X),
+            (int)Mathf.Snapped(Y, step.Y),
+            (int)Mathf.Snapped(Z, step.Z)
+        );
+    }
+
+    /// <summary>
+    /// Returns a new vector with each component snapped to the closest multiple of <paramref name="step"/>.
+    /// </summary>
+    /// <param name="step">The step size to snap to.</param>
+    /// <returns>The snapped vector.</returns>
+    public readonly Vector3I Snapped(int step)
+    {
+        return new Vector3I
+        (
+            (int)Mathf.Snapped(X, step),
+            (int)Mathf.Snapped(Y, step),
+            (int)Mathf.Snapped(Z, step)
         );
     }
 

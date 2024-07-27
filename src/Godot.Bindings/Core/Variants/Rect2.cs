@@ -62,9 +62,12 @@ public struct Rect2 : IEquatable<Rect2>
     /// <returns>The modified <see cref="Rect2"/>.</returns>
     public readonly Rect2 Abs()
     {
-        Vector2 end = End;
-        Vector2 topLeft = new Vector2(real_t.Min(_position.X, end.X), real_t.Min(_position.Y, end.Y));
-        return new Rect2(topLeft, _size.Abs());
+        Vector2 topLeft = End.Min(_position);
+        return new Rect2
+        (
+            topLeft,
+            _size.Abs()
+        );
     }
 
     /// <summary>
@@ -85,14 +88,12 @@ public struct Rect2 : IEquatable<Rect2>
             return new Rect2();
         }
 
-        newRect._position.X = real_t.Max(b._position.X, _position.X);
-        newRect._position.Y = real_t.Max(b._position.Y, _position.Y);
+        newRect._position = b._position.Max(_position);
 
         Vector2 bEnd = b._position + b._size;
         Vector2 end = _position + _size;
 
-        newRect._size.X = real_t.Min(bEnd.X, end.X) - newRect._position.X;
-        newRect._size.Y = real_t.Min(bEnd.Y, end.Y) - newRect._position.Y;
+        newRect._size = bEnd.Min(end) - newRect._position;
 
         return newRect;
     }
@@ -337,11 +338,8 @@ public struct Rect2 : IEquatable<Rect2>
     {
         Rect2 newRect;
 
-        newRect._position.X = real_t.Min(b._position.X, _position.X);
-        newRect._position.Y = real_t.Min(b._position.Y, _position.Y);
-
-        newRect._size.X = real_t.Max(b._position.X + b._size.X, _position.X + _size.X);
-        newRect._size.Y = real_t.Max(b._position.Y + b._size.Y, _position.Y + _size.Y);
+        newRect._position = b._position.Min(_position);
+        newRect._size = (b._position + b._size).Max(_position + _size);
 
         // Make relative again.
         newRect._size -= newRect._position;
