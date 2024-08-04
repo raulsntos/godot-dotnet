@@ -413,15 +413,28 @@ internal static class NamingUtils
 
     public static void RemoveMaxConstant(GodotEnumInfo engineEnum, EnumInfo @enum)
     {
+        int maxEnumFieldIndex = 0;
+        GodotEnumValueInfo? maxEnumField = null;
+
+        // Look for the enum field that has the highest value and matches the naming pattern.
         for (int i = 0; i < engineEnum.Values.Length; i++)
         {
             GodotEnumValueInfo? enumField = engineEnum.Values[i];
-            if (enumField.Name.EndsWith("_MAX", StringComparison.Ordinal))
+
+            if (maxEnumField is null || enumField.Value > maxEnumField.Value)
             {
-                Debug.Assert(enumField.Value == @enum.Values[i].Value);
-                @enum.Values.RemoveAt(i);
-                break;
+                if (enumField.Name.EndsWith("_MAX", StringComparison.Ordinal)
+                 || enumField.Name.EndsWith("_ENUM_SIZE", StringComparison.Ordinal))
+                {
+                    maxEnumField = enumField;
+                    maxEnumFieldIndex = i;
+                }
             }
+        }
+
+        if (maxEnumField is not null)
+        {
+            @enum.Values.RemoveAt(maxEnumFieldIndex);
         }
     }
 }

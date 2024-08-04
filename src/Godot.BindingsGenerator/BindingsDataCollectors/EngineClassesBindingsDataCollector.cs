@@ -613,19 +613,15 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
 
             int enumPrefix = NamingUtils.DetermineEnumPrefix(engineEnum);
 
-            // HARDCODED: The Error enum have the prefix 'ERR_' for everything except 'OK' and 'FAILED'.
-            if (type.ContainingType is null && type.Name == "Error")
-            {
-                if (enumPrefix > 0)
-                {
-                    // Just in case it ever changes.
-                    context.Logger.LogError($"Prefix for enum 'Error' is not empty.");
-                }
+            NamingUtils.ApplyPrefixToEnumConstants(engineEnum, @enum, enumPrefix);
 
-                enumPrefix = 1; // 'ERR_'
+            // HARDCODED: Some enums have a '_MAX' constant that shouldn't be removed.
+            if ((engineClass.Name == "AudioEffectSpectrumAnalyzerInstance" && engineEnum.Name == "MagnitudeMode")
+             || (engineClass.Name == "SurfaceTool" && engineEnum.Name == "CustomFormat"))
+            {
+                continue;
             }
 
-            NamingUtils.ApplyPrefixToEnumConstants(engineEnum, @enum, enumPrefix);
             NamingUtils.RemoveMaxConstant(engineEnum, @enum);
         }
 

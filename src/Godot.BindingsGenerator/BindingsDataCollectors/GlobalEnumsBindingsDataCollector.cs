@@ -53,6 +53,19 @@ internal sealed class GlobalEnumsBindingsDataCollector : BindingsDataCollector
 
             NamingUtils.ApplyPrefixToEnumConstants(globalEnum, enumType, enumPrefix);
             NamingUtils.RemoveMaxConstant(globalEnum, enumType);
+
+            // HARDCODED: Some enums have more constants that should be removed.
+            if (globalEnum.Name == "JoyButton" || globalEnum.Name == "JoyAxis")
+            {
+                for (int i = 0; i < globalEnum.Values.Length; i++)
+                {
+                    if (globalEnum.Values[i].Name.EndsWith("_SDL_MAX", StringComparison.Ordinal))
+                    {
+                        enumType.Values.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
         }
     }
 }
