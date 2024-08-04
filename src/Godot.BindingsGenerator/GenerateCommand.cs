@@ -10,21 +10,21 @@ namespace Godot.BindingsGenerator;
 
 internal sealed class GenerateCommand : CliRootCommand
 {
-    private static readonly CliOption<FileInfo> _extensionApiPathOption = new(
+    private static readonly CliOption<FileInfo> _extensionApiPathOption = new CliOption<FileInfo>(
         name: "--extension-api"
     )
     {
         Description = "Path to the extension API dump JSON file.",
         Arity = ArgumentArity.ExactlyOne,
-    };
+    }.AcceptExistingOnly();
 
-    private static readonly CliOption<FileInfo> _extensionInterfacePathOption = new(
+    private static readonly CliOption<FileInfo> _extensionInterfacePathOption = new CliOption<FileInfo>(
         name: "--extension-interface"
     )
     {
         Description = "Path to the extension interface header file.",
         Arity = ArgumentArity.ExactlyOne,
-    };
+    }.AcceptExistingOnly();
 
     private static readonly CliOption<DirectoryInfo?> _outputPathOption = new(
         name: "--output", aliases: ["-o"])
