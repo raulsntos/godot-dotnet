@@ -48,7 +48,7 @@ public static partial class GD
     /// Variant a = new GodotArray { 4, 2.5, 1.2 };
     /// GD.Print(a.VariantType == VariantType.Array); // Prints true
     ///
-    /// var b = GD.Convert(a, VariantType.PackedByteArray);
+    /// var b = GD.TypeConvert(a, VariantType.PackedByteArray);
     /// GD.Print(b); // Prints [4, 2, 1]
     /// GD.Print(b.VariantType == VariantType.Array); // Prints false
     /// </code>
