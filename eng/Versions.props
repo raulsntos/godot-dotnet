@@ -14,11 +14,18 @@
     <MicrosoftBuildLocatorVersion>1.7.8</MicrosoftBuildLocatorVersion>
     <MicrosoftBuildUtilitiesCoreVersion>$(MicrosoftBuildVersion)</MicrosoftBuildUtilitiesCoreVersion>
     <!-- Roslyn -->
+    <!--
+      The exact version is always a moving target. This version should never go ahead the version of Roslyn that is
+      included in the most recent Visual Studio version or the most recent .NET SDK version. If it were to go ahead,
+      then any components (analyzers, source generators) depending on this version would not work in Visual Studio.
+    -->
+    <MicrosoftCodeAnalysisVersion_LatestVS>4.8.0</MicrosoftCodeAnalysisVersion_LatestVS>
+    <MicrosoftCodeAnalysisCSharpVersion>$(MicrosoftCodeAnalysisVersion_LatestVS)</MicrosoftCodeAnalysisCSharpVersion>
+    <MicrosoftCodeAnalysisTestingVersion>1.1.2-beta1.24169.1</MicrosoftCodeAnalysisTestingVersion>
+    <MicrosoftCodeAnalysisCSharpAnalyzerTestingVersion>$(MicrosoftCodeAnalysisTestingVersion)</MicrosoftCodeAnalysisCSharpAnalyzerTestingVersion>
+    <MicrosoftCodeAnalysisCSharpCodeFixTestingVersion>$(MicrosoftCodeAnalysisTestingVersion)</MicrosoftCodeAnalysisCSharpCodeFixTestingVersion>
+    <MicrosoftCodeAnalysisCSharpSourceGeneratorsTestingVersion>$(MicrosoftCodeAnalysisTestingVersion)</MicrosoftCodeAnalysisCSharpSourceGeneratorsTestingVersion>
     <MicrosoftCodeAnalysisAnalyzersVersion>3.3.4</MicrosoftCodeAnalysisAnalyzersVersion>
-    <MicrosoftCodeAnalysisCSharpVersion>4.9.2</MicrosoftCodeAnalysisCSharpVersion>
-    <MicrosoftCodeAnalysisCSharpCodeFixTestingVersion>1.1.2-beta1.24169.1</MicrosoftCodeAnalysisCSharpCodeFixTestingVersion>
-    <MicrosoftCodeAnalysisCSharpAnalyzerTestingVersion>1.1.2-beta1.24169.1</MicrosoftCodeAnalysisCSharpAnalyzerTestingVersion>
-    <MicrosoftCodeAnalysisCSharpSourceGeneratorsTestingVersion>1.1.2-beta1.24169.1</MicrosoftCodeAnalysisCSharpSourceGeneratorsTestingVersion>
     <!-- NuGet -->
     <NuGetVersioningVersion>6.10.0</NuGetVersioningVersion>
     <!-- MSTest -->
