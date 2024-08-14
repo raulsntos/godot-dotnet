@@ -15,7 +15,7 @@ internal unsafe static class CallableMarshaller
 
     public static NativeGodotCallable* ConvertToUnmanaged(Callable value)
     {
-        NativeGodotCallable* ptr = (NativeGodotCallable*)Marshal.AllocHGlobal(sizeof(NativeGodotCallable));
+        NativeGodotCallable* ptr = (NativeGodotCallable*)NativeMemory.Alloc((nuint)sizeof(NativeGodotCallable));
         WriteUnmanaged(ptr, value);
         return ptr;
     }
@@ -41,12 +41,12 @@ internal unsafe static class CallableMarshaller
 
     public static void Free(NativeGodotCallable* value)
     {
-        Marshal.FreeHGlobal((nint)value);
+        NativeMemory.Free(value);
     }
 
     public static NativeGodotVariant* ConvertToVariant(Callable value)
     {
-        NativeGodotVariant* ptr = (NativeGodotVariant*)Marshal.AllocHGlobal(sizeof(NativeGodotVariant));
+        NativeGodotVariant* ptr = (NativeGodotVariant*)NativeMemory.Alloc((nuint)sizeof(NativeGodotVariant));
         *ptr = NativeGodotVariant.CreateFromCallableTakingOwnership(value.NativeValue.DangerousSelfRef);
         return ptr;
     }
@@ -61,6 +61,6 @@ internal unsafe static class CallableMarshaller
     {
         Debug.Assert(value is not null);
         value->Dispose();
-        Marshal.FreeHGlobal((nint)value);
+        NativeMemory.Free(value);
     }
 }

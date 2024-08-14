@@ -92,7 +92,7 @@ internal sealed class PropertyInfoList : IList<PropertyInfo>
     internal unsafe static GDExtensionPropertyInfo* ConvertToNative(PropertyInfoList value)
     {
         int count = value.Count;
-        GDExtensionPropertyInfo* ptr = (GDExtensionPropertyInfo*)Marshal.AllocHGlobal(sizeof(GDExtensionPropertyInfo) * count);
+        GDExtensionPropertyInfo* ptr = (GDExtensionPropertyInfo*)NativeMemory.Alloc((nuint)count, (nuint)sizeof(GDExtensionPropertyInfo));
         for (int i = 0; i < count; i++)
         {
             PropertyInfo propertyInfo = value[i];
@@ -111,6 +111,6 @@ internal sealed class PropertyInfoList : IList<PropertyInfo>
 
     internal unsafe static void FreeNative(GDExtensionPropertyInfo* ptr)
     {
-        Marshal.FreeHGlobal((nint)ptr);
+        NativeMemory.Free(ptr);
     }
 }

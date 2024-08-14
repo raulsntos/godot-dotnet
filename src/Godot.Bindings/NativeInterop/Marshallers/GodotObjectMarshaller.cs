@@ -56,7 +56,7 @@ internal unsafe class GodotObjectMarshaller
 
     public static nint* ConvertToUnmanaged(GodotObject? value)
     {
-        nint* ptr = (nint*)Marshal.AllocHGlobal(sizeof(nint));
+        nint* ptr = (nint*)NativeMemory.Alloc((nuint)sizeof(nint));
         WriteUnmanaged(ptr, value);
         return ptr;
     }
@@ -69,12 +69,12 @@ internal unsafe class GodotObjectMarshaller
 
     public static void Free(nint* value)
     {
-        Marshal.FreeHGlobal((nint)value);
+        NativeMemory.Free(value);
     }
 
     public static NativeGodotVariant* ConvertToVariant(GodotObject? value)
     {
-        NativeGodotVariant* ptr = (NativeGodotVariant*)Marshal.AllocHGlobal(sizeof(NativeGodotVariant));
+        NativeGodotVariant* ptr = (NativeGodotVariant*)NativeMemory.Alloc((nuint)sizeof(NativeGodotVariant));
         *ptr = NativeGodotVariant.CreateFromObject(GodotObject.GetNativePtr(value));
         return ptr;
     }
@@ -91,6 +91,6 @@ internal unsafe class GodotObjectMarshaller
     {
         Debug.Assert(value is not null);
         value->Dispose();
-        Marshal.FreeHGlobal((nint)value);
+        NativeMemory.Free(value);
     }
 }
