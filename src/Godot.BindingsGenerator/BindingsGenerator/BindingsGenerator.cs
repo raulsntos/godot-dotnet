@@ -51,6 +51,10 @@ internal static partial class BindingsGenerator
             using var streamWriter = new StreamWriter(stream);
             using var writer = new IndentedTextWriter(streamWriter);
 
+            writer.WriteLine("using System.Diagnostics.CodeAnalysis;");
+            writer.WriteLine("using System.Reflection;");
+            writer.WriteLine();
+
             writer.WriteLine($"namespace {type.Namespace};");
             writer.WriteLine();
 

@@ -23,10 +23,14 @@ internal sealed class RegisterVirtualOverrides : MethodBody
     {
         if (_type.BaseType is not null)
         {
-            writer.WriteLine($"{_type.BaseType.FullNameWithGlobal}.RegisterVirtualOverrides(context);");
+            writer.WriteLine($"{_type.BaseType.FullNameWithGlobal}.RegisterVirtualOverrides(type, context);");
         }
         foreach (var (method, engineMethod) in _virtualMethods)
         {
+            writer.WriteLine($"if (type.GetMethod(nameof(MethodName.{method.Name}), BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly) != null)");
+            writer.WriteLine('{');
+            writer.Indent++;
+
             writer.Write($"context.BindVirtualMethodOverride(MethodName.{method.Name}, ");
             writer.Write($"static ({_type.FullNameWithGlobal} __instance");
             if (method.Parameters.Count > 0)
@@ -84,6 +88,8 @@ internal sealed class RegisterVirtualOverrides : MethodBody
 
             writer.Indent--;
             writer.WriteLine("});");
+            writer.Indent--;
+            writer.WriteLine('}');
         }
     }
 }

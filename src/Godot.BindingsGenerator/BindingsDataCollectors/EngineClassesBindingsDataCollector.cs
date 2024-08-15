@@ -108,7 +108,7 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                     Body = MethodBody.Create(writer =>
                     {
                         writer.WriteLine($"var createHelpers = new global::System.Collections.Generic.Dictionary<StringName, global::System.Func<nint, global::Godot.GodotObject>>(capacity: {context.Api.Classes.Length});");
-                        writer.WriteLine($"var registerVirtualOverridesHelpers = new global::System.Collections.Generic.Dictionary<StringName, global::System.Action<global::Godot.Bridge.ClassDBRegistrationContext>>(capacity: {context.Api.Classes.Length});");
+                        writer.WriteLine($"var registerVirtualOverridesHelpers = new global::System.Collections.Generic.Dictionary<StringName, RegisterVirtualOverrideHelper>(capacity: {context.Api.Classes.Length});");
 
                         foreach (var engineClass in context.Api.Classes)
                         {
@@ -303,6 +303,7 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                 IsNew = engineClass.Name != "Object",
                 Parameters =
                 {
+                    new ParameterInfo("type", new TypeInfo("Type", "System")) { Attributes = ["[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.NonPublicMethods)]"]},
                     new ParameterInfo("context", new TypeInfo("ClassDBRegistrationContext", "Godot.Bridge")),
                 },
                 Body = new RegisterVirtualOverrides(type, virtualMethods),
