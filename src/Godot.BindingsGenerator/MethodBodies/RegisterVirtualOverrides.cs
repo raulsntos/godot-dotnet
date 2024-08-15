@@ -23,10 +23,44 @@ internal sealed class RegisterVirtualOverrides : MethodBody
     {
         if (_type.BaseType is not null)
         {
-            writer.WriteLine($"{_type.BaseType.FullNameWithGlobal}.RegisterVirtualOverrides(context);");
+            writer.WriteLine($"{_type.BaseType.FullNameWithGlobal}.RegisterVirtualOverrides(type, context);");
         }
         foreach (var (method, _) in _virtualMethods)
         {
+            writer.OpenBlock();
+
+            // Determine if the virtual method is overridden. Only overridden methods are registered,
+            // so Godot can skip calling them and fallback to the default behavior implemented on the C++ side.
+            writer.WriteLine("bool isOverriden = false;");
+            {
+                writer.WriteLine($"global::System.Reflection.MethodInfo methodInfo = type.GetMethod(nameof({_type.FullNameWithGlobal}.{method.Name}), global::System.Reflection.BindingFlags.Instance | global::System.Reflection.BindingFlags.Public | global::System.Reflection.BindingFlags.NonPublic, [");
+                for (int i = 0; i < method.Parameters.Count; i++)
+                {
+                    var parameter = method.Parameters[i];
+                    writer.Write($"typeof({parameter.Type.FullNameWithGlobal})");
+                    if (i < method.Parameters.Count - 1)
+                    {
+                        writer.Write(", ");
+                    }
+                }
+                writer.WriteLine("]);");
+
+                writer.WriteLine("if (methodInfo is not null)");
+                writer.OpenBlock();
+
+                writer.WriteLine($"bool isMethodDeclaredInDerivedType = methodInfo.DeclaringType != typeof({_type.FullNameWithGlobal});");
+                writer.WriteLine("global::System.Reflection.MethodInfo baseDefinition = methodInfo.GetBaseDefinition();");
+                writer.WriteLine("bool isMethodDeclaredAsOverride = baseDefinition != methodInfo;");
+                writer.WriteLine($"bool isBaseDefinitionFromCorrectBaseType = baseDefinition.DeclaringType == typeof({_type.FullNameWithGlobal});");
+                writer.WriteLine("isOverriden = isMethodDeclaredInDerivedType && isMethodDeclaredAsOverride && isBaseDefinitionFromCorrectBaseType;");
+
+                writer.CloseBlock();
+            }
+            writer.WriteLineNoTabs("");
+
+            writer.WriteLine("if (isOverriden)");
+            writer.OpenBlock();
+
             writer.Write($"context.BindVirtualMethodOverride(MethodName.{method.Name}, ");
             writer.Write($"static ({_type.FullNameWithGlobal} __instance");
             if (method.Parameters.Count > 0)
@@ -84,6 +118,9 @@ internal sealed class RegisterVirtualOverrides : MethodBody
 
             writer.Indent--;
             writer.WriteLine("});");
+            writer.CloseBlock();
+
+            writer.CloseBlock();
         }
     }
 }
