@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+  Microsoft ResX Schema
+
+  Version 2.0
+
+  The primary goals of this format is to allow a simple XML format
+  that is mostly human readable. The generation and parsing of the
+  various data types are done through the TypeConverter classes
+  associated with the data types.
+
+  Example:
+
+  ... ado.net/XML headers & schema ...
+  <resheader name="resmimetype">text/microsoft-resx</resheader>
+  <resheader name="version">2.0</resheader>
+  <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+  <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+  <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+  <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+  <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>[base64 mime encoded serialized .NET Framework object]</value>
+  </data>
+  <data name="Icon1" type="System.Drawing.Icon, System.Drawing"
+  mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>[base64 mime encoded string representing a byte array form of the .NET Framework
+  object]</value>
+    <comment>This is a comment</comment>
+  </data>
+
+  There are any number of "resheader" rows that contain simple
+  name/value pairs.
+
+  Each data row contains a name, and value. The row also contains a
+  type or mimetype. Type corresponds to a .NET class that support
+  text/value conversion through the TypeConverter architecture.
+  Classes that don't support this are serialized and stored with the
+  mimetype set.
+
+  The mimetype is used for serialized objects, and tells the
+  ResXResourceReader how to depersist the object. This is currently not
+  extensible. For a given mimetype the value must be set accordingly:
+
+  Note - application/x-microsoft.net.object.binary.base64 is the format
+  that the ResXResourceWriter will generate, however the reader can
+  read any of the formats listed below.
+
+  mimetype: application/x-microsoft.net.object.binary.base64
+  value   : The object must be serialized with
+      : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+      : and then encoded with base64 encoding.
+
+  mimetype: application/x-microsoft.net.object.soap.base64
+  value   : The object must be serialized with
+      : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+      : and then encoded with base64 encoding.
+
+  mimetype: application/x-microsoft.net.object.bytearray.base64
+  value   : The object must be serialized into a byte array
+      : using a System.ComponentModel.TypeConverter
+      : and then encoded with base64 encoding.
+  -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"
+                  msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0"
+                  msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"
+                msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"
+                  msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Argument_ArchitectureNotRecognizedFromRuntimeIdentifier" xml:space="preserve">
+    <value>Architecture not recognized from runtime identifier architecture '{architecture}'.</value>
+  </data>
+  <data name="Argument_CodeEditorManagerNotFound" xml:space="preserve">
+    <value>Code editor manager does not exist for '{editorId}'.</value>
+  </data>
+  <data name="ArgumentOutOfRange_InvalidMenuOption" xml:space="preserve">
+    <value>Invalid menu option.</value>
+  </data>
+  <data name="BuildManager_CannotRemoveIssuesFile" xml:space="preserve">
+    <value>Cannot remove issues file: {issuesFilePath}</value>
+  </data>
+  <data name="BuildManager_RunningCommand" xml:space="preserve">
+    <value>Running: {command}</value>
+  </data>
+  <data name="BuildProjectFailed" xml:space="preserve">
+    <value>Building .NET project failed with errors.</value>
+  </data>
+  <data name="BuildProjectProgressLabel" xml:space="preserve">
+    <value>Building .NET project...</value>
+  </data>
+  <data name="BuildProjectProgressStep" xml:space="preserve">
+    <value>Building '{assemblyName}' for {runtimeIdentifier}.</value>
+  </data>
+  <data name="CleanProjectFailed" xml:space="preserve">
+    <value>Cleaning .NET project failed with errors.</value>
+  </data>
+  <data name="CleanProjectProgressLabel" xml:space="preserve">
+    <value>Cleaning .NET project...</value>
+  </data>
+  <data name="CleanProjectProgressStep" xml:space="preserve">
+    <value>Cleaning '{assemblyName}'.</value>
+  </data>
+  <data name="CodeEditorCustom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="CodeEditorDisabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="CodeEditorErrorNotFound" xml:space="preserve">
+    <value>Cannot find code editor '{editorName}'.</value>
+  </data>
+  <data name="CodeEditorErrorOnLaunch" xml:space="preserve">
+    <value>Error when trying to launch code editor: '{editorId}'. Exception message: '{exceptionMessage}'.</value>
+  </data>
+  <data name="DotNetEditorPlugin_AlertTitleError" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="DotNetEditorPlugin_AlertTitleWarning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="DotNetEditorPlugin_CreateCSharpProjectFailed" xml:space="preserve">
+    <value>Failed to create C# project. Exception message: {exceptionMessage}</value>
+  </data>
+  <data name="DotNetEditorPlugin_CreateCSharpSolution" xml:space="preserve">
+    <value>Create C# solution</value>
+  </data>
+  <data name="DotNetEditorPlugin_CSharpSolutionAlreadyExists" xml:space="preserve">
+    <value>C# solution already exists. This will override the existing C# project file, any manual changes will be lost.</value>
+  </data>
+  <data name="DotNetEditorPlugin_GenerateSolutionEditorProgressLabel" xml:space="preserve">
+    <value>Generating C# solution...</value>
+  </data>
+  <data name="DotNetEditorPlugin_GenerateSolutionEditorProgressStep" xml:space="preserve">
+    <value>Generating C# project...</value>
+  </data>
+  <data name="DotNetEditorPlugin_InvalidOperation_CannotOpenCSharpProject" xml:space="preserve">
+    <value>Cannot open C# project.</value>
+  </data>
+  <data name="DotNetEditorPlugin_SaveSolutionFailed" xml:space="preserve">
+    <value>Failed to save solution. Exception message: {exceptionMessage}</value>
+  </data>
+  <data name="DotNetSdkFound" xml:space="preserve">
+    <value>Found .NET SDK version '{sdkVersion}' at {sdkPath}</value>
+  </data>
+  <data name="DotNetSdkNotFound" xml:space="preserve">
+    <value>.NET SDK not found. The required version is '{sdkSearchVersion}'.</value>
+  </data>
+  <data name="EditorProgressDisposedByGC" xml:space="preserve">
+    <value>EditorProgress disposed by the Garbage Collector.</value>
+  </data>
+  <data name="ExportProjectMessageCategory" xml:space="preserve">
+    <value>Export .NET project</value>
+  </data>
+  <data name="ExportProjectMessageExceptionThrown" xml:space="preserve">
+    <value>Exporting threw an exception of type '{exceptionTypeName}'.</value>
+  </data>
+  <data name="ExportProjectProgressLabel" xml:space="preserve">
+    <value>Exporting .NET project...</value>
+  </data>
+  <data name="FileNotFound_DotNetExe" xml:space="preserve">
+    <value>Cannot find the dotnet executable.</value>
+  </data>
+  <data name="FileNotFound_SolutionDirectory" xml:space="preserve">
+    <value>The solution directory does not exist.</value>
+  </data>
+  <data name="InvalidOperation_AnInstanceAlreadyExists" xml:space="preserve">
+    <value>An instance of '{typeName}' already exists.</value>
+  </data>
+  <data name="InvalidOperation_AnInstanceDoesNotExist" xml:space="preserve">
+    <value>An instance of '{typeName}' does not exist.</value>
+  </data>
+  <data name="InvalidOperation_BuildAlreadyInProgress" xml:space="preserve">
+    <value>A build is already in progress.</value>
+  </data>
+  <data name="InvalidOperation_BuildFailed" xml:space="preserve">
+    <value>Failed to build .NET project.</value>
+  </data>
+  <data name="InvalidOperation_CreateFatBinaryFailed" xml:space="preserve">
+    <value>Failed to create fat binary.</value>
+  </data>
+  <data name="InvalidOperation_GenerateXCFrameworkFailed" xml:space="preserve">
+    <value>Failed to generate xcframework.</value>
+  </data>
+  <data name="InvalidOperation_ParameterCannotBeNullWhenOptionIsEnabled" xml:space="preserve">
+    <value>{paramName} can't be null when the option is enabled.</value>
+  </data>
+  <data name="InvalidOperation_PublishSuccessfulButAssemblyNotFound" xml:space="preserve">
+    <value>Publish succeeded but project assembly not found at '{assemblyPath}'.</value>
+  </data>
+  <data name="InvalidOperation_PublishSuccessfulButAssemblyNotFound2" xml:space="preserve">
+    <value>Publish succeeded but project assembly not found at '{assemblyPath}' or '{nativeAotPath}'.</value>
+  </data>
+  <data name="InvalidOperation_UnableToLoadGDExtensionInterfaceFunction" xml:space="preserve">
+    <value>Unable to load GDExtension interface function '{functionName}'.</value>
+  </data>
+  <data name="MSBuildExitedWithCode" xml:space="preserve">
+    <value>MSBuild exited with code: {exitCode}. Log file: {logFilePath}</value>
+  </data>
+  <data name="MSBuildPanel_Build" xml:space="preserve">
+    <value>Build</value>
+  </data>
+  <data name="MSBuildPanel_BuildProject" xml:space="preserve">
+    <value>Build Project</value>
+  </data>
+  <data name="MSBuildPanel_CleanProject" xml:space="preserve">
+    <value>Clean Project</value>
+  </data>
+  <data name="MSBuildPanel_ClearOutput" xml:space="preserve">
+    <value>Clear Output</value>
+  </data>
+  <data name="MSBuildPanel_CopyError" xml:space="preserve">
+    <value>Copy Error</value>
+  </data>
+  <data name="MSBuildPanel_CopySelection" xml:space="preserve">
+    <value>Copy Selection</value>
+  </data>
+  <data name="MSBuildPanel_Expected7ColumnsGotN" xml:space="preserve">
+    <value>Expected 7 columns, got {actualColumnCount}.</value>
+  </data>
+  <data name="MSBuildPanel_FilePathIssuesN" xml:space="preserve">
+    <value>{filePath} ({issues} issues)</value>
+  </data>
+  <data name="MSBuildPanel_FilterProblems" xml:space="preserve">
+    <value>Filter Problems</value>
+  </data>
+  <data name="MSBuildPanel_FocusSearchBar" xml:space="preserve">
+    <value>Focus Search/Filter Bar</value>
+  </data>
+  <data name="MSBuildPanel_InvalidOperation_DiagnosticIndexOutOfRange" xml:space="preserve">
+    <value>Diagnostic index out of range.</value>
+  </data>
+  <data name="MSBuildPanel_InvalidOperation_ItemTreeHasNoSelectedItems" xml:space="preserve">
+    <value>Item tree has no selected items.</value>
+  </data>
+  <data name="MSBuildPanel_Output" xml:space="preserve">
+    <value>Output</value>
+  </data>
+  <data name="MSBuildPanel_Problems" xml:space="preserve">
+    <value>Problems</value>
+  </data>
+  <data name="MSBuildPanel_ProblemsN" xml:space="preserve">
+    <value>Problems ({count})</value>
+  </data>
+  <data name="MSBuildPanel_RebuildProject" xml:space="preserve">
+    <value>Rebuild Project</value>
+  </data>
+  <data name="MSBuildPanel_ShowLogsInFileManager" xml:space="preserve">
+    <value>Show Logs in File Manager</value>
+  </data>
+  <data name="MSBuildPanel_ToggleVisibilityOfErrors" xml:space="preserve">
+    <value>Toggle visibility of errors.</value>
+  </data>
+  <data name="MSBuildPanel_ToggleVisibilityOfInfoDiagnostics" xml:space="preserve">
+    <value>Toggle visibility of info diagnostics.</value>
+  </data>
+  <data name="MSBuildPanel_ToggleVisibilityOfWarnings" xml:space="preserve">
+    <value>Toggle visibility of warnings.</value>
+  </data>
+  <data name="MSBuildPanel_TooltipDiagnosticColumn" xml:space="preserve">
+    <value>Column: {column}</value>
+  </data>
+  <data name="MSBuildPanel_TooltipDiagnosticFile" xml:space="preserve">
+    <value>File: {file}</value>
+  </data>
+  <data name="MSBuildPanel_TooltipDiagnosticId" xml:space="preserve">
+    <value>ID: {id}</value>
+  </data>
+  <data name="MSBuildPanel_TooltipDiagnosticLine" xml:space="preserve">
+    <value>Line: {line}</value>
+  </data>
+  <data name="MSBuildPanel_TooltipDiagnosticMessage" xml:space="preserve">
+    <value>Message: {message}</value>
+  </data>
+  <data name="MSBuildPanel_TooltipDiagnosticProject" xml:space="preserve">
+    <value>Project: {project}</value>
+  </data>
+  <data name="MSBuildPanel_TooltipDiagnosticSeverity" xml:space="preserve">
+    <value>Severity: {severity}</value>
+  </data>
+  <data name="MSBuildPanel_UnknownFile" xml:space="preserve">
+    <value>Unknown file</value>
+  </data>
+  <data name="MSBuildPanel_UnknownProject" xml:space="preserve">
+    <value>Unknown project</value>
+  </data>
+  <data name="MSBuildPanel_ViewAsAList" xml:space="preserve">
+    <value>View as a List</value>
+  </data>
+  <data name="MSBuildPanel_ViewAsATree" xml:space="preserve">
+    <value>View as a Tree</value>
+  </data>
+  <data name="MSBuildThrewAnException" xml:space="preserve">
+    <value>MSBuild threw an exception.\n{exceptionTypeName}: {exceptionMessage}</value>
+  </data>
+  <data name="NotSupported_TargetPlatform" xml:space="preserve">
+    <value>.NET export plugin does not support target platform '{platform}'.</value>
+  </data>
+  <data name="PlatformNotSupported_VisualStudio" xml:space="preserve">
+    <value>Visual Studio not supported on this platform.</value>
+  </data>
+</root>

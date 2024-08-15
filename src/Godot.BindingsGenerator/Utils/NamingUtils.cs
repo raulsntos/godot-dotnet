@@ -42,6 +42,7 @@ internal static class NamingUtils
         { "HBOX", "HBox" }, // Horizontal Box
         { "ID", "Id" },
         { "IO", "IO" }, // Input/Output
+        { "IOS", "IOS" }, // iOS
         { "IP", "IP" }, // Internet Protocol
         { "IV", "IV" }, // Initialization Vector
         { "MACOS", "MacOS" },

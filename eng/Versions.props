@@ -41,5 +41,9 @@
     <CoverletCollectorVersion>6.0.2</CoverletCollectorVersion>
     <!-- ClangSharp -->
     <ClangSharpVersion>18.1.0</ClangSharpVersion>
+    <!-- EnvDTE -->
+    <EnvDTEVersion>17.8.37221</EnvDTEVersion>
+    <!-- JetBrains -->
+    <JetBrainsRiderPathLocatorVersion>1.0.11</JetBrainsRiderPathLocatorVersion>
   </PropertyGroup>
 </Project>

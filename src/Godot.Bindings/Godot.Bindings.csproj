@@ -23,6 +23,7 @@
   </PropertyGroup> -->
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Godot.EditorIntegration" />
     <InternalsVisibleTo Include="Godot.Bindings.Tests" />
   </ItemGroup>
 
