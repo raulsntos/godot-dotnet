@@ -332,6 +332,25 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
             // TODO: Some methods that are used as property accessors don't seem to be exposed in extensions_api.json
             // https://github.com/godotengine/godot/issues/64429
 
+            // HARDCODED: The setters of some Control properties are internal but a public version exists with
+            // additional optional parameters, so we can use the public method as the setter.
+            // https://github.com/godotengine/godot/issues/64429
+            bool setterHasOptionalParameters = false;
+            if (engineClass.Name == "Control")
+            {
+                (engineProperty.Setter, setterHasOptionalParameters) = engineProperty.Name switch
+                {
+                    "anchor_bottom"
+                    or "anchor_left"
+                    or "anchor_right"
+                    or "anchor_top" => ("set_anchor", true),
+                    "size" => ("set_size", true),
+                    "position" => ("set_position", true),
+                    "global_position" => ("set_global_position", true),
+                    _ => (engineProperty.Setter, setterHasOptionalParameters),
+                };
+            }
+
             if (!string.IsNullOrEmpty(engineProperty.Getter))
             {
                 if (!TryGetEngineClassMethodByEngineName(type, engineProperty.Getter, out var getter))
@@ -383,7 +402,7 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
 #if DEBUG
                 // Properties with index have an extra paramater in the setter.
                 int expectedParameterCount = engineProperty.Index is not null ? 2 : 1;
-                Debug.Assert(setter.Parameters.Count == expectedParameterCount, $"Setter method '{type.Name}.{setter.Name}' has {setter.Parameters.Count} parameters (expected: {expectedParameterCount}).");
+                Debug.Assert(setterHasOptionalParameters ? setter.Parameters.Count >= expectedParameterCount : setter.Parameters.Count == expectedParameterCount, $"Setter method '{type.Name}.{setter.Name}' has {setter.Parameters.Count} parameters (expected: {expectedParameterCount}).");
 #endif
 
                 var setterParameterIndex = engineProperty.Index is not null ? 1 : 0;
@@ -406,12 +425,15 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                     }),
                 };
 
-                // Hide property accessors.
-                // Properties with index may reuse the same setter method multiple times,
-                // so we need to make sure we haven't already added the attribute.
-                if (!setter.Attributes.Any(attr => attr.Contains("global::System.ComponentModel.EditorBrowsableAttribute")))
+                if (!setterHasOptionalParameters)
                 {
-                    setter.Attributes.Add("[global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]");
+                    // Hide property accessors.
+                    // Properties with index may reuse the same setter method multiple times,
+                    // so we need to make sure we haven't already added the attribute.
+                    if (!setter.Attributes.Any(attr => attr.Contains("global::System.ComponentModel.EditorBrowsableAttribute")))
+                    {
+                        setter.Attributes.Add("[global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]");
+                    }
                 }
             }
 
