@@ -5,7 +5,7 @@ using Godot.Bridge;
 
 namespace Godot.NativeInterop;
 
-public static partial class InteropUtils
+internal static partial class InteropUtils
 {
     internal static FrozenDictionary<StringName, Func<nint, GodotObject>> CreateHelpers { get; private set; }
 

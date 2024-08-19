@@ -27,12 +27,10 @@ internal sealed class RegisterVirtualOverrides : MethodBody
         }
         foreach (var (method, engineMethod) in _virtualMethods)
         {
-            writer.WriteLine("{");
-            writer.Indent++;
+            writer.OpenBlock();
             writer.WriteLine($"MethodInfo methodInfo = type.GetMethod(nameof(MethodName.{method.Name}), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);");
             writer.WriteLine($"if (methodInfo is not null && methodInfo.DeclaringType != typeof({_type.Name}))");
-            writer.WriteLine('{');
-            writer.Indent++;
+            writer.OpenBlock();
 
             writer.Write($"context.BindVirtualMethodOverride(MethodName.{method.Name}, ");
             writer.Write($"static ({_type.FullNameWithGlobal} __instance");
@@ -91,10 +89,8 @@ internal sealed class RegisterVirtualOverrides : MethodBody
 
             writer.Indent--;
             writer.WriteLine("});");
-            writer.Indent--;
-            writer.WriteLine('}');
-            writer.Indent--;
-            writer.WriteLine('}');
+            writer.CloseBlock();
+            writer.CloseBlock();
         }
     }
 }

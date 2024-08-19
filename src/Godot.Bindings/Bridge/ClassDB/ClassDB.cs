@@ -413,6 +413,8 @@ public static class ClassDB
 
         if (!context.RegisteredVirtualMethodOverrides.TryGetValue(methodNameStr, out var virtualMethodInfo))
         {
+            // Virtual method not registered, it likely means it wasn't overridden.
+            // Returning null so it falls back to the default implementation.
             return null;
         }
 
