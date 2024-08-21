@@ -303,7 +303,7 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                 IsNew = engineClass.Name != "Object",
                 Parameters =
                 {
-                    new ParameterInfo("type", new TypeInfo("Type", "System")) { Attributes = ["[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]"]},
+                    new ParameterInfo("type", new TypeInfo("Type", "System")) { Attributes = ["[global::System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicMethods | global::System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.NonPublicMethods)]"]},
                     new ParameterInfo("context", new TypeInfo("ClassDBRegistrationContext", "Godot.Bridge")),
                 },
                 Body = new RegisterVirtualOverrides(type, virtualMethods),

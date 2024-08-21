@@ -28,7 +28,7 @@ internal sealed class RegisterVirtualOverrides : MethodBody
         foreach (var (method, engineMethod) in _virtualMethods)
         {
             writer.OpenBlock();
-            writer.WriteLine($"MethodInfo methodInfo = type.GetMethod(nameof(MethodName.{method.Name}), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);");
+            writer.WriteLine($"global::System.Reflection.MethodInfo methodInfo = type.GetMethod(nameof(MethodName.{method.Name}), global::System.Reflection.BindingFlags.Instance | global::System.Reflection.BindingFlags.Public | global::System.Reflection.BindingFlags.NonPublic);");
             writer.WriteLine($"if (methodInfo is not null && methodInfo.DeclaringType != typeof({_type.Name}))");
             writer.OpenBlock();
 
