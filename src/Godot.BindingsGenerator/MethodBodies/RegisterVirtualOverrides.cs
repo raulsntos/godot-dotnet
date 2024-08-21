@@ -1,5 +1,6 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Linq;
 using Godot.BindingsGenerator.ApiDump;
 using Godot.BindingsGenerator.Reflection;
 
@@ -27,9 +28,21 @@ internal sealed class RegisterVirtualOverrides : MethodBody
         }
         foreach (var (method, engineMethod) in _virtualMethods)
         {
+            string types = string.Join(", ", method.Parameters.Select(p => $"typeof({p.Type.FullNameWithGlobal})"));
             writer.OpenBlock();
-            writer.WriteLine($"global::System.Reflection.MethodInfo methodInfo = type.GetMethod(nameof(MethodName.{method.Name}), global::System.Reflection.BindingFlags.Instance | global::System.Reflection.BindingFlags.Public | global::System.Reflection.BindingFlags.NonPublic);");
-            writer.WriteLine($"if (methodInfo is not null && methodInfo.DeclaringType != typeof({_type.Name}))");
+
+            writer.WriteLine($"global::System.Reflection.MethodInfo? methodInfo = type.GetMethod(nameof({_type.Name}.{method.Name}), global::System.Reflection.BindingFlags.Instance | global::System.Reflection.BindingFlags.Public | global::System.Reflection.BindingFlags.NonPublic, [{types}]);");
+            writer.WriteLine("var isOverride = false;");
+            writer.WriteLine("if (methodInfo is not null)");
+            writer.OpenBlock();
+            writer.WriteLine($"bool isMethodDeclaredInDerivedType = methodInfo.DeclaringType != typeof({_type.Name});");
+            writer.WriteLine("global::System.Reflection.MethodInfo baseDefinition = methodInfo.GetBaseDefinition();");
+            writer.WriteLine("bool isMethodDeclaredAsOverride = baseDefinition != methodInfo;");
+            writer.WriteLine($"bool isBaseDefinitionFromCorrectBaseType = baseDefinition.DeclaringType == typeof({_type.Name});");
+            writer.WriteLine("isOverride = isMethodDeclaredInDerivedType && isMethodDeclaredAsOverride && isBaseDefinitionFromCorrectBaseType;");
+            writer.CloseBlock();
+            writer.WriteLine("");
+            writer.WriteLine("if (isOverride)");
             writer.OpenBlock();
 
             writer.Write($"context.BindVirtualMethodOverride(MethodName.{method.Name}, ");
