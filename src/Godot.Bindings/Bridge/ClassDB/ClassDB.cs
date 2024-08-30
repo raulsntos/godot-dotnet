@@ -80,7 +80,7 @@ public static class ClassDB
         if (typeof(T).IsAbstract && !isAbstract)
         {
             // T is an abstract type but the isAbstract parameter is false.
-            throw new ArgumentException($"Can't register abstract type '{typeof(T)}' as a non-abstract class.", nameof(isAbstract));
+            throw new ArgumentException(SR.FormatArgument_AbstractTypeCantBeRegisteredAsNonAbstract(typeof(T)), nameof(isAbstract));
         }
 
         StringName className = new StringName(typeof(T).Name);
@@ -373,7 +373,7 @@ public static class ClassDB
 
         if (context.RegisteredConstructor is null)
         {
-            throw new InvalidOperationException($"Can't instantiate type '{context.ClassName}'. A constructor has not been registered for the type.");
+            throw new InvalidOperationException(SR.FormatInvalidOperation_CantInstantiateTypeConstructorNotRegistered(context.ClassName));
         }
 
         var instance = context.RegisteredConstructor.Invoke();

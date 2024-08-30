@@ -67,7 +67,7 @@ internal static class DisposablesTracker
     {
         if (!_godotObjectInstances.TryRemove(weakReferenceToSelf, out _))
         {
-            throw new ArgumentException("Godot Object not registered.", nameof(weakReferenceToSelf));
+            throw new ArgumentException(SR.Argument_DisposableGodotObjectNotRegistered, nameof(weakReferenceToSelf));
         }
     }
 
@@ -75,7 +75,7 @@ internal static class DisposablesTracker
     {
         if (!_otherInstances.TryRemove(weakReference, out _))
         {
-            throw new ArgumentException("Disposable not registered.", nameof(weakReference));
+            throw new ArgumentException(SR.Argument_DisposableNotRegistered, nameof(weakReference));
         }
     }
 }

@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+  Microsoft ResX Schema
+
+  Version 2.0
+
+  The primary goals of this format is to allow a simple XML format
+  that is mostly human readable. The generation and parsing of the
+  various data types are done through the TypeConverter classes
+  associated with the data types.
+
+  Example:
+
+  ... ado.net/XML headers & schema ...
+  <resheader name="resmimetype">text/microsoft-resx</resheader>
+  <resheader name="version">2.0</resheader>
+  <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+  <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+  <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+  <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+  <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>[base64 mime encoded serialized .NET Framework object]</value>
+  </data>
+  <data name="Icon1" type="System.Drawing.Icon, System.Drawing"
+  mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>[base64 mime encoded string representing a byte array form of the .NET Framework
+  object]</value>
+    <comment>This is a comment</comment>
+  </data>
+
+  There are any number of "resheader" rows that contain simple
+  name/value pairs.
+
+  Each data row contains a name, and value. The row also contains a
+  type or mimetype. Type corresponds to a .NET class that support
+  text/value conversion through the TypeConverter architecture.
+  Classes that don't support this are serialized and stored with the
+  mimetype set.
+
+  The mimetype is used for serialized objects, and tells the
+  ResXResourceReader how to depersist the object. This is currently not
+  extensible. For a given mimetype the value must be set accordingly:
+
+  Note - application/x-microsoft.net.object.binary.base64 is the format
+  that the ResXResourceWriter will generate, however the reader can
+  read any of the formats listed below.
+
+  mimetype: application/x-microsoft.net.object.binary.base64
+  value   : The object must be serialized with
+      : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+      : and then encoded with base64 encoding.
+
+  mimetype: application/x-microsoft.net.object.soap.base64
+  value   : The object must be serialized with
+      : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+      : and then encoded with base64 encoding.
+
+  mimetype: application/x-microsoft.net.object.bytearray.base64
+  value   : The object must be serialized into a byte array
+      : using a System.ComponentModel.TypeConverter
+      : and then encoded with base64 encoding.
+  -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"
+                  msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0"
+                  msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"
+                msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"
+                  msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Argument_AbstractTypeCantBeRegisteredAsNonAbstract" xml:space="preserve">
+    <value>Can't register abstract type '{typeName}' as a non-abstract class.</value>
+  </data>
+  <data name="Argument_BytesAreNotValidAscii" xml:space="preserve">
+    <value>The bytes are not using ASCII encoding or contain invalid characters.</value>
+  </data>
+  <data name="Argument_CallableArgumentCountMismatch" xml:space="preserve">
+    <value>Invalid argument count for invoking callable. Expected {argCountExpected} arguments, received {argCountReceived}.</value>
+  </data>
+  <data name="Argument_ConstantAlreadyRegistered" xml:space="preserve">
+    <value>Constant '{constantName}' already registered in class '{typeName}'.</value>
+  </data>
+  <data name="Argument_ConstantWithoutEnumCantBeFlag" xml:space="preserve">
+    <value>Constant '{constantName}' not contained in an enum can't be a flag.</value>
+  </data>
+  <data name="Argument_DictionaryKeyAlreadyExists" xml:space="preserve">
+    <value>An element with the same key already exists.</value>
+  </data>
+  <data name="Argument_DisposableGodotObjectNotRegistered" xml:space="preserve">
+    <value>Godot Object not registered.</value>
+  </data>
+  <data name="Argument_DisposableNotRegistered" xml:space="preserve">
+    <value>Disposable not registered.</value>
+  </data>
+  <data name="Argument_MethodAlreadyRegistered" xml:space="preserve">
+    <value>Method '{methodName}' already registered in class '{typeName}'.</value>
+  </data>
+  <data name="Argument_PropertyAlreadyRegistered" xml:space="preserve">
+    <value>Property '{propertyName}' already registered in class '{typeName}'.</value>
+  </data>
+  <data name="Argument_SignalAlreadyRegistered" xml:space="preserve">
+    <value>Signal '{signalName}' already registered in class '{typeName}'.</value>
+  </data>
+  <data name="Argument_TargetVectorAndUpVectorCantBeParallel" xml:space="preserve">
+    <value>The target vector and up vector can't be parallel to each other.</value>
+  </data>
+  <data name="Argument_ValueIsNotNormalized" xml:space="preserve">
+    <value>Argument is not normalized.</value>
+  </data>
+  <data name="Argument_VectorCantBeZero" xml:space="preserve">
+    <value>The vector can't be zero.</value>
+  </data>
+  <data name="Argument_VirtualMethodOverrideAlreadyRegistered" xml:space="preserve">
+    <value>Virtual method override '{methodName}' already registered in class '{typeName}'.</value>
+  </data>
+  <data name="ArgumentOutOfRange_AabbEndPointIndex" xml:space="preserve">
+    <value>Index is {endpointIndex}, but a value from 0 to 7 is expected.</value>
+  </data>
+  <data name="ArgumentOutOfRange_ColorCodeInvalidAlphaPart" xml:space="preserve">
+    <value>Invalid color code. Alpha part is not valid hexadecimal: {colorCode}</value>
+  </data>
+  <data name="ArgumentOutOfRange_ColorCodeInvalidBluePart" xml:space="preserve">
+    <value>Invalid color code. Blue part is not valid hexadecimal: {colorCode}</value>
+  </data>
+  <data name="ArgumentOutOfRange_ColorCodeInvalidGreenPart" xml:space="preserve">
+    <value>Invalid color code. Green part is not valid hexadecimal: {colorCode}</value>
+  </data>
+  <data name="ArgumentOutOfRange_ColorCodeInvalidLength" xml:space="preserve">
+    <value>Invalid color code. Length is {colorCodeLength}, but a length of 6 or 8 is expected: {colorCode}</value>
+  </data>
+  <data name="ArgumentOutOfRange_ColorCodeInvalidRedPart" xml:space="preserve">
+    <value>Invalid color code. Red part is not valid hexadecimal: {colorCode}</value>
+  </data>
+  <data name="ArgumentOutOfRange_ColorNameInvalid" xml:space="preserve">
+    <value>Invalid Color Name: {colorName}</value>
+  </data>
+  <data name="CallError_ArgumentCountMismatch" xml:space="preserve">
+    <value>Invalid call to {methodName}. Expected {expectedArgumentCount} arguments.</value>
+  </data>
+  <data name="CallError_InstanceIsNull" xml:space="preserve">
+    <value>Attempt to call {methodName} on a null instance.</value>
+  </data>
+  <data name="CallError_InvalidArgument_TypeMismatch" xml:space="preserve">
+    <value>Invalid type in {methodName}. Cannot convert argument {argumentIndex} from {variantType} to {expectedVariantType}.</value>
+  </data>
+  <data name="CallError_InvalidArgument_TypeMismatchArrayElementType" xml:space="preserve">
+    <value>Invalid type in {methodName}. The array of argument {argumentIndex} ({variantType}) does not have the same element type as the expected typed array argument.</value>
+  </data>
+  <data name="CallError_InvalidArgument_TypeMismatchObjectDerived" xml:space="preserve">
+    <value>Invalid type in {methodName}. The Object-derived class of argument {argumentIndex} ({variantType}) is not a subclass of the expected argument class.</value>
+  </data>
+  <data name="CallError_InvalidMethod" xml:space="preserve">
+    <value>Invalid call. Nonexistent {methodName}.</value>
+  </data>
+  <data name="CallError_MethodNotConst" xml:space="preserve">
+    <value>Attempt to call {methodName} on a const instance.</value>
+  </data>
+  <data name="InvalidOperation_ArrayIsReadOnly" xml:space="preserve">
+    <value>Array instance is read-only.</value>
+  </data>
+  <data name="InvalidOperation_CantInstantiateTypeConstructorNotRegistered" xml:space="preserve">
+    <value>Can't instantiate type '{typeName}'. A constructor has not been registered for the type.</value>
+  </data>
+  <data name="InvalidOperation_DictionaryIsReadOnly" xml:space="preserve">
+    <value>Dictionary instance is read-only.</value>
+  </data>
+  <data name="InvalidOperation_EditorPluginAlreadyRegistered" xml:space="preserve">
+    <value>Type '{typeName}' has already been registered as an editor plugin.</value>
+  </data>
+  <data name="InvalidOperation_GodotBridgeAlreadyInitialized" xml:space="preserve">
+    <value>GodotBridge has already been initialized.</value>
+  </data>
+  <data name="InvalidOperation_MarshallingUnsupportedForType" xml:space="preserve">
+    <value>Marshalling is not supported for the type '{typeName}'.</value>
+  </data>
+  <data name="InvalidOperation_MatrixDeterminantIsZeroAndCantBeInverted" xml:space="preserve">
+    <value>Matrix determinant is zero and cannot be inverted.</value>
+  </data>
+  <data name="InvalidOperation_MethodOptionalParametersMustAppearAfterRequiredParameters" xml:space="preserve">
+    <value>Optional parameters must appear after all required parameters.</value>
+  </data>
+  <data name="InvalidOperation_QuaternionIsNotNormalized" xml:space="preserve">
+    <value>Quaternion is not normalized.</value>
+  </data>
+  <data name="InvalidOperation_RequiredVirtualMethodMustBeOverridden" xml:space="preserve">
+    <value>Required virtual method '{typeName}.{methodName}' must be overridden before calling.</value>
+  </data>
+  <data name="InvalidOperation_SignalAwaiterFailedToConnect" xml:space="preserve">
+    <value>Error connecting to signal '{signalName}' during await.</value>
+  </data>
+  <data name="InvalidOperation_SignalNameIsNull" xml:space="preserve">
+    <value>Signal name is null.</value>
+  </data>
+  <data name="InvalidOperation_SignalOwnerIsNull" xml:space="preserve">
+    <value>Signal owner is null.</value>
+  </data>
+  <data name="InvalidOperation_UnableToLoadGDExtensionFunction" xml:space="preserve">
+    <value>Unable to load GDExtension interface function '{functionName}'.</value>
+  </data>
+  <data name="InvalidOperation_VariantTypeInvalid" xml:space="preserve">
+    <value>Invalid Variant type: {variantType}</value>
+  </data>
+  <data name="InvalidOperation_VariantCantBeEnumerated" xml:space="preserve">
+    <value>Can't enumerate Variant '{variantValue}'.</value>
+  </data>
+  <data name="KeyNotFound_DictionaryKeyNotFound" xml:space="preserve">
+    <value>The given key '{key}' was not present in the dictionary.</value>
+  </data>
+  <data name="MissingGodotMethod_BuiltInNotFound" xml:space="preserve">
+    <value>Built-in method was not found. Likely the engine method changed to an incompatible version.</value>
+  </data>
+  <data name="MissingGodotMethod_ConstructorNotFound" xml:space="preserve">
+    <value>Constructor was not found. Likely the engine method changed to an incompatible version.</value>
+  </data>
+  <data name="MissingGodotMethod_DestructorNotFound" xml:space="preserve">
+    <value>Destructor was not found. Likely the engine method changed to an incompatible version.</value>
+  </data>
+  <data name="MissingGodotMethod_MethodBindNotFound" xml:space="preserve">
+    <value>Method bind was not found. Likely the engine method changed to an incompatible version.</value>
+  </data>
+  <data name="MissingGodotMethod_OperatorEvaluatorNotFound" xml:space="preserve">
+    <value>Operator evaluator was not found. Likely the engine method changed to an incompatible version.</value>
+  </data>
+  <data name="MissingGodotMethod_UtilityFunctionNotFound" xml:space="preserve">
+    <value>Utility function was not found. Likely the engine method changed to an incompatible version.</value>
+  </data>
+</root>

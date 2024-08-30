@@ -189,7 +189,7 @@ public partial struct Variant : IDisposable
             VariantType.PackedColorArray => AsPackedColorArray(),
             VariantType.PackedVector4Array => AsPackedVector4Array(),
             _ =>
-                throw new InvalidOperationException($"Invalid Variant type: {NativeValue.DangerousSelfRef.Type}"),
+                throw new InvalidOperationException(SR.FormatInvalidOperation_VariantTypeInvalid(NativeValue.DangerousSelfRef.Type)),
         };
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member

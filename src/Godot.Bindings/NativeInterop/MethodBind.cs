@@ -16,7 +16,7 @@ internal static partial class MethodBind
             methodBind = GodotBridge.GDExtensionInterface.classdb_get_method_bind(classNameNative.GetUnsafeAddress(), methodNameNative.GetUnsafeAddress(), methodHash);
         }
 
-        MissingGodotMethodException.ThrowIfNull(methodBind, "Method bind was not found. Likely the engine method changed to an incompatible version.");
+        MissingGodotMethodException.ThrowIfNull(methodBind, SR.MissingGodotMethod_MethodBindNotFound);
     }
 
     public unsafe static void GetAndCacheUtilityFunction(ref delegate* unmanaged[Cdecl]<void*, void**, int, void> utilityFunction, ReadOnlySpan<byte> methodNameAscii, [ConstantExpected] long methodHash)
@@ -27,7 +27,7 @@ internal static partial class MethodBind
             utilityFunction = GodotBridge.GDExtensionInterface.variant_get_ptr_utility_function(methodNameNative.GetUnsafeAddress(), methodHash);
         }
 
-        MissingGodotMethodException.ThrowIfNull(utilityFunction, "Utility function was not found. Likely the engine method changed to an incompatible version.");
+        MissingGodotMethodException.ThrowIfNull(utilityFunction, SR.MissingGodotMethod_UtilityFunctionNotFound);
     }
 
     public unsafe static void GetAndCacheBuiltInMethod(ref delegate* unmanaged[Cdecl]<void*, void**, void*, int, void> builtInMethod, GDExtensionVariantType variantType, ReadOnlySpan<byte> methodNameAscii, [ConstantExpected] long methodHash)
@@ -38,7 +38,7 @@ internal static partial class MethodBind
             builtInMethod = GodotBridge.GDExtensionInterface.variant_get_ptr_builtin_method(variantType, methodNameNative.GetUnsafeAddress(), methodHash);
         }
 
-        MissingGodotMethodException.ThrowIfNull(builtInMethod, "Built-in method was not found. Likely the engine method changed to an incompatible version.");
+        MissingGodotMethodException.ThrowIfNull(builtInMethod, SR.MissingGodotMethod_BuiltInNotFound);
     }
 
     public unsafe static void GetAndCacheBuiltInConstructor(ref delegate* unmanaged[Cdecl]<void*, void**, void> constructor, GDExtensionVariantType variantType, int constructorIndex)
@@ -48,7 +48,7 @@ internal static partial class MethodBind
             constructor = GodotBridge.GDExtensionInterface.variant_get_ptr_constructor(variantType, constructorIndex);
         }
 
-        MissingGodotMethodException.ThrowIfNull(constructor, "Constructor was not found. Likely the engine method changed to an incompatible version.");
+        MissingGodotMethodException.ThrowIfNull(constructor, SR.MissingGodotMethod_ConstructorNotFound);
     }
 
     public unsafe static void GetAndCacheBuiltInDestructor(ref delegate* unmanaged[Cdecl]<void*, void> destructor, GDExtensionVariantType variantType)
@@ -58,7 +58,7 @@ internal static partial class MethodBind
             destructor = GodotBridge.GDExtensionInterface.variant_get_ptr_destructor(variantType);
         }
 
-        MissingGodotMethodException.ThrowIfNull(destructor, "Destructor was not found. Likely the engine method changed to an incompatible version.");
+        MissingGodotMethodException.ThrowIfNull(destructor, SR.MissingGodotMethod_DestructorNotFound);
     }
 
     public unsafe static void GetAndCacheBuiltInOperator(ref delegate* unmanaged[Cdecl]<void*, void*, void*, void> operatorMethod, GDExtensionVariantOperator operatorKind, GDExtensionVariantType leftVariantType, GDExtensionVariantType rightVariantType)
@@ -68,7 +68,7 @@ internal static partial class MethodBind
             operatorMethod = GodotBridge.GDExtensionInterface.variant_get_ptr_operator_evaluator(operatorKind, leftVariantType, rightVariantType);
         }
 
-        MissingGodotMethodException.ThrowIfNull(operatorMethod, "Operator evaluator was not found. Likely the engine method changed to an incompatible version.");
+        MissingGodotMethodException.ThrowIfNull(operatorMethod, SR.MissingGodotMethod_OperatorEvaluatorNotFound);
     }
 
     [Conditional("DEBUG")]
@@ -117,27 +117,27 @@ internal static partial class MethodBind
 #if DEBUG
                     if (expected == VariantType.Object && args[errorarg].Type == expected)
                     {
-                        return $"Invalid type in {where}. The Object-derived class of argument {errorarg + 1} (" + GetVariantTypeName(args[errorarg]) + ") is not a subclass of the expected argument class.";
+                        return SR.FormatCallError_InvalidArgument_TypeMismatchObjectDerived(where, errorarg + 1, GetVariantTypeName(args[errorarg]));
                     }
                     else if (expected == VariantType.Array && args[errorarg].Type == expected)
                     {
-                        return $"Invalid type in {where}. The array of argument {errorarg + 1} (" + GetVariantTypeName(args[errorarg]) + ") does not have the same element type as the expected typed array argument.";
+                        return SR.FormatCallError_InvalidArgument_TypeMismatchArrayElementType(where, errorarg + 1, GetVariantTypeName(args[errorarg]));
                     }
                     else
 #endif
                     {
-                        return $"Invalid type in {where}. Cannot convert argument {errorarg + 1} from {args[errorarg].Type} to {expected}.";
+                        return SR.FormatCallError_InvalidArgument_TypeMismatch(where, errorarg + 1, args[errorarg].Type, expected);
                     }
                 }
                 case GDExtensionCallErrorType.GDEXTENSION_CALL_ERROR_TOO_MANY_ARGUMENTS:
                 case GDExtensionCallErrorType.GDEXTENSION_CALL_ERROR_TOO_FEW_ARGUMENTS:
-                    return $"Invalid call to {where}. Expected {error.expected} arguments.";
+                    return SR.FormatCallError_ArgumentCountMismatch(where, error.expected);
                 case GDExtensionCallErrorType.GDEXTENSION_CALL_ERROR_INVALID_METHOD:
-                    return $"Invalid call. Nonexistent {where}.";
+                    return SR.FormatCallError_InvalidMethod(where);
                 case GDExtensionCallErrorType.GDEXTENSION_CALL_ERROR_INSTANCE_IS_NULL:
-                    return $"Attempt to call {where} on a null instance.";
+                    return SR.FormatCallError_InstanceIsNull(where);
                 case GDExtensionCallErrorType.GDEXTENSION_CALL_ERROR_METHOD_NOT_CONST:
-                    return $"Attempt to call {where} on a const instance.";
+                    return SR.FormatCallError_MethodNotConst(where);
                 default:
                     return $"Bug, call error: #{error.error}";
             }

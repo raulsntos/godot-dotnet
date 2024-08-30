@@ -81,7 +81,7 @@ partial class GodotObject
     {
         if (!TryCallVirtualMethodCore(name, args, out var returnValue))
         {
-            throw new InvalidOperationException($"Required virtual method '{GetType()}.{name}' must be overridden before calling.");
+            throw new InvalidOperationException(SR.FormatInvalidOperation_RequiredVirtualMethodMustBeOverridden(GetType(), name));
         }
 
         return returnValue;

@@ -600,7 +600,7 @@ public struct Vector2 : IEquatable<Vector2>
 #if DEBUG
         if (!normal.IsNormalized())
         {
-            throw new ArgumentException("Argument is not normalized.", nameof(normal));
+            throw new ArgumentException(SR.Argument_ValueIsNotNormalized, nameof(normal));
         }
 #endif
         return (2 * Dot(normal) * normal) - this;
@@ -686,7 +686,7 @@ public struct Vector2 : IEquatable<Vector2>
 #if DEBUG
         if (!normal.IsNormalized())
         {
-            throw new ArgumentException("Argument is not normalized.", nameof(normal));
+            throw new ArgumentException(SR.Argument_ValueIsNotNormalized, nameof(normal));
         }
 #endif
         return this - (normal * Dot(normal));

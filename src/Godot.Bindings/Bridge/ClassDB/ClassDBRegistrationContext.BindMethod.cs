@@ -27,7 +27,7 @@ partial class ClassDBRegistrationContext
     {
         if (!_registeredMethods.Add(methodInfo.Name))
         {
-            throw new ArgumentException($"Method '{methodInfo.Name}' already registered in class '{ClassName}'.", nameof(methodInfo));
+            throw new ArgumentException(SR.FormatArgument_MethodAlreadyRegistered(methodInfo.Name, ClassName), nameof(methodInfo));
         }
 
         RegisteredMethodImplementations[methodInfo.Name] = methodInfo;
@@ -86,7 +86,7 @@ partial class ClassDBRegistrationContext
 
                 if (optionalParameterCount > 0 && parameter.DefaultValue is null)
                 {
-                    throw new InvalidOperationException("Optional parameters must appear after all required parameters.");
+                    throw new InvalidOperationException(SR.InvalidOperation_MethodOptionalParametersMustAppearAfterRequiredParameters);
                 }
 
                 if (parameter.DefaultValue is not null)

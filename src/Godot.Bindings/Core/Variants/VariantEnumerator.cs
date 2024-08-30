@@ -106,7 +106,7 @@ public ref struct VariantEnumerator
     {
         if (!valid)
         {
-            throw new InvalidOperationException($"Can't enumerate Variant '{Variant.CreateTakingOwnership(source)}'.");
+            throw new InvalidOperationException(SR.FormatInvalidOperation_VariantCantBeEnumerated(Variant.CreateTakingOwnership(source)));
         }
     }
 }

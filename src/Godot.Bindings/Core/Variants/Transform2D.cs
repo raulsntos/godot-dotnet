@@ -134,7 +134,7 @@ public struct Transform2D : IEquatable<Transform2D>
 #if DEBUG
         if (det == 0)
         {
-            throw new InvalidOperationException("Matrix determinant is zero and cannot be inverted.");
+            throw new InvalidOperationException(SR.InvalidOperation_MatrixDeterminantIsZeroAndCantBeInverted);
         }
 #endif
 

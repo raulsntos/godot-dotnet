@@ -568,7 +568,7 @@ public struct Basis : IEquatable<Basis>
 #if DEBUG
         if (det == 0)
         {
-            throw new InvalidOperationException("Matrix determinant is zero and cannot be inverted.");
+            throw new InvalidOperationException(SR.InvalidOperation_MatrixDeterminantIsZeroAndCantBeInverted);
         }
 #endif
 
@@ -631,11 +631,11 @@ public struct Basis : IEquatable<Basis>
 #if DEBUG
         if (target.IsZeroApprox())
         {
-            throw new ArgumentException("The vector can't be zero.", nameof(target));
+            throw new ArgumentException(SR.Argument_VectorCantBeZero, nameof(target));
         }
         if (up.Value.IsZeroApprox())
         {
-            throw new ArgumentException("The vector can't be zero.", nameof(up));
+            throw new ArgumentException(SR.Argument_VectorCantBeZero, nameof(up));
         }
 #endif
         Vector3 column2 = target.Normalized();
@@ -647,7 +647,7 @@ public struct Basis : IEquatable<Basis>
 #if DEBUG
         if (column0.IsZeroApprox())
         {
-            throw new ArgumentException("The target vector and up vector can't be parallel to each other.");
+            throw new ArgumentException(SR.Argument_TargetVectorAndUpVectorCantBeParallel);
         }
 #endif
         column0.Normalize();
@@ -838,7 +838,7 @@ public struct Basis : IEquatable<Basis>
 #if DEBUG
         if (!axis.IsNormalized())
         {
-            throw new ArgumentException("Argument is not normalized.", nameof(axis));
+            throw new ArgumentException(SR.Argument_ValueIsNotNormalized, nameof(axis));
         }
 #endif
         Vector3 axisSq = new Vector3(axis.X * axis.X, axis.Y * axis.Y, axis.Z * axis.Z);

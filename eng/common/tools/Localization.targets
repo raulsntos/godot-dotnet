@@ -1,0 +1,11 @@
+<Project>
+
+  <!-- TODO: This uses a source generator in preview, will likely be moved to the .NET SDK at some point and then this can probably be removed. -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.ResxSourceGenerator" Version="$(MicrosoftCodeAnalysisResxSourceGeneratorVersion)">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

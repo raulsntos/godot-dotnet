@@ -1037,7 +1037,7 @@ public sealed class GodotArray :
     {
         if (IsReadOnly)
         {
-            throw new InvalidOperationException("Array instance is read-only.");
+            throw new InvalidOperationException(SR.InvalidOperation_ArrayIsReadOnly);
         }
     }
 }

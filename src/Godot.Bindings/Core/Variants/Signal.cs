@@ -84,13 +84,13 @@ public readonly struct Signal : IAwaitable<SignalAwaiter, Variant[]>
         GodotObject? owner = Owner;
         if (owner is null)
         {
-            throw new InvalidOperationException("Signal owner is null.");
+            throw new InvalidOperationException(SR.InvalidOperation_SignalOwnerIsNull);
         }
 
         StringName? name = Name;
         if (name is null)
         {
-            throw new InvalidOperationException("Signal name is null.");
+            throw new InvalidOperationException(SR.InvalidOperation_SignalNameIsNull);
         }
 
         return new SignalAwaiter(owner, name, owner);

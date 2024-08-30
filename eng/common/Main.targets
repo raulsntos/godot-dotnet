@@ -6,5 +6,6 @@
   <Import Project="tools\ProjectDefaults.targets" Condition="'$(_SuppressAllTargets)' != 'true'" />
   <Import Project="tools\Tests.targets" Condition="'$(_SuppressAllTargets)' != 'true'" />
   <Import Project="tools\Nuspec.targets" Condition="'$(_SuppressAllTargets)' != 'true'" />
+  <Import Project="tools\Localization.targets" Condition="'$(_SuppressAllTargets)' != 'true'" />
 
 </Project>

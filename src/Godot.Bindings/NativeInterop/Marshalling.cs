@@ -65,6 +65,6 @@ internal static partial class Marshalling
     [DoesNotReturn]
     private static void ThrowUnsupportedType<T>()
     {
-        throw new InvalidOperationException($"The type is not supported for conversion to/from Variant: '{typeof(T).FullName}'.");
+        throw new InvalidOperationException(SR.FormatInvalidOperation_MarshallingUnsupportedForType(typeof(T).FullName));
     }
 }

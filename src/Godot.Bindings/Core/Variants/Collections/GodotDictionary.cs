@@ -100,7 +100,7 @@ public sealed class GodotDictionary :
             NativeGodotVariant* value = self.GetPtrw(key.NativeValue.DangerousSelfRef);
             if (value is null)
             {
-                throw new KeyNotFoundException();
+                throw new KeyNotFoundException(SR.FormatKeyNotFound_DictionaryKeyNotFound(key));
             }
 
             return Variant.CreateTakingOwnership(*value);
@@ -205,7 +205,7 @@ public sealed class GodotDictionary :
 
         if (NativeGodotDictionary.Has(in self, variantKey))
         {
-            throw new ArgumentException("An element with the same key already exists.", nameof(key));
+            throw new ArgumentException(SR.Argument_DictionaryKeyAlreadyExists, nameof(key));
         }
 
         NativeGodotVariant* itemPtr = self.GetPtrw(variantKey);
@@ -483,7 +483,7 @@ public sealed class GodotDictionary :
     {
         if (IsReadOnly)
         {
-            throw new InvalidOperationException("Dictionary instance is read-only.");
+            throw new InvalidOperationException(SR.InvalidOperation_DictionaryIsReadOnly);
         }
     }
 }

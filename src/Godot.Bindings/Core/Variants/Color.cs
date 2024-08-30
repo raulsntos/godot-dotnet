@@ -628,7 +628,7 @@ public struct Color : IEquatable<Color>
         }
         else
         {
-            throw new ArgumentOutOfRangeException($"Invalid color code. Length is {rgba.Length}, but a length of 6 or 8 is expected: {rgba}");
+            throw new ArgumentOutOfRangeException(SR.FormatArgumentOutOfRange_ColorCodeInvalidLength(rgba.Length, rgba.ToString()));
         }
 
         c.A = 1.0f;
@@ -655,23 +655,24 @@ public struct Color : IEquatable<Color>
 
         if (c.R < 0)
         {
-            throw new ArgumentOutOfRangeException($"Invalid color code. Red part is not valid hexadecimal: {rgba}");
+            throw new ArgumentOutOfRangeException(SR.FormatArgumentOutOfRange_ColorCodeInvalidRedPart(rgba.ToString()));
         }
 
         if (c.G < 0)
         {
-            throw new ArgumentOutOfRangeException($"Invalid color code. Green part is not valid hexadecimal: {rgba}");
+            throw new ArgumentOutOfRangeException(SR.FormatArgumentOutOfRange_ColorCodeInvalidGreenPart(rgba.ToString()));
         }
 
         if (c.B < 0)
         {
-            throw new ArgumentOutOfRangeException($"Invalid color code. Blue part is not valid hexadecimal: {rgba}");
+            throw new ArgumentOutOfRangeException(SR.FormatArgumentOutOfRange_ColorCodeInvalidBluePart(rgba.ToString()));
         }
 
         if (c.A < 0)
         {
-            throw new ArgumentOutOfRangeException($"Invalid color code. Alpha part is not valid hexadecimal: {rgba}");
+            throw new ArgumentOutOfRangeException(SR.FormatArgumentOutOfRange_ColorCodeInvalidAlphaPart(rgba.ToString()));
         }
+
         return c;
     }
 
@@ -703,7 +704,7 @@ public struct Color : IEquatable<Color>
     {
         if (!FindNamedColor(name, out Color color))
         {
-            throw new ArgumentOutOfRangeException($"Invalid Color Name: {name}");
+            throw new ArgumentOutOfRangeException(SR.FormatArgumentOutOfRange_ColorNameInvalid(name));
         }
 
         return color;

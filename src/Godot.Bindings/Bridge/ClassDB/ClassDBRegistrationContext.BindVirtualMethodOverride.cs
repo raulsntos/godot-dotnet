@@ -21,7 +21,7 @@ partial class ClassDBRegistrationContext
     {
         if (!_registeredMethods.Add(virtualMethodInfo.Name))
         {
-            throw new ArgumentException($"Virtual method override '{virtualMethodInfo.Name}' already registered in class '{ClassName}'.", nameof(virtualMethodInfo));
+            throw new ArgumentException(SR.FormatArgument_VirtualMethodOverrideAlreadyRegistered(virtualMethodInfo.Name, ClassName), nameof(virtualMethodInfo));
         }
 
         RegisteredVirtualMethodOverrides[virtualMethodInfo.Name] = virtualMethodInfo;

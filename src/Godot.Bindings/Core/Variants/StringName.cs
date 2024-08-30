@@ -84,7 +84,7 @@ public sealed class StringName : IDisposable, IEquatable<StringName?>
     {
         if (!Ascii.IsValid(ascii))
         {
-            throw new ArgumentException("The bytes are not using ASCII encoding or contains invalid characters.", nameof(ascii));
+            throw new ArgumentException(SR.Argument_BytesAreNotValidAscii, nameof(ascii));
         }
 
         return CreateStaticStringNameFromAsciiLiteral(ascii);

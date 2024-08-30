@@ -186,10 +186,7 @@ public readonly partial struct Callable
     /// <returns>A new Callable with the arguments unbound.</returns>
     public Callable Unbind(int argCount)
     {
-        if (argCount < 0)
-        {
-            throw new ArgumentException("Argument count can't be negative.", nameof(argCount));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(argCount);
 
         ref NativeGodotCallable self = ref NativeValue.DangerousSelfRef;
         return new Callable(NativeGodotCallable.Unbind(ref self, argCount));
@@ -261,7 +258,7 @@ public readonly partial struct Callable
         [DoesNotReturn]
         static void ThrowArgCountMismatch(int countExpected, int countReceived, string? paramName)
         {
-            throw new ArgumentException($"Invalid argument count for invoking callable. Expected {countExpected} arguments, received {countReceived}.", paramName);
+            throw new ArgumentException(SR.FormatArgument_CallableArgumentCountMismatch(countExpected, countReceived), paramName);
         }
     }
 }

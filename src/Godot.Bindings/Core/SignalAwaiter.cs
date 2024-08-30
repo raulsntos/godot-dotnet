@@ -41,7 +41,7 @@ public sealed class SignalAwaiter : IAwaiter<Variant[]>, IAwaitable<SignalAwaite
         Error err = source.Connect(signal, callback, (uint)GodotObject.ConnectFlags.OneShot);
         if (err != Error.Ok)
         {
-            throw new InvalidOperationException($"Error connecting to signal '{signal}' during await.");
+            throw new InvalidOperationException(SR.FormatInvalidOperation_SignalAwaiterFailedToConnect(signal));
         }
     }
 

@@ -26,7 +26,7 @@ public static class EditorPlugins
 
         if (_registeredPlugins.Contains(className))
         {
-            throw new InvalidOperationException($"Type '{typeof(T)}' has already been registered as an editor plugin.");
+            throw new InvalidOperationException(SR.FormatInvalidOperation_EditorPluginAlreadyRegistered(typeof(T)));
         }
 
         _registeredPlugins.Add(className);

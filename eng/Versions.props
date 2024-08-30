@@ -26,6 +26,7 @@
     <MicrosoftCodeAnalysisCSharpCodeFixTestingVersion>$(MicrosoftCodeAnalysisTestingVersion)</MicrosoftCodeAnalysisCSharpCodeFixTestingVersion>
     <MicrosoftCodeAnalysisCSharpSourceGeneratorsTestingVersion>$(MicrosoftCodeAnalysisTestingVersion)</MicrosoftCodeAnalysisCSharpSourceGeneratorsTestingVersion>
     <MicrosoftCodeAnalysisAnalyzersVersion>3.3.4</MicrosoftCodeAnalysisAnalyzersVersion>
+    <MicrosoftCodeAnalysisResxSourceGeneratorVersion>3.11.0-beta1.24324.1</MicrosoftCodeAnalysisResxSourceGeneratorVersion>
     <!-- NuGet -->
     <NuGetVersioningVersion>6.10.0</NuGetVersioningVersion>
     <!-- MSTest -->

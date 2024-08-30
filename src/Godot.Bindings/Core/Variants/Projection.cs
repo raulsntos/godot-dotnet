@@ -259,18 +259,9 @@ public struct Projection : IEquatable<Projection>
     /// <returns>The created projection.</returns>
     public static Projection CreateFrustum(real_t left, real_t right, real_t bottom, real_t top, real_t depthNear, real_t depthFar)
     {
-        if (right <= left)
-        {
-            throw new ArgumentException("right is less or equal to left.");
-        }
-        if (top <= bottom)
-        {
-            throw new ArgumentException("top is less or equal to bottom.");
-        }
-        if (depthFar <= depthNear)
-        {
-            throw new ArgumentException("far is less or equal to near.");
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(right, left);
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(top, bottom);
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(depthFar, depthNear);
 
         real_t x = 2 * depthNear / (right - left);
         real_t y = 2 * depthNear / (top - bottom);

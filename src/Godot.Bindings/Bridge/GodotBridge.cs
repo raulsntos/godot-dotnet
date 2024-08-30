@@ -51,7 +51,7 @@ public static partial class GodotBridge
     {
         if (_initialized)
         {
-            throw new InvalidOperationException("GodotBridge has already been initialized.");
+            throw new InvalidOperationException(SR.InvalidOperation_GodotBridgeAlreadyInitialized);
         }
 
         _getProcAddress = getProcAddress;
@@ -109,7 +109,7 @@ public static partial class GodotBridge
             nint ptr = _getProcAddress(namePtr);
             if (ptr == 0)
             {
-                throw new InvalidOperationException($"Unable to load GDExtension interface function '{Encoding.UTF8.GetString(nameUtf8)}'.");
+                throw new InvalidOperationException(SR.FormatInvalidOperation_UnableToLoadGDExtensionFunction(Encoding.UTF8.GetString(nameUtf8)));
             }
 
             return ptr;

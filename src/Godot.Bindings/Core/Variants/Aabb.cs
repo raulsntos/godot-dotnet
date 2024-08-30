@@ -164,8 +164,7 @@ public struct Aabb : IEquatable<Aabb>
             5 => new Vector3(_position.X + _size.X, _position.Y, _position.Z + _size.Z),
             6 => new Vector3(_position.X + _size.X, _position.Y + _size.Y, _position.Z),
             7 => new Vector3(_position.X + _size.X, _position.Y + _size.Y, _position.Z + _size.Z),
-            _ => throw new ArgumentOutOfRangeException(nameof(idx),
-                    $"Index is {idx}, but a value from 0 to 7 is expected."),
+            _ => throw new ArgumentOutOfRangeException(nameof(idx), SR.FormatArgumentOutOfRange_AabbEndPointIndex(idx)),
         };
     }
 

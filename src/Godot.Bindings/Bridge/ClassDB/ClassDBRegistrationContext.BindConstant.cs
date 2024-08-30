@@ -19,14 +19,14 @@ partial class ClassDBRegistrationContext
     {
         if (!_registeredConstants.Add(constantInfo.Name))
         {
-            throw new ArgumentException($"Constant '{constantInfo.Name}' already registered in class '{ClassName}'.", nameof(constantInfo));
+            throw new ArgumentException(SR.FormatArgument_ConstantAlreadyRegistered(constantInfo.Name, ClassName), nameof(constantInfo));
         }
 
         StringName enumName = constantInfo.EnumName ?? StringName.Empty;
 
         if (enumName.IsEmpty && constantInfo.IsFlagsEnum)
         {
-            throw new ArgumentException($"Constant '{constantInfo.Name}' not contained in an enum can't be a flag.");
+            throw new ArgumentException(SR.FormatArgument_ConstantWithoutEnumCantBeFlag(constantInfo.Name), nameof(constantInfo));
         }
 
         NativeGodotStringName constantNameNative = constantInfo.Name.NativeValue.DangerousSelfRef;
