@@ -17,7 +17,7 @@ partial class ClassDBRegistrationContext
     /// <exception cref="ArgumentException">
     /// A method has already been registered with the same name.
     /// </exception>
-    public void BindVirtualMethodOverride(VirtualMethodOverrideInfo virtualMethodInfo)
+    internal void BindVirtualMethodOverride(VirtualMethodOverrideInfo virtualMethodInfo)
     {
         if (!_registeredMethods.Add(virtualMethodInfo.Name))
         {

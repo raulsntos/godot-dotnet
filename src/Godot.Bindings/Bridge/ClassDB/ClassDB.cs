@@ -115,9 +115,9 @@ public static class ClassDB
             create_instance_func = &Create_Native,
             free_instance_func = &Free_Native,
             // recreate_instance_func = null, // TODO: We should implement this for GDExtension reloading.
-            get_virtual_func = &GetVirtualFunctionPointer_Native,
-            get_virtual_call_data_func = null,
-            call_virtual_with_data_func = null,
+            get_virtual_func = null,
+            get_virtual_call_data_func = &GetVirtualMethodUserData_Native,
+            call_virtual_with_data_func = &CallVirtualMethod_Native,
             get_rid_func = null,
             class_userdata = (void*)GCHandle.ToIntPtr(context.GCHandle),
         };
@@ -401,7 +401,7 @@ public static class ClassDB
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static delegate* unmanaged[Cdecl]<void*, void**, void*, void> GetVirtualFunctionPointer_Native(void* userData, NativeGodotStringName* name)
+    private unsafe static void* GetVirtualMethodUserData_Native(void* userData, NativeGodotStringName* name)
     {
         var gcHandle = GCHandle.FromIntPtr((nint)userData);
         var context = (ClassDBRegistrationContext?)gcHandle.Target;
@@ -412,9 +412,29 @@ public static class ClassDB
 
         if (!context.RegisteredVirtualMethodOverrides.TryGetValue(methodNameStr, out var virtualMethodInfo))
         {
-            throw new InvalidOperationException($"Virtual method '{methodNameStr}' has not been registered in class '{context.ClassName}'.");
+            // Virtual method not registered, it likely means it wasn't overridden.
+            // Returning null so it falls back to the default implementation.
+            return null;
         }
 
-        return (delegate* unmanaged[Cdecl]<void*, void**, void*, void>)Marshal.GetFunctionPointerForDelegate(virtualMethodInfo.Invoker.CallVirtualWithPtrArgs);
+        return userData;
+    }
+
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
+    private unsafe static void CallVirtualMethod_Native(void* instance, NativeGodotStringName* name, void* userData, void** args, void* outRet)
+    {
+        var gcHandle = GCHandle.FromIntPtr((nint)userData);
+        var context = (ClassDBRegistrationContext?)gcHandle.Target;
+
+        Debug.Assert(context is not null);
+
+        StringName methodNameStr = StringName.CreateTakingOwnership(*name);
+
+        // We already checked that the method is registered in 'GetVirtualMethodUserData_Native',
+        // this method would not have been called otherwise.
+        Debug.Assert(context.RegisteredVirtualMethodOverrides.ContainsKey(methodNameStr), $"Virtual method '{methodNameStr}' has not been registered in class '{context.ClassName}'.");
+
+        var virtualMethodInfo = context.RegisteredVirtualMethodOverrides[methodNameStr];
+        virtualMethodInfo.Invoker.CallVirtualWithPtrArgs(instance, args, outRet);
     }
 }
