@@ -221,7 +221,12 @@ partial class BindingsData
         {
             RegisterType(engineTypeName, type, unmanagedType);
 
-            RegisterPtrMarshaller(type, new InteropStructPtrMarshallerWriter(type, unmanagedType.MakePointerType()));
+            var marshallerType = new TypeInfo("PackedArrayMarshaller", "Godot.NativeInterop.Marshallers")
+            {
+                TypeAttributes = TypeAttributes.ReferenceType,
+            };
+
+            RegisterPtrMarshaller(type, new RuntimePtrMarshallerWriter(marshallerType, type, unmanagedType.MakePointerType()));
             RegisterPtrMarshaller(unmanagedType, new InteropStructPtrMarshallerWriter(unmanagedType));
 
             RegisterVariantMarshaller(type, new InteropStructVariantMarshallerWriter(type, engineTypeName, unmanagedType, createMethodSuffix: "Copying"));

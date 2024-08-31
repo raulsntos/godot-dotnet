@@ -233,61 +233,61 @@ partial class Marshalling
 
         if (typeof(T) == typeof(PackedByteArray))
         {
-            *(NativeGodotPackedByteArray*)destination = UnsafeAs<PackedByteArray>(value).NativeValue.DangerousSelfRef;
+            PackedArrayMarshaller.WriteUnmanaged((NativeGodotPackedByteArray*)destination, UnsafeAs<PackedByteArray?>(value));
             return;
         }
 
         if (typeof(T) == typeof(PackedInt32Array))
         {
-            *(NativeGodotPackedInt32Array*)destination = UnsafeAs<PackedInt32Array>(value).NativeValue.DangerousSelfRef;
+            PackedArrayMarshaller.WriteUnmanaged((NativeGodotPackedInt32Array*)destination, UnsafeAs<PackedInt32Array?>(value));
             return;
         }
 
         if (typeof(T) == typeof(PackedInt64Array))
         {
-            *(NativeGodotPackedInt64Array*)destination = UnsafeAs<PackedInt64Array>(value).NativeValue.DangerousSelfRef;
+            PackedArrayMarshaller.WriteUnmanaged((NativeGodotPackedInt64Array*)destination, UnsafeAs<PackedInt64Array?>(value));
             return;
         }
 
         if (typeof(T) == typeof(PackedFloat32Array))
         {
-            *(NativeGodotPackedFloat32Array*)destination = UnsafeAs<PackedFloat32Array>(value).NativeValue.DangerousSelfRef;
+            PackedArrayMarshaller.WriteUnmanaged((NativeGodotPackedFloat32Array*)destination, UnsafeAs<PackedFloat32Array?>(value));
             return;
         }
 
         if (typeof(T) == typeof(PackedFloat64Array))
         {
-            *(NativeGodotPackedFloat64Array*)destination = UnsafeAs<PackedFloat64Array>(value).NativeValue.DangerousSelfRef;
+            PackedArrayMarshaller.WriteUnmanaged((NativeGodotPackedFloat64Array*)destination, UnsafeAs<PackedFloat64Array?>(value));
             return;
         }
 
         if (typeof(T) == typeof(PackedStringArray))
         {
-            *(NativeGodotPackedStringArray*)destination = UnsafeAs<PackedStringArray>(value).NativeValue.DangerousSelfRef;
+            PackedArrayMarshaller.WriteUnmanaged((NativeGodotPackedStringArray*)destination, UnsafeAs<PackedStringArray?>(value));
             return;
         }
 
         if (typeof(T) == typeof(PackedVector2Array))
         {
-            *(NativeGodotPackedVector2Array*)destination = UnsafeAs<PackedVector2Array>(value).NativeValue.DangerousSelfRef;
+            PackedArrayMarshaller.WriteUnmanaged((NativeGodotPackedVector2Array*)destination, UnsafeAs<PackedVector2Array?>(value));
             return;
         }
 
         if (typeof(T) == typeof(PackedVector3Array))
         {
-            *(NativeGodotPackedVector3Array*)destination = UnsafeAs<PackedVector3Array>(value).NativeValue.DangerousSelfRef;
+            PackedArrayMarshaller.WriteUnmanaged((NativeGodotPackedVector3Array*)destination, UnsafeAs<PackedVector3Array?>(value));
             return;
         }
 
         if (typeof(T) == typeof(PackedColorArray))
         {
-            *(NativeGodotPackedColorArray*)destination = UnsafeAs<PackedColorArray>(value).NativeValue.DangerousSelfRef;
+            PackedArrayMarshaller.WriteUnmanaged((NativeGodotPackedColorArray*)destination, UnsafeAs<PackedColorArray?>(value));
             return;
         }
 
         if (typeof(T) == typeof(PackedVector4Array))
         {
-            *(NativeGodotPackedVector4Array*)destination = UnsafeAs<PackedVector4Array>(value).NativeValue.DangerousSelfRef;
+            PackedArrayMarshaller.WriteUnmanaged((NativeGodotPackedVector4Array*)destination, UnsafeAs<PackedVector4Array?>(value));
             return;
         }
 
