@@ -320,6 +320,11 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
         // Populate properties.
         foreach (var engineProperty in engineClass.Properties)
         {
+            if (!ShouldGenerateProperty(type, engineClass, engineProperty))
+            {
+                continue;
+            }
+
             // The type specified for the property in the API dump is often not what we want so we prefer
             // the type used by the getter/setter methods.
             string propertyName = NamingUtils.SnakeToPascalCase(engineProperty.Name);
@@ -772,6 +777,11 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
 
                 foreach (var engineProperty in engineClass.Properties)
                 {
+                    if (!ShouldGenerateProperty(type, engineClass, engineProperty))
+                    {
+                        continue;
+                    }
+
                     AddCachedStringName(propertyNamesType, engineProperty.Name);
                 }
 
@@ -869,6 +879,32 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
             if (engineMethod.Name == "get_instance_id")
             {
                 // Skipping GodotObject.GetInstanceId, we'll use the GDExtensionInterface method instead.
+                return false;
+            }
+        }
+        if (engineClass.Name == "GLTFAccessor")
+        {
+            if (engineMethod.Name is "get_type" or "set_type")
+            {
+                // This method is deprecated in favor of 'accessor_type'.
+                // We can skip it since these bindings never exposed this method in public API,
+                // and thus also avoid conflict with the `System.GetType` method.
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static bool ShouldGenerateProperty(TypeInfo type, GodotClassInfo engineClass, GodotPropertyInfo engineProperty)
+    {
+        if (engineClass.Name == "GLTFAccessor")
+        {
+            if (engineProperty.Name == "type")
+            {
+                // This method is deprecated in favor of 'accessor_type'.
+                // We can skip it since these bindings never exposed this method in public API,
+                // and thus also avoid conflict with the `System.GetType` method.
                 return false;
             }
         }
