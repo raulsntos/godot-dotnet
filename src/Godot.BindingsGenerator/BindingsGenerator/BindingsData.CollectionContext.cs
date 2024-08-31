@@ -101,12 +101,12 @@ partial class BindingsData
                 GenericTypeArgumentCount = 1,
                 Attributes = { $"[global::System.Runtime.CompilerServices.InlineArray({length})]" },
                 DeclaredFields =
-            {
-                new FieldInfo("_element0", new TypeParameterInfo("T"))
                 {
-                    VisibilityAttributes = VisibilityAttributes.Private,
+                    new FieldInfo("_element0", new TypeParameterInfo("T"))
+                    {
+                        VisibilityAttributes = VisibilityAttributes.Private,
+                    },
                 },
-            },
             };
             _data._inlineArrays[length] = inlineArrayType;
 
