@@ -605,6 +605,12 @@ partial class Marshalling
 
         if (typeof(GodotObject).IsAssignableFrom(typeof(T)))
         {
+            // If the pointer is null we can skip all the operations below.
+            if (value is null)
+            {
+                return default!;
+            }
+
             if (typeof(RefCounted).IsAssignableFrom(typeof(T)))
             {
                 // In virtual methods, if T is RefCounted we need to use `ref_get_object` to get
@@ -624,7 +630,14 @@ partial class Marshalling
                 {
                     value = refPtr;
                 }
+                else
+                {
+                    // If the GodotObject is not RefCounted, the pointer is 'Object**'
+                    // so we need to dereference it.
+                    value = *(void**)value;
+                }
             }
+
             return (T)(object)GodotObjectMarshaller.GetOrCreateManagedInstance((nint)value)!;
         }
 
