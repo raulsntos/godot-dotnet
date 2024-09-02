@@ -140,7 +140,14 @@ internal static class BindMethodsWriter
 
         void AddCachedStringName(string symbolName, string value)
         {
-            sb.AppendLine($$"""public static global::Godot.StringName @{{symbolName}} { get; } = global::Godot.StringName.CreateStaticFromAscii("{{value}}"u8);""");
+            if (value.IsAscii())
+            {
+                sb.AppendLine($$"""public static global::Godot.StringName @{{symbolName}} { get; } = global::Godot.StringName.CreateStaticFromAscii("{{value}}"u8);""");
+            }
+            else
+            {
+                sb.AppendLine($$"""public static global::Godot.StringName @{{symbolName}} { get; } = global::Godot.StringName.CreateFromUtf8("{{value}}"u8);""");
+            }
         }
     }
 
@@ -421,7 +428,14 @@ internal static class BindMethodsWriter
             : parameter.SymbolName;
 
         sb.Append("new global::Godot.Bridge.ParameterInfo(");
-        sb.Append($"""global::Godot.StringName.CreateStaticFromAscii("{nameValue}"u8), """);
+        if (nameValue.IsAscii())
+        {
+            sb.Append($"""global::Godot.StringName.CreateStaticFromAscii("{nameValue}"u8), """);
+        }
+        else
+        {
+            sb.Append($"""global::Godot.StringName.CreateFromUtf8("{nameValue}"u8), """);
+        }
         sb.Append(parameter.MarshalInfo.VariantType.FullNameWithGlobal());
         if (parameter.MarshalInfo.VariantTypeMetadata != VariantTypeMetadata.None || parameter.HasExplicitDefaultValue)
         {
@@ -501,7 +515,14 @@ internal static class BindMethodsWriter
         }
         if (!string.IsNullOrEmpty(marshalInfo.ClassName))
         {
-            lines.Add($"""ClassName = global::Godot.StringName.CreateStaticFromAscii("{marshalInfo.ClassName}"u8),""");
+            if (marshalInfo.ClassName!.IsAscii())
+            {
+                lines.Add($"""ClassName = global::Godot.StringName.CreateStaticFromAscii("{marshalInfo.ClassName}"u8),""");
+            }
+            else
+            {
+                lines.Add($"""ClassName = global::Godot.StringName.CreateFromUtf8("{marshalInfo.ClassName}"u8),""");
+            }
         }
 
         if (lines.Count == 0)
@@ -535,5 +556,10 @@ internal static class BindMethodsWriter
         }
 
         return delegateName.Substring(0, delegateName.Length - "EventHandler".Length);
+    }
+
+    private static bool IsAscii(this string value)
+    {
+        return System.Text.Encoding.UTF8.GetByteCount(value) == value.Length;
     }
 }
