@@ -65,6 +65,10 @@ internal sealed class GenerateCommand : CliRootCommand
 
         var testOutputPath = parseResult.GetValue(_testOutputPathOption);
 
+        // Clean output directories first.
+        outputPath.Delete(recursive: true);
+        testOutputPath?.Delete(recursive: true);
+
         var logger = ConsoleLogger.Instance;
 
         ClangGenerator.Generate(extensionInterfacePath.FullName, outputPath.FullName, testOutputPath?.FullName, logger);
