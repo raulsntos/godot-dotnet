@@ -36,6 +36,16 @@ public class GenerateTask : Task
 
     public override bool Execute()
     {
+        // Clean output directories first.
+        if (Directory.Exists(OutputPath))
+        {
+            Directory.Delete(OutputPath, recursive: true);
+        }
+        if (Directory.Exists(TestOutputPath))
+        {
+            Directory.Delete(TestOutputPath, recursive: true);
+        }
+
         var logger = new MSBuildTaskLogger(Log);
 
         ClangGenerator.Generate(ExtensionInterfacePath, OutputPath, TestOutputPath, logger);
