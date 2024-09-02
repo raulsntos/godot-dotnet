@@ -52,6 +52,9 @@ dotnet_style_require_accessibility_modifiers = always
 # IDE0040: Add accessibility modifiers.
 dotnet_diagnostic.IDE0040.severity = warning
 
+# IDE0055: Formatting rule violation.
+dotnet_diagnostic.IDE0055.severity = warning
+
 # IDE1006: Naming rule violation.
 dotnet_diagnostic.IDE1006.severity = suggestion
 
