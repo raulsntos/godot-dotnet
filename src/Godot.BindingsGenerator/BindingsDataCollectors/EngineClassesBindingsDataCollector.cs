@@ -144,7 +144,7 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                 IsStatic = true,
                 IsInitOnly = true,
                 IsNew = engineClass.Name != "Object",
-                DefaultValue = $"global::Godot.StringName.CreateStaticStringNameFromAsciiLiteral(\"{engineClass.Name}\"u8)",
+                DefaultValue = $"global::Godot.StringName.CreateFromUtf8(\"{engineClass.Name}\"u8)",
             };
             type.DeclaredFields.Add(nativeNameField);
         }
@@ -817,7 +817,7 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                     VisibilityAttributes = VisibilityAttributes.Private,
                     IsStatic = true,
                     IsInitOnly = true,
-                    DefaultValue = $"global::Godot.StringName.CreateStaticStringNameFromAsciiLiteral(\"{engineName}\"u8)",
+                    DefaultValue = $"global::Godot.StringName.CreateFromUtf8(\"{engineName}\"u8)",
                 };
                 cacheType.DeclaredFields.Add(nameField);
 
