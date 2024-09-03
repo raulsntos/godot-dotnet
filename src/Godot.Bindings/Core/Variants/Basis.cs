@@ -565,10 +565,12 @@ public struct Basis : IEquatable<Basis>
 
         real_t det = Row0[0] * cofac00 + Row0[1] * cofac10 + Row0[2] * cofac20;
 
+#if DEBUG
         if (det == 0)
         {
             throw new InvalidOperationException("Matrix determinant is zero and cannot be inverted.");
         }
+#endif
 
         real_t detInv = 1.0f / det;
 
@@ -833,6 +835,12 @@ public struct Basis : IEquatable<Basis>
     /// <param name="angle">The angle to rotate, in radians.</param>
     public Basis(Vector3 axis, real_t angle)
     {
+#if DEBUG
+        if (!axis.IsNormalized())
+        {
+            throw new ArgumentException("Argument is not normalized.", nameof(axis));
+        }
+#endif
         Vector3 axisSq = new Vector3(axis.X * axis.X, axis.Y * axis.Y, axis.Z * axis.Z);
         (real_t sin, real_t cos) = real_t.SinCos(angle);
 

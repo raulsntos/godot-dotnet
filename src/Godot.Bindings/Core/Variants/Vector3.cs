@@ -661,12 +661,6 @@ public struct Vector3 : IEquatable<Vector3>
     /// <returns>The rotated vector.</returns>
     public readonly Vector3 Rotated(Vector3 axis, real_t angle)
     {
-#if DEBUG
-        if (!axis.IsNormalized())
-        {
-            throw new ArgumentException("Argument is not normalized.", nameof(axis));
-        }
-#endif
         return new Basis(axis, angle) * this;
     }
 
@@ -750,6 +744,12 @@ public struct Vector3 : IEquatable<Vector3>
     /// <returns>The slid vector.</returns>
     public readonly Vector3 Slide(Vector3 normal)
     {
+#if DEBUG
+        if (!normal.IsNormalized())
+        {
+            throw new ArgumentException("Argument is not normalized.", nameof(normal));
+        }
+#endif
         return this - (normal * Dot(normal));
     }
 

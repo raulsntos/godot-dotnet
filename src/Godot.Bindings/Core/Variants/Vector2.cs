@@ -683,6 +683,12 @@ public struct Vector2 : IEquatable<Vector2>
     /// <returns>The slid vector.</returns>
     public readonly Vector2 Slide(Vector2 normal)
     {
+#if DEBUG
+        if (!normal.IsNormalized())
+        {
+            throw new ArgumentException("Argument is not normalized.", nameof(normal));
+        }
+#endif
         return this - (normal * Dot(normal));
     }
 

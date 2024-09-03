@@ -180,16 +180,15 @@ public struct Transform3D : IEquatable<Transform3D>
     /// <returns>The resulting transform.</returns>
     public readonly Transform3D LookingAt(Vector3 target, Vector3? up = null, bool useModelFront = false)
     {
+#if DEBUG
+        if (target.IsEqualApprox(Origin))
+        {
+            throw new ArgumentException("The transform's origin and target can't be equal.", nameof(target));
+        }
+#endif
         Transform3D t = this;
-        t.SetLookAt(Origin, target, up ?? Vector3.Up, useModelFront);
+        t.Basis = Basis.LookingAt(target - Origin, up, useModelFront);
         return t;
-    }
-
-    /// <inheritdoc cref="LookingAt(Vector3, Nullable{Vector3}, bool)"/>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public readonly Transform3D LookingAt(Vector3 target, Vector3 up)
-    {
-        return LookingAt(target, up, false);
     }
 
     /// <summary>
@@ -254,12 +253,6 @@ public struct Transform3D : IEquatable<Transform3D>
     {
         Basis tmpBasis = Basis.FromScale(scale);
         return new Transform3D(Basis * tmpBasis, Origin);
-    }
-
-    private void SetLookAt(Vector3 eye, Vector3 target, Vector3 up, bool useModelFront = false)
-    {
-        Basis = Basis.LookingAt(target - eye, up, useModelFront);
-        Origin = eye;
     }
 
     /// <summary>

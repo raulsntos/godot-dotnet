@@ -123,11 +123,11 @@ public struct Quaternion : IEquatable<Quaternion>
 #if DEBUG
         if (!IsNormalized())
         {
-            throw new InvalidOperationException("Quaternion is not normalized");
+            throw new InvalidOperationException("Quaternion is not normalized.");
         }
         if (!b.IsNormalized())
         {
-            throw new ArgumentException("Argument is not normalized", nameof(b));
+            throw new ArgumentException("Argument is not normalized.", nameof(b));
         }
 #endif
 
@@ -196,11 +196,11 @@ public struct Quaternion : IEquatable<Quaternion>
 #if DEBUG
         if (!IsNormalized())
         {
-            throw new InvalidOperationException("Quaternion is not normalized");
+            throw new InvalidOperationException("Quaternion is not normalized.");
         }
         if (!b.IsNormalized())
         {
-            throw new ArgumentException("Argument is not normalized", nameof(b));
+            throw new ArgumentException("Argument is not normalized.", nameof(b));
         }
 #endif
 
@@ -478,11 +478,11 @@ public struct Quaternion : IEquatable<Quaternion>
 #if DEBUG
         if (!IsNormalized())
         {
-            throw new InvalidOperationException("Quaternion is not normalized");
+            throw new InvalidOperationException("Quaternion is not normalized.");
         }
         if (!to.IsNormalized())
         {
-            throw new ArgumentException("Argument is not normalized", nameof(to));
+            throw new ArgumentException("Argument is not normalized.", nameof(to));
         }
 #endif
 
@@ -665,7 +665,7 @@ public struct Quaternion : IEquatable<Quaternion>
 #if DEBUG
         if (!quaternion.IsNormalized())
         {
-            throw new InvalidOperationException("Quaternion is not normalized.");
+            throw new ArgumentException("Quaternion is not normalized.", nameof(quaternion));
         }
 #endif
         var u = new Vector3(quaternion.X, quaternion.Y, quaternion.Z);

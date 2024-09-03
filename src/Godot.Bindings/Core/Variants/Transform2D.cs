@@ -131,10 +131,12 @@ public struct Transform2D : IEquatable<Transform2D>
     {
         real_t det = BasisDeterminant();
 
+#if DEBUG
         if (det == 0)
         {
             throw new InvalidOperationException("Matrix determinant is zero and cannot be inverted.");
         }
+#endif
 
         Transform2D inv = this;
 
