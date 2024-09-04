@@ -13,7 +13,7 @@ partial class GodotObject : IDisposable
     internal nint NativePtr;
     private readonly GCHandle _gcHandle;
 
-    private readonly WeakReference<GodotObject>? _weakReferenceToSelf;
+    private readonly WeakReference<RefCounted>? _weakReferenceToSelf;
 
     private bool _disposed;
 
@@ -206,10 +206,7 @@ partial class GodotObject : IDisposable
             NativePtr = 0;
         }
 
-        if (_weakReferenceToSelf is not null)
-        {
-            DisposablesTracker.UnregisterGodotObject(this, _weakReferenceToSelf);
-        }
+        DisposablesTracker.UnregisterGodotObject(this, _weakReferenceToSelf);
     }
 
     /// <summary>

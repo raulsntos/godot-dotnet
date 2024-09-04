@@ -6,8 +6,11 @@ namespace Godot.NativeInterop;
 
 internal static class DisposablesTracker
 {
-    private static readonly ConcurrentDictionary<WeakReference<GodotObject>, byte> _godotObjectInstances =
+    private static readonly ConcurrentDictionary<GodotObject, byte> _godotObjectInstances =
         new();
+
+    private static readonly ConcurrentDictionary<WeakReference<RefCounted>, byte> _refCountedInstances =
+       new();
 
     private static readonly ConcurrentDictionary<WeakReference<IDisposable>, byte> _otherInstances =
         new();
@@ -25,9 +28,14 @@ internal static class DisposablesTracker
         // like StringName, NodePath, GodotArray/GodotDictionary, etc.
         // The GodotObject Dispose() method may need any of the later instances.
 
-        foreach (WeakReference<GodotObject> item in _godotObjectInstances.Keys)
+        foreach (GodotObject self in _godotObjectInstances.Keys)
         {
-            if (item.TryGetTarget(out GodotObject? self))
+            self.Dispose();
+        }
+
+        foreach (WeakReference<RefCounted> item in _refCountedInstances.Keys)
+        {
+            if (item.TryGetTarget(out RefCounted? self))
             {
                 self.Dispose();
             }
@@ -47,11 +55,16 @@ internal static class DisposablesTracker
         }
     }
 
-    public static WeakReference<GodotObject> RegisterGodotObject(GodotObject godotObject)
+    public static WeakReference<RefCounted>? RegisterGodotObject(GodotObject godotObject)
     {
-        var weakReferenceToSelf = new WeakReference<GodotObject>(godotObject);
-        _godotObjectInstances.TryAdd(weakReferenceToSelf, 0);
-        return weakReferenceToSelf;
+        if (godotObject is RefCounted rc)
+        {
+            var weakReferenceToSelf = new WeakReference<RefCounted>(rc);
+            _refCountedInstances.TryAdd(weakReferenceToSelf, 0);
+            return weakReferenceToSelf;
+        }
+        _godotObjectInstances.TryAdd(godotObject, 0);
+        return null;
     }
 
     public static WeakReference<IDisposable> RegisterDisposable(IDisposable disposable)
@@ -63,9 +76,9 @@ internal static class DisposablesTracker
         return weakReferenceToSelf;
     }
 
-    public static void UnregisterGodotObject(GodotObject godotObject, WeakReference<GodotObject> weakReferenceToSelf)
+    public static void UnregisterGodotObject(GodotObject godotObject, WeakReference<RefCounted>? weakReferenceToSelf)
     {
-        if (!_godotObjectInstances.TryRemove(weakReferenceToSelf, out _))
+        if (godotObject is RefCounted rc ? !_refCountedInstances.TryRemove(weakReferenceToSelf!, out _) : !_godotObjectInstances.TryRemove(godotObject, out _))
         {
             throw new ArgumentException("Godot Object not registered.", nameof(weakReferenceToSelf));
         }
