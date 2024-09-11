@@ -253,6 +253,9 @@
   <data name="InvalidOperation_UnableToLoadGDExtensionFunction" xml:space="preserve">
     <value>Unable to load GDExtension interface function '{functionName}'.</value>
   </data>
+  <data name="InvalidOperation_UnableToParseString" xml:space="preserve">
+    <value>Unable to parse string '{value}' with encoding '{encoding}'.</value>
+  </data>
   <data name="InvalidOperation_VariantTypeInvalid" xml:space="preserve">
     <value>Invalid Variant type: {variantType}</value>
   </data>

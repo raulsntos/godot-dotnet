@@ -28,38 +28,69 @@ partial struct NativeGodotString
         }
     }
 
-    internal unsafe static NativeGodotString Create(char* utf16)
+    internal unsafe static NativeGodotString Create(scoped ReadOnlySpan<byte> utf8)
     {
-        NativeGodotString dest = default;
-        GodotBridge.GDExtensionInterface.string_new_with_utf16_chars(dest.GetUnsafeAddress(), (ushort*)utf16);
+        if (!TryCreate(utf8, out NativeGodotString dest))
+        {
+            throw new InvalidOperationException(SR.FormatInvalidOperation_UnableToParseString(Encoding.UTF8.GetString(utf8), "UTF-8"));
+        }
+
         return dest;
     }
 
-    internal unsafe static NativeGodotString Create(string? utf16)
+    internal unsafe static NativeGodotString Create(scoped ReadOnlySpan<char> utf16)
     {
-        if (utf16 is null)
+        if (!TryCreate(utf16, out NativeGodotString dest))
         {
-            return default;
+            throw new InvalidOperationException(SR.FormatInvalidOperation_UnableToParseString(utf16.ToString(), "UTF-16"));
         }
 
-        fixed (char* utf16Ptr = utf16)
-        {
-            return Create(utf16Ptr);
-        }
+        return dest;
     }
 
-    internal unsafe static NativeGodotString Create(ReadOnlySpan<byte> utf8)
+    internal unsafe static bool TryCreate(scoped ReadOnlySpan<byte> utf8, out NativeGodotString value)
     {
         if (utf8.IsEmpty)
         {
-            return default;
+            value = default;
+            return true;
         }
 
         NativeGodotString dest = default;
         fixed (byte* utf8Ptr = utf8)
         {
-            GodotBridge.GDExtensionInterface.string_new_with_utf8_chars_and_len(&dest, utf8Ptr, utf8.Length);
-            return dest;
+            Error error = (Error)GodotBridge.GDExtensionInterface.string_new_with_utf8_chars_and_len2(&dest, utf8Ptr, utf8.Length);
+            if (error != Error.Ok)
+            {
+                value = default;
+                return false;
+            }
+
+            value = dest;
+            return true;
+        }
+    }
+
+    internal unsafe static bool TryCreate(scoped ReadOnlySpan<char> utf16, out NativeGodotString value)
+    {
+        if (utf16.IsEmpty)
+        {
+            value = default;
+            return true;
+        }
+
+        NativeGodotString dest = default;
+        fixed (char* utf16Ptr = utf16)
+        {
+            Error error = (Error)GodotBridge.GDExtensionInterface.string_new_with_utf16_chars_and_len2(&dest, (ushort*)utf16Ptr, utf16.Length, BitConverter.IsLittleEndian);
+            if (error != Error.Ok)
+            {
+                value = default;
+                return false;
+            }
+
+            value = dest;
+            return true;
         }
     }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Buffers;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -93,6 +94,8 @@ partial struct NativeGodotStringName
 
     internal unsafe static NativeGodotStringName Create(scoped ReadOnlySpan<byte> ascii, bool isStatic)
     {
+        Debug.Assert(Ascii.IsValid(ascii), $"StringName is not valid ASCII '{Encoding.UTF8.GetString(ascii)}'.");
+
         if (ascii.IsEmpty)
         {
             return default;
