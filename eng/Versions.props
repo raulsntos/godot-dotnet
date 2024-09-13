@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <!-- Version for this repository. -->
-    <VersionPrefix>4.3.0</VersionPrefix>
+    <VersionPrefix>4.4.0</VersionPrefix>
     <!-- Label to use when producing official prerelease builds. -->
     <!-- Do not change. Use the command arguments to produce a build with a different label. -->
     <PreReleaseVersionLabel>nightly</PreReleaseVersionLabel>
