@@ -50,6 +50,11 @@ internal readonly record struct GodotRegistrationSpec : IEquatable<GodotRegistra
     public required string FullyQualifiedSymbolName { get; init; }
 
     /// <summary>
+    /// Fully qualified name of the type's base type's symbol, including the global namespace.
+    /// </summary>
+    public required string FullyQualifiedBaseSymbolName { get; init; }
+
+    /// <summary>
     /// Indicates the kind of registration that this specification represents.
     /// </summary>
     public required Kind RegistrationKind { get; init; }

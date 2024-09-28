@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using Microsoft.CodeAnalysis;
@@ -25,12 +27,45 @@ internal sealed class EntryPointGenerator : IIncrementalGenerator
             .Collect()
             .Select((topLevelAttrs, ct) => !topLevelAttrs.IsEmpty);
 
-        IncrementalValueProvider<ImmutableArray<GodotRegistrationSpec?>> registrationSpecs = context.SyntaxProvider
+        IncrementalValueProvider<ImmutableArray<GodotRegistrationSpec>> registrationSpecs = context.SyntaxProvider
             .ForAttributeWithMetadataName(KnownTypeNames.GodotClassAttribute,
                 predicate: IsSyntaxTargetForGeneration,
                 transform: GetSemanticTargetForGeneration)
             .Where(spec => spec is not null)
-            .Collect();
+            .Select((spec, ct) => spec!.Value)
+            .Collect()
+            // Sort for base classes to to be registered before derived classes.
+            .Select((specs, ct) =>
+            {
+                Dictionary<string, GodotRegistrationSpec> specByTypeName = [];
+                Dictionary<string, int> derivedTypeCountByBaseTypeName = [];
+
+                foreach (var spec in specs)
+                {
+                    specByTypeName.Add(spec.FullyQualifiedSymbolName, spec);
+
+                    if (!derivedTypeCountByBaseTypeName.TryGetValue(spec.FullyQualifiedSymbolName, out int derivedTypeCount))
+                    {
+                        derivedTypeCountByBaseTypeName.Add(spec.FullyQualifiedSymbolName, 0);
+                        derivedTypeCount++;
+                    }
+
+                    string baseTypeName = spec.FullyQualifiedBaseSymbolName;
+                    while (specByTypeName.TryGetValue(baseTypeName, out var baseTypeNameType))
+                    {
+                        derivedTypeCountByBaseTypeName[baseTypeName] += derivedTypeCount;
+                        baseTypeName = baseTypeNameType.FullyQualifiedBaseSymbolName;
+                    }
+
+                    derivedTypeCountByBaseTypeName.TryGetValue(baseTypeName, out int oldDerivedTypeCount);
+                    derivedTypeCountByBaseTypeName[baseTypeName] = oldDerivedTypeCount + derivedTypeCount;
+                }
+
+                return specByTypeName
+                    .OrderByDescending(kvp => derivedTypeCountByBaseTypeName[kvp.Key])
+                    .Select(kvp => kvp.Value)
+                    .ToImmutableArray();
+            });
 
         var assemblySpec = assemblyName
             .Combine(disableGodotEntryPointGeneration)
