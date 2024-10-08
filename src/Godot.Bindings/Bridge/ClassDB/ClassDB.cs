@@ -95,7 +95,7 @@ public static class ClassDB
         _registeredClasses[className] = context;
         _classRegisterStack.Push(className);
 
-        var creationInfo = new GDExtensionClassCreationInfo3()
+        var creationInfo = new GDExtensionClassCreationInfo4()
         {
             is_virtual = isVirtual,
             is_abstract = isAbstract,
@@ -118,7 +118,6 @@ public static class ClassDB
             get_virtual_func = null,
             get_virtual_call_data_func = &GetVirtualMethodUserData_Native,
             call_virtual_with_data_func = &CallVirtualMethod_Native,
-            get_rid_func = null,
             class_userdata = (void*)GCHandle.ToIntPtr(context.GCHandle),
         };
 
@@ -146,7 +145,7 @@ public static class ClassDB
         NativeGodotStringName classNameNative = className.NativeValue.DangerousSelfRef;
         NativeGodotStringName baseClassNameNative = baseClassName.NativeValue.DangerousSelfRef;
 
-        GodotBridge.GDExtensionInterface.classdb_register_extension_class3(GodotBridge.LibraryPtr, &classNameNative, &baseClassNameNative, &creationInfo);
+        GodotBridge.GDExtensionInterface.classdb_register_extension_class4(GodotBridge.LibraryPtr, &classNameNative, &baseClassNameNative, &creationInfo);
 
         configure(context);
 
@@ -364,7 +363,7 @@ public static class ClassDB
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static void* Create_Native(void* userData)
+    private unsafe static void* Create_Native(void* userData, bool notifyPostInitialize)
     {
         var gcHandle = GCHandle.FromIntPtr((nint)userData);
         var context = (ClassDBRegistrationContext?)gcHandle.Target;
@@ -377,6 +376,12 @@ public static class ClassDB
         }
 
         var instance = context.RegisteredConstructor.Invoke();
+
+        if (notifyPostInitialize)
+        {
+            instance.Notification((int)GodotObject.NotificationPostinitialize);
+        }
+
         return (void*)instance.NativePtr;
     }
 

@@ -49,7 +49,7 @@ partial class GodotObject : IDisposable
 
     private unsafe static nint ConstructGodotObject(scoped NativeGodotStringName nativeClassName)
     {
-        return (nint)GodotBridge.GDExtensionInterface.classdb_construct_object(nativeClassName.GetUnsafeAddress());
+        return (nint)GodotBridge.GDExtensionInterface.classdb_construct_object2(nativeClassName.GetUnsafeAddress());
     }
 
     /// <summary>
@@ -70,12 +70,6 @@ partial class GodotObject : IDisposable
         GDExtensionInstanceBindingCallbacks bindingsCallbacks = default;
 
         GodotBridge.GDExtensionInterface.object_set_instance_binding((void*)NativePtr, GodotBridge.LibraryPtr, (void*)gcHandlePtr, &bindingsCallbacks);
-
-        if (IsUserDefinedType())
-        {
-            // For user-defined types we have to send the PostInitialize notification manually.
-            Notification((int)NotificationPostinitialize);
-        }
 
         bool IsUserDefinedType()
         {
