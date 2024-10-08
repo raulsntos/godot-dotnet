@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using Godot;
 using Godot.Collections;
 
@@ -25,6 +26,9 @@ public partial class NodeWithDefaultMarshalling : Node
 
     [BindProperty]
     public char PropertyChar { get; set; }
+
+    [BindProperty]
+    public Rune PropertyRune { get; set; }
 
     [BindProperty]
     public short PropertyInt16 { get; set; }

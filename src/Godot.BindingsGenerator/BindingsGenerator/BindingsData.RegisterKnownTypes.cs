@@ -28,6 +28,9 @@ partial class BindingsData
         RegisterMetaType("float", "float", KnownTypes.SystemSingle, KnownTypes.SystemDouble);
         RegisterMetaType("float", "double", KnownTypes.SystemDouble, KnownTypes.SystemDouble);
 
+        RegisterMetaType("int", "char16", KnownTypes.SystemChar, KnownTypes.SystemInt64);
+        RegisterMetaType("int", "char32", KnownTypes.SystemTextRune, KnownTypes.SystemInt64);
+
         RegisterPtrMarshaller(KnownTypes.SystemBoolean, new BlittablePtrMarshallerWriter(KnownTypes.SystemBoolean));
 
         RegisterPtrMarshaller(KnownTypes.SystemSByte, IntegerPtrMarshallerWriter.Instance);
@@ -43,6 +46,9 @@ partial class BindingsData
         RegisterPtrMarshaller(KnownTypes.SystemHalf, FloatingPointPtrMarshallerWriter.Instance);
         RegisterPtrMarshaller(KnownTypes.SystemSingle, FloatingPointPtrMarshallerWriter.Instance);
         RegisterPtrMarshaller(KnownTypes.SystemDouble, FloatingPointPtrMarshallerWriter.Instance);
+
+        RegisterPtrMarshaller(KnownTypes.SystemChar, IntegerPtrMarshallerWriter.Instance);
+        RegisterPtrMarshaller(KnownTypes.SystemTextRune, IntegerPtrMarshallerWriter.Instance);
 
         RegisterVariantMarshaller(KnownTypes.SystemSByte, IntegerVariantMarshallerWriter.Instance);
         RegisterVariantMarshaller(KnownTypes.SystemInt16, IntegerVariantMarshallerWriter.Instance);
@@ -72,6 +78,9 @@ partial class BindingsData
         RegisterDefaultValueParser(KnownTypes.SystemHalf, NumberDefaultValueParser<Half>.Instance);
         RegisterDefaultValueParser(KnownTypes.SystemSingle, NumberDefaultValueParser<float>.Instance);
         RegisterDefaultValueParser(KnownTypes.SystemDouble, NumberDefaultValueParser<double>.Instance);
+
+        RegisterDefaultValueParser(KnownTypes.SystemChar, NumberDefaultValueParser<char>.Instance);
+        RegisterDefaultValueParser(KnownTypes.SystemTextRune, RuneDefaultValueParser.Instance);
 
         RegisterDefaultValueParser(KnownTypes.SystemEnum, NumberDefaultValueParser<long>.Instance);
 

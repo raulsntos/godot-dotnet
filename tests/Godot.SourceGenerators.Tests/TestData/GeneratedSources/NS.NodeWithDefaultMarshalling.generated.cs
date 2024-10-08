@@ -10,6 +10,7 @@ partial class NodeWithDefaultMarshalling
         public static global::Godot.StringName @PropertyBoolean { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyBoolean"u8);
         public static global::Godot.StringName @PropertySByte { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertySByte"u8);
         public static global::Godot.StringName @PropertyChar { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyChar"u8);
+        public static global::Godot.StringName @PropertyRune { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyRune"u8);
         public static global::Godot.StringName @PropertyInt16 { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyInt16"u8);
         public static global::Godot.StringName @PropertyInt32 { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyInt32"u8);
         public static global::Godot.StringName @PropertyInt64 { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyInt64"u8);
@@ -109,7 +110,7 @@ partial class NodeWithDefaultMarshalling
             {
                 __instance.@PropertySByte = value;
             });
-        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyChar, global::Godot.VariantType.Int)
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyChar, global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Char16)
             {
                 Usage = global::Godot.PropertyUsageFlags.Default,
             },
@@ -120,6 +121,18 @@ partial class NodeWithDefaultMarshalling
             static (NodeWithDefaultMarshalling __instance, char value) =>
             {
                 __instance.@PropertyChar = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyRune, global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Char32)
+            {
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyRune;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::System.Text.Rune value) =>
+            {
+                __instance.@PropertyRune = value;
             });
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyInt16, global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Int16)
             {

@@ -33,6 +33,11 @@ internal static class KnownTypes
         TypeAttributes = TypeAttributes.ValueType,
     };
 
+    public static TypeInfo SystemTextRune { get; } = new TypeInfo("Rune", "System.Text")
+    {
+        TypeAttributes = TypeAttributes.ValueType,
+    };
+
     public static TypeInfo SystemInt16 { get; } = new TypeInfo("Int16", "System")
     {
         TypeAttributes = TypeAttributes.ValueType,

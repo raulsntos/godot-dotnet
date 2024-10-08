@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Text;
 using Godot.Bridge;
 using Godot.Collections;
 using Godot.NativeInterop.Marshallers;
@@ -26,6 +27,11 @@ partial class Marshalling
         {
             *(long*)destination = UnsafeAs<char>(value);
             return;
+        }
+
+        if (typeof(T) == typeof(Rune))
+        {
+            *(long*)destination = UnsafeAs<Rune>(value).Value;
         }
 
         if (typeof(T) == typeof(sbyte))
@@ -367,6 +373,11 @@ partial class Marshalling
         if (typeof(T) == typeof(char))
         {
             return UnsafeAsT((char)*(long*)value);
+        }
+
+        if (typeof(T) == typeof(Rune))
+        {
+            return UnsafeAsT((Rune)(int)*(long*)value);
         }
 
         if (typeof(T) == typeof(sbyte))

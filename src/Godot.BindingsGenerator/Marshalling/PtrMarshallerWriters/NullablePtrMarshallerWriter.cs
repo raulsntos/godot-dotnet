@@ -26,7 +26,7 @@ internal sealed class NullablePtrMarshallerWriter : PtrMarshallerWriter
             // Only Nullable<T> is supported.
             throw new ArgumentException($"Marshallable type must be a constructed Nullable<T> type.", nameof(marshallableType));
         }
-        if (underlyingMarshaller.MarshallableType != marshallableType.GenericTypeArguments[0])
+        if (underlyingMarshaller is not IntegerPtrMarshallerWriter && underlyingMarshaller.MarshallableType != marshallableType.GenericTypeArguments[0])
         {
             // Only T from the Nullable<T> is supported.
             throw new ArgumentException("Underlying marshaller's marshallable type must match the T in the Nullable<T> type.", nameof(underlyingMarshaller));

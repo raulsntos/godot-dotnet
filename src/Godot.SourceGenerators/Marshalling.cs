@@ -49,8 +49,6 @@ internal static class Marshalling
 
             SpecialType.System_Boolean => (VariantType.Bool, VariantTypeMetadata.None),
 
-            // TODO: Not sure what the metadata should be for char.
-            SpecialType.System_Char => (VariantType.Int, VariantTypeMetadata.None),
             SpecialType.System_SByte => (VariantType.Int, VariantTypeMetadata.SByte),
             SpecialType.System_Int16 => (VariantType.Int, VariantTypeMetadata.Int16),
             SpecialType.System_Int32 => (VariantType.Int, VariantTypeMetadata.Int32),
@@ -63,6 +61,9 @@ internal static class Marshalling
             _ when typeSymbol.FullName() == KnownTypeNames.SystemHalf => (VariantType.Float, VariantTypeMetadata.None),
             SpecialType.System_Single => (VariantType.Float, VariantTypeMetadata.Single),
             SpecialType.System_Double => (VariantType.Float, VariantTypeMetadata.Double),
+
+            SpecialType.System_Char => (VariantType.Int, VariantTypeMetadata.Char16),
+            _ when typeSymbol.FullName() == KnownTypeNames.SystemTextRune => (VariantType.Int, VariantTypeMetadata.Char32),
 
             SpecialType.System_String => (VariantType.String, VariantTypeMetadata.None),
 

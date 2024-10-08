@@ -17,6 +17,8 @@ internal enum VariantTypeMetadata : uint
     UInt64 = 8,
     Single = 9,
     Double = 10,
+    Char16 = 11,
+    Char32 = 12,
 }
 
 internal static class VariantTypeMetadataExtensions

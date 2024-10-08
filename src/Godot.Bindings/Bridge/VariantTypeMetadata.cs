@@ -1,3 +1,4 @@
+using System.Text;
 using System.Diagnostics.CodeAnalysis;
 using Godot.NativeInterop;
 
@@ -63,4 +64,14 @@ public enum VariantTypeMetadata : uint
     /// Variant floating point represents a <see langword="double"/>.
     /// </summary>
     Double = GDExtensionClassMethodArgumentMetadata.GDEXTENSION_METHOD_ARGUMENT_METADATA_REAL_IS_DOUBLE,
+
+    /// <summary>
+    /// Variant integer represents a <see langword="char"/>.
+    /// </summary>
+    Char16 = GDExtensionClassMethodArgumentMetadata.GDEXTENSION_METHOD_ARGUMENT_METADATA_INT_IS_CHAR16,
+
+    /// <summary>
+    /// Variant integer represents a <see cref="Rune"/>.
+    /// </summary>
+    Char32 = GDExtensionClassMethodArgumentMetadata.GDEXTENSION_METHOD_ARGUMENT_METADATA_INT_IS_CHAR32,
 }

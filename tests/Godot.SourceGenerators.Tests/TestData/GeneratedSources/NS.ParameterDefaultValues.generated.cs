@@ -74,7 +74,7 @@ partial class ParameterDefaultValues
                 __instance.@Method3(@parameterSingle, @parameterDouble);
             });
         context.BindMethod(MethodName.@Method4,
-            new global::Godot.Bridge.ParameterInfo(global::Godot.StringName.CreateStaticFromAscii("parameterChar"u8), global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.None, 'a')
+            new global::Godot.Bridge.ParameterInfo(global::Godot.StringName.CreateStaticFromAscii("parameterChar"u8), global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Char16, 'a')
             {
                 Usage = global::Godot.PropertyUsageFlags.Default,
             },

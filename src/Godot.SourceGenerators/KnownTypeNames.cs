@@ -8,6 +8,7 @@ internal static class KnownTypeNames
     public const string SystemBoolean = "System.Boolean";
     public const string SystemSByte = "System.SByte";
     public const string SystemChar = "System.Char";
+    public const string SystemTextRune = "System.Text.Rune";
     public const string SystemInt16 = "System.Int16";
     public const string SystemInt32 = "System.Int32";
     public const string SystemInt64 = "System.Int64";

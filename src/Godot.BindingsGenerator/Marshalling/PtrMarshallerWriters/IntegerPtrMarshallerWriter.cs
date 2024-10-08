@@ -16,6 +16,7 @@ internal sealed class IntegerPtrMarshallerWriter : PtrMarshallerWriter
         KnownTypes.SystemInt16, KnownTypes.SystemUInt16,
         KnownTypes.SystemInt32, KnownTypes.SystemUInt32,
         KnownTypes.SystemInt64, KnownTypes.SystemUInt64,
+        KnownTypes.SystemChar, KnownTypes.SystemTextRune,
     ];
 
     public static IntegerPtrMarshallerWriter Instance { get; } = new();
@@ -44,7 +45,13 @@ internal sealed class IntegerPtrMarshallerWriter : PtrMarshallerWriter
                 // UInt64 is the only type that needs to be converted explicitly.
                 writer.Write("(long)");
             }
-            writer.WriteLine($"{source};");
+            writer.Write(source);
+            if (type == KnownTypes.SystemTextRune)
+            {
+                // Rune needs to be converted to Int32 in a special way.
+                writer.Write(".Value");
+            }
+            writer.WriteLine(';');
             return true;
         }
 
@@ -72,7 +79,13 @@ internal sealed class IntegerPtrMarshallerWriter : PtrMarshallerWriter
     {
         if (type != KnownTypes.SystemInt64)
         {
-            writer.WriteLine($"{destination} = ({type.FullNameWithGlobal})(*{source});");
+            writer.Write($"{destination} = ({type.FullNameWithGlobal})");
+            if (type == KnownTypes.SystemTextRune)
+            {
+                // Rune needs to be converted to Int32 first.
+                writer.Write("(int)");
+            }
+            writer.WriteLine($"(*{source});");
         }
         else
         {

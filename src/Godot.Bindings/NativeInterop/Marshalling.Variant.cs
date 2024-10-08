@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Text;
 using Godot.Collections;
 using Godot.NativeInterop.Marshallers;
 
@@ -23,6 +24,11 @@ partial class Marshalling
         if (typeof(T) == typeof(char))
         {
             return NativeGodotVariant.CreateFromInt(UnsafeAs<char>(value));
+        }
+
+        if (typeof(T) == typeof(Rune))
+        {
+            return NativeGodotVariant.CreateFromInt(UnsafeAs<Rune>(value).Value);
         }
 
         if (typeof(T) == typeof(sbyte))
@@ -316,6 +322,11 @@ partial class Marshalling
         if (typeof(T) == typeof(char))
         {
             return UnsafeAsT((char)NativeGodotVariant.ConvertToInt(value));
+        }
+
+        if (typeof(T) == typeof(Rune))
+        {
+            return UnsafeAsT((Rune)(int)NativeGodotVariant.ConvertToInt(value));
         }
 
         if (typeof(T) == typeof(sbyte))
