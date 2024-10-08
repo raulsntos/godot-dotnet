@@ -40,6 +40,12 @@ public class GodotMethodInfo
     public bool IsVirtual { get; set; }
 
     /// <summary>
+    /// Indicates if the virtual method must be overridden (i.e.: it's an abstract method).
+    /// </summary>
+    [JsonPropertyName("is_required")]
+    public bool IsRequired { get; set; }
+
+    /// <summary>
     /// Indicates if the method is static and can be called without an instance.
     /// </summary>
     [JsonPropertyName("is_static")]
