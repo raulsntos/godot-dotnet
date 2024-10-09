@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Godot.NativeInterop;
@@ -23,7 +24,7 @@ public static class ClassDB
     /// </summary>
     /// <typeparam name="T">The type of the class.</typeparam>
     /// <param name="configure">The configuration function.</param>
-    public static void RegisterClass<T>(Action<ClassDBRegistrationContext> configure) where T : GodotObject
+    public static void RegisterClass<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicMethods)] T>(Action<ClassDBRegistrationContext> configure) where T : GodotObject
     {
         RegisterClassCore<T>(isVirtual: false, isAbstract: false, isExposed: true, isRuntime: false, configure);
     }
@@ -35,7 +36,7 @@ public static class ClassDB
     /// </summary>
     /// <typeparam name="T">The type of the class.</typeparam>
     /// <param name="configure">The configuration function.</param>
-    public static void RegisterRuntimeClass<T>(Action<ClassDBRegistrationContext> configure) where T : GodotObject
+    public static void RegisterRuntimeClass<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicMethods)] T>(Action<ClassDBRegistrationContext> configure) where T : GodotObject
     {
         RegisterClassCore<T>(isVirtual: false, isAbstract: false, isExposed: true, isRuntime: true, configure);
     }
@@ -47,7 +48,7 @@ public static class ClassDB
     /// </summary>
     /// <typeparam name="T">The type of the class.</typeparam>
     /// <param name="configure">The configuration function.</param>
-    public static void RegisterVirtualClass<T>(Action<ClassDBRegistrationContext> configure) where T : GodotObject
+    public static void RegisterVirtualClass<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicMethods)] T>(Action<ClassDBRegistrationContext> configure) where T : GodotObject
     {
         RegisterClassCore<T>(isVirtual: true, isAbstract: false, isExposed: true, isRuntime: false, configure);
     }
@@ -59,7 +60,7 @@ public static class ClassDB
     /// </summary>
     /// <typeparam name="T">The type of the class.</typeparam>
     /// <param name="configure">The configuration function.</param>
-    public static void RegisterAbstractClass<T>(Action<ClassDBRegistrationContext> configure) where T : GodotObject
+    public static void RegisterAbstractClass<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicMethods)] T>(Action<ClassDBRegistrationContext> configure) where T : GodotObject
     {
         RegisterClassCore<T>(isVirtual: false, isAbstract: true, isExposed: true, isRuntime: false, configure);
     }
@@ -70,12 +71,12 @@ public static class ClassDB
     /// </summary>
     /// <typeparam name="T">The type of the class.</typeparam>
     /// <param name="configure">The configuration function.</param>
-    public static void RegisterInternalClass<T>(Action<ClassDBRegistrationContext> configure) where T : GodotObject
+    public static void RegisterInternalClass<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicMethods)] T>(Action<ClassDBRegistrationContext> configure) where T : GodotObject
     {
         RegisterClassCore<T>(isVirtual: false, isAbstract: false, isExposed: false, isRuntime: false, configure);
     }
 
-    private unsafe static void RegisterClassCore<T>(bool isVirtual, bool isAbstract, bool isExposed, bool isRuntime, Action<ClassDBRegistrationContext> configure) where T : GodotObject
+    private unsafe static void RegisterClassCore<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.NonPublicMethods | DynamicallyAccessedMemberTypes.PublicMethods)] T>(bool isVirtual, bool isAbstract, bool isExposed, bool isRuntime, Action<ClassDBRegistrationContext> configure) where T : GodotObject
     {
         if (typeof(T).IsAbstract && !isAbstract)
         {
@@ -151,7 +152,7 @@ public static class ClassDB
 
         if (InteropUtils.RegisterVirtualOverridesHelpers.TryGetValue(godotNativeName, out var registerVirtualOverrides))
         {
-            registerVirtualOverrides(context);
+            registerVirtualOverrides(typeof(T), context);
         }
     }
 
