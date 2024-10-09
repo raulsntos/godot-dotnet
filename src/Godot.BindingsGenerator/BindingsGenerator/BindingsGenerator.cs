@@ -201,10 +201,17 @@ internal static partial class BindingsGenerator
                     writer.WriteAttributes(method.ReturnParameter);
                 }
                 writer.WriteMethodSignature(method);
-                writer.WriteLine();
-                writer.OpenBlock();
-                writer.WriteMethodBody(method);
-                writer.CloseBlock();
+                if (method.IsAbstract)
+                {
+                    writer.WriteLine(';');
+                }
+                else
+                {
+                    writer.WriteLine();
+                    writer.OpenBlock();
+                    writer.WriteMethodBody(method);
+                    writer.CloseBlock();
+                }
             }
 
             writer.CloseBlock();
