@@ -37,6 +37,7 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 max_line_length = 120
 
+csharp_prefer_braces = true
 csharp_indent_case_contents_when_block = false
 csharp_style_prefer_primary_constructors = false
 
@@ -48,6 +49,9 @@ csharp_new_line_before_members_in_object_initializers = true
 csharp_new_line_before_members_in_anonymous_types = true
 
 dotnet_style_require_accessibility_modifiers = always
+
+# IDE0011: Add braces.
+dotnet_diagnostic.IDE0011.severity = warning
 
 # IDE0040: Add accessibility modifiers.
 dotnet_diagnostic.IDE0040.severity = warning

@@ -241,7 +241,9 @@ internal static partial class Program
             IOleMessageFilter newFilter = new MessageFilter();
             int ret = CoRegisterMessageFilter(newFilter, out _oldFilter);
             if (ret != 0)
+            {
                 Console.Error.WriteLine($"CoRegisterMessageFilter failed with error code: {ret}");
+            }
         }
 
         // Done with the filter, close it.

@@ -1,6 +1,8 @@
 using Godot;
 using Godot.Bridge;
 
+namespace NS;
+
 [GodotClass]
 public partial class DerivedType : BaseType
 {
@@ -30,4 +32,3 @@ public partial class DerivedType3 : BaseType
 {
     public new static void BindMethods(ClassDBRegistrationContext context) { }
 }
-
