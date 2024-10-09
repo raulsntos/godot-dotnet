@@ -37,6 +37,7 @@ internal static class RegistrationSpecCollector
         {
             SymbolName = typeSymbol.Name,
             FullyQualifiedSymbolName = typeSymbol.FullNameWithGlobal(),
+            FullyQualifiedBaseSymbolName = typeSymbol.BaseType!.FullNameWithGlobal(),
             RegistrationKind = registrationKind,
         };
     }

@@ -1,0 +1,33 @@
+using Godot;
+using Godot.Bridge;
+
+[GodotClass]
+public partial class DerivedType : BaseType
+{
+    public new static void BindMethods(ClassDBRegistrationContext context) { }
+}
+
+[GodotClass]
+public partial class DerivedType2 : BaseType
+{
+    public new static void BindMethods(ClassDBRegistrationContext context) { }
+}
+
+[GodotClass]
+public partial class BaseType : Node
+{
+    public static void BindMethods(ClassDBRegistrationContext context) { }
+}
+
+[GodotClass]
+public partial class HighlyDerivedType : DerivedType3
+{
+    public new static void BindMethods(ClassDBRegistrationContext context) { }
+}
+
+[GodotClass]
+public partial class DerivedType3 : BaseType
+{
+    public new static void BindMethods(ClassDBRegistrationContext context) { }
+}
+
