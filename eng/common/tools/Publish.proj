@@ -18,7 +18,7 @@
     <PublishToLocalNuGetFeed>false</PublishToLocalNuGetFeed>
     <PublishToLocalNuGetFeed Condition="'$(OutputBlobFeedDir)' != ''">true</PublishToLocalNuGetFeed>
 
-    <PublishDependsOnTargets Condition="$(PublishToLocalNuGetFeed)">$(PublishDependsOnTargets);PublishToLocalNuGetFeed</PublishDependsOnTargets>
+    <PublishDependsOnTargets Condition="$(PublishToLocalNuGetFeed)">$(PublishDependsOnTargets);PublishToLocalNuGetFeed;ClearNuGetLocalPackageCache</PublishDependsOnTargets>
 
     <PublishDependsOnTargets>BeforePublish;$(PublishDependsOnTargets)</PublishDependsOnTargets>
   </PropertyGroup>
@@ -39,6 +39,24 @@
   <Target Name="PublishToLocalNuGetFeed">
     <!-- Copy packages to the local NuGet feed storage. -->
     <Copy SourceFiles="@(PackagesToPublish)" DestinationFolder="$(OutputBlobFeedDir)" />
+  </Target>
+
+  <Target Name="ClearNuGetLocalPackageCache">
+    <!-- Clear packages from the local NuGet cache to ensure the new packages are used. -->
+    <PropertyGroup>
+      <!-- This regex separates the assembly name and the package version from the nupkg filename. -->
+      <_PackageRegex><![CDATA[^(.*?)\.((?:\.?[0-9]+){3,}(?:[-a-z0-9]+?\.?)*)\.nupkg$]]></_PackageRegex>
+    </PropertyGroup>
+    <ItemGroup>
+      <!-- Only include the packages that match the regex, that way we exclude symbol packages. -->
+      <PackagesToClear Condition="$([System.Text.RegularExpressions.Regex]::Match('%(PackagesToPublish.Filename)%(PackagesToPublish.Extension)', '$(_PackageRegex)').Success)" Include="%(PackagesToPublish.Identity)" />
+      <!-- Store the assembly name and package version from the regex match groups into item metadata that can be retrieved later. -->
+      <PackagesToClear AssemblyName="$([System.Text.RegularExpressions.Regex]::Match('%(Filename)%(Extension)', '$(_PackageRegex)').Groups[1].Value)" />
+      <PackagesToClear PackageVersion="$([System.Text.RegularExpressions.Regex]::Match('%(Filename)%(Extension)', '$(_PackageRegex)').Groups[2].Value)" />
+      <!-- Add an item metadata for the assembly name converted to lowercase. The local NuGet cache directory names use lowercase. -->
+      <PackagesToClear AssemblyNameLowercase="$([System.String]::Copy('%(AssemblyName)').ToLower())" />
+    </ItemGroup>
+    <RemoveDir Directories="@(PackagesToClear->'$(NugetPackageRoot)\%(AssemblyNameLowercase)\%(PackageVersion)\')" />
   </Target>
 
 </Project>
