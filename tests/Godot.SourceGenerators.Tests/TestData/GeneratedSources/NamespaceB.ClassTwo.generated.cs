@@ -16,7 +16,7 @@ partial class ClassTwo
     public new partial class SignalName : global::Godot.Node.SignalName
     {
     }
-    internal static void BindMethods(global::Godot.Bridge.ClassDBRegistrationContext context)
+    internal static void BindMethods(global::Godot.Bridge.ClassRegistrationContext context)
     {
         context.BindConstructor(() => new ClassTwo());
     }

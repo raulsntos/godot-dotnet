@@ -2,7 +2,7 @@ using System;
 
 namespace Godot.Bridge;
 
-partial class ClassDBRegistrationContext
+partial class ClassRegistrationContext
 {
     internal Func<GodotObject>? RegisteredConstructor { get; private set; }
 

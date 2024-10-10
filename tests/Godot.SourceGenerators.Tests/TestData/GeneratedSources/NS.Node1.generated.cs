@@ -17,13 +17,13 @@ partial class Node1
     public new partial class SignalName : global::Godot.Node.SignalName
     {
     }
-    internal static void BindMethods(global::Godot.Bridge.ClassDBRegistrationContext context)
+    internal static void BindMethods(global::Godot.Bridge.ClassRegistrationContext context)
     {
         context.BindConstructor(() => new Node1());
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@Node1Property, global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Int32)
-            {
-                Usage = global::Godot.PropertyUsageFlags.Default,
-            },
+        {
+            Usage = global::Godot.PropertyUsageFlags.Default,
+        },
             static (Node1 __instance) =>
             {
                 return __instance.@Node1Property;

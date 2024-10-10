@@ -9,21 +9,22 @@ using Godot.NativeInterop.Marshallers;
 namespace Godot.Bridge;
 
 /// <summary>
-/// Database that registers classes and their members within the Godot engine.
+/// Utility to register classes and their members within the Godot engine,
+/// and to add or remove editor plugins.
 /// </summary>
-public static class ClassDB
+public static partial class GodotRegistry
 {
-    private static readonly Dictionary<StringName, ClassDBRegistrationContext> _registeredClasses = [];
+    private static readonly Dictionary<StringName, ClassRegistrationContext> _registeredClasses = [];
     private static readonly Stack<StringName> _classRegisterStack = [];
 
     /// <summary>
     /// Registers a class with a configuration function that registers its members.
     /// Classes registered with this method will also run in the editor, to avoid this
-    /// use <see cref="RegisterRuntimeClass{T}(Action{ClassDBRegistrationContext})"/>.
+    /// use <see cref="RegisterRuntimeClass{T}(Action{ClassRegistrationContext})"/>.
     /// </summary>
     /// <typeparam name="T">The type of the class.</typeparam>
     /// <param name="configure">The configuration function.</param>
-    public static void RegisterClass<T>(Action<ClassDBRegistrationContext> configure) where T : GodotObject
+    public static void RegisterClass<T>(Action<ClassRegistrationContext> configure) where T : GodotObject
     {
         RegisterClassCore<T>(isVirtual: false, isAbstract: false, isExposed: true, isRuntime: false, configure);
     }
@@ -31,11 +32,11 @@ public static class ClassDB
     /// <summary>
     /// Registers a runtime class with a configuration function that registers its members.
     /// Runtime classes don't run in the editor, to register classes that also run in the editor
-    /// use <see cref="RegisterClass{T}(Action{ClassDBRegistrationContext})"/>.
+    /// use <see cref="RegisterClass{T}(Action{ClassRegistrationContext})"/>.
     /// </summary>
     /// <typeparam name="T">The type of the class.</typeparam>
     /// <param name="configure">The configuration function.</param>
-    public static void RegisterRuntimeClass<T>(Action<ClassDBRegistrationContext> configure) where T : GodotObject
+    public static void RegisterRuntimeClass<T>(Action<ClassRegistrationContext> configure) where T : GodotObject
     {
         RegisterClassCore<T>(isVirtual: false, isAbstract: false, isExposed: true, isRuntime: true, configure);
     }
@@ -47,7 +48,7 @@ public static class ClassDB
     /// </summary>
     /// <typeparam name="T">The type of the class.</typeparam>
     /// <param name="configure">The configuration function.</param>
-    public static void RegisterVirtualClass<T>(Action<ClassDBRegistrationContext> configure) where T : GodotObject
+    public static void RegisterVirtualClass<T>(Action<ClassRegistrationContext> configure) where T : GodotObject
     {
         RegisterClassCore<T>(isVirtual: true, isAbstract: false, isExposed: true, isRuntime: false, configure);
     }
@@ -59,7 +60,7 @@ public static class ClassDB
     /// </summary>
     /// <typeparam name="T">The type of the class.</typeparam>
     /// <param name="configure">The configuration function.</param>
-    public static void RegisterAbstractClass<T>(Action<ClassDBRegistrationContext> configure) where T : GodotObject
+    public static void RegisterAbstractClass<T>(Action<ClassRegistrationContext> configure) where T : GodotObject
     {
         RegisterClassCore<T>(isVirtual: false, isAbstract: true, isExposed: true, isRuntime: false, configure);
     }
@@ -70,12 +71,12 @@ public static class ClassDB
     /// </summary>
     /// <typeparam name="T">The type of the class.</typeparam>
     /// <param name="configure">The configuration function.</param>
-    public static void RegisterInternalClass<T>(Action<ClassDBRegistrationContext> configure) where T : GodotObject
+    public static void RegisterInternalClass<T>(Action<ClassRegistrationContext> configure) where T : GodotObject
     {
         RegisterClassCore<T>(isVirtual: false, isAbstract: false, isExposed: false, isRuntime: false, configure);
     }
 
-    private unsafe static void RegisterClassCore<T>(bool isVirtual, bool isAbstract, bool isExposed, bool isRuntime, Action<ClassDBRegistrationContext> configure) where T : GodotObject
+    private unsafe static void RegisterClassCore<T>(bool isVirtual, bool isAbstract, bool isExposed, bool isRuntime, Action<ClassRegistrationContext> configure) where T : GodotObject
     {
         if (typeof(T).IsAbstract && !isAbstract)
         {
@@ -91,7 +92,7 @@ public static class ClassDB
             return;
         }
 
-        context = new ClassDBRegistrationContext(className);
+        context = new ClassRegistrationContext(className);
         _registeredClasses[className] = context;
         _classRegisterStack.Push(className);
 
@@ -366,7 +367,7 @@ public static class ClassDB
     private unsafe static void* Create_Native(void* userData, bool notifyPostInitialize)
     {
         var gcHandle = GCHandle.FromIntPtr((nint)userData);
-        var context = (ClassDBRegistrationContext?)gcHandle.Target;
+        var context = (ClassRegistrationContext?)gcHandle.Target;
 
         Debug.Assert(context is not null);
 
@@ -409,7 +410,7 @@ public static class ClassDB
     private unsafe static void* GetVirtualMethodUserData_Native(void* userData, NativeGodotStringName* name, uint hash)
     {
         var gcHandle = GCHandle.FromIntPtr((nint)userData);
-        var context = (ClassDBRegistrationContext?)gcHandle.Target;
+        var context = (ClassRegistrationContext?)gcHandle.Target;
 
         Debug.Assert(context is not null);
 
@@ -429,7 +430,7 @@ public static class ClassDB
     private unsafe static void CallVirtualMethod_Native(void* instance, NativeGodotStringName* name, void* userData, void** args, void* outRet)
     {
         var gcHandle = GCHandle.FromIntPtr((nint)userData);
-        var context = (ClassDBRegistrationContext?)gcHandle.Target;
+        var context = (ClassRegistrationContext?)gcHandle.Target;
 
         Debug.Assert(context is not null);
 

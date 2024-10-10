@@ -7,7 +7,7 @@ using Godot.NativeInterop;
 namespace Godot.Bridge;
 
 /// <summary>
-/// Helper to invoke methods registered for a class with <see cref="ClassDBRegistrationContext"/>.
+/// Helper to invoke methods registered for a class with <see cref="ClassRegistrationContext"/>.
 /// </summary>
 public readonly partial struct MethodBindInvoker
 {

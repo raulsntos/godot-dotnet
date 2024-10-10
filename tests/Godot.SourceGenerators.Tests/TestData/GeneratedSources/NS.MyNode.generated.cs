@@ -19,7 +19,7 @@ partial class MyNode
     {
         public static global::Godot.StringName @MySignal { get; } = global::Godot.StringName.CreateStaticFromAscii("MySignal"u8);
     }
-    internal static void BindMethods(global::Godot.Bridge.ClassDBRegistrationContext context)
+    internal static void BindMethods(global::Godot.Bridge.ClassRegistrationContext context)
     {
         context.BindConstructor(() => MyNode.@MyConstructorMethod());
         context.BindMethod(MethodName.@MyMethod,

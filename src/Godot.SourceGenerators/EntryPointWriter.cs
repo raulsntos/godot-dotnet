@@ -129,7 +129,7 @@ internal static class EntryPointWriter
 
     private static void WriteRegisterClass(IndentedStringBuilder sb, GodotRegistrationSpec spec)
     {
-        sb.Append("global::Godot.Bridge.ClassDB.");
+        sb.Append("global::Godot.Bridge.GodotRegistry.");
         sb.Append(spec.RegistrationKind switch
         {
             GodotRegistrationSpec.Kind.Class => "RegisterClass",

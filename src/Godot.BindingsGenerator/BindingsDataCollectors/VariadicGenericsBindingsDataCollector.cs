@@ -752,14 +752,14 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
             type.DeclaredMethods.AddRange(fromMethodsWithReturn);
         }
 
-        // Generate ClassDBRegistrationContext.BindMethod<TInstance, T..>, ClassDBRegistrationContext.BindStaticMethod<T..>, BindVirtualMethod<T>, and ClassDBRegistrationContext.BindVirtualMethodOverride<TInstance, T..>
+        // Generate ClassRegistrationContext.BindMethod<TInstance, T..>, ClassRegistrationContext.BindStaticMethod<T..>, BindVirtualMethod<T>, and ClassRegistrationContext.BindVirtualMethodOverride<TInstance, T..>
         {
-            var type = new TypeInfo("ClassDBRegistrationContext", "Godot.Bridge")
+            var type = new TypeInfo("ClassRegistrationContext", "Godot.Bridge")
             {
                 TypeAttributes = TypeAttributes.ReferenceType,
                 IsPartial = true,
             };
-            context.AddGeneratedType("ClassDBRegistrationContext.BindMethod.cs", type, configuration =>
+            context.AddGeneratedType("ClassRegistrationContext.BindMethod.cs", type, configuration =>
             {
                 configuration.Nullable = true;
             });

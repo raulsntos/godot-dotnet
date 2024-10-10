@@ -4,7 +4,7 @@ using Godot.NativeInterop;
 
 namespace Godot.Bridge;
 
-partial class ClassDBRegistrationContext
+partial class ClassRegistrationContext
 {
     private readonly HashSet<StringName> _registeredConstants = [];
 

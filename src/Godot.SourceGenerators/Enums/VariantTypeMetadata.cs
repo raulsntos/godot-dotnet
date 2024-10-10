@@ -2,7 +2,7 @@ using System;
 
 namespace Godot.SourceGenerators;
 
-// IMPORTANT: Must match the type defined in GodotBindings/Bridge/ClassDB/VariantTypeMetadata.cs
+// IMPORTANT: Must match the type defined in GodotBindings/Bridge/VariantTypeMetadata.cs
 
 internal enum VariantTypeMetadata : uint
 {

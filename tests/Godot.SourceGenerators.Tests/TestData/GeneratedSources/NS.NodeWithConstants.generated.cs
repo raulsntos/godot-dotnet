@@ -48,121 +48,121 @@ partial class NodeWithConstants
     public new partial class SignalName : global::Godot.Node.SignalName
     {
     }
-    internal static void BindMethods(global::Godot.Bridge.ClassDBRegistrationContext context)
+    internal static void BindMethods(global::Godot.Bridge.ClassRegistrationContext context)
     {
         context.BindConstructor(() => new NodeWithConstants());
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyConstant, (long)(@MyConstant)));
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyNamedConstant, (long)(@MyNamedConstant)));
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyEnumRed, (long)(@MyEnum.@Red))
-            {
-                EnumName = ConstantName.@MyEnum,
-            });
+        {
+            EnumName = ConstantName.@MyEnum,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyEnumGreen, (long)(@MyEnum.@Green))
-            {
-                EnumName = ConstantName.@MyEnum,
-            });
+        {
+            EnumName = ConstantName.@MyEnum,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyEnumBlue, (long)(@MyEnum.@Blue))
-            {
-                EnumName = ConstantName.@MyEnum,
-            });
+        {
+            EnumName = ConstantName.@MyEnum,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyNamedEnumRed, (long)(@MyNamedEnum.@Red))
-            {
-                EnumName = ConstantName.@MyNamedEnum,
-            });
+        {
+            EnumName = ConstantName.@MyNamedEnum,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyNamedEnumGreen, (long)(@MyNamedEnum.@Green))
-            {
-                EnumName = ConstantName.@MyNamedEnum,
-            });
+        {
+            EnumName = ConstantName.@MyNamedEnum,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyNamedEnumBlue, (long)(@MyNamedEnum.@Blue))
-            {
-                EnumName = ConstantName.@MyNamedEnum,
-            });
+        {
+            EnumName = ConstantName.@MyNamedEnum,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyEnumWithNamedConstantsRed, (long)(@MyEnumWithNamedConstants.@Red))
-            {
-                EnumName = ConstantName.@MyEnumWithNamedConstants,
-            });
+        {
+            EnumName = ConstantName.@MyEnumWithNamedConstants,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyEnumWithNamedConstantsGreen, (long)(@MyEnumWithNamedConstants.@Green))
-            {
-                EnumName = ConstantName.@MyEnumWithNamedConstants,
-            });
+        {
+            EnumName = ConstantName.@MyEnumWithNamedConstants,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyEnumWithNamedConstantsBlue, (long)(@MyEnumWithNamedConstants.@Blue))
-            {
-                EnumName = ConstantName.@MyEnumWithNamedConstants,
-            });
+        {
+            EnumName = ConstantName.@MyEnumWithNamedConstants,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyFlagsEnumFire, (long)(@MyFlagsEnum.@Fire))
-            {
-                EnumName = ConstantName.@MyFlagsEnum,
-                IsFlagsEnum = true,
-            });
+        {
+            EnumName = ConstantName.@MyFlagsEnum,
+            IsFlagsEnum = true,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyFlagsEnumWater, (long)(@MyFlagsEnum.@Water))
-            {
-                EnumName = ConstantName.@MyFlagsEnum,
-                IsFlagsEnum = true,
-            });
+        {
+            EnumName = ConstantName.@MyFlagsEnum,
+            IsFlagsEnum = true,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyFlagsEnumEarth, (long)(@MyFlagsEnum.@Earth))
-            {
-                EnumName = ConstantName.@MyFlagsEnum,
-                IsFlagsEnum = true,
-            });
+        {
+            EnumName = ConstantName.@MyFlagsEnum,
+            IsFlagsEnum = true,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyFlagsEnumWind, (long)(@MyFlagsEnum.@Wind))
-            {
-                EnumName = ConstantName.@MyFlagsEnum,
-                IsFlagsEnum = true,
-            });
+        {
+            EnumName = ConstantName.@MyFlagsEnum,
+            IsFlagsEnum = true,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyFlagsEnumFireAndWater, (long)(@MyFlagsEnum.@FireAndWater))
-            {
-                EnumName = ConstantName.@MyFlagsEnum,
-                IsFlagsEnum = true,
-            });
+        {
+            EnumName = ConstantName.@MyFlagsEnum,
+            IsFlagsEnum = true,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyNamedFlagsEnumFire, (long)(@MyNamedFlagsEnum.@Fire))
-            {
-                EnumName = ConstantName.@MyNamedFlagsEnum,
-                IsFlagsEnum = true,
-            });
+        {
+            EnumName = ConstantName.@MyNamedFlagsEnum,
+            IsFlagsEnum = true,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyNamedFlagsEnumWater, (long)(@MyNamedFlagsEnum.@Water))
-            {
-                EnumName = ConstantName.@MyNamedFlagsEnum,
-                IsFlagsEnum = true,
-            });
+        {
+            EnumName = ConstantName.@MyNamedFlagsEnum,
+            IsFlagsEnum = true,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyNamedFlagsEnumEarth, (long)(@MyNamedFlagsEnum.@Earth))
-            {
-                EnumName = ConstantName.@MyNamedFlagsEnum,
-                IsFlagsEnum = true,
-            });
+        {
+            EnumName = ConstantName.@MyNamedFlagsEnum,
+            IsFlagsEnum = true,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyNamedFlagsEnumWind, (long)(@MyNamedFlagsEnum.@Wind))
-            {
-                EnumName = ConstantName.@MyNamedFlagsEnum,
-                IsFlagsEnum = true,
-            });
+        {
+            EnumName = ConstantName.@MyNamedFlagsEnum,
+            IsFlagsEnum = true,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyNamedFlagsEnumFireAndWater, (long)(@MyNamedFlagsEnum.@FireAndWater))
-            {
-                EnumName = ConstantName.@MyNamedFlagsEnum,
-                IsFlagsEnum = true,
-            });
+        {
+            EnumName = ConstantName.@MyNamedFlagsEnum,
+            IsFlagsEnum = true,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyFlagsEnumWithNamedConstantsFire, (long)(@MyFlagsEnumWithNamedConstants.@Fire))
-            {
-                EnumName = ConstantName.@MyFlagsEnumWithNamedConstants,
-                IsFlagsEnum = true,
-            });
+        {
+            EnumName = ConstantName.@MyFlagsEnumWithNamedConstants,
+            IsFlagsEnum = true,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyFlagsEnumWithNamedConstantsWater, (long)(@MyFlagsEnumWithNamedConstants.@Water))
-            {
-                EnumName = ConstantName.@MyFlagsEnumWithNamedConstants,
-                IsFlagsEnum = true,
-            });
+        {
+            EnumName = ConstantName.@MyFlagsEnumWithNamedConstants,
+            IsFlagsEnum = true,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyFlagsEnumWithNamedConstantsEarth, (long)(@MyFlagsEnumWithNamedConstants.@Earth))
-            {
-                EnumName = ConstantName.@MyFlagsEnumWithNamedConstants,
-                IsFlagsEnum = true,
-            });
+        {
+            EnumName = ConstantName.@MyFlagsEnumWithNamedConstants,
+            IsFlagsEnum = true,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyFlagsEnumWithNamedConstantsWind, (long)(@MyFlagsEnumWithNamedConstants.@Wind))
-            {
-                EnumName = ConstantName.@MyFlagsEnumWithNamedConstants,
-                IsFlagsEnum = true,
-            });
+        {
+            EnumName = ConstantName.@MyFlagsEnumWithNamedConstants,
+            IsFlagsEnum = true,
+        });
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyFlagsEnumWithNamedConstantsFireAndWater, (long)(@MyFlagsEnumWithNamedConstants.@FireAndWater))
-            {
-                EnumName = ConstantName.@MyFlagsEnumWithNamedConstants,
-                IsFlagsEnum = true,
-            });
+        {
+            EnumName = ConstantName.@MyFlagsEnumWithNamedConstants,
+            IsFlagsEnum = true,
+        });
     }
 }

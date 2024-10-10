@@ -5,13 +5,13 @@ namespace Godot.Bridge;
 /// <summary>
 /// Context for registering classes and their members within the Godot engine.
 /// </summary>
-public partial class ClassDBRegistrationContext
+public partial class ClassRegistrationContext
 {
     internal GCHandle GCHandle { get; }
 
     internal StringName ClassName { get; }
 
-    internal ClassDBRegistrationContext(StringName className)
+    internal ClassRegistrationContext(StringName className)
     {
         GCHandle = GCHandle.Alloc(this, GCHandleType.Weak);
         ClassName = className;

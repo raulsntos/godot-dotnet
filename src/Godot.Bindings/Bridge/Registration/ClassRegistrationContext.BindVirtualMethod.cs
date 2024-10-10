@@ -3,7 +3,7 @@ using Godot.NativeInterop;
 
 namespace Godot.Bridge;
 
-partial class ClassDBRegistrationContext
+partial class ClassRegistrationContext
 {
     /// <summary>
     /// Register a virtual method in the class.

@@ -32,7 +32,7 @@ partial class NodeWithMethods
     public new partial class SignalName : global::Godot.Node.SignalName
     {
     }
-    internal static void BindMethods(global::Godot.Bridge.ClassDBRegistrationContext context)
+    internal static void BindMethods(global::Godot.Bridge.ClassRegistrationContext context)
     {
         context.BindConstructor(() => new NodeWithMethods());
         context.BindMethod(MethodName.@MyMethod,

@@ -2,7 +2,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Godot;
 using Godot.Bridge;
-using ClassDB = Godot.Bridge.ClassDB;
 
 [assembly: DisableGodotEntryPointGeneration]
 [assembly: DisableRuntimeMarshalling]
@@ -18,7 +17,7 @@ public class Main
             return;
         }
 
-        ClassDB.RegisterClass<Summator>(Summator.BindMethods);
+        GodotRegistry.RegisterClass<Summator>(Summator.BindMethods);
     }
 
     public static void DeinitializeSummatorTypes(InitializationLevel level)

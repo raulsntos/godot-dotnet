@@ -4,10 +4,7 @@ using Godot.NativeInterop;
 
 namespace Godot.Bridge;
 
-/// <summary>
-/// Utility to register editor plugins within the Godot engine.
-/// </summary>
-public static class EditorPlugins
+partial class GodotRegistry
 {
     private static readonly HashSet<StringName> _registeredPlugins = [];
     private static readonly Stack<StringName> _pluginRegisterStack = [];
@@ -20,7 +17,7 @@ public static class EditorPlugins
     /// <exception cref="InvalidOperationException">
     /// A type has already been registered
     /// </exception>
-    public static unsafe void AddByType<T>() where T : EditorPlugin
+    public static unsafe void AddEditorPluginByType<T>() where T : EditorPlugin
     {
         StringName className = new StringName(typeof(T).Name);
 
@@ -36,7 +33,7 @@ public static class EditorPlugins
         GodotBridge.GDExtensionInterface.editor_add_plugin(classNameNative.GetUnsafeAddress());
     }
 
-    internal unsafe static void RemoveAllPlugins()
+    internal unsafe static void RemoveAllEditorPlugins()
     {
         while (_pluginRegisterStack.TryPop(out StringName? className))
         {

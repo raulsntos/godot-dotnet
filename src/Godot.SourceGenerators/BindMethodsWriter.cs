@@ -39,7 +39,7 @@ internal static class BindMethodsWriter
 
         WriteCachedStringNames(sb, spec);
 
-        sb.AppendLine("internal static void BindMethods(global::Godot.Bridge.ClassDBRegistrationContext context)");
+        sb.AppendLine("internal static void BindMethods(global::Godot.Bridge.ClassRegistrationContext context)");
         sb.OpenBlock();
 
         WriteBindConstructor(sb, spec);

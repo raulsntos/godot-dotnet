@@ -21,7 +21,7 @@ partial class NodeWithSignals
         public static global::Godot.StringName @MySignalWithNamedParameters { get; } = global::Godot.StringName.CreateStaticFromAscii("MySignalWithNamedParameters"u8);
         public static global::Godot.StringName @MySignalWithOptionalParameters { get; } = global::Godot.StringName.CreateStaticFromAscii("MySignalWithOptionalParameters"u8);
     }
-    internal static void BindMethods(global::Godot.Bridge.ClassDBRegistrationContext context)
+    internal static void BindMethods(global::Godot.Bridge.ClassRegistrationContext context)
     {
         context.BindConstructor(() => new NodeWithSignals());
         context.BindSignal(new global::Godot.Bridge.SignalInfo(SignalName.@MySignal));

@@ -10,7 +10,6 @@ using Godot.EditorIntegration.Internals;
 [assembly: DisableGodotEntryPointGeneration]
 
 namespace Godot.EditorIntegration;
-using ClassDB = Godot.Bridge.ClassDB;
 
 internal static class Main
 {
@@ -21,14 +20,14 @@ internal static class Main
             return;
         }
 
-        ClassDB.RegisterClass<DotNetEditorPlugin>(DotNetEditorPlugin.BindMethods);
-        ClassDB.RegisterClass<DotNetExportPlugin>(DotNetExportPlugin.BindMethods);
+        GodotRegistry.RegisterClass<DotNetEditorPlugin>(DotNetEditorPlugin.BindMethods);
+        GodotRegistry.RegisterClass<DotNetExportPlugin>(DotNetExportPlugin.BindMethods);
 
-        ClassDB.RegisterClass<MSBuildPanel>(MSBuildPanel.BindMethods);
-        ClassDB.RegisterClass<BuildProblemsView>(BuildProblemsView.BindMethods);
-        ClassDB.RegisterClass<BuildOutputView>(BuildOutputView.BindMethods);
+        GodotRegistry.RegisterClass<MSBuildPanel>(MSBuildPanel.BindMethods);
+        GodotRegistry.RegisterClass<BuildProblemsView>(BuildProblemsView.BindMethods);
+        GodotRegistry.RegisterClass<BuildOutputView>(BuildOutputView.BindMethods);
 
-        EditorPlugins.AddByType<DotNetEditorPlugin>();
+        GodotRegistry.AddEditorPluginByType<DotNetEditorPlugin>();
     }
 
     public static void DeinitializeTypes(InitializationLevel level)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Godot.Bridge;
 
-partial class ClassDBRegistrationContext
+partial class ClassRegistrationContext
 {
     internal readonly Dictionary<StringName, VirtualMethodOverrideInfo> RegisteredVirtualMethodOverrides = [];
 

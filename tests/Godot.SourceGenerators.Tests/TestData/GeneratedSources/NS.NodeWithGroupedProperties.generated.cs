@@ -24,13 +24,13 @@ partial class NodeWithGroupedProperties
     public new partial class SignalName : global::Godot.Node.SignalName
     {
     }
-    internal static void BindMethods(global::Godot.Bridge.ClassDBRegistrationContext context)
+    internal static void BindMethods(global::Godot.Bridge.ClassRegistrationContext context)
     {
         context.BindConstructor(() => new NodeWithGroupedProperties());
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@UngroupedProperty, global::Godot.VariantType.String)
-            {
-                Usage = global::Godot.PropertyUsageFlags.Default,
-            },
+        {
+            Usage = global::Godot.PropertyUsageFlags.Default,
+        },
             static (NodeWithGroupedProperties __instance) =>
             {
                 return __instance.@UngroupedProperty;
@@ -41,9 +41,9 @@ partial class NodeWithGroupedProperties
             });
         context.AddPropertyGroup("Text", "Text");
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@TextSize, global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Int32)
-            {
-                Usage = global::Godot.PropertyUsageFlags.Default,
-            },
+        {
+            Usage = global::Godot.PropertyUsageFlags.Default,
+        },
             static (NodeWithGroupedProperties __instance) =>
             {
                 return __instance.@TextSize;
@@ -54,9 +54,9 @@ partial class NodeWithGroupedProperties
             });
         context.AddPropertySubgroup("Text Outline", "TextOutline");
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@TextOutlineWidth, global::Godot.VariantType.Float, global::Godot.Bridge.VariantTypeMetadata.Single)
-            {
-                Usage = global::Godot.PropertyUsageFlags.Default,
-            },
+        {
+            Usage = global::Godot.PropertyUsageFlags.Default,
+        },
             static (NodeWithGroupedProperties __instance) =>
             {
                 return __instance.@TextOutlineWidth;
@@ -66,9 +66,9 @@ partial class NodeWithGroupedProperties
                 __instance.@TextOutlineWidth = value;
             });
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@TextOutlineColor, global::Godot.VariantType.Float, global::Godot.Bridge.VariantTypeMetadata.Single)
-            {
-                Usage = global::Godot.PropertyUsageFlags.Default,
-            },
+        {
+            Usage = global::Godot.PropertyUsageFlags.Default,
+        },
             static (NodeWithGroupedProperties __instance) =>
             {
                 return __instance.@TextOutlineColor;
@@ -79,9 +79,9 @@ partial class NodeWithGroupedProperties
             });
         context.AddPropertyGroup("Physics");
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@Speed, global::Godot.VariantType.Float, global::Godot.Bridge.VariantTypeMetadata.Single)
-            {
-                Usage = global::Godot.PropertyUsageFlags.Default,
-            },
+        {
+            Usage = global::Godot.PropertyUsageFlags.Default,
+        },
             static (NodeWithGroupedProperties __instance) =>
             {
                 return __instance.@Speed;
@@ -91,9 +91,9 @@ partial class NodeWithGroupedProperties
                 __instance.@Speed = value;
             });
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@Gravity, global::Godot.VariantType.Float, global::Godot.Bridge.VariantTypeMetadata.Single)
-            {
-                Usage = global::Godot.PropertyUsageFlags.Default,
-            },
+        {
+            Usage = global::Godot.PropertyUsageFlags.Default,
+        },
             static (NodeWithGroupedProperties __instance) =>
             {
                 return __instance.@Gravity;
@@ -104,9 +104,9 @@ partial class NodeWithGroupedProperties
             });
         context.AddPropertySubgroup("Collisions");
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@CanCollideWithEnemies, global::Godot.VariantType.Bool)
-            {
-                Usage = global::Godot.PropertyUsageFlags.Default,
-            },
+        {
+            Usage = global::Godot.PropertyUsageFlags.Default,
+        },
             static (NodeWithGroupedProperties __instance) =>
             {
                 return __instance.@CanCollideWithEnemies;
@@ -116,9 +116,9 @@ partial class NodeWithGroupedProperties
                 __instance.@CanCollideWithEnemies = value;
             });
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@CanCollideWithWalls, global::Godot.VariantType.Bool)
-            {
-                Usage = global::Godot.PropertyUsageFlags.Default,
-            },
+        {
+            Usage = global::Godot.PropertyUsageFlags.Default,
+        },
             static (NodeWithGroupedProperties __instance) =>
             {
                 return __instance.@CanCollideWithWalls;

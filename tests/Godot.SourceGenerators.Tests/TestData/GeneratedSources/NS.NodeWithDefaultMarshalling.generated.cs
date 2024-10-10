@@ -98,7 +98,7 @@ partial class NodeWithDefaultMarshalling
     public new partial class SignalName : global::Godot.Node.SignalName
     {
     }
-    internal static void BindMethods(global::Godot.Bridge.ClassDBRegistrationContext context)
+    internal static void BindMethods(global::Godot.Bridge.ClassRegistrationContext context)
     {
         context.BindConstructor(() => new NodeWithDefaultMarshalling());
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyByte, global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Byte)

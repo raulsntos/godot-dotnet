@@ -130,8 +130,8 @@ public static partial class GodotBridge
         // Only free everything once at the last level.
         if (level == 0)
         {
-            EditorPlugins.RemoveAllPlugins();
-            ClassDB.UnregisterAllClasses();
+            GodotRegistry.RemoveAllEditorPlugins();
+            GodotRegistry.UnregisterAllClasses();
 
             DisposablesTracker.DisposeAll();
         }
