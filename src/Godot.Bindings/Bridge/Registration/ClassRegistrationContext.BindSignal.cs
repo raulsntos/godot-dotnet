@@ -27,37 +27,40 @@ partial class ClassRegistrationContext
             throw new ArgumentException(SR.FormatArgument_SignalAlreadyRegistered(signalInfo.Name, ClassName), nameof(signalInfo));
         }
 
-        // Convert managed signal info to the internal unmanaged type.
-        Span<GDExtensionPropertyInfo> parameters = signalInfo.Parameters.Count <= ParameterSpanThreshold
-            ? stackalloc GDExtensionPropertyInfo[ParameterSpanThreshold].Slice(0, signalInfo.Parameters.Count)
-            : new GDExtensionPropertyInfo[signalInfo.Parameters.Count];
-        for (int i = 0; i < parameters.Length; i++)
+        _registerBindingActions.Enqueue(() =>
         {
-            var parameterInfo = signalInfo.Parameters[i];
-
-            NativeGodotStringName parameterNameNative = parameterInfo.Name.NativeValue.DangerousSelfRef;
-            NativeGodotStringName parameterClassNameNative = (parameterInfo.ClassName?.NativeValue ?? default).DangerousSelfRef;
-            NativeGodotString hintStringNative = NativeGodotString.Create(parameterInfo.HintString);
-
-            parameters[i] = new GDExtensionPropertyInfo()
+            // Convert managed signal info to the internal unmanaged type.
+            Span<GDExtensionPropertyInfo> parameters = signalInfo.Parameters.Count <= ParameterSpanThreshold
+                ? stackalloc GDExtensionPropertyInfo[ParameterSpanThreshold].Slice(0, signalInfo.Parameters.Count)
+                : new GDExtensionPropertyInfo[signalInfo.Parameters.Count];
+            for (int i = 0; i < parameters.Length; i++)
             {
-                type = (GDExtensionVariantType)parameterInfo.Type,
-                name = &parameterNameNative,
+                var parameterInfo = signalInfo.Parameters[i];
 
-                hint = (uint)parameterInfo.Hint,
-                hint_string = &hintStringNative,
-                class_name = &parameterClassNameNative,
-                usage = (uint)parameterInfo.Usage,
-            };
-        }
+                NativeGodotStringName parameterNameNative = parameterInfo.Name.NativeValue.DangerousSelfRef;
+                NativeGodotStringName parameterClassNameNative = (parameterInfo.ClassName?.NativeValue ?? default).DangerousSelfRef;
+                NativeGodotString hintStringNative = NativeGodotString.Create(parameterInfo.HintString);
 
-        NativeGodotStringName signalNameNative = signalInfo.Name.NativeValue.DangerousSelfRef;
+                parameters[i] = new GDExtensionPropertyInfo()
+                {
+                    type = (GDExtensionVariantType)parameterInfo.Type,
+                    name = &parameterNameNative,
 
-        NativeGodotStringName classNameNative = ClassName.NativeValue.DangerousSelfRef;
+                    hint = (uint)parameterInfo.Hint,
+                    hint_string = &hintStringNative,
+                    class_name = &parameterClassNameNative,
+                    usage = (uint)parameterInfo.Usage,
+                };
+            }
 
-        fixed (GDExtensionPropertyInfo* parametersPtr = parameters)
-        {
-            GodotBridge.GDExtensionInterface.classdb_register_extension_class_signal(GodotBridge.LibraryPtr, &classNameNative, &signalNameNative, parametersPtr, parameters.Length);
-        }
+            NativeGodotStringName signalNameNative = signalInfo.Name.NativeValue.DangerousSelfRef;
+
+            NativeGodotStringName classNameNative = ClassName.NativeValue.DangerousSelfRef;
+
+            fixed (GDExtensionPropertyInfo* parametersPtr = parameters)
+            {
+                GodotBridge.GDExtensionInterface.classdb_register_extension_class_signal(GodotBridge.LibraryPtr, &classNameNative, &signalNameNative, parametersPtr, parameters.Length);
+            }
+        });
     }
 }

@@ -7,8 +7,14 @@ namespace Godot.SourceGenerators;
 
 internal static class ClassSpecCollector
 {
-    public static GodotClassSpec Collect(Compilation compilation, INamedTypeSymbol typeSymbol, CancellationToken cancellationToken = default)
+    public static GodotClassSpec? Collect(Compilation compilation, INamedTypeSymbol typeSymbol, CancellationToken cancellationToken = default)
     {
+        if (!typeSymbol.TryGetAttribute(KnownTypeNames.GodotClassAttribute, out var attribute))
+        {
+            // Classes must have the attribute to be registered.
+            return null;
+        }
+
         var members = typeSymbol.GetMembers();
 
         List<ContainingSymbol> containingTypeSymbols = [];
@@ -17,6 +23,7 @@ internal static class ClassSpecCollector
         List<GodotPropertySpec> properties = [];
         List<GodotMethodSpec> methods = [];
         List<GodotSignalSpec> signals = [];
+        string? icon = null;
 
         // Initialize constructor spec if the class is instantiable.
         if (!typeSymbol.IsAbstract)
@@ -114,6 +121,17 @@ internal static class ClassSpecCollector
             }
         }
 
+        // Collect icon.
+        foreach (var (key, constant) in attribute.NamedArguments)
+        {
+            switch (key)
+            {
+                case "Icon":
+                    icon = constant.Value as string;
+                    break;
+            }
+        }
+
         return new GodotClassSpec()
         {
             SymbolName = typeSymbol.Name,
@@ -126,6 +144,7 @@ internal static class ClassSpecCollector
             Properties = [.. properties],
             Methods = [.. methods],
             Signals = [.. signals],
+            IconPath = icon,
         };
     }
 }

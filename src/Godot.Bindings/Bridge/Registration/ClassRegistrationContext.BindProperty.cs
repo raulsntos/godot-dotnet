@@ -27,31 +27,34 @@ partial class ClassRegistrationContext
             throw new ArgumentException(SR.FormatArgument_PropertyAlreadyRegistered(propertyInfo.Name, ClassName), nameof(propertyInfo));
         }
 
-        // Convert managed property info to the internal unmanaged type.
-        GDExtensionPropertyInfo propertyInfoNative;
+        _registerBindingActions.Enqueue(() =>
         {
-            NativeGodotStringName propertyNameNative = propertyInfo.Name.NativeValue.DangerousSelfRef;
-            NativeGodotStringName propertyClassNameNative = (propertyInfo.ClassName?.NativeValue ?? default).DangerousSelfRef;
-            NativeGodotString hintStringNative = NativeGodotString.Create(propertyInfo.HintString);
-
-            propertyInfoNative = new GDExtensionPropertyInfo
+            // Convert managed property info to the internal unmanaged type.
+            GDExtensionPropertyInfo propertyInfoNative;
             {
-                type = (GDExtensionVariantType)propertyInfo.Type,
-                name = &propertyNameNative,
+                NativeGodotStringName propertyNameNative = propertyInfo.Name.NativeValue.DangerousSelfRef;
+                NativeGodotStringName propertyClassNameNative = (propertyInfo.ClassName?.NativeValue ?? default).DangerousSelfRef;
+                NativeGodotString hintStringNative = NativeGodotString.Create(propertyInfo.HintString);
 
-                hint = (uint)propertyInfo.Hint,
-                hint_string = &hintStringNative,
-                class_name = &propertyClassNameNative,
-                usage = (uint)propertyInfo.Usage,
-            };
-        }
+                propertyInfoNative = new GDExtensionPropertyInfo
+                {
+                    type = (GDExtensionVariantType)propertyInfo.Type,
+                    name = &propertyNameNative,
 
-        NativeGodotStringName setterNameNative = propertyInfo.SetterName.NativeValue.DangerousSelfRef;
-        NativeGodotStringName getterNameNative = propertyInfo.GetterName.NativeValue.DangerousSelfRef;
+                    hint = (uint)propertyInfo.Hint,
+                    hint_string = &hintStringNative,
+                    class_name = &propertyClassNameNative,
+                    usage = (uint)propertyInfo.Usage,
+                };
+            }
 
-        NativeGodotStringName classNameNative = ClassName.NativeValue.DangerousSelfRef;
+            NativeGodotStringName setterNameNative = propertyInfo.SetterName.NativeValue.DangerousSelfRef;
+            NativeGodotStringName getterNameNative = propertyInfo.GetterName.NativeValue.DangerousSelfRef;
 
-        GodotBridge.GDExtensionInterface.classdb_register_extension_class_property(GodotBridge.LibraryPtr, &classNameNative, &propertyInfoNative, &setterNameNative, &getterNameNative);
+            NativeGodotStringName classNameNative = ClassName.NativeValue.DangerousSelfRef;
+
+            GodotBridge.GDExtensionInterface.classdb_register_extension_class_property(GodotBridge.LibraryPtr, &classNameNative, &propertyInfoNative, &setterNameNative, &getterNameNative);
+        });
     }
 
     /// <summary>
@@ -106,12 +109,15 @@ partial class ClassRegistrationContext
     /// <param name="prefix">Prefix used by properties in the group.</param>
     public unsafe void AddPropertyGroup(string groupName, string prefix = "")
     {
-        using NativeGodotString groupNameNative = NativeGodotString.Create(groupName);
-        using NativeGodotString prefixNative = NativeGodotString.Create(prefix);
+        _registerBindingActions.Enqueue(() =>
+        {
+            using NativeGodotString groupNameNative = NativeGodotString.Create(groupName);
+            using NativeGodotString prefixNative = NativeGodotString.Create(prefix);
 
-        NativeGodotStringName classNameNative = ClassName.NativeValue.DangerousSelfRef;
+            NativeGodotStringName classNameNative = ClassName.NativeValue.DangerousSelfRef;
 
-        GodotBridge.GDExtensionInterface.classdb_register_extension_class_property_group(GodotBridge.LibraryPtr, &classNameNative, &groupNameNative, &prefixNative);
+            GodotBridge.GDExtensionInterface.classdb_register_extension_class_property_group(GodotBridge.LibraryPtr, &classNameNative, &groupNameNative, &prefixNative);
+        });
     }
 
     /// <summary>
@@ -121,11 +127,14 @@ partial class ClassRegistrationContext
     /// <param name="prefix">Prefix used by properties in the subgroup.</param>
     public unsafe void AddPropertySubgroup(string subgroupName, string prefix = "")
     {
-        using NativeGodotString subgroupNameNative = NativeGodotString.Create(subgroupName);
-        using NativeGodotString prefixNative = NativeGodotString.Create(prefix);
+        _registerBindingActions.Enqueue(() =>
+        {
+            using NativeGodotString subgroupNameNative = NativeGodotString.Create(subgroupName);
+            using NativeGodotString prefixNative = NativeGodotString.Create(prefix);
 
-        NativeGodotStringName classNameNative = ClassName.NativeValue.DangerousSelfRef;
+            NativeGodotStringName classNameNative = ClassName.NativeValue.DangerousSelfRef;
 
-        GodotBridge.GDExtensionInterface.classdb_register_extension_class_property_subgroup(GodotBridge.LibraryPtr, &classNameNative, &subgroupNameNative, &prefixNative);
+            GodotBridge.GDExtensionInterface.classdb_register_extension_class_property_subgroup(GodotBridge.LibraryPtr, &classNameNative, &subgroupNameNative, &prefixNative);
+        });
     }
 }

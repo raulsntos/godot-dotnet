@@ -29,11 +29,14 @@ partial class ClassRegistrationContext
             throw new ArgumentException(SR.FormatArgument_ConstantWithoutEnumCantBeFlag(constantInfo.Name), nameof(constantInfo));
         }
 
-        NativeGodotStringName constantNameNative = constantInfo.Name.NativeValue.DangerousSelfRef;
-        NativeGodotStringName enumNameNative = enumName.NativeValue.DangerousSelfRef;
+        _registerBindingActions.Enqueue(() =>
+        {
+            NativeGodotStringName constantNameNative = constantInfo.Name.NativeValue.DangerousSelfRef;
+            NativeGodotStringName enumNameNative = enumName.NativeValue.DangerousSelfRef;
 
-        NativeGodotStringName classNameNative = ClassName.NativeValue.DangerousSelfRef;
+            NativeGodotStringName classNameNative = ClassName.NativeValue.DangerousSelfRef;
 
-        GodotBridge.GDExtensionInterface.classdb_register_extension_class_integer_constant(GodotBridge.LibraryPtr, &classNameNative, &enumNameNative, &constantNameNative, constantInfo.Value, constantInfo.IsFlagsEnum);
+            GodotBridge.GDExtensionInterface.classdb_register_extension_class_integer_constant(GodotBridge.LibraryPtr, &classNameNative, &enumNameNative, &constantNameNative, constantInfo.Value, constantInfo.IsFlagsEnum);
+        });
     }
 }

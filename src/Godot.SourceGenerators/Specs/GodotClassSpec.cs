@@ -68,6 +68,12 @@ internal readonly record struct GodotClassSpec : IEquatable<GodotClassSpec>
     public EquatableArray<GodotSignalSpec> Signals { get; init; }
 
     /// <summary>
+    /// Indicates the path to an image that will be used as the icon of the registered
+    /// GDExtension class.
+    /// </summary>
+    public required string? IconPath { get; init; }
+
+    /// <summary>
     /// Generate a unique hint name for the generated source code
     /// from the type name and the containing symbols.
     /// </summary>

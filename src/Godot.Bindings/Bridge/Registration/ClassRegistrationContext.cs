@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 
 namespace Godot.Bridge;
@@ -11,9 +13,19 @@ public partial class ClassRegistrationContext
 
     internal StringName ClassName { get; }
 
+    private readonly ConcurrentQueue<Action> _registerBindingActions = [];
+
     internal ClassRegistrationContext(StringName className)
     {
         GCHandle = GCHandle.Alloc(this, GCHandleType.Weak);
         ClassName = className;
+    }
+
+    internal void RegisterBindings()
+    {
+        while (_registerBindingActions.TryDequeue(out var register))
+        {
+            register();
+        }
     }
 }

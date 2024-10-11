@@ -89,12 +89,21 @@ public static partial class GodotRegistry
         {
             // If this class has been registered before, allow configuring it again.
             configure(context);
+            context.RegisterBindings();
             return;
         }
 
         context = new ClassRegistrationContext(className);
         _registeredClasses[className] = context;
         _classRegisterStack.Push(className);
+
+        configure(context);
+
+        NativeGodotString iconPathNative = default;
+        if (!string.IsNullOrEmpty(context.IconPath))
+        {
+            iconPathNative = NativeGodotString.Create(context.IconPath);
+        }
 
         var creationInfo = new GDExtensionClassCreationInfo4()
         {
@@ -120,6 +129,7 @@ public static partial class GodotRegistry
             get_virtual_call_data_func = &GetVirtualMethodUserData_Native,
             call_virtual_with_data_func = &CallVirtualMethod_Native,
             class_userdata = (void*)GCHandle.ToIntPtr(context.GCHandle),
+            icon_path = &iconPathNative,
         };
 
         StringName? godotNativeName = GodotObject.GetGodotNativeName(typeof(T));
@@ -148,7 +158,7 @@ public static partial class GodotRegistry
 
         GodotBridge.GDExtensionInterface.classdb_register_extension_class4(GodotBridge.LibraryPtr, &classNameNative, &baseClassNameNative, &creationInfo);
 
-        configure(context);
+        context.RegisterBindings();
 
         if (InteropUtils.RegisterVirtualOverridesHelpers.TryGetValue(godotNativeName, out var registerVirtualOverrides))
         {

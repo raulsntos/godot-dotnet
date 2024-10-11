@@ -32,107 +32,110 @@ partial class ClassRegistrationContext
 
         RegisteredMethodImplementations[methodInfo.Name] = methodInfo;
 
-        // Convert managed method info to the internal unmanaged type.
-        var methodInfoNative = new GDExtensionClassMethodInfo();
+        _registerBindingActions.Enqueue(() =>
         {
-            NativeGodotStringName nameNative = methodInfo.Name.NativeValue.DangerousSelfRef;
-            methodInfoNative.name = &nameNative;
-
-            var methodFlags = GDExtensionClassMethodFlags.GDEXTENSION_METHOD_FLAGS_DEFAULT;
-            if (methodInfo.IsStatic)
+            // Convert managed method info to the internal unmanaged type.
+            var methodInfoNative = new GDExtensionClassMethodInfo();
             {
-                methodFlags |= GDExtensionClassMethodFlags.GDEXTENSION_METHOD_FLAG_STATIC;
-            }
-            methodInfoNative.method_flags = (uint)methodFlags;
+                NativeGodotStringName nameNative = methodInfo.Name.NativeValue.DangerousSelfRef;
+                methodInfoNative.name = &nameNative;
 
-            // Return
-
-            if (methodInfo.Return is not null)
-            {
-                // Convert managed property info to the internal unmanaged type.
-                GDExtensionPropertyInfo ret;
+                var methodFlags = GDExtensionClassMethodFlags.GDEXTENSION_METHOD_FLAGS_DEFAULT;
+                if (methodInfo.IsStatic)
                 {
-                    NativeGodotStringName returnNameNative = methodInfo.Return.Name.NativeValue.DangerousSelfRef;
-                    NativeGodotStringName returnClassNameNative = (methodInfo.Return.ClassName?.NativeValue ?? default).DangerousSelfRef;
-                    NativeGodotString hintStringNative = NativeGodotString.Create(methodInfo.Return.HintString);
+                    methodFlags |= GDExtensionClassMethodFlags.GDEXTENSION_METHOD_FLAG_STATIC;
+                }
+                methodInfoNative.method_flags = (uint)methodFlags;
 
-                    ret = new GDExtensionPropertyInfo
+                // Return
+
+                if (methodInfo.Return is not null)
+                {
+                    // Convert managed property info to the internal unmanaged type.
+                    GDExtensionPropertyInfo ret;
                     {
-                        type = (GDExtensionVariantType)methodInfo.Return.Type,
-                        name = &returnNameNative,
+                        NativeGodotStringName returnNameNative = methodInfo.Return.Name.NativeValue.DangerousSelfRef;
+                        NativeGodotStringName returnClassNameNative = (methodInfo.Return.ClassName?.NativeValue ?? default).DangerousSelfRef;
+                        NativeGodotString hintStringNative = NativeGodotString.Create(methodInfo.Return.HintString);
 
-                        hint = (uint)methodInfo.Return.Hint,
-                        hint_string = &hintStringNative,
-                        class_name = &returnClassNameNative,
-                        usage = (uint)methodInfo.Return.Usage,
-                    };
+                        ret = new GDExtensionPropertyInfo
+                        {
+                            type = (GDExtensionVariantType)methodInfo.Return.Type,
+                            name = &returnNameNative,
+
+                            hint = (uint)methodInfo.Return.Hint,
+                            hint_string = &hintStringNative,
+                            class_name = &returnClassNameNative,
+                            usage = (uint)methodInfo.Return.Usage,
+                        };
+                    }
+
+                    methodInfoNative.has_return_value = true;
+                    methodInfoNative.return_value_info = &ret;
+                    methodInfoNative.return_value_metadata = (GDExtensionClassMethodArgumentMetadata)methodInfo.Return.TypeMetadata;
                 }
 
-                methodInfoNative.has_return_value = true;
-                methodInfoNative.return_value_info = &ret;
-                methodInfoNative.return_value_metadata = (GDExtensionClassMethodArgumentMetadata)methodInfo.Return.TypeMetadata;
-            }
+                // Parameters
 
-            // Parameters
+                var args = stackalloc GDExtensionPropertyInfo[methodInfo.Parameters.Count];
+                var argsMetadata = stackalloc GDExtensionClassMethodArgumentMetadata[methodInfo.Parameters.Count];
+                var argsDefaultValues = stackalloc NativeGodotVariant*[methodInfo.Parameters.Count];
 
-            var args = stackalloc GDExtensionPropertyInfo[methodInfo.Parameters.Count];
-            var argsMetadata = stackalloc GDExtensionClassMethodArgumentMetadata[methodInfo.Parameters.Count];
-            var argsDefaultValues = stackalloc NativeGodotVariant*[methodInfo.Parameters.Count];
-
-            uint optionalParameterCount = 0;
-            for (int i = 0; i < methodInfo.Parameters.Count; i++)
-            {
-                var parameter = methodInfo.Parameters[i];
-
-                if (optionalParameterCount > 0 && parameter.DefaultValue is null)
+                uint optionalParameterCount = 0;
+                for (int i = 0; i < methodInfo.Parameters.Count; i++)
                 {
-                    throw new InvalidOperationException(SR.InvalidOperation_MethodOptionalParametersMustAppearAfterRequiredParameters);
-                }
+                    var parameter = methodInfo.Parameters[i];
 
-                if (parameter.DefaultValue is not null)
-                {
-                    NativeGodotVariant defaultValue = parameter.DefaultValue.Value.NativeValue.DangerousSelfRef;
-                    argsDefaultValues[optionalParameterCount++] = &defaultValue;
-                }
-
-                // Convert managed parameter info to the internal unmanaged type.
-                {
-                    NativeGodotStringName parameterNameNative = parameter.Name.NativeValue.DangerousSelfRef;
-                    NativeGodotStringName parameterClassNameNative = (parameter.ClassName?.NativeValue ?? default).DangerousSelfRef;
-                    NativeGodotString hintStringNative = NativeGodotString.Create(parameter.HintString);
-
-                    args[i] = new GDExtensionPropertyInfo
+                    if (optionalParameterCount > 0 && parameter.DefaultValue is null)
                     {
-                        type = (GDExtensionVariantType)parameter.Type,
-                        name = &parameterNameNative,
+                        throw new InvalidOperationException(SR.InvalidOperation_MethodOptionalParametersMustAppearAfterRequiredParameters);
+                    }
 
-                        hint = (uint)parameter.Hint,
-                        hint_string = &hintStringNative,
-                        class_name = &parameterClassNameNative,
-                        usage = (uint)parameter.Usage,
-                    };
+                    if (parameter.DefaultValue is not null)
+                    {
+                        NativeGodotVariant defaultValue = parameter.DefaultValue.Value.NativeValue.DangerousSelfRef;
+                        argsDefaultValues[optionalParameterCount++] = &defaultValue;
+                    }
+
+                    // Convert managed parameter info to the internal unmanaged type.
+                    {
+                        NativeGodotStringName parameterNameNative = parameter.Name.NativeValue.DangerousSelfRef;
+                        NativeGodotStringName parameterClassNameNative = (parameter.ClassName?.NativeValue ?? default).DangerousSelfRef;
+                        NativeGodotString hintStringNative = NativeGodotString.Create(parameter.HintString);
+
+                        args[i] = new GDExtensionPropertyInfo
+                        {
+                            type = (GDExtensionVariantType)parameter.Type,
+                            name = &parameterNameNative,
+
+                            hint = (uint)parameter.Hint,
+                            hint_string = &hintStringNative,
+                            class_name = &parameterClassNameNative,
+                            usage = (uint)parameter.Usage,
+                        };
+                    }
+                    argsMetadata[i] = (GDExtensionClassMethodArgumentMetadata)parameter.TypeMetadata;
                 }
-                argsMetadata[i] = (GDExtensionClassMethodArgumentMetadata)parameter.TypeMetadata;
+
+                methodInfoNative.argument_count = (uint)methodInfo.Parameters.Count;
+                methodInfoNative.arguments_info = args;
+                methodInfoNative.arguments_metadata = argsMetadata;
+
+                methodInfoNative.default_argument_count = optionalParameterCount;
+                methodInfoNative.default_arguments = argsDefaultValues;
             }
 
-            methodInfoNative.argument_count = (uint)methodInfo.Parameters.Count;
-            methodInfoNative.arguments_info = args;
-            methodInfoNative.arguments_metadata = argsMetadata;
+            var methodGCHandle = GCHandle.Alloc(methodInfo, GCHandleType.Weak);
+            var methodInfoPtr = GCHandle.ToIntPtr(methodGCHandle);
 
-            methodInfoNative.default_argument_count = optionalParameterCount;
-            methodInfoNative.default_arguments = argsDefaultValues;
-        }
+            methodInfoNative.call_func = &CallWithVariantArgs_Native;
+            methodInfoNative.ptrcall_func = &CallWithPtrArgs_Native;
+            methodInfoNative.method_userdata = (void*)methodInfoPtr;
 
-        var methodGCHandle = GCHandle.Alloc(methodInfo, GCHandleType.Weak);
-        var methodInfoPtr = GCHandle.ToIntPtr(methodGCHandle);
+            NativeGodotStringName classNameNative = ClassName.NativeValue.DangerousSelfRef;
 
-        methodInfoNative.call_func = &CallWithVariantArgs_Native;
-        methodInfoNative.ptrcall_func = &CallWithPtrArgs_Native;
-        methodInfoNative.method_userdata = (void*)methodInfoPtr;
-
-        NativeGodotStringName classNameNative = ClassName.NativeValue.DangerousSelfRef;
-
-        GodotBridge.GDExtensionInterface.classdb_register_extension_class_method(GodotBridge.LibraryPtr, &classNameNative, &methodInfoNative);
+            GodotBridge.GDExtensionInterface.classdb_register_extension_class_method(GodotBridge.LibraryPtr, &classNameNative, &methodInfoNative);
+        });
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]

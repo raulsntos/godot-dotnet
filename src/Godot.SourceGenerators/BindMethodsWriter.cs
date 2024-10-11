@@ -42,6 +42,8 @@ internal static class BindMethodsWriter
         sb.AppendLine("internal static void BindMethods(global::Godot.Bridge.ClassRegistrationContext context)");
         sb.OpenBlock();
 
+        WriteSetIcon(sb, spec);
+
         WriteBindConstructor(sb, spec);
 
         WriteBindMethods(sb, spec);
@@ -145,6 +147,17 @@ internal static class BindMethodsWriter
                 sb.AppendLine($$"""public static global::Godot.StringName @{{symbolName}} { get; } = global::Godot.StringName.CreateFromUtf8("{{value}}"u8);""");
             }
         }
+    }
+
+    private static void WriteSetIcon(IndentedStringBuilder sb, GodotClassSpec spec)
+    {
+        if (spec.IconPath is null)
+        {
+            // Class did not specify an icon.
+            return;
+        }
+
+        sb.AppendLine($"""context.SetIcon("{spec.IconPath}")""");
     }
 
     private static void WriteBindConstructor(IndentedStringBuilder sb, GodotClassSpec spec)
