@@ -75,7 +75,25 @@ partial class NodeWithDefaultMarshalling
         public static global::Godot.StringName @PropertyGodotArrayOfFlagsEnum { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotArrayOfFlagsEnum"u8);
         public static global::Godot.StringName @PropertyGodotArrayOfVariant { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotArrayOfVariant"u8);
         public static global::Godot.StringName @PropertyGodotArrayOfGodotObject { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotArrayOfGodotObject"u8);
-        public static global::Godot.StringName @PropertyGodotDictionaryOfIntString { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfIntString"u8);
+        public static global::Godot.StringName @PropertyGodotDictionaryOfInt32Int32 { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfInt32Int32"u8);
+        public static global::Godot.StringName @PropertyGodotDictionaryOfInt32Byte { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfInt32Byte"u8);
+        public static global::Godot.StringName @PropertyGodotDictionaryOfInt32Int64 { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfInt32Int64"u8);
+        public static global::Godot.StringName @PropertyGodotDictionaryOfInt32Single { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfInt32Single"u8);
+        public static global::Godot.StringName @PropertyGodotDictionaryOfInt32Double { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfInt32Double"u8);
+        public static global::Godot.StringName @PropertyGodotDictionaryOfInt32String { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfInt32String"u8);
+        public static global::Godot.StringName @PropertyGodotDictionaryOfInt32Enum { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfInt32Enum"u8);
+        public static global::Godot.StringName @PropertyGodotDictionaryOfInt32FlagsEnum { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfInt32FlagsEnum"u8);
+        public static global::Godot.StringName @PropertyGodotDictionaryOfInt32Variant { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfInt32Variant"u8);
+        public static global::Godot.StringName @PropertyGodotDictionaryOfInt32GodotObject { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfInt32GodotObject"u8);
+        public static global::Godot.StringName @PropertyGodotDictionaryOfByteInt32 { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfByteInt32"u8);
+        public static global::Godot.StringName @PropertyGodotDictionaryOfInt64Int32 { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfInt64Int32"u8);
+        public static global::Godot.StringName @PropertyGodotDictionaryOfSingleInt32 { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfSingleInt32"u8);
+        public static global::Godot.StringName @PropertyGodotDictionaryOfDoubleInt32 { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfDoubleInt32"u8);
+        public static global::Godot.StringName @PropertyGodotDictionaryOfStringInt32 { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfStringInt32"u8);
+        public static global::Godot.StringName @PropertyGodotDictionaryOfEnumInt32 { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfEnumInt32"u8);
+        public static global::Godot.StringName @PropertyGodotDictionaryOfFlagsEnumInt32 { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfFlagsEnumInt32"u8);
+        public static global::Godot.StringName @PropertyGodotDictionaryOfVariantInt32 { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfVariantInt32"u8);
+        public static global::Godot.StringName @PropertyGodotDictionaryOfGodotObjectInt32 { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfGodotObjectInt32"u8);
     }
     public new partial class SignalName : global::Godot.Node.SignalName
     {
@@ -890,17 +908,271 @@ partial class NodeWithDefaultMarshalling
             {
                 __instance.@PropertyGodotArrayOfGodotObject = value;
             });
-        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfIntString, global::Godot.VariantType.Dictionary)
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfInt32Int32, global::Godot.VariantType.Dictionary)
             {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "2/0:;2/0:",
                 Usage = global::Godot.PropertyUsageFlags.Default,
             },
             static (NodeWithDefaultMarshalling __instance) =>
             {
-                return __instance.@PropertyGodotDictionaryOfIntString;
+                return __instance.@PropertyGodotDictionaryOfInt32Int32;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.GodotDictionary<int, int> value) =>
+            {
+                __instance.@PropertyGodotDictionaryOfInt32Int32 = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfInt32Byte, global::Godot.VariantType.Dictionary)
+            {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "2/0:;2/0:",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyGodotDictionaryOfInt32Byte;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.GodotDictionary<int, byte> value) =>
+            {
+                __instance.@PropertyGodotDictionaryOfInt32Byte = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfInt32Int64, global::Godot.VariantType.Dictionary)
+            {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "2/0:;2/0:",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyGodotDictionaryOfInt32Int64;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.GodotDictionary<int, long> value) =>
+            {
+                __instance.@PropertyGodotDictionaryOfInt32Int64 = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfInt32Single, global::Godot.VariantType.Dictionary)
+            {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "2/0:;3/0:",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyGodotDictionaryOfInt32Single;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.GodotDictionary<int, float> value) =>
+            {
+                __instance.@PropertyGodotDictionaryOfInt32Single = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfInt32Double, global::Godot.VariantType.Dictionary)
+            {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "2/0:;3/0:",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyGodotDictionaryOfInt32Double;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.GodotDictionary<int, double> value) =>
+            {
+                __instance.@PropertyGodotDictionaryOfInt32Double = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfInt32String, global::Godot.VariantType.Dictionary)
+            {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "2/0:;4/0:",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyGodotDictionaryOfInt32String;
             },
             static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.GodotDictionary<int, string> value) =>
             {
-                __instance.@PropertyGodotDictionaryOfIntString = value;
+                __instance.@PropertyGodotDictionaryOfInt32String = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfInt32Enum, global::Godot.VariantType.Dictionary)
+            {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "2/0:;2/2:A,B,C",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyGodotDictionaryOfInt32Enum;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.GodotDictionary<int, global::NS.NodeWithDefaultMarshalling.MyEnum> value) =>
+            {
+                __instance.@PropertyGodotDictionaryOfInt32Enum = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfInt32FlagsEnum, global::Godot.VariantType.Dictionary)
+            {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "2/0:;2/6:A:0,B:1,C:2",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyGodotDictionaryOfInt32FlagsEnum;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.GodotDictionary<int, global::NS.NodeWithDefaultMarshalling.MyFlagsEnum> value) =>
+            {
+                __instance.@PropertyGodotDictionaryOfInt32FlagsEnum = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfInt32Variant, global::Godot.VariantType.Dictionary)
+            {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "2/0:;0/0:",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyGodotDictionaryOfInt32Variant;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.GodotDictionary<int, global::Godot.Variant> value) =>
+            {
+                __instance.@PropertyGodotDictionaryOfInt32Variant = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfInt32GodotObject, global::Godot.VariantType.Dictionary)
+            {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "2/0:;24/0:",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyGodotDictionaryOfInt32GodotObject;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.GodotDictionary<int, global::Godot.GodotObject> value) =>
+            {
+                __instance.@PropertyGodotDictionaryOfInt32GodotObject = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfByteInt32, global::Godot.VariantType.Dictionary)
+            {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "2/0:;2/0:",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyGodotDictionaryOfByteInt32;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.GodotDictionary<byte, int> value) =>
+            {
+                __instance.@PropertyGodotDictionaryOfByteInt32 = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfInt64Int32, global::Godot.VariantType.Dictionary)
+            {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "2/0:;2/0:",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyGodotDictionaryOfInt64Int32;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.GodotDictionary<long, int> value) =>
+            {
+                __instance.@PropertyGodotDictionaryOfInt64Int32 = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfSingleInt32, global::Godot.VariantType.Dictionary)
+            {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "3/0:;2/0:",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyGodotDictionaryOfSingleInt32;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.GodotDictionary<float, int> value) =>
+            {
+                __instance.@PropertyGodotDictionaryOfSingleInt32 = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfDoubleInt32, global::Godot.VariantType.Dictionary)
+            {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "3/0:;2/0:",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyGodotDictionaryOfDoubleInt32;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.GodotDictionary<double, int> value) =>
+            {
+                __instance.@PropertyGodotDictionaryOfDoubleInt32 = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfStringInt32, global::Godot.VariantType.Dictionary)
+            {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "4/0:;2/0:",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyGodotDictionaryOfStringInt32;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.GodotDictionary<string, int> value) =>
+            {
+                __instance.@PropertyGodotDictionaryOfStringInt32 = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfEnumInt32, global::Godot.VariantType.Dictionary)
+            {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "2/2:A,B,C;2/0:",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyGodotDictionaryOfEnumInt32;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.GodotDictionary<global::NS.NodeWithDefaultMarshalling.MyEnum, int> value) =>
+            {
+                __instance.@PropertyGodotDictionaryOfEnumInt32 = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfFlagsEnumInt32, global::Godot.VariantType.Dictionary)
+            {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "2/6:A:0,B:1,C:2;2/0:",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyGodotDictionaryOfFlagsEnumInt32;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.GodotDictionary<global::NS.NodeWithDefaultMarshalling.MyFlagsEnum, int> value) =>
+            {
+                __instance.@PropertyGodotDictionaryOfFlagsEnumInt32 = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfVariantInt32, global::Godot.VariantType.Dictionary)
+            {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "0/0:;2/0:",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyGodotDictionaryOfVariantInt32;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.GodotDictionary<global::Godot.Variant, int> value) =>
+            {
+                __instance.@PropertyGodotDictionaryOfVariantInt32 = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyGodotDictionaryOfGodotObjectInt32, global::Godot.VariantType.Dictionary)
+            {
+                Hint = global::Godot.PropertyHint.TypeString,
+                HintString = "24/0:;2/0:",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithDefaultMarshalling __instance) =>
+            {
+                return __instance.@PropertyGodotDictionaryOfGodotObjectInt32;
+            },
+            static (NodeWithDefaultMarshalling __instance, global::Godot.Collections.GodotDictionary<global::Godot.GodotObject, int> value) =>
+            {
+                __instance.@PropertyGodotDictionaryOfGodotObjectInt32 = value;
             });
     }
 }

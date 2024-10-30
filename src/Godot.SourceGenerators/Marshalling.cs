@@ -398,20 +398,13 @@ internal static class Marshalling
             // We were unable to get a property hint for the element type,
             // but we can still create a property hint for the array.
             hint = PropertyHint.TypeString;
-            hintString = ConstructArrayHintString(elementVariantType, PropertyHint.None, null);
+            hintString = ConstructTypeStringHint(elementVariantType, PropertyHint.None, null);
             return true;
         }
 
         hint = PropertyHint.TypeString;
-        hintString = ConstructArrayHintString(elementVariantType, elementHint, elementHintString);
+        hintString = ConstructTypeStringHint(elementVariantType, elementHint, elementHintString);
         return true;
-
-        static string ConstructArrayHintString(VariantType elementVariantType, PropertyHint elementHint, string? elementHintString)
-        {
-            // Format: "type/hint:hint_string"
-            // IMPORTANT: The enums are formatted as numeric values.
-            return $"{elementVariantType:D}/{elementHint:D}:{elementHintString}";
-        }
     }
 
     private static bool TryGetDictionaryLikePropertyHint(Compilation compilation, ITypeSymbol dictionaryLikeTypeSymbol, out PropertyHint hint, out string? hintString)
@@ -432,9 +425,40 @@ internal static class Marshalling
             return false;
         }
 
-        // TODO: Dictionaries don't have a hint that can be used for inspector support yet.
-        // https://github.com/godotengine/godot/pull/78656
-        return false;
+        if (!TryGetDefaultPropertyHintCore(compilation, keyTypeSymbol, keyVariantType, isNestedType: true, out PropertyHint keyHint, out string? keyHintString))
+        {
+            // We were unable to get a property hint for the key type,
+            // but we can still create a property hint for the dictionary.
+            keyHint = PropertyHint.None;
+            keyHintString = null;
+        }
+
+        if (!TryGetDefaultPropertyHintCore(compilation, valueTypeSymbol, valueVariantType, isNestedType: true, out PropertyHint valueHint, out string? valueHintString))
+        {
+            // We were unable to get a property hint for the key type,
+            // but we can still create a property hint for the dictionary.
+            valueHint = PropertyHint.None;
+            valueHintString = null;
+        }
+
+        hint = PropertyHint.TypeString;
+        string keyTypeStringHint = ConstructTypeStringHint(keyVariantType, keyHint, keyHintString);
+        string valueTypeStringHint = ConstructTypeStringHint(valueVariantType, valueHint, valueHintString);
+        hintString = ConstructDictionaryHintString(keyTypeStringHint, valueTypeStringHint);
+        return true;
+
+        static string ConstructDictionaryHintString(string keyTypeStringHint, string valueTypeStringHint)
+        {
+            // Format: "key_type_string_hint;value_type_string_hint"
+            return $"{keyTypeStringHint};{valueTypeStringHint}";
+        }
+    }
+
+    private static string ConstructTypeStringHint(VariantType variantType, PropertyHint hint, string? hintString)
+    {
+        // Format: "type/hint:hint_string"
+        // IMPORTANT: The enums are formatted as numeric values.
+        return $"{variantType:D}/{hint:D}:{hintString}";
     }
 
     private static PropertyUsageFlags GetPropertyUsageFlags(VariantType variantType)

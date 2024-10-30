@@ -211,5 +211,59 @@ public partial class NodeWithDefaultMarshalling : Node
     public GodotArray<GodotObject> PropertyGodotArrayOfGodotObject { get; set; }
 
     [BindProperty]
-    public GodotDictionary<int, string> PropertyGodotDictionaryOfIntString { get; set; }
+    public GodotDictionary<int, int> PropertyGodotDictionaryOfInt32Int32 { get; set; }
+
+    [BindProperty]
+    public GodotDictionary<int, byte> PropertyGodotDictionaryOfInt32Byte { get; set; }
+
+    [BindProperty]
+    public GodotDictionary<int, long> PropertyGodotDictionaryOfInt32Int64 { get; set; }
+
+    [BindProperty]
+    public GodotDictionary<int, float> PropertyGodotDictionaryOfInt32Single { get; set; }
+
+    [BindProperty]
+    public GodotDictionary<int, double> PropertyGodotDictionaryOfInt32Double { get; set; }
+
+    [BindProperty]
+    public GodotDictionary<int, string> PropertyGodotDictionaryOfInt32String { get; set; }
+
+    [BindProperty]
+    public GodotDictionary<int, MyEnum> PropertyGodotDictionaryOfInt32Enum { get; set; }
+
+    [BindProperty]
+    public GodotDictionary<int, MyFlagsEnum> PropertyGodotDictionaryOfInt32FlagsEnum { get; set; }
+
+    [BindProperty]
+    public GodotDictionary<int, Variant> PropertyGodotDictionaryOfInt32Variant { get; set; }
+
+    [BindProperty]
+    public GodotDictionary<int, GodotObject> PropertyGodotDictionaryOfInt32GodotObject { get; set; }
+
+    [BindProperty]
+    public GodotDictionary<byte, int> PropertyGodotDictionaryOfByteInt32 { get; set; }
+
+    [BindProperty]
+    public GodotDictionary<long, int> PropertyGodotDictionaryOfInt64Int32 { get; set; }
+
+    [BindProperty]
+    public GodotDictionary<float, int> PropertyGodotDictionaryOfSingleInt32 { get; set; }
+
+    [BindProperty]
+    public GodotDictionary<double, int> PropertyGodotDictionaryOfDoubleInt32 { get; set; }
+
+    [BindProperty]
+    public GodotDictionary<string, int> PropertyGodotDictionaryOfStringInt32 { get; set; }
+
+    [BindProperty]
+    public GodotDictionary<MyEnum, int> PropertyGodotDictionaryOfEnumInt32 { get; set; }
+
+    [BindProperty]
+    public GodotDictionary<MyFlagsEnum, int> PropertyGodotDictionaryOfFlagsEnumInt32 { get; set; }
+
+    [BindProperty]
+    public GodotDictionary<Variant, int> PropertyGodotDictionaryOfVariantInt32 { get; set; }
+
+    [BindProperty]
+    public GodotDictionary<GodotObject, int> PropertyGodotDictionaryOfGodotObjectInt32 { get; set; }
 }
