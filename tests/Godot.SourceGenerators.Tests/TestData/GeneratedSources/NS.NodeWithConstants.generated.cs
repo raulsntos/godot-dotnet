@@ -4,6 +4,9 @@ namespace NS;
 
 partial class NodeWithConstants
 {
+    public new partial class MethodName : global::Godot.Node.MethodName
+    {
+    }
     public new partial class ConstantName : global::Godot.Node.ConstantName
     {
         public static global::Godot.StringName @MyConstant { get; } = global::Godot.StringName.CreateStaticFromAscii("MyConstant"u8);
@@ -38,6 +41,12 @@ partial class NodeWithConstants
         public static global::Godot.StringName @MyFlagsEnumWithNamedConstantsEarth { get; } = global::Godot.StringName.CreateStaticFromAscii("EARTH"u8);
         public static global::Godot.StringName @MyFlagsEnumWithNamedConstantsWind { get; } = global::Godot.StringName.CreateStaticFromAscii("WIND"u8);
         public static global::Godot.StringName @MyFlagsEnumWithNamedConstantsFireAndWater { get; } = global::Godot.StringName.CreateStaticFromAscii("FIRE_AND_WATER"u8);
+    }
+    public new partial class PropertyName : global::Godot.Node.PropertyName
+    {
+    }
+    public new partial class SignalName : global::Godot.Node.SignalName
+    {
     }
     internal static void BindMethods(global::Godot.Bridge.ClassDBRegistrationContext context)
     {

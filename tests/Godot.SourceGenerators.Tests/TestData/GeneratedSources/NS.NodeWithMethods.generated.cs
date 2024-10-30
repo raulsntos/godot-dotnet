@@ -23,6 +23,15 @@ partial class NodeWithMethods
         public static global::Godot.StringName @MyVirtualMethodWithReturn { get; } = global::Godot.StringName.CreateStaticFromAscii("MyVirtualMethodWithReturn"u8);
         public static global::Godot.StringName @MyVirtualMethodWithReturnAndParameters { get; } = global::Godot.StringName.CreateStaticFromAscii("MyVirtualMethodWithReturnAndParameters"u8);
     }
+    public new partial class ConstantName : global::Godot.Node.ConstantName
+    {
+    }
+    public new partial class PropertyName : global::Godot.Node.PropertyName
+    {
+    }
+    public new partial class SignalName : global::Godot.Node.SignalName
+    {
+    }
     internal static void BindMethods(global::Godot.Bridge.ClassDBRegistrationContext context)
     {
         context.BindConstructor(() => new NodeWithMethods());

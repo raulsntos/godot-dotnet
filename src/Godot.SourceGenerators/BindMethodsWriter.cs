@@ -66,7 +66,6 @@ internal static class BindMethodsWriter
     {
         string baseTypeFullName = spec.FullyQualifiedBaseTypeName;
 
-        if (spec.Methods.Count > 0)
         {
             sb.AppendLine($"public new partial class MethodName : {baseTypeFullName}.MethodName");
             sb.OpenBlock();
@@ -80,7 +79,6 @@ internal static class BindMethodsWriter
             sb.CloseBlock();
         }
 
-        if (spec.Constants.Count > 0)
         {
             HashSet<string> visitedEnums = [];
 
@@ -109,7 +107,6 @@ internal static class BindMethodsWriter
             sb.CloseBlock();
         }
 
-        if (spec.Properties.Count > 0)
         {
             sb.AppendLine($"public new partial class PropertyName : {baseTypeFullName}.PropertyName");
             sb.OpenBlock();
@@ -123,7 +120,6 @@ internal static class BindMethodsWriter
             sb.CloseBlock();
         }
 
-        if (spec.Signals.Count > 0)
         {
             sb.AppendLine($"public new partial class SignalName : {baseTypeFullName}.SignalName");
             sb.OpenBlock();

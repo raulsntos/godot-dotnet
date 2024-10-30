@@ -723,12 +723,12 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
 
         // Add cached StringNames.
         {
-            if (engineClass.Name == "Object" || engineClass.Methods.Length > 0)
             {
                 var methodNamesType = new TypeInfo("MethodName")
                 {
                     TypeAttributes = TypeAttributes.ReferenceType,
                     VisibilityAttributes = VisibilityAttributes.Public,
+                    IsPartial = true,
                     IsNew = engineClass.Name != "Object",
                     BaseType = engineClass.Name != "Object"
                         ? new TypeInfo("MethodName") { ContainingType = type.BaseType }
@@ -748,12 +748,12 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                 type.NestedTypes.Add(methodNamesType);
             }
 
-            if (engineClass.Name == "Object")
             {
                 var constantNamesType = new TypeInfo("ConstantName")
                 {
                     TypeAttributes = TypeAttributes.ReferenceType,
                     VisibilityAttributes = VisibilityAttributes.Public,
+                    IsPartial = true,
                     IsNew = engineClass.Name != "Object",
                     BaseType = engineClass.Name != "Object"
                         ? new TypeInfo("ConstantName") { ContainingType = type.BaseType }
@@ -763,12 +763,12 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                 type.NestedTypes.Add(constantNamesType);
             }
 
-            if (engineClass.Name == "Object" || engineClass.Properties.Length > 0)
             {
                 var propertyNamesType = new TypeInfo("PropertyName")
                 {
                     TypeAttributes = TypeAttributes.ReferenceType,
                     VisibilityAttributes = VisibilityAttributes.Public,
+                    IsPartial = true,
                     IsNew = engineClass.Name != "Object",
                     BaseType = engineClass.Name != "Object"
                         ? new TypeInfo("PropertyName") { ContainingType = type.BaseType }
@@ -788,12 +788,12 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                 type.NestedTypes.Add(propertyNamesType);
             }
 
-            if (engineClass.Name == "Object" || engineClass.Signals.Length > 0)
             {
                 var signalNamesType = new TypeInfo("SignalName")
                 {
                     TypeAttributes = TypeAttributes.ReferenceType,
                     VisibilityAttributes = VisibilityAttributes.Public,
+                    IsPartial = true,
                     IsNew = engineClass.Name != "Object",
                     BaseType = engineClass.Name != "Object"
                         ? new TypeInfo("SignalName") { ContainingType = type.BaseType }

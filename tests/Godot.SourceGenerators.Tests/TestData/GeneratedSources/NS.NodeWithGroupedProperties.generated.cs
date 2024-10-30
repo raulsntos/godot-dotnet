@@ -4,6 +4,12 @@ namespace NS;
 
 partial class NodeWithGroupedProperties
 {
+    public new partial class MethodName : global::Godot.Node.MethodName
+    {
+    }
+    public new partial class ConstantName : global::Godot.Node.ConstantName
+    {
+    }
     public new partial class PropertyName : global::Godot.Node.PropertyName
     {
         public static global::Godot.StringName @UngroupedProperty { get; } = global::Godot.StringName.CreateStaticFromAscii("UngroupedProperty"u8);
@@ -14,6 +20,9 @@ partial class NodeWithGroupedProperties
         public static global::Godot.StringName @Gravity { get; } = global::Godot.StringName.CreateStaticFromAscii("Gravity"u8);
         public static global::Godot.StringName @CanCollideWithEnemies { get; } = global::Godot.StringName.CreateStaticFromAscii("CanCollideWithEnemies"u8);
         public static global::Godot.StringName @CanCollideWithWalls { get; } = global::Godot.StringName.CreateStaticFromAscii("CanCollideWithWalls"u8);
+    }
+    public new partial class SignalName : global::Godot.Node.SignalName
+    {
     }
     internal static void BindMethods(global::Godot.Bridge.ClassDBRegistrationContext context)
     {

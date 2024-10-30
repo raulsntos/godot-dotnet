@@ -4,6 +4,12 @@ namespace NS;
 
 partial class NodeWithDefaultMarshalling
 {
+    public new partial class MethodName : global::Godot.Node.MethodName
+    {
+    }
+    public new partial class ConstantName : global::Godot.Node.ConstantName
+    {
+    }
     public new partial class PropertyName : global::Godot.Node.PropertyName
     {
         public static global::Godot.StringName @PropertyByte { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyByte"u8);
@@ -70,6 +76,9 @@ partial class NodeWithDefaultMarshalling
         public static global::Godot.StringName @PropertyGodotArrayOfVariant { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotArrayOfVariant"u8);
         public static global::Godot.StringName @PropertyGodotArrayOfGodotObject { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotArrayOfGodotObject"u8);
         public static global::Godot.StringName @PropertyGodotDictionaryOfIntString { get; } = global::Godot.StringName.CreateStaticFromAscii("PropertyGodotDictionaryOfIntString"u8);
+    }
+    public new partial class SignalName : global::Godot.Node.SignalName
+    {
     }
     internal static void BindMethods(global::Godot.Bridge.ClassDBRegistrationContext context)
     {

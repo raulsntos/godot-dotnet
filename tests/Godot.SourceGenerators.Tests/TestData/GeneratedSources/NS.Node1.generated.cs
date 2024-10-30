@@ -4,9 +4,18 @@ namespace NS;
 
 partial class Node1
 {
+    public new partial class MethodName : global::Godot.Node.MethodName
+    {
+    }
+    public new partial class ConstantName : global::Godot.Node.ConstantName
+    {
+    }
     public new partial class PropertyName : global::Godot.Node.PropertyName
     {
         public static global::Godot.StringName @Node1Property { get; } = global::Godot.StringName.CreateStaticFromAscii("Node1Property"u8);
+    }
+    public new partial class SignalName : global::Godot.Node.SignalName
+    {
     }
     internal static void BindMethods(global::Godot.Bridge.ClassDBRegistrationContext context)
     {

@@ -11,6 +11,15 @@ partial class ParameterDefaultValues
         public static global::Godot.StringName @Method3 { get; } = global::Godot.StringName.CreateStaticFromAscii("Method3"u8);
         public static global::Godot.StringName @Method4 { get; } = global::Godot.StringName.CreateStaticFromAscii("Method4"u8);
     }
+    public new partial class ConstantName : global::Godot.Node.ConstantName
+    {
+    }
+    public new partial class PropertyName : global::Godot.Node.PropertyName
+    {
+    }
+    public new partial class SignalName : global::Godot.Node.SignalName
+    {
+    }
     internal static void BindMethods(global::Godot.Bridge.ClassDBRegistrationContext context)
     {
         context.BindConstructor(() => new ParameterDefaultValues());

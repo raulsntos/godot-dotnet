@@ -8,6 +8,9 @@ partial class MyNode
     {
         public static global::Godot.StringName @MyMethod { get; } = global::Godot.StringName.CreateStaticFromAscii("MyMethod"u8);
     }
+    public new partial class ConstantName : global::Godot.Node.ConstantName
+    {
+    }
     public new partial class PropertyName : global::Godot.Node.PropertyName
     {
         public static global::Godot.StringName @MyProperty { get; } = global::Godot.StringName.CreateStaticFromAscii("MyProperty"u8);
