@@ -306,19 +306,24 @@ public struct Aabb : IEquatable<Aabb>
     /// Returns the support point in a given direction.
     /// This is useful for collision detection algorithms.
     /// </summary>
-    /// <param name="dir">The direction to find support for.</param>
+    /// <param name="direction">The direction to find support for.</param>
     /// <returns>A vector representing the support.</returns>
-    public readonly Vector3 GetSupport(Vector3 dir)
+    public readonly Vector3 GetSupport(Vector3 direction)
     {
-        Vector3 halfExtents = _size * 0.5f;
-        Vector3 ofs = _position + halfExtents;
-
-        return ofs + new Vector3
-        (
-            dir.X > 0f ? halfExtents.X : -halfExtents.X,
-            dir.Y > 0f ? halfExtents.Y : -halfExtents.Y,
-            dir.Z > 0f ? halfExtents.Z : -halfExtents.Z
-        );
+        Vector3 support = _position;
+        if (direction.X > 0)
+        {
+            support.X += _size.X;
+        }
+        if (direction.Y > 0)
+        {
+            support.Y += _size.Y;
+        }
+        if (direction.Z > 0)
+        {
+            support.Z += _size.Z;
+        }
+        return support;
     }
 
     /// <summary>
