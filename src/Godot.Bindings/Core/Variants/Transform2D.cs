@@ -44,7 +44,7 @@ public struct Transform2D : IEquatable<Transform2D>
     {
         get
         {
-            real_t detSign = real_t.Sign(BasisDeterminant());
+            real_t detSign = real_t.Sign(Determinant());
             return new Vector2
             (
                 X.Length(),
@@ -60,7 +60,7 @@ public struct Transform2D : IEquatable<Transform2D>
     {
         get
         {
-            real_t detSign = real_t.Sign(BasisDeterminant());
+            real_t detSign = real_t.Sign(Determinant());
             return real_t.Acos(X.Normalized().Dot(detSign * Y.Normalized())) - real_t.Pi * 0.5f;
         }
     }
@@ -129,7 +129,7 @@ public struct Transform2D : IEquatable<Transform2D>
     /// <returns>The inverse transformation matrix.</returns>
     public readonly Transform2D AffineInverse()
     {
-        real_t det = BasisDeterminant();
+        real_t det = Determinant();
 
 #if DEBUG
         if (det == 0)
@@ -155,15 +155,16 @@ public struct Transform2D : IEquatable<Transform2D>
 
     /// <summary>
     /// Returns the determinant of the basis matrix. If the basis is
-    /// uniformly scaled, its determinant is the square of the scale.
+    /// uniformly scaled, then its determinant equals the square of the
+    /// scale factor.
     ///
-    /// A negative determinant means the Y scale is negative.
-    /// A zero determinant means the basis isn't invertible,
-    /// and is usually considered invalid.
+    /// A negative determinant means the basis was flipped, so onoe part of
+    /// the scale is negative. A zero determinant means the basis isn't
+    /// invertible, and is usually considered invalid.
     /// </summary>
     /// <returns>The determinant of the basis matrix.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private readonly real_t BasisDeterminant()
+    public readonly real_t Determinant()
     {
         return (X.X * Y.Y) - (X.Y * Y.X);
     }
