@@ -115,7 +115,6 @@ internal abstract class VarargCallMethodBody<TContext> : CallMethodBody<TContext
 
         // Number of parameters without the vararg parameter.
         int argsCount = context.Parameters.Count - 1;
-        ParameterInfo[] parameters = context.Parameters.Take(argsCount).ToArray();
 
         for (int i = 0; i < argsCount; i++)
         {

@@ -510,21 +510,23 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
 
             TypeInfo eventHandlerType;
 
+            List<ParameterInfo> signalParameters = [];
+            foreach (var arg in engineSignal.Arguments)
+            {
+                string argName = NamingUtils.SnakeToCamelCase(arg.Name);
+                var argType = context.TypeDB.GetTypeFromEngineName(arg.Type, arg.Meta);
+                var parameter = new ParameterInfo(argName, argType);
+                signalParameters.Add(parameter);
+            }
+
             if (engineSignal.Arguments.Length != 0)
             {
                 var @delegate = new DelegateInfo($"{NamingUtils.SnakeToPascalCase(engineSignal.Name)}EventHandler")
                 {
                     VisibilityAttributes = VisibilityAttributes.Public,
                     ContainingType = type,
+                    Parameters = signalParameters,
                 };
-
-                foreach (var arg in engineSignal.Arguments)
-                {
-                    string argName = NamingUtils.SnakeToCamelCase(arg.Name);
-                    var argType = context.TypeDB.GetTypeFromEngineName(arg.Type, arg.Meta);
-                    var parameter = new ParameterInfo(argName, argType);
-                    @delegate.Parameters.Add(parameter);
-                }
 
                 type.NestedTypes.Add(@delegate);
                 eventHandlerType = @delegate;
@@ -613,6 +615,34 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                 }),
             };
             type.DeclaredEvents.Add(@event);
+
+            var raiseEventMethod = new MethodInfo($"EmitSignal{@event.Name}")
+            {
+                VisibilityAttributes = VisibilityAttributes.Family,
+                Parameters = signalParameters,
+                Body = MethodBody.Create(writer =>
+                {
+                    writer.Write($"EmitSignal(SignalName.{@event.Name}, [");
+                    foreach (var parameter in signalParameters)
+                    {
+                        if (parameter != signalParameters[0])
+                        {
+                            writer.Write(", ");
+                        }
+
+                        if (parameter.Type.IsEnum)
+                        {
+                            // Enum values need to be converted to long before so they can be implicitly converted to Variant.
+                            writer.Write("(long)");
+                        }
+
+                        string parameterName = SourceCodeWriter.EscapeIdentifier(parameter.Name);
+                        writer.Write(parameterName);
+                    }
+                    writer.WriteLine("]);");
+                }),
+            };
+            type.DeclaredMethods.Add(raiseEventMethod);
         }
     }
 
