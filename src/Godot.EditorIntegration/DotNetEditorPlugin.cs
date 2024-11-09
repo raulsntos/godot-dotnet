@@ -9,6 +9,10 @@ using Godot.EditorIntegration.CodeEditors;
 using Godot.EditorIntegration.Export;
 using Godot.EditorIntegration.Internals;
 using Godot.EditorIntegration.ProjectEditor;
+using Microsoft.VisualStudio.SolutionPersistence.Model;
+using Microsoft.VisualStudio.SolutionPersistence.Serializer.SlnV12;
+using Microsoft.VisualStudio.SolutionPersistence.Serializer;
+using System.Threading;
 
 namespace Godot.EditorIntegration;
 
@@ -57,25 +61,17 @@ internal sealed partial class DotNetEditorPlugin : EditorPlugin
                 return SR.FormatDotNetEditorPlugin_CreateCSharpProjectFailed(e.Message);
             }
 
-            string guid = Guid.NewGuid().ToString().ToUpperInvariant();
-
-            var solution = new DotNetSolution(name)
-            {
-                DirectoryPath = slnDir,
-            };
-
-            var projectInfo = new DotNetSolution.ProjectInfo()
-            {
-                Guid = guid,
-                PathRelativeToSolution = Path.GetRelativePath(slnDir, EditorPath.ProjectCSProjPath),
-                Configs = ["Debug", "ExportDebug", "ExportRelease"],
-            };
-
-            solution.AddNewProject(name, projectInfo);
+            var solutionModel = new SolutionModel();
+            solutionModel.AddPlatform("Any CPU");
+            solutionModel.AddBuildType("Debug");
+            solutionModel.AddBuildType("ExportDebug");
+            solutionModel.AddBuildType("ExportRelease");
+            solutionModel.AddProject(Path.GetRelativePath(slnDir, EditorPath.ProjectCSProjPath));
 
             try
             {
-                solution.Save();
+                string solutionMoniker = Path.Join(slnDir, $"{name}.sln");
+                SolutionSerializers.SlnFileV12.SaveAsync(solutionMoniker, solutionModel, CancellationToken.None).Wait();
             }
             catch (IOException e)
             {

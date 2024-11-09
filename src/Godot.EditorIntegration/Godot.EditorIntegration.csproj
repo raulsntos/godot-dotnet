@@ -26,6 +26,7 @@
     <PackageReference Include="JetBrains.Rider.PathLocator" Version="$(JetBrainsRiderPathLocatorVersion)" />
     <PackageReference Include="Microsoft.Build" Version="$(MicrosoftBuildVersion)" ExcludeAssets="runtime" />
     <PackageReference Include="Microsoft.Build.Locator" Version="$(MicrosoftBuildLocatorVersion)" />
+    <PackageReference Include="Microsoft.VisualStudio.SolutionPersistence" Version="$(MicrosoftVisualStudioSolutionPersistenceVersion)" />
   </ItemGroup>
 
   <ItemGroup>

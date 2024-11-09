@@ -29,6 +29,8 @@
     <MicrosoftCodeAnalysisResxSourceGeneratorVersion>3.11.0-beta1.24324.1</MicrosoftCodeAnalysisResxSourceGeneratorVersion>
     <!-- NuGet -->
     <NuGetVersioningVersion>6.10.0</NuGetVersioningVersion>
+    <!-- Solution Persistence -->
+    <MicrosoftVisualStudioSolutionPersistenceVersion>1.0.9</MicrosoftVisualStudioSolutionPersistenceVersion>
     <!-- MSTest -->
     <MicrosoftNETTestSdkVersion>17.10.0</MicrosoftNETTestSdkVersion>
     <!-- XUnit -->
