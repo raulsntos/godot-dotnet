@@ -1,6 +1,5 @@
 using System;
 using System.CodeDom.Compiler;
-using System.Linq;
 using Godot.BindingsGenerator.Reflection;
 
 namespace Godot.BindingsGenerator;
@@ -131,18 +130,8 @@ internal abstract class VarargCallMethodBody<TContext> : CallMethodBody<TContext
 
         if (context.ReturnType is not null)
         {
-            // TODO: Can't skip init because NativeGodotVariant is a ref struct.
-            // Change when C# is able to use ref structs in generic type arguments.
-            // See: https://github.com/dotnet/csharplang/issues/1148
-            if (context.ReturnType.IsByRefLike)
-            {
-                writer.WriteLine($"{context.ReturnType.FullNameWithGlobal} {context.ReturnVariableName} = default;");
-            }
-            else
-            {
-                writer.WriteLine($"{context.ReturnType.FullNameWithGlobal} {context.ReturnVariableName};");
-                writer.WriteLine($"global::System.Runtime.CompilerServices.Unsafe.SkipInit(out {context.ReturnVariableName});");
-            }
+            writer.WriteLine($"{context.ReturnType.FullNameWithGlobal} {context.ReturnVariableName};");
+            writer.WriteLine($"global::System.Runtime.CompilerServices.Unsafe.SkipInit(out {context.ReturnVariableName});");
 
             if (context.MarshalReturnTypeAsPtr)
             {
@@ -164,12 +153,8 @@ internal abstract class VarargCallMethodBody<TContext> : CallMethodBody<TContext
 
                 if (context.ReturnType != KnownTypes.NativeGodotVariant)
                 {
-                    // TODO: Can't skip init because NativeGodotVariant is a ref struct.
-                    // Change when C# is able to use ref structs in generic type arguments.
-                    // See: https://github.com/dotnet/csharplang/issues/1148
-                    // writer.WriteLine($"global::Godot.NativeInterop.NativeGodotVariant {context.ReturnVariableName}Var;");
-                    // writer.WriteLine($"global::System.Runtime.CompilerServices.Unsafe.SkipInit(out {context.ReturnVariableName}Var);");
-                    writer.WriteLine($"global::Godot.NativeInterop.NativeGodotVariant {context.ReturnVariableName}Var = default;");
+                    writer.WriteLine($"global::Godot.NativeInterop.NativeGodotVariant {context.ReturnVariableName}Var;");
+                    writer.WriteLine($"global::System.Runtime.CompilerServices.Unsafe.SkipInit(out {context.ReturnVariableName}Var);");
                 }
             }
         }

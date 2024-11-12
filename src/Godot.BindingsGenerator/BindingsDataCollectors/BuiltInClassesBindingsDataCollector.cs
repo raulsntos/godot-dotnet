@@ -241,9 +241,8 @@ internal sealed class BuiltInClassesBindingsDataCollector : BindingsDataCollecto
                 };
                 type.DeclaredMethods.Add(getPtrwMethod);
 
-                // Skip the AsSpan method for PackedStringArray because the generic T in Span would need to be
-                // NativeGodotString which is a ref struct and ref structs can't be used in generics yet.
-                // https://github.com/dotnet/csharplang/issues/1148
+                // Skip the AsSpan method for PackedStringArray because the generic T in Span<T> would need to be
+                // NativeGodotString which is a ref struct and Span<T> doesn't support it.
                 if (!indexerTypeUnmanaged.IsByRefLike)
                 {
                     var spanType = KnownTypes.SystemSpanOf(indexerTypeUnmanaged);

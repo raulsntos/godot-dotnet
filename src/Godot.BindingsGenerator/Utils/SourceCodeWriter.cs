@@ -505,8 +505,7 @@ internal static class SourceCodeWriter
             var orderedConstraintTypes = typeParameter.ConstraintTypes
                 .OrderBy(type => type.IsReferenceType);
 
-            int i = 0;
-            foreach (var type in orderedConstraintTypes)
+            foreach (var (i, type) in orderedConstraintTypes.Index())
             {
                 writer.Write(type.FullNameWithGlobal);
 
@@ -514,8 +513,6 @@ internal static class SourceCodeWriter
                 {
                     writer.Write(", ");
                 }
-
-                i++;
             }
         }
     }

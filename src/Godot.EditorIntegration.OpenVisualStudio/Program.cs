@@ -157,7 +157,7 @@ internal static partial class Program
     }
 
     [GeneratedRegex("!VisualStudio.DTE.17.0:[0-9]")]
-    private static partial Regex VisualStudioDTERegex();
+    private static partial Regex VisualStudioDTERegex { get; }
 
     private static DTE? FindInstanceEditingSolution(string solutionPath)
     {
@@ -194,7 +194,7 @@ internal static partial class Program
                 }
 
                 // The digits after the colon are the process ID.
-                if (!VisualStudioDTERegex().IsMatch(ppszDisplayName))
+                if (!VisualStudioDTERegex.IsMatch(ppszDisplayName))
                 {
                     continue;
                 }

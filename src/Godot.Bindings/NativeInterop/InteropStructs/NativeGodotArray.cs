@@ -18,7 +18,7 @@ partial struct NativeGodotArray
     {
         private readonly uint _safeRefCount;
 
-        private readonly NativeGodotVectorOfVariant _vector;
+        private readonly NativeGodotVector<NativeGodotVariant> _vector;
 
         private unsafe readonly NativeGodotVariant* _readOnly;
 

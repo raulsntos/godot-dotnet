@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -16,7 +17,7 @@ internal sealed class IOSPlatformExporter : PlatformExporter
         return GodotPlatform.IsIOS(godotPlatform);
     }
 
-    private static HashSet<RuntimeIdentifierArchitecture> DetermineArchitectures(HashSet<string> features)
+    private static HashSet<RuntimeIdentifierArchitecture> DetermineArchitectures(ReadOnlySet<string> features)
     {
         HashSet<RuntimeIdentifierArchitecture> architectures = [];
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using Godot.EditorIntegration.Build;
 
@@ -35,12 +36,10 @@ internal sealed class PlatformExporterContext
     /// </summary>
     public required string TargetPlatform { get; init; }
 
-    // TODO: Replace with ReadOnlySet<string> when .NET 9.0
-    // https://github.com/dotnet/runtime/issues/100113
     /// <summary>
     /// Godot features enabled by the active export preset for this export process.
     /// </summary>
-    public required HashSet<string> PresetFeatures { get; init; }
+    public required ReadOnlySet<string> PresetFeatures { get; init; }
 
     /// <summary>
     /// Build configuration requested by the export preset.

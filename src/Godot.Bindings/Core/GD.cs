@@ -350,9 +350,7 @@ public static partial class GD
         // TODO: Getting the caller information using the StackTrace API is problematic:
         //
         // - It won't work in NativeAOT:
-        //   - StackFrame.GetMethod requires unrefenced code, the method may be trimmed.
-        //     See: https://github.com/dotnet/runtime/issues/96528
-        //   - The file name may also be unknown.
+        //   - The file name may be unknown.
         //   - The line number is always 0.
         //     See: https://github.com/dotnet/runtime/issues/68714
         // - Even when not using AOT, it may not retrieve the expected information:
@@ -367,7 +365,7 @@ public static partial class GD
         var stackTrace = new StackTrace(skipFrames: 2, fNeedFileInfo: true);
         var stackFrame = stackTrace.GetFrame(0);
 
-        string? callerName = stackFrame?.GetMethod()?.Name;
+        string? callerName = stackFrame is not null ? DiagnosticMethodInfo.Create(stackFrame)?.Name : null;
         string? callerFilePath = stackFrame?.GetFileName();
         int callerLineNumber = stackFrame?.GetFileLineNumber() ?? 0;
 

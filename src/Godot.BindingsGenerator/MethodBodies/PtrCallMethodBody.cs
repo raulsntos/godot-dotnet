@@ -110,18 +110,8 @@ internal abstract class PtrCallMethodBody<TContext> : CallMethodBody<TContext> w
 
         if (context.ReturnType is not null)
         {
-            // TODO: Can't skip init because NativeGodotVariant is a ref struct.
-            // Change when C# is able to use ref structs in generic type arguments.
-            // See: https://github.com/dotnet/csharplang/issues/1148
-            if (context.ReturnType.IsByRefLike)
-            {
-                writer.WriteLine($"{context.ReturnType.FullNameWithGlobal} {context.ReturnVariableName} = default;");
-            }
-            else
-            {
-                writer.WriteLine($"{context.ReturnType.FullNameWithGlobal} {context.ReturnVariableName};");
-                writer.WriteLine($"global::System.Runtime.CompilerServices.Unsafe.SkipInit(out {context.ReturnVariableName});");
-            }
+            writer.WriteLine($"{context.ReturnType.FullNameWithGlobal} {context.ReturnVariableName};");
+            writer.WriteLine($"global::System.Runtime.CompilerServices.Unsafe.SkipInit(out {context.ReturnVariableName});");
 
             var marshaller = context.ReturnTypeMarshaller!;
             if (marshaller.WriteSetupToUnmanagedUninitialized(writer, context.ReturnType, $"{context.ReturnVariableName}Native"))

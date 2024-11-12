@@ -416,34 +416,9 @@ internal static class KnownTypes
         GenericTypeArgumentCount = 1,
     };
 
-    private static TypeInfo NativeGodotVectorOfString { get; } = new TypeInfo("NativeGodotVectorOfString", "Godot.NativeInterop")
-    {
-        TypeAttributes = TypeAttributes.ByRefLikeType,
-    };
-    private static TypeInfo NativeGodotVectorOfVariant { get; } = new TypeInfo("NativeGodotVectorOfString", "Godot.NativeInterop")
-    {
-        TypeAttributes = TypeAttributes.ByRefLikeType,
-    };
-
     public static TypeInfo NativeGodotVectorOf(TypeInfo elementType)
     {
-        // If the element type is one of the known ref struct types,
-        // since generic type arguments can't be ref structs, use the
-        // specific vector type that was created for this element type.
-        // TODO: Remove this when C# supports ref structs in generic type
-        // arguments. See https://github.com/dotnet/csharplang/issues/1148.
-        if (elementType == NativeGodotString)
-        {
-            return NativeGodotVectorOfString;
-        }
-        else if (elementType == NativeGodotVariant)
-        {
-            return NativeGodotVectorOfVariant;
-        }
-        else
-        {
-            return NativeGodotVector.MakeGenericType([elementType]);
-        }
+        return NativeGodotVector.MakeGenericType([elementType]);
     }
 
     public static TypeInfo NativeGodotPackedByteArray { get; } = new TypeInfo("NativeGodotPackedByteArray", "Godot.NativeInterop")

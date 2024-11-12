@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <IsTrimmable>true</IsTrimmable>
     <IsAotCompatible>true</IsAotCompatible>
@@ -32,7 +32,7 @@
     <ProjectReference Include="..\Godot.BindingsGenerator\Godot.BindingsGenerator.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
-  <UsingTask TaskName="Godot.BindingsGenerator.GenerateTask" AssemblyFile="$(ArtifactsBinDir)\Godot.BindingsGenerator\$(Configuration)\net8.0\Godot.BindingsGenerator.dll" />
+  <UsingTask TaskName="Godot.BindingsGenerator.GenerateTask" AssemblyFile="$(ArtifactsBinDir)\Godot.BindingsGenerator\$(Configuration)\net9.0\Godot.BindingsGenerator.dll" />
 
   <!-- Generate the bindings before building the project. -->
   <ItemGroup Condition="'$(GenerateGodotBindings)' == 'true'">

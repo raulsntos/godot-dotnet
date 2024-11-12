@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using Godot.EditorIntegration.Internals;
 
 namespace Godot.EditorIntegration.Build.UI;
@@ -22,9 +23,7 @@ internal sealed partial class MSBuildPanel : MarginContainer
     public CommonOptions? LastBuildOptions { get; private set; }
     public BuildResult? LastBuildResult { get; private set; }
 
-    // TODO: Replace with the new lock from .NET 9
-    // See: https://github.com/dotnet/runtime/issues/34812
-    private readonly object _pendingBuildLogTextLock = new object();
+    private readonly Lock _pendingBuildLogTextLock = new();
     private string _pendingBuildLogText = string.Empty;
 
     public Texture2D? GetBuildStateIcon()

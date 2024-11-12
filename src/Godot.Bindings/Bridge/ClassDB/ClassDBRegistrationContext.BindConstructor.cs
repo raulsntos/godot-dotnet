@@ -4,9 +4,7 @@ namespace Godot.Bridge;
 
 partial class ClassDBRegistrationContext
 {
-    private Func<GodotObject>? _registeredConstructor;
-
-    internal Func<GodotObject>? RegisteredConstructor => _registeredConstructor;
+    internal Func<GodotObject>? RegisteredConstructor { get; private set; }
 
     /// <summary>
     /// Register a function to construct a new instance of the class.
@@ -15,6 +13,6 @@ partial class ClassDBRegistrationContext
     public unsafe void BindConstructor(Func<GodotObject> constructor)
     {
         ArgumentNullException.ThrowIfNull(constructor);
-        _registeredConstructor = constructor;
+        RegisteredConstructor = constructor;
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using Godot.Collections;
@@ -15,7 +16,7 @@ internal sealed class AndroidPlatformExporter : PlatformExporter
         return GodotPlatform.IsAndroid(godotPlatform);
     }
 
-    private static HashSet<RuntimeIdentifierArchitecture> DetermineArchitectures(HashSet<string> features)
+    private static HashSet<RuntimeIdentifierArchitecture> DetermineArchitectures(ReadOnlySet<string> features)
     {
         HashSet<RuntimeIdentifierArchitecture> architectures = [];
 

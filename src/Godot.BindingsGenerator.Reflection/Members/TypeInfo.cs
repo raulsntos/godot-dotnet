@@ -228,14 +228,6 @@ public class TypeInfo : VisibleMemberInfo, IEquatable<TypeInfo>
             throw new ArgumentException($"Generic type argument mismatch. Expected {GenericTypeArgumentCount} arguments, received {typeArgumentsArray.Length}.", nameof(typeArguments));
         }
 
-        foreach (var typeArgument in typeArguments)
-        {
-            if (typeArgument.IsByRefLike)
-            {
-                throw new ArgumentException($"Generic type argument can't be a ref struct. Type argument was '{typeArgument.FullName}'.", nameof(typeArguments));
-            }
-        }
-
         var genericType = new TypeInfo(this)
         {
             GenericTypeDefinition = this,

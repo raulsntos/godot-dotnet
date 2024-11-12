@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -111,7 +112,7 @@ internal sealed partial class DotNetExportPlugin : EditorExportPlugin
         {
             ExportPlugin = this,
             TargetPlatform = platform,
-            PresetFeatures = features,
+            PresetFeatures = new ReadOnlySet<string>(features),
             BuildConfiguration = isDebug ? "ExportDebug" : "ExportRelease",
             IncludeDebugSymbols = (bool)GetOption(ExportOptionNames.IncludeDebugSymbols),
         };

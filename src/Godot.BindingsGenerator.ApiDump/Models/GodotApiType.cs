@@ -1,34 +1,32 @@
-using Godot.BindingsGenerator.ApiDump.Serialization;
-
 namespace Godot.BindingsGenerator.ApiDump;
 
 /// <summary>
 /// Defines the type of an API.
 /// </summary>
-[JsonConverter(typeof(StringEnumConverter<GodotApiType>))]
+[JsonConverter(typeof(JsonStringEnumConverter<GodotApiType>))]
 public enum GodotApiType
 {
     /// <summary>
     /// API defined in core types.
     /// </summary>
-    [JsonPropertyName("core")]
+    [JsonStringEnumMemberName("core")]
     Core = 1,
 
     /// <summary>
     /// API defined in editor types that aren't available in exported projects.
     /// </summary>
-    [JsonPropertyName("editor")]
+    [JsonStringEnumMemberName("editor")]
     Editor,
 
     /// <summary>
     /// API defined in extension types.
     /// </summary>
-    [JsonPropertyName("extension")]
+    [JsonStringEnumMemberName("extension")]
     Extension,
 
     /// <summary>
     /// API defined in extension editor types that aren't available in exported projects.
     /// </summary>
-    [JsonPropertyName("editor_extension")]
+    [JsonStringEnumMemberName("editor_extension")]
     EditorExtension,
 }

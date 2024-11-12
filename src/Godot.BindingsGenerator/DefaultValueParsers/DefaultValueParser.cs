@@ -9,7 +9,7 @@ namespace Godot.BindingsGenerator;
 internal abstract partial class DefaultValueParser
 {
     [GeneratedRegex("^(?<type_name>[A-z0-9]+)\\((?<args>.*)\\)$")]
-    private static partial Regex ConstructorExpressionRegex();
+    private static partial Regex ConstructorExpressionRegex { get; }
 
     private TypeDB? _typeDB;
 
@@ -46,7 +46,7 @@ internal abstract partial class DefaultValueParser
 
     public static bool TryParseDefaultExpressionAsConstructor(string engineDefaultValueExpression, [NotNullWhen(true)] out string? engineTypeName, [NotNullWhen(true)] out string[]? constructorArguments)
     {
-        var match = ConstructorExpressionRegex().Match(engineDefaultValueExpression);
+        var match = ConstructorExpressionRegex.Match(engineDefaultValueExpression);
         if (match.Success)
         {
             engineTypeName = match.Groups["type_name"].Value;
