@@ -70,7 +70,7 @@
 
   <!-- Set the paths where we can find the built toolset assemblies. -->
   <PropertyGroup>
-    <InfraTasksAssembly>$(ArtifactsToolsetDir)Common\$(Configuration)\net8.0\Tasks.dll</InfraTasksAssembly>
+    <InfraTasksAssembly>$(ArtifactsToolsetDir)Common\$(Configuration)\net9.0\Tasks.dll</InfraTasksAssembly>
   </PropertyGroup>
 
 </Project>
