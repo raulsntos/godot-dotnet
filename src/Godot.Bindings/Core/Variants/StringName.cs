@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Godot.NativeInterop;
@@ -18,7 +19,7 @@ public sealed class StringName : IDisposable, IEquatable<StringName?>
 
     private readonly WeakReference<IDisposable>? _weakReferenceToSelf;
 
-    private readonly bool _isStatic;
+    private static readonly ConcurrentDictionary<NativeGodotStringName.Movable, byte> _staticDictionary = new();
 
     internal static StringName Empty { get; } = CreateStaticStringNameFromAsciiLiteral(""u8);
 
@@ -31,12 +32,10 @@ public sealed class StringName : IDisposable, IEquatable<StringName?>
     private StringName(NativeGodotStringName nativeValueToOwn, bool isStatic = false)
     {
         NativeValue = nativeValueToOwn.AsMovable();
-        _isStatic = isStatic;
-
-        // Static StringNames must not be disposed, so don't register the disposable.
-        if (!_isStatic)
+        _weakReferenceToSelf = DisposablesTracker.RegisterDisposable(this);
+        if (isStatic)
         {
-            _weakReferenceToSelf = DisposablesTracker.RegisterDisposable(this);
+            _staticDictionary.TryAdd(NativeValue, 0);
         }
     }
 
@@ -136,15 +135,12 @@ public sealed class StringName : IDisposable, IEquatable<StringName?>
 
     private void Dispose(bool disposing)
     {
-        if (_isStatic)
+        // Static StringNames must not be disposed.
+        if (!_staticDictionary.ContainsKey(NativeValue))
         {
-            // Static StringNames must not be disposed.
-            return;
+            // Always dispose `NativeValue` even if disposing is true
+            NativeValue.DangerousSelfRef.Dispose();
         }
-
-        // Always dispose `NativeValue` even if disposing is true
-        NativeValue.DangerousSelfRef.Dispose();
-
         if (_weakReferenceToSelf is not null)
         {
             DisposablesTracker.UnregisterDisposable(_weakReferenceToSelf);
