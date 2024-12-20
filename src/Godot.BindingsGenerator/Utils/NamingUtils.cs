@@ -20,6 +20,7 @@ internal static class NamingUtils
         { "JSONRPC", "JsonRpc" },
         { "Object", "GodotObject" },
         { "OpenXRIPBinding", "OpenXRIPBinding" },
+        { "OpenXRIPBindingModifier", "OpenXRIPBindingModifier" },
         { "SkeletonModification2DCCDIK", "SkeletonModification2DCcdik" },
         { "SkeletonModification2DFABRIK", "SkeletonModification2DFabrik" },
         { "SkeletonModification3DCCDIK", "SkeletonModification3DCcdik" },
