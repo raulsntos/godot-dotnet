@@ -167,7 +167,7 @@ internal sealed class IOSPlatformExporter : PlatformExporter
             outputPaths.RemoveRange(2, outputPaths.Count - 2);
         }
 
-        string baseOutputPath = EditorInternal.GetProjectOutputPath(EditorPath.ProjectSlnPath);
+        string baseOutputPath = EditorInternal.GetProjectOutputPath(EditorPath.ProjectCSProjPath);
         string xcFrameworkPath = Path.Join(baseOutputPath, $"{EditorPath.ProjectAssemblyName}_aot.xcframework");
         if (!XCFramework.GenerateBlocking(outputPaths, xcFrameworkPath))
         {

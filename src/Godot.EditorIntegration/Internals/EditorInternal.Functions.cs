@@ -30,12 +30,12 @@ unsafe partial class EditorInternal
 
     private static delegate* unmanaged[Cdecl]<NativeGodotString*, NativeGodotString*, void> _get_project_output_path;
 
-    public static string GetProjectOutputPath(string slnOrProjectPath)
+    public static string GetProjectOutputPath(string projectPath)
     {
         Debug.Assert(_get_project_output_path is not null);
-        using NativeGodotString slnOrProjectPathNative = NativeGodotString.Create(slnOrProjectPath);
+        using NativeGodotString projectPathNative = NativeGodotString.Create(projectPath);
         using NativeGodotString dest = default;
-        _get_project_output_path(&slnOrProjectPathNative, &dest);
+        _get_project_output_path(&projectPathNative, &dest);
         return dest.ToString();
     }
 
