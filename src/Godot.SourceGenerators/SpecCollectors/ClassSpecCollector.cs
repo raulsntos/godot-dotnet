@@ -17,6 +17,8 @@ internal static class ClassSpecCollector
         List<GodotPropertySpec> properties = [];
         List<GodotMethodSpec> methods = [];
         List<GodotSignalSpec> signals = [];
+        bool isGodotObject = typeSymbol.DerivesFrom(KnownTypeNames.GodotObject);
+        Location location = typeSymbol.Locations[0];
 
         // Initialize constructor spec if the class is instantiable.
         if (!typeSymbol.IsAbstract)
@@ -126,6 +128,8 @@ internal static class ClassSpecCollector
             Properties = [.. properties],
             Methods = [.. methods],
             Signals = [.. signals],
+            IsGodotObject = isGodotObject,
+            LocationInSource = location,
         };
     }
 }

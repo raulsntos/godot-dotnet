@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using Microsoft.CodeAnalysis;
 
 namespace Godot.SourceGenerators;
 
@@ -8,6 +9,16 @@ namespace Godot.SourceGenerators;
 /// </summary>
 internal readonly record struct GodotClassSpec : IEquatable<GodotClassSpec>
 {
+    /// <summary>
+    /// Describes the state of the class specification: it is either perfectly
+    /// valid or it isn't. If it is invalid, this indicates the reason.
+    /// </summary>
+    internal enum StateType
+    {
+        Valid,
+        InvalidBaseType
+    }
+
     /// <summary>
     /// Name of the type's symbol.
     /// This is the real name of the type in the source code.
@@ -66,6 +77,43 @@ internal readonly record struct GodotClassSpec : IEquatable<GodotClassSpec>
     /// Describes the signals that should be registered for the type.
     /// </summary>
     public EquatableArray<GodotSignalSpec> Signals { get; init; }
+
+    /// <summary>
+    /// Location of the class declaration in the source code.
+    /// </summary>
+    public Location LocationInSource { get; init; }
+
+    /// <summary>
+    /// Indicates whether the type derives from <c>Godot.GodotObject</c>. Types
+    /// that do not derive from <c>Godot.GodotObject</c> cannot be automatically
+    /// registered with the engine.
+    /// </summary>
+    public bool IsGodotObject { get; init; }
+
+    /// <summary>
+    /// State of the class specification.
+    /// </summary>
+    public StateType State
+    {
+        get
+        {
+            if (!IsGodotObject)
+            {
+                return StateType.InvalidBaseType;
+            }
+
+            return StateType.Valid;
+        }
+    }
+
+    public Diagnostic? GetDiagnostic()
+    {
+        return State switch
+        {
+            StateType.InvalidBaseType => Diagnostics.ClassDoesNotHaveCorrectBaseType(LocationInSource, this),
+            _ => null
+        };
+    }
 
     /// <summary>
     /// Generate a unique hint name for the generated source code
