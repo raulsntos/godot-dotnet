@@ -187,4 +187,9 @@ if [[ -n "$properties" ]]; then
   args+=("$properties")
 fi
 
-python ${args[@]}
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  # Once again, macOS is a special case :P
+  python3 ${args[@]}
+else
+  python ${args[@]}
+fi

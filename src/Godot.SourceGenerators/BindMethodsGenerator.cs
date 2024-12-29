@@ -11,13 +11,19 @@ internal sealed class BindMethodsGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        IncrementalValuesProvider<GodotClassSpec?> specs = context.SyntaxProvider
+        IncrementalValuesProvider<GodotClassSpec> specs = context.SyntaxProvider
             .ForAttributeWithMetadataName(KnownTypeNames.GodotClassAttribute,
                 predicate: IsSyntaxTargetForGeneration,
                 transform: GetSemanticTargetForGeneration)
-            .Where(spec => spec is not null);
+            .Where(spec => spec.HasValue)
+            .Select((spec, token) => spec!.Value);
+
+        IncrementalValuesProvider<Diagnostic> diagnostics = specs
+            .Where(spec => spec.State != GodotClassSpec.StateType.Valid)
+            .Select((spec, token) => spec.GetDiagnostic()!);
 
         context.RegisterSourceOutput(specs, Execute);
+        context.RegisterSourceOutput(diagnostics, OutputDiagnostics);
     }
 
     private static bool IsSyntaxTargetForGeneration(SyntaxNode node, CancellationToken cancellationToken = default)
@@ -35,19 +41,19 @@ internal sealed class BindMethodsGenerator : IIncrementalGenerator
         return ClassSpecCollector.Collect(context.SemanticModel.Compilation, typeSymbol, cancellationToken);
     }
 
-    private static void Execute(SourceProductionContext context, GodotClassSpec? spec)
+    private static void Execute(SourceProductionContext context, GodotClassSpec spec)
     {
-        if (spec is null)
-        {
-            return;
-        }
-
-        string hintName = $"{spec.Value.GetHintName()}.generated.cs";
+        string hintName = $"{spec.GetHintName()}.generated.cs";
 
         var sb = new IndentedStringBuilder();
-        BindMethodsWriter.Write(sb, spec.Value);
+        BindMethodsWriter.Write(sb, spec);
 
         var sourceText = SourceText.From(sb.ToString(), Encoding.UTF8);
         context.AddSource(hintName, sourceText);
+    }
+
+    private static void OutputDiagnostics(SourceProductionContext context, Diagnostic diagnostic)
+    {
+        context.ReportDiagnostic(diagnostic);
     }
 }
