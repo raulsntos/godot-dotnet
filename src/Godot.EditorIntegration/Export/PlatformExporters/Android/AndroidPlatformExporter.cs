@@ -83,6 +83,15 @@ internal sealed class AndroidPlatformExporter : PlatformExporter
         foreach (string path in Directory.EnumerateFiles(outputPath, "*", SearchOption.AllDirectories))
         {
             string relativePath = Path.GetRelativePath(outputPath, path);
+
+            if (path.EndsWith(".jar", StringComparison.OrdinalIgnoreCase))
+            {
+                // We exclude jar files from the export since they should
+                // already be included in the Godot templates, adding them
+                // again would cause conflicts.
+                continue;
+            }
+
             if (IsSharedObject(path))
             {
                 string target = Path.Join(projectDataDirName, Path.GetDirectoryName(relativePath));
@@ -102,7 +111,6 @@ internal sealed class AndroidPlatformExporter : PlatformExporter
         {
             if (path.EndsWith(".so", StringComparison.OrdinalIgnoreCase)
              || path.EndsWith(".a", StringComparison.OrdinalIgnoreCase)
-             || path.EndsWith(".jar", StringComparison.OrdinalIgnoreCase)
              || path.EndsWith(".dex", StringComparison.OrdinalIgnoreCase))
             {
                 return true;
