@@ -406,7 +406,7 @@ public static class ClassDB
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static void* GetVirtualMethodUserData_Native(void* userData, NativeGodotStringName* name)
+    private unsafe static void* GetVirtualMethodUserData_Native(void* userData, NativeGodotStringName* name, uint hash)
     {
         var gcHandle = GCHandle.FromIntPtr((nint)userData);
         var context = (ClassDBRegistrationContext?)gcHandle.Target;
