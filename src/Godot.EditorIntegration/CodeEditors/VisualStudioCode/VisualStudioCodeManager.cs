@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using Godot.EditorIntegration.Internals;
 using Godot.EditorIntegration.Utils;
 
@@ -11,6 +13,7 @@ internal sealed class VisualStudioCodeManager : CodeEditorManager
 {
     // The package path is '/Applications/Visual Studio Code.app'
     private const string VSCodeBundleId = "com.microsoft.VSCode";
+    private const string VSCodiumBundleId = "com.vscodium.codium";
 
     private static string? _vsCodePath;
 
@@ -18,7 +21,8 @@ internal sealed class VisualStudioCodeManager : CodeEditorManager
     [
         "code", "code-oss",
         "vscode", "vscode-oss",
-        "visual-studio-code", "visual-studio-code-oss"
+        "visual-studio-code", "visual-studio-code-oss",
+        "codium",
     ];
 
     protected override Error LaunchCore(string filePath, int line, int column)
@@ -27,12 +31,12 @@ internal sealed class VisualStudioCodeManager : CodeEditorManager
 
         var args = new List<string>();
 
-        if (OperatingSystem.IsMacOS() && EditorInternal.IsMacOSAppBundleInstalled(VSCodeBundleId))
+        if (OperatingSystem.IsMacOS() && TryGetMacOSAppBundleId(out string? bundleId))
         {
             command = "/usr/bin/open";
 
             args.Add("-b");
-            args.Add(VSCodeBundleId);
+            args.Add(bundleId);
 
             // The reusing of existing windows made by the 'open' command might not choose a window that is
             // editing our folder. It's better to ask for a new window and let VSCode do the window management.
@@ -76,5 +80,24 @@ internal sealed class VisualStudioCodeManager : CodeEditorManager
 
         StartProcess(command, args);
         return Error.Ok;
+    }
+
+    [SupportedOSPlatform("macOS")]
+    private static bool TryGetMacOSAppBundleId([NotNullWhen(true)] out string? bundleId)
+    {
+        if (EditorInternal.IsMacOSAppBundleInstalled(VSCodeBundleId))
+        {
+            bundleId = VSCodeBundleId;
+            return true;
+        }
+
+        if (EditorInternal.IsMacOSAppBundleInstalled(VSCodiumBundleId))
+        {
+            bundleId = VSCodiumBundleId;
+            return true;
+        }
+
+        bundleId = null;
+        return false;
     }
 }

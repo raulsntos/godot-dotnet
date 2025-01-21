@@ -280,19 +280,19 @@ internal sealed partial class DotNetEditorPlugin : EditorPlugin
         if (OperatingSystem.IsWindows())
         {
             settingsHintStr += $",Visual Studio:{CodeEditorId.VisualStudio:D}" +
-                               $",Visual Studio Code:{CodeEditorId.VSCode:D}" +
+                               $",Visual Studio Code and VSCodium:{CodeEditorId.VSCode:D}" +
                                $",JetBrains Rider and Fleet:{CodeEditorId.Rider:D}" +
                                $",{SR.CodeEditorCustom}:{CodeEditorId.CustomEditor:D}";
         }
         else if (OperatingSystem.IsMacOS())
         {
-            settingsHintStr += $",Visual Studio Code:{CodeEditorId.VSCode:D}" +
+            settingsHintStr += $",Visual Studio Code and VSCodium:{CodeEditorId.VSCode:D}" +
                                $",JetBrains Rider and Fleet:{CodeEditorId.Rider:D}" +
                                $",{SR.CodeEditorCustom}:{CodeEditorId.CustomEditor:D}";
         }
         else if (OperatingSystem.IsLinux())
         {
-            settingsHintStr += $",Visual Studio Code:{CodeEditorId.VSCode:D}" +
+            settingsHintStr += $",Visual Studio Code and VSCodium:{CodeEditorId.VSCode:D}" +
                                $",JetBrains Rider and Fleet:{CodeEditorId.Rider:D}" +
                                $",{SR.CodeEditorCustom}:{CodeEditorId.CustomEditor:D}";
         }
