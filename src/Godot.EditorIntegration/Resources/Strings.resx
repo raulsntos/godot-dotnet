@@ -163,6 +163,15 @@
   <data name="CodeEditorDisabled" xml:space="preserve">
     <value>Disabled</value>
   </data>
+  <data name="CodeEditorJetBrainsRider" xml:space="preserve">
+    <value>JetBrains Rider and Fleet</value>
+  </data>
+  <data name="CodeEditorVisualStudio" xml:space="preserve">
+    <value>Visual Studio</value>
+  </data>
+  <data name="CodeEditorVisualStudioCode" xml:space="preserve">
+    <value>Visual Studio Code and VSCodium</value>
+  </data>
   <data name="CodeEditorErrorNotFound" xml:space="preserve">
     <value>Cannot find code editor '{editorName}'.</value>
   </data>
