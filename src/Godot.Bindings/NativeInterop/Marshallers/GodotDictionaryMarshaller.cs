@@ -4,7 +4,7 @@ using Godot.Collections;
 
 namespace Godot.NativeInterop.Marshallers;
 
-internal unsafe static class GodotDictionaryMarshaller
+internal static unsafe class GodotDictionaryMarshaller
 {
     // This is used to avoid creating a new instance of GodotDictionary everytime
     // when marshalling null arrays because the engine needs to receive a non-null
@@ -41,7 +41,7 @@ internal unsafe static class GodotDictionaryMarshaller
     public static void Free(NativeGodotDictionary* value) { }
 }
 
-internal unsafe static class GodotDictionaryMarshaller<[MustBeVariant] TKey, [MustBeVariant] TValue>
+internal static unsafe class GodotDictionaryMarshaller<[MustBeVariant] TKey, [MustBeVariant] TValue>
 {
     public static NativeGodotDictionary* ConvertToUnmanaged(GodotDictionary<TKey, TValue>? value)
     {

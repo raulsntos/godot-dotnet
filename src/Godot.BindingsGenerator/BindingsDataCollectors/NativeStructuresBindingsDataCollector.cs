@@ -53,7 +53,7 @@ internal sealed class NativeStructuresBindingsDataCollector : BindingsDataCollec
             }
             Debug.Assert(context.IsTypeGenerated(type));
 
-            var fieldDefaultValues = new List<(string FieldName, string DefaultValue)>();
+            List<(string FieldName, string DefaultValue)> fieldDefaultValues = [];
             foreach (var structField in NativeStructureFormatParser.EnumerateFields(nativeStructure.Format))
             {
                 string fieldName = NamingUtils.SnakeToPascalCase(structField.Name.ToString());
@@ -83,6 +83,7 @@ internal sealed class NativeStructuresBindingsDataCollector : BindingsDataCollec
                     VisibilityAttributes = VisibilityAttributes.Public,
                     Getter = new MethodInfo($"get_{fieldName}")
                     {
+                        IsReadOnly = true,
                         ReturnParameter = ReturnInfo.FromType(fieldType),
                         Body = MethodBody.Create(writer =>
                         {

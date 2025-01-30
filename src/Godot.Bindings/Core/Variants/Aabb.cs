@@ -502,8 +502,8 @@ public struct Aabb : IEquatable<Aabb>
     /// </returns>
     public readonly bool IntersectsPlane(Plane plane)
     {
-        Span<Vector3> points = stackalloc Vector3[]
-        {
+        Span<Vector3> points =
+        [
             new Vector3(_position.X, _position.Y, _position.Z),
             new Vector3(_position.X, _position.Y, _position.Z + _size.Z),
             new Vector3(_position.X, _position.Y + _size.Y, _position.Z),
@@ -512,7 +512,7 @@ public struct Aabb : IEquatable<Aabb>
             new Vector3(_position.X + _size.X, _position.Y, _position.Z + _size.Z),
             new Vector3(_position.X + _size.X, _position.Y + _size.Y, _position.Z),
             new Vector3(_position.X + _size.X, _position.Y + _size.Y, _position.Z + _size.Z)
-        };
+        ];
 
         bool over = false;
         bool under = false;

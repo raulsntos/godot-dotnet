@@ -1,4 +1,4 @@
-using Godot.BindingsGenerator.ApiDump;
+using Godot.BindingsGenerator.Reflection;
 
 namespace Godot.BindingsGenerator;
 
@@ -18,7 +18,7 @@ internal abstract class BindingsDataCollector
     /// Populate <see cref="BindingsData"/> with the necessary data to generate
     /// the bindings.
     /// Stubs of <see cref="TypeInfo"/> that were initialized in
-    /// <see cref="Initialize(BindingsData, GodotApi, BindingsGeneratorOptions)"/>
+    /// <see cref="Initialize(BindingsData.CollectionContext)"/>
     /// can now be fully populated with members.
     /// </summary>
     /// <param name="context">

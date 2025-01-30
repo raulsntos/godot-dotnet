@@ -55,7 +55,7 @@ internal sealed class GlobalEnumsBindingsDataCollector : BindingsDataCollector
             NamingUtils.RemoveMaxConstant(globalEnum, enumType);
 
             // HARDCODED: Some enums have more constants that should be removed.
-            if (globalEnum.Name == "JoyButton" || globalEnum.Name == "JoyAxis")
+            if (globalEnum.Name is "JoyButton" or "JoyAxis")
             {
                 for (int i = 0; i < globalEnum.Values.Length; i++)
                 {

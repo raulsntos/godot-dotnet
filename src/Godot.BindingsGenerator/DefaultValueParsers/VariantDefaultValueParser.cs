@@ -26,7 +26,7 @@ internal sealed class VariantDefaultValueParser : DefaultValueParser
 
     protected override string ParseCore(string engineDefaultValue)
     {
-        if (engineDefaultValue == "null" || engineDefaultValue == "Variant()")
+        if (engineDefaultValue is "null" or "Variant()")
         {
             return "default";
         }

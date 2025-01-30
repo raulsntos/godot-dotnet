@@ -16,10 +16,12 @@ namespace Godot.EditorIntegration.MSBuildLogger;
 /// </summary>
 public sealed class BuildLogger : ILogger, IDisposable
 {
+#pragma warning disable IDE0051 // Private member is unused.
     // Keep in sync with the constants in 'Godot.EditorIntegration.Build.BuildManager'.
     private const string MSBuildIssuesFileName = "msbuild_issues.csv";
     private const string MSBuildLogFileName = "msbuild_log.txt";
     private const string MSBuildBinaryLogFileName = "msbuild.binlog";
+#pragma warning restore IDE0051 // Private member is unused.
 
     /// <inheritdoc/>
     public string? Parameters { get; set; }
@@ -68,13 +70,13 @@ public sealed class BuildLogger : ILogger, IDisposable
         catch (Exception ex)
         {
             if (ex is UnauthorizedAccessException
-             || ex is ArgumentNullException
-             || ex is PathTooLongException
-             || ex is DirectoryNotFoundException
-             || ex is NotSupportedException
-             || ex is ArgumentException
-             || ex is SecurityException
-             || ex is IOException)
+                   or ArgumentNullException
+                   or PathTooLongException
+                   or DirectoryNotFoundException
+                   or NotSupportedException
+                   or ArgumentException
+                   or SecurityException
+                   or IOException)
             {
                 throw new LoggerException(SR.FormatLogger_CreateLogFileFailed(ex.Message));
             }

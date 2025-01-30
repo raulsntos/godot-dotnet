@@ -10,7 +10,7 @@ namespace Godot.NativeInterop;
 partial class Marshalling
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    public unsafe static void WriteUnmanaged<[MustBeVariant] T>(void* destination, scoped ref readonly T value)
+    public static unsafe void WriteUnmanaged<[MustBeVariant] T>(void* destination, scoped ref readonly T value)
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static TTo UnsafeAs<TTo>(in T value) => Unsafe.As<T, TTo>(ref Unsafe.AsRef(in value));
@@ -358,7 +358,7 @@ partial class Marshalling
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-    public unsafe static T ConvertFromUnmanaged<[MustBeVariant] T>(void* value)
+    public static unsafe T ConvertFromUnmanaged<[MustBeVariant] T>(void* value)
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static T UnsafeAsT<TFrom>(TFrom value) => Unsafe.As<TFrom, T>(ref Unsafe.AsRef(ref value));

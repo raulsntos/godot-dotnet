@@ -17,7 +17,7 @@ internal abstract partial class DefaultValueParser
     /// Parse a default value expression from the API JSON dump
     /// and return the equivalent C# expression as a string.
     /// </summary>
-    /// <param name="engineDefaultValue">Default value expression.</param>
+    /// <param name="engineDefaultValueExpression">Default value expression.</param>
     /// <returns>Default value expression for C#.</returns>
     public string Parse(string engineDefaultValueExpression, TypeDB typeDB)
     {
@@ -52,7 +52,7 @@ internal abstract partial class DefaultValueParser
             engineTypeName = match.Groups["type_name"].Value;
             var argsSpan = match.Groups["args"].ValueSpan;
 
-            var ctorArgs = new List<string>();
+            List<string> ctorArgs = [];
             {
                 var remaining = argsSpan;
                 while (!remaining.IsEmpty)

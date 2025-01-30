@@ -25,7 +25,7 @@ internal sealed class RegisterVirtualOverrides : MethodBody
         {
             writer.WriteLine($"{_type.BaseType.FullNameWithGlobal}.RegisterVirtualOverrides(context);");
         }
-        foreach (var (method, engineMethod) in _virtualMethods)
+        foreach (var (method, _) in _virtualMethods)
         {
             writer.Write($"context.BindVirtualMethodOverride(MethodName.{method.Name}, ");
             writer.Write($"static ({_type.FullNameWithGlobal} __instance");

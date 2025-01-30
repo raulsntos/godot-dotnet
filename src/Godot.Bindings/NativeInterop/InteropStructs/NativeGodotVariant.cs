@@ -31,19 +31,19 @@ partial struct NativeGodotVariant
         };
     }
 
-    private unsafe static NativeGodotVariant CreateCore(scoped NativeGodotVariant from)
+    private static unsafe NativeGodotVariant CreateCore(scoped NativeGodotVariant from)
     {
         NativeGodotVariant dest = default;
         GodotBridge.GDExtensionInterface.variant_new_copy(dest.GetUnsafeAddress(), from.GetUnsafeAddress());
         return dest;
     }
 
-    internal unsafe static bool Equals(scoped NativeGodotVariant left, scoped NativeGodotVariant right)
+    internal static unsafe bool Equals(scoped NativeGodotVariant left, scoped NativeGodotVariant right)
     {
         return GodotBridge.GDExtensionInterface.variant_hash_compare(left.GetUnsafeAddress(), right.GetUnsafeAddress());
     }
 
-    internal unsafe static int Compare(scoped NativeGodotVariant left, scoped NativeGodotVariant right)
+    internal static unsafe int Compare(scoped NativeGodotVariant left, scoped NativeGodotVariant right)
     {
         // If the types are different we can avoid interop and just compare the type numeric value,
         // comparing different types is questionable anyway.

@@ -617,7 +617,7 @@ public sealed class PackedByteArray :
     /// Converts this <see cref="PackedByteArray"/> to a string.
     /// </summary>
     /// <returns>A string representation of this array.</returns>
-    public unsafe override string ToString()
+    public override unsafe string ToString()
     {
         ref NativeGodotPackedByteArray self = ref NativeValue.DangerousSelfRef;
         using NativeGodotVariant selfVariant = NativeGodotVariant.CreateFromPackedByteArrayCopying(self);

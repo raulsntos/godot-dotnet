@@ -10,7 +10,6 @@ using Godot.EditorIntegration.Export;
 using Godot.EditorIntegration.Internals;
 using Godot.EditorIntegration.ProjectEditor;
 using Microsoft.VisualStudio.SolutionPersistence.Model;
-using Microsoft.VisualStudio.SolutionPersistence.Serializer.SlnV12;
 using Microsoft.VisualStudio.SolutionPersistence.Serializer;
 using System.Threading;
 

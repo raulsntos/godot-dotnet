@@ -726,6 +726,7 @@ internal sealed class BuiltInClassesBindingsDataCollector : BindingsDataCollecto
 
             TypeInfo? movableType = new TypeInfo("Movable")
             {
+                IsReadOnly = true,
                 VisibilityAttributes = VisibilityAttributes.Assembly,
                 TypeAttributes = TypeAttributes.ValueType,
                 ContainingType = type,
@@ -807,7 +808,7 @@ internal sealed class BuiltInClassesBindingsDataCollector : BindingsDataCollecto
     /// <returns>Whether the type should be generated.</returns>
     private static bool ShouldGenerateBuiltInClass(string engineTypeName)
     {
-        return !(engineTypeName is "Nil" or "void" or "bool" or "real_t"
+        return engineTypeName is not ("Nil" or "void" or "bool" or "real_t"
             or "float" or "double" or "int" or "int8_t" or "uint8_t"
             or "int16_t" or "uint16_t" or "int32_t" or "int64_t"
             or "uint32_t" or "uint64_t" or "RID" or "AABB"

@@ -1009,7 +1009,7 @@ public sealed class GodotArray :
     /// Converts this <see cref="GodotArray"/> to a string.
     /// </summary>
     /// <returns>A string representation of this array.</returns>
-    public unsafe override string ToString()
+    public override unsafe string ToString()
     {
         ref NativeGodotArray self = ref NativeValue.DangerousSelfRef;
         NativeGodotVariant selfVariant = new() { Array = self, Type = VariantType.Array };

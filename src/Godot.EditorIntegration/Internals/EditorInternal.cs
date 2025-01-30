@@ -12,9 +12,9 @@ namespace Godot.EditorIntegration.Internals;
 /// </summary>
 internal static partial class EditorInternal
 {
-    private unsafe static GetProcAddressFunction _getProcAddress;
+    private static unsafe GetProcAddressFunction _getProcAddress;
 
-    public unsafe static void Initialize(nint getProcAddress)
+    public static unsafe void Initialize(nint getProcAddress)
     {
         _getProcAddress = (GetProcAddressFunction)getProcAddress;
 
@@ -39,7 +39,7 @@ internal static partial class EditorInternal
         _editor_shortcut_override = (delegate* unmanaged[Cdecl]<NativeGodotString*, NativeGodotString*, long, bool, void>)LoadProcAddress("editor_shortcut_override"u8);
     }
 
-    private unsafe static nint LoadProcAddress(ReadOnlySpan<byte> nameUtf8)
+    private static unsafe nint LoadProcAddress(ReadOnlySpan<byte> nameUtf8)
     {
         Debug.Assert(_getProcAddress is not null);
 

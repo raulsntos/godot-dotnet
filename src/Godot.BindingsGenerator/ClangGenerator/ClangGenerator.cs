@@ -253,7 +253,7 @@ internal static class ClangGenerator
         writer2.WriteLine('{');
         writer2.Indent++;
 
-        writer2.WriteLine("private unsafe static void InitializeGDExtensionInterface()");
+        writer2.WriteLine("private static unsafe void InitializeGDExtensionInterface()");
         writer2.WriteLine('{');
         writer2.Indent++;
 
@@ -324,7 +324,7 @@ internal static class ClangGenerator
                 writer2.WriteLine($")LoadProcAddress(\"{functionName}\"u8);");
                 if (isDeprecated)
                 {
-                    writer2.WriteLineNoTabs("#pragma warning restore CS0618");
+                    writer2.WriteLineNoTabs("#pragma warning restore CS0618 // Method is obsolete but we still need to load the function pointer.");
                 }
             }
         }
@@ -363,7 +363,7 @@ internal static class ClangGenerator
     }
 
     [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "GetTypeName")]
-    private extern static string GetTypeNameInternal(PInvokeGenerator generator, Cursor? cursor, Cursor? context, ClangSharp.Type type, bool ignoreTransparentStructsWhereRequired, bool isTemplate, out string nativeTypeName);
+    private static extern string GetTypeNameInternal(PInvokeGenerator generator, Cursor? cursor, Cursor? context, ClangSharp.Type type, bool ignoreTransparentStructsWhereRequired, bool isTemplate, out string nativeTypeName);
 
     private static string GetTypeName(PInvokeGenerator generator, Cursor cursor, ClangSharp.Type type)
     {

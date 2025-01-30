@@ -109,6 +109,12 @@ public class TypeInfo : VisibleMemberInfo, IEquatable<TypeInfo>
     }
 
     /// <summary>
+    /// Indicates whether the type is read-only.
+    /// Currently this is only supported for struct types.
+    /// </summary>
+    public bool IsReadOnly { get; set; }
+
+    /// <summary>
     /// The type attributes.
     /// </summary>
     public TypeAttributes TypeAttributes { get; set; }

@@ -99,7 +99,8 @@ internal abstract class VarargCallMethodBody<TContext> : CallMethodBody<TContext
     }
 
     /// <summary>
-    /// Retrieves the method bind that will be invoked in <see cref="CallMethodBody.InvokeMethodBind"/>.
+    /// Retrieves the method bind that will be invoked in
+    /// <see cref="CallMethodBody{TContext}.InvokeMethodBind(TContext, IndentedTextWriter)"/>.
     /// </summary>
     protected abstract void RetrieveMethodBind(TContext context, IndentedTextWriter writer);
 

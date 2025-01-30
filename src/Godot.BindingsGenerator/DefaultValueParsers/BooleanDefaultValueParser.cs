@@ -10,7 +10,7 @@ internal sealed class BooleanDefaultValueParser : DefaultValueParser
 
     protected override string ParseCore(string engineDefaultValue)
     {
-        if (engineDefaultValue == "true" || engineDefaultValue == "false")
+        if (engineDefaultValue is "true" or "false")
         {
             return engineDefaultValue;
         }

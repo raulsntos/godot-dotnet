@@ -5,13 +5,6 @@ namespace Godot.BindingsGenerator.Marshallers;
 
 internal sealed class FloatingPointVariantMarshallerWriter : VariantMarshallerWriter
 {
-    private readonly static TypeInfo[] _compatibleTypes =
-    [
-        KnownTypes.SystemHalf,
-        KnownTypes.SystemSingle,
-        KnownTypes.SystemDouble,
-    ];
-
     public static FloatingPointVariantMarshallerWriter Instance { get; } = new();
 
     public override bool NeedsCleanup => false;

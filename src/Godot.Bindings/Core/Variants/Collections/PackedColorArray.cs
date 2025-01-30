@@ -609,7 +609,7 @@ public sealed class PackedColorArray :
     /// Converts this <see cref="PackedColorArray"/> to a string.
     /// </summary>
     /// <returns>A string representation of this array.</returns>
-    public unsafe override string ToString()
+    public override unsafe string ToString()
     {
         ref NativeGodotPackedColorArray self = ref NativeValue.DangerousSelfRef;
         using NativeGodotVariant selfVariant = NativeGodotVariant.CreateFromPackedColorArrayCopying(self);

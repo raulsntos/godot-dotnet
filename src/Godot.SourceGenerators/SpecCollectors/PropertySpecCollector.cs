@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -66,7 +65,6 @@ internal static class PropertySpecCollector
                 var parameterSyntax = (ParameterSyntax)syntaxReference.GetSyntax(cancellationToken);
                 if (parameterSyntax.Default is not null)
                 {
-                    var sb = new StringBuilder();
                     if (parameterSymbol.Type.TypeKind == TypeKind.Enum)
                     {
                         return $"(long)({parameterSyntax.Default.Value})";

@@ -5,7 +5,7 @@ using Godot.Bridge;
 
 namespace Godot.NativeInterop.Marshallers;
 
-internal unsafe static class CallableMarshaller
+internal static unsafe class CallableMarshaller
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void WriteUnmanaged(NativeGodotCallable* destination, Callable value)

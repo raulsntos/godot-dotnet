@@ -5,7 +5,7 @@ using Godot.Collections;
 
 namespace Godot.NativeInterop.Marshallers;
 
-internal unsafe static class PackedArrayMarshaller
+internal static unsafe class PackedArrayMarshaller
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void WriteUnmanaged(NativeGodotPackedByteArray* destination, PackedByteArray? value)

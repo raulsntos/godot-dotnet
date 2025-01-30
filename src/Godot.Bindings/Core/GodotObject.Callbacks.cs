@@ -5,9 +5,9 @@ namespace Godot;
 
 partial class GodotObject
 {
-#pragma warning disable CA1707 // Identifiers should not contain underscores
-#pragma warning disable CA1716 // Identifiers should not match keywords
-#pragma warning disable IDE1006 // Naming Styles
+#pragma warning disable CA1707 // Identifiers should not contain underscores.
+#pragma warning disable CA1716 // Identifiers should not match keywords.
+#pragma warning disable IDE1006 // Naming Styles.
     /// <summary>
     /// Called when the object receives a notification, which can be identified in
     /// <paramref name="what"/> by comparing it with a constant. See also
@@ -255,7 +255,7 @@ partial class GodotObject
     /// </example>
     /// <param name="property">Property to validate.</param>
     protected internal virtual void _ValidateProperty(PropertyInfo property) { }
-#pragma warning restore IDE1006 // Naming Styles
-#pragma warning restore CA1716 // Identifiers should not match keywords
-#pragma warning restore CA1707 // Identifiers should not contain underscores
+#pragma warning restore IDE1006 // Naming Styles.
+#pragma warning restore CA1716 // Identifiers should not match keywords.
+#pragma warning restore CA1707 // Identifiers should not contain underscores.
 }

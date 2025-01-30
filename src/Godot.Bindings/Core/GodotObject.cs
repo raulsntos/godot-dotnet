@@ -24,7 +24,7 @@ partial class GodotObject : IDisposable
     /// Constructs a <see cref="GodotObject"/> with the given <paramref name="nativePtr"/>.
     /// </summary>
     /// <param name="nativePtr">The pointer to the native object in the engine's side.</param>
-    internal protected GodotObject(nint nativePtr)
+    protected internal GodotObject(nint nativePtr)
     {
         _gcHandle = GCHandle.Alloc(this, GCHandleType.Weak);
 
@@ -47,7 +47,7 @@ partial class GodotObject : IDisposable
     /// <param name="nativeClassName">The name of the Godot engine class.</param>
     private protected GodotObject(scoped NativeGodotStringName nativeClassName) : this(ConstructGodotObject(nativeClassName)) { }
 
-    private unsafe static nint ConstructGodotObject(scoped NativeGodotStringName nativeClassName)
+    private static unsafe nint ConstructGodotObject(scoped NativeGodotStringName nativeClassName)
     {
         return (nint)GodotBridge.GDExtensionInterface.classdb_construct_object2(nativeClassName.GetUnsafeAddress());
     }
@@ -127,7 +127,7 @@ partial class GodotObject : IDisposable
     /// </example>
     /// <param name="instanceId">Instance ID of the Object to retrieve.</param>
     /// <returns>The <see cref="GodotObject"/> instance.</returns>
-    public unsafe static GodotObject? InstanceFromId(ulong instanceId)
+    public static unsafe GodotObject? InstanceFromId(ulong instanceId)
     {
         nint objectPtr = (nint)GodotBridge.GDExtensionInterface.object_get_instance_from_id(instanceId);
         return GodotObjectMarshaller.GetOrCreateManagedInstance(objectPtr);
@@ -149,7 +149,7 @@ partial class GodotObject : IDisposable
     /// </summary>
     /// <param name="instanceId">The Object ID to check.</param>
     /// <returns>If the instance with the given ID is a valid object.</returns>
-    public unsafe static bool IsInstanceIdValid(ulong instanceId)
+    public static unsafe bool IsInstanceIdValid(ulong instanceId)
     {
         return GodotBridge.GDExtensionInterface.object_get_instance_from_id(instanceId) is not null;
     }
@@ -185,7 +185,7 @@ partial class GodotObject : IDisposable
     /// <summary>
     /// Disposes implementation of this <see cref="GodotObject"/>.
     /// </summary>
-    protected unsafe virtual void Dispose(bool disposing)
+    protected virtual unsafe void Dispose(bool disposing)
     {
         if (_disposed)
         {
@@ -204,7 +204,7 @@ partial class GodotObject : IDisposable
 
         if (_weakReferenceToSelf is not null)
         {
-            DisposablesTracker.UnregisterGodotObject(this, _weakReferenceToSelf);
+            DisposablesTracker.UnregisterGodotObject(_weakReferenceToSelf);
         }
     }
 

@@ -118,10 +118,7 @@ internal static class EntryPointWriter
             sb.AppendLine("return;");
             sb.CloseBlock();
 
-            foreach (var classSpec in spec.Types)
-            {
-                WriteUnregisterClass(sb, classSpec);
-            }
+            // Classes are unregistered automatically.
         }
 
         sb.CloseBlock();
@@ -140,10 +137,5 @@ internal static class EntryPointWriter
             var kind => throw new InvalidOperationException($"Invalid registration kind '{kind}'."),
         });
         sb.AppendLine($"<{spec.FullyQualifiedSymbolName}>({spec.FullyQualifiedSymbolName}.BindMethods);");
-    }
-
-    private static void WriteUnregisterClass(IndentedStringBuilder sb, GodotRegistrationSpec spec)
-    {
-        // Classes are unregistered automatically.
     }
 }

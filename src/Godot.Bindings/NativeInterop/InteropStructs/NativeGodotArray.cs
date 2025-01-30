@@ -20,7 +20,7 @@ partial struct NativeGodotArray
 
         private readonly NativeGodotVector<NativeGodotVariant> _vector;
 
-        private unsafe readonly NativeGodotVariant* _readOnly;
+        private readonly unsafe NativeGodotVariant* _readOnly;
 
         // There are more fields here, but we don't care as we never store this in C#
 
@@ -37,7 +37,7 @@ partial struct NativeGodotArray
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal unsafe readonly NativeGodotVariant* GetPtrw()
+        internal readonly unsafe NativeGodotVariant* GetPtrw()
         {
             return _vector.GetPtrw();
         }
@@ -61,12 +61,12 @@ partial struct NativeGodotArray
         get => _p is not null && _p->IsReadOnly;
     }
 
-    internal unsafe readonly NativeGodotVariant* GetPtrw()
+    internal readonly unsafe NativeGodotVariant* GetPtrw()
     {
         return _p->GetPtrw();
     }
 
-    internal unsafe static NativeGodotArray Create<[MustBeVariant] T>(ReadOnlySpan<T> value)
+    internal static unsafe NativeGodotArray Create<[MustBeVariant] T>(ReadOnlySpan<T> value)
     {
         NativeGodotArray destination = Create();
 
@@ -82,7 +82,7 @@ partial struct NativeGodotArray
         return destination;
     }
 
-    internal unsafe readonly T[] ToArray<[MustBeVariant] T>()
+    internal readonly unsafe T[] ToArray<[MustBeVariant] T>()
     {
         int size = Size;
         if (size == 0)

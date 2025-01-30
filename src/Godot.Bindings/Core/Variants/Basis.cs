@@ -668,9 +668,9 @@ public struct Basis : IEquatable<Basis>
         Vector3 column2 = this[2];
 
         column0.Normalize();
-        column1 = column1 - column0 * column0.Dot(column1);
+        column1 -= column0 * column0.Dot(column1);
         column1.Normalize();
-        column2 = column2 - column0 * column0.Dot(column2) - column1 * column1.Dot(column2);
+        column2 -= column0 * column0.Dot(column2) - column1 * column1.Dot(column2);
         column2.Normalize();
 
         return new Basis(column0, column1, column2);

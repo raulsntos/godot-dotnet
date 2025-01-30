@@ -35,19 +35,19 @@ public static partial class GodotBridge
     private static Action<InitializationLevel>? _initCallback;
     private static Action<InitializationLevel>? _terminateCallback;
 
-    private unsafe static GetProcAddressFunction _getProcAddress;
-    private unsafe static void* _libraryPtr;
+    private static unsafe GetProcAddressFunction _getProcAddress;
+    private static unsafe void* _libraryPtr;
 
     private static GDExtensionGodotVersion _godotVersion;
 
     private static GDExtensionInterface _gdextensionInterface;
 
-    internal unsafe static void* LibraryPtr => _libraryPtr;
+    internal static unsafe void* LibraryPtr => _libraryPtr;
     internal static GDExtensionInterface GDExtensionInterface => _gdextensionInterface;
 
     private static bool _initialized;
 
-    private unsafe static void Initialize(GetProcAddressFunction getProcAddress, void* library, GDExtensionInitialization* initialization, Action<GodotBridgeConfiguration> configure)
+    private static unsafe void Initialize(GetProcAddressFunction getProcAddress, void* library, GDExtensionInitialization* initialization, Action<GodotBridgeConfiguration> configure)
     {
         if (_initialized)
         {
@@ -95,12 +95,12 @@ public static partial class GodotBridge
     /// <param name="library">Pointer that identifies the library.</param>
     /// <param name="initialization">Initialization object to configure.</param>
     /// <param name="configure">Callback to configure the bridge.</param>
-    public unsafe static void Initialize(nint getProcAddress, nint library, nint initialization, Action<GodotBridgeConfiguration> configure)
+    public static unsafe void Initialize(nint getProcAddress, nint library, nint initialization, Action<GodotBridgeConfiguration> configure)
     {
         Initialize((GetProcAddressFunction)getProcAddress, (void*)library, (GDExtensionInitialization*)initialization, configure);
     }
 
-    private unsafe static nint LoadProcAddress(ReadOnlySpan<byte> nameUtf8)
+    private static unsafe nint LoadProcAddress(ReadOnlySpan<byte> nameUtf8)
     {
         Debug.Assert(_getProcAddress is not null);
 
@@ -117,13 +117,13 @@ public static partial class GodotBridge
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static void InitializeLevel_Native(void* userData, GDExtensionInitializationLevel level)
+    private static unsafe void InitializeLevel_Native(void* userData, GDExtensionInitializationLevel level)
     {
         _initCallback?.Invoke((InitializationLevel)level);
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static void DeinitializeLevel_Native(void* userData, GDExtensionInitializationLevel level)
+    private static unsafe void DeinitializeLevel_Native(void* userData, GDExtensionInitializationLevel level)
     {
         _terminateCallback?.Invoke((InitializationLevel)level);
 

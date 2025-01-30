@@ -37,10 +37,7 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 max_line_length = 120
 
-csharp_prefer_braces = true
-csharp_indent_case_contents_when_block = false
-csharp_style_prefer_primary_constructors = false
-
+# New line preferences.
 csharp_new_line_before_open_brace = all
 csharp_new_line_before_else = true
 csharp_new_line_before_catch = true
@@ -48,13 +45,64 @@ csharp_new_line_before_finally = true
 csharp_new_line_before_members_in_object_initializers = true
 csharp_new_line_before_members_in_anonymous_types = true
 
-dotnet_style_require_accessibility_modifiers = always
+# Indentation preferences.
+csharp_indent_block_contents = true
+csharp_indent_braces = false
+csharp_indent_case_contents = true
+csharp_indent_case_contents_when_block = false
+csharp_indent_switch_labels = true
+csharp_indent_labels = one_less_than_current
 
-# IDE0011: Add braces.
-dotnet_diagnostic.IDE0011.severity = warning
+# Code style defaults.
+csharp_using_directive_placement = outside_namespace:suggestion
+dotnet_sort_system_directives_first = true:warning
+csharp_prefer_braces = true:warning
+csharp_prefer_static_local_function = true:warning
+csharp_prefer_simple_using_statement = true:suggestion
+csharp_style_prefer_switch_expression = true:suggestion
+dotnet_style_readonly_field = true:suggestion
+dotnet_style_require_accessibility_modifiers = always:warning
+dotnet_style_namespace_match_folder = true:silent
+csharp_style_namespace_declarations = file_scoped:warning
+csharp_style_implicit_object_creation_when_type_is_apparent = true:suggestion
+csharp_style_prefer_primary_constructors = false
+csharp_style_prefer_index_operator = true:suggestion
+csharp_style_prefer_range_operator = true:suggestion
 
-# IDE0040: Add accessibility modifiers.
-dotnet_diagnostic.IDE0040.severity = warning
+# Expression-level preferences.
+dotnet_style_object_initializer = true:suggestion
+dotnet_style_collection_initializer = true:suggestion
+dotnet_style_prefer_collection_expression = when_types_loosely_match:suggestion
+dotnet_style_explicit_tuple_names = true:suggestion
+dotnet_style_coalesce_expression = true:suggestion
+dotnet_style_null_propagation = true:warning
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true:warning
+dotnet_style_prefer_inferred_tuple_names = true:suggestion
+dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
+dotnet_style_prefer_auto_properties = true:suggestion
+dotnet_style_prefer_conditional_expression_over_assignment = true:silent
+dotnet_style_prefer_conditional_expression_over_return = true:silent
+csharp_prefer_simple_default_expression = true:warning
+
+# Expression-bodied members
+csharp_style_expression_bodied_methods = true:silent
+csharp_style_expression_bodied_constructors = true:silent
+csharp_style_expression_bodied_operators = true:silent
+csharp_style_expression_bodied_properties = true:silent
+csharp_style_expression_bodied_indexers = true:silent
+csharp_style_expression_bodied_accessors = true:silent
+csharp_style_expression_bodied_lambdas = true:silent
+csharp_style_expression_bodied_local_functions = true:silent
+
+# Types: use keywords instead of BCL types, and permit var only when the type is clear.
+csharp_style_var_for_built_in_types = false:suggestion
+csharp_style_var_when_type_is_apparent = false:none
+csharp_style_var_elsewhere = false:suggestion
+dotnet_style_predefined_type_for_locals_parameters_members = true:suggestion
+dotnet_style_predefined_type_for_member_access = true:suggestion
+
+# Modifier preferences.
+csharp_preferred_modifier_order = public,private,protected,internal,file,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,required,volatile,async:warning
 
 # IDE0055: Formatting rule violation.
 dotnet_diagnostic.IDE0055.severity = warning
@@ -106,6 +154,14 @@ dotnet_naming_style.pascal_case_style.required_prefix =
 [**/Generated/**.cs]
 # IDE1006: Naming rule violation.
 dotnet_diagnostic.IDE1006.severity = none
+# IDE0018: Variable declaration can be inlined.
+dotnet_diagnostic.IDE0018.severity = none
+# IDE0047: Parentheses can be removed.
+dotnet_diagnostic.IDE0047.severity = none
+# IDE0059: Remove unnecessary value assignment.
+dotnet_diagnostic.IDE0059.severity = none
+# IDE0241: Nullable directive is unnecessary.
+dotnet_diagnostic.IDE0241.severity = none
 # CA1062: Validate parameter is non-null before using it.
 # Useful for generated code, since it disables nullable.
 dotnet_diagnostic.CA1062.severity = error
@@ -118,12 +174,14 @@ dotnet_diagnostic.CA1708.severity = none
 # CA1711: Identifiers should not have incorrect suffix.
 # Disable warning for suffixes like EventHandler, Flags, Enum, etc.
 dotnet_diagnostic.CA1711.severity = none
+# CA1712: Do not prefix enum values with the name of the enum type.
+dotnet_diagnostic.CA1712.severity = none
 # CA1716: Identifiers should not match keywords.
 # This is suppressed, because it will report `@event` as well as `event`.
 dotnet_diagnostic.CA1716.severity = none
 # CA1720: Identifiers should not contain type names.
 dotnet_diagnostic.CA1720.severity = none
-# CS1591: Missing XML comment for publicly visible type or member.
-dotnet_diagnostic.CS1591.severity = none
 # CS1573: Parameter has no matching param tag in the XML comment.
 dotnet_diagnostic.CS1573.severity = none
+# CS1591: Missing XML comment for publicly visible type or member.
+dotnet_diagnostic.CS1591.severity = none

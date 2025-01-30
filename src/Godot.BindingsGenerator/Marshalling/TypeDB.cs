@@ -574,15 +574,15 @@ internal sealed class TypeDB
     /// <returns>Whether the type is a packed array.</returns>
     public static bool IsTypePackedArray(string engineTypeName)
     {
-        return engineTypeName == "PackedByteArray"
-            || engineTypeName == "PackedInt32Array"
-            || engineTypeName == "PackedInt64Array"
-            || engineTypeName == "PackedFloat32Array"
-            || engineTypeName == "PackedFloat64Array"
-            || engineTypeName == "PackedStringArray"
-            || engineTypeName == "PackedVector2Array"
-            || engineTypeName == "PackedVector3Array"
-            || engineTypeName == "PackedVector4Array"
-            || engineTypeName == "PackedColorArray";
+        return engineTypeName is "PackedByteArray"
+                              or "PackedInt32Array"
+                              or "PackedInt64Array"
+                              or "PackedFloat32Array"
+                              or "PackedFloat64Array"
+                              or "PackedStringArray"
+                              or "PackedVector2Array"
+                              or "PackedVector3Array"
+                              or "PackedVector4Array"
+                              or "PackedColorArray";
     }
 }

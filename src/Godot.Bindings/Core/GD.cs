@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Text;
 using Godot.Bridge;
 using Godot.NativeInterop;
@@ -345,7 +344,7 @@ public static partial class GD
     }
 
     [StackTraceHidden]
-    private unsafe static void ErrPrintError(string message, ErrorHandlerType type = ErrorHandlerType.Error)
+    private static unsafe void ErrPrintError(string message, ErrorHandlerType type = ErrorHandlerType.Error)
     {
         // TODO: Getting the caller information using the StackTrace API is problematic:
         //

@@ -216,17 +216,17 @@ partial class BindingsData
         RegisterRuntimeVariantMarshaller(KnownTypes.GodotObject, "GodotObjectMarshaller");
 
         // Packed arrays.
-        RegisterPackedArray("PackedByteArray", KnownTypes.SystemByte, KnownTypes.GodotPackedByteArray, KnownTypes.NativeGodotPackedByteArray);
-        RegisterPackedArray("PackedInt32Array", KnownTypes.SystemInt32, KnownTypes.GodotPackedInt32Array, KnownTypes.NativeGodotPackedInt32Array);
-        RegisterPackedArray("PackedInt64Array", KnownTypes.SystemInt64, KnownTypes.GodotPackedInt64Array, KnownTypes.NativeGodotPackedInt64Array);
-        RegisterPackedArray("PackedFloat32Array", KnownTypes.SystemSingle, KnownTypes.GodotPackedFloat32Array, KnownTypes.NativeGodotPackedFloat32Array);
-        RegisterPackedArray("PackedFloat64Array", KnownTypes.SystemDouble, KnownTypes.GodotPackedFloat64Array, KnownTypes.NativeGodotPackedFloat64Array);
-        RegisterPackedArray("PackedStringArray", KnownTypes.SystemString, KnownTypes.GodotPackedStringArray, KnownTypes.NativeGodotPackedStringArray);
-        RegisterPackedArray("PackedVector2Array", KnownTypes.GodotVector2, KnownTypes.GodotPackedVector2Array, KnownTypes.NativeGodotPackedVector2Array);
-        RegisterPackedArray("PackedVector3Array", KnownTypes.GodotVector3, KnownTypes.GodotPackedVector3Array, KnownTypes.NativeGodotPackedVector3Array);
-        RegisterPackedArray("PackedColorArray", KnownTypes.GodotColor, KnownTypes.GodotPackedColorArray, KnownTypes.NativeGodotPackedColorArray);
-        RegisterPackedArray("PackedVector4Array", KnownTypes.GodotVector4, KnownTypes.GodotPackedVector4Array, KnownTypes.NativeGodotPackedVector4Array);
-        void RegisterPackedArray(string engineTypeName, TypeInfo itemType, TypeInfo type, TypeInfo unmanagedType)
+        RegisterPackedArray("PackedByteArray", KnownTypes.GodotPackedByteArray, KnownTypes.NativeGodotPackedByteArray);
+        RegisterPackedArray("PackedInt32Array", KnownTypes.GodotPackedInt32Array, KnownTypes.NativeGodotPackedInt32Array);
+        RegisterPackedArray("PackedInt64Array", KnownTypes.GodotPackedInt64Array, KnownTypes.NativeGodotPackedInt64Array);
+        RegisterPackedArray("PackedFloat32Array", KnownTypes.GodotPackedFloat32Array, KnownTypes.NativeGodotPackedFloat32Array);
+        RegisterPackedArray("PackedFloat64Array", KnownTypes.GodotPackedFloat64Array, KnownTypes.NativeGodotPackedFloat64Array);
+        RegisterPackedArray("PackedStringArray", KnownTypes.GodotPackedStringArray, KnownTypes.NativeGodotPackedStringArray);
+        RegisterPackedArray("PackedVector2Array", KnownTypes.GodotPackedVector2Array, KnownTypes.NativeGodotPackedVector2Array);
+        RegisterPackedArray("PackedVector3Array", KnownTypes.GodotPackedVector3Array, KnownTypes.NativeGodotPackedVector3Array);
+        RegisterPackedArray("PackedColorArray", KnownTypes.GodotPackedColorArray, KnownTypes.NativeGodotPackedColorArray);
+        RegisterPackedArray("PackedVector4Array", KnownTypes.GodotPackedVector4Array, KnownTypes.NativeGodotPackedVector4Array);
+        void RegisterPackedArray(string engineTypeName, TypeInfo type, TypeInfo unmanagedType)
         {
             RegisterType(engineTypeName, type, unmanagedType);
 

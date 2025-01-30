@@ -29,10 +29,10 @@ public sealed class GodotDictionary<[MustBeVariant] TKey, [MustBeVariant] TValue
     IGenericGodotDictionary,
     IDisposable
 {
-    private unsafe static void WriteUnmanagedFunc(in GodotDictionary<TKey, TValue> value, void* destination) =>
+    private static unsafe void WriteUnmanagedFunc(in GodotDictionary<TKey, TValue> value, void* destination) =>
         *(NativeGodotDictionary*)destination = value.NativeValue.DangerousSelfRef;
 
-    private unsafe static GodotDictionary<TKey, TValue> ConvertFromUnmanagedFunc(void* ptr) =>
+    private static unsafe GodotDictionary<TKey, TValue> ConvertFromUnmanagedFunc(void* ptr) =>
         GodotDictionary<TKey, TValue>.CreateTakingOwnership(*(NativeGodotDictionary*)ptr);
 
     private static NativeGodotVariant ConvertToVariantFunc(in GodotDictionary<TKey, TValue> from) =>

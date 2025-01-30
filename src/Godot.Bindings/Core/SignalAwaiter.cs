@@ -126,7 +126,7 @@ public sealed class SignalAwaiter : IAwaiter<Variant[]>, IAwaitable<SignalAwaite
             throw new UnreachableException();
         }
 
-        internal unsafe override void Call(NativeGodotVariantPtrSpan args, NativeGodotVariant* outRet, GDExtensionCallError* outError)
+        internal override unsafe void Call(NativeGodotVariantPtrSpan args, NativeGodotVariant* outRet, GDExtensionCallError* outError)
         {
             _awaiter.SignalCallback(args);
             outError->error = GDExtensionCallErrorType.GDEXTENSION_CALL_OK;

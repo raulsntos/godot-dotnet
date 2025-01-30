@@ -49,7 +49,7 @@ internal abstract class VariantMarshallerWriter
     /// The marshaller may create an uninitialized aux variable with the name
     /// <paramref name="destination"/> if it needs it for marshalling and returns
     /// <see langword="true"/> to indicate that this variable should be used for
-    /// marshalling instead of <paramref name="source"/>.
+    /// marshalling.
     /// </summary>
     /// <param name="writer">Writer to write the lines to.</param>
     /// <param name="type">Type that needs to be converted.</param>

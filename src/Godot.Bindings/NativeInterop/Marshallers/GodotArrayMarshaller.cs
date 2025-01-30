@@ -4,7 +4,7 @@ using Godot.Collections;
 
 namespace Godot.NativeInterop.Marshallers;
 
-internal unsafe static class GodotArrayMarshaller
+internal static unsafe class GodotArrayMarshaller
 {
     // This is used to avoid creating a new instance of GodotArray everytime
     // when marshalling null arrays because the engine needs to receive a non-null
@@ -41,7 +41,7 @@ internal unsafe static class GodotArrayMarshaller
     public static void Free(NativeGodotArray* value) { }
 }
 
-internal unsafe static class GodotArrayMarshaller<[MustBeVariant] T>
+internal static unsafe class GodotArrayMarshaller<[MustBeVariant] T>
 {
     public static NativeGodotArray* ConvertToUnmanaged(GodotArray<T>? value)
     {

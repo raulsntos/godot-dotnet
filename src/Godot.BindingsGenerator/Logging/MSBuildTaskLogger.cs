@@ -27,7 +27,7 @@ internal sealed class MSBuildTaskLogger : ILogger
         });
         return;
 
-#pragma warning disable CS0162 // Unreachable code detected
+#pragma warning disable CS0162 // Unreachable code detected.
         switch (logLevel)
         {
             case <= LogLevel.Debug:
@@ -46,6 +46,6 @@ internal sealed class MSBuildTaskLogger : ILogger
                 _logger.LogError(message);
                 break;
         }
-#pragma warning restore CS0162 // Unreachable code detected
+#pragma warning restore CS0162 // Unreachable code detected.
     }
 }

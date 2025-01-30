@@ -8,16 +8,14 @@ using System.Runtime.InteropServices;
 
 namespace Godot.PluginLoader;
 
-internal unsafe static class Main
+internal static unsafe class Main
 {
     private static readonly Dictionary<string, WeakGodotLoadContext> _loadContexts = [];
-
-    private delegate bool GDExtensionEntryPointDelegate(nint getProcAddress, nint library, nint initialization);
 
     [UnmanagedCallersOnly]
     public static void LoadAssembly(nint assemblyPathNative, nint fullyQualifiedTypeNameNative, nint methodNameNative, nint outGDExtensionInitializationFunction)
     {
-        ArgumentNullException.ThrowIfNull(outGDExtensionInitializationFunction);
+        ArgumentNullException.ThrowIfNull((void*)outGDExtensionInitializationFunction);
 
         string assemblyPath = MarshalToString(assemblyPathNative);
         string fullyQualifiedTypeName = MarshalToString(fullyQualifiedTypeNameNative);

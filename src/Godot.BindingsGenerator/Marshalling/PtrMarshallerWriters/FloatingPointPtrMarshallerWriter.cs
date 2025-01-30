@@ -8,14 +8,7 @@ internal sealed class FloatingPointPtrMarshallerWriter : PtrMarshallerWriter
     /// <summary>
     /// The type of the fixed pointer to the marshalled value.
     /// </summary>
-    private readonly static TypeInfo _unmanagedPointerType = KnownTypes.SystemDouble.MakePointerType();
-
-    private readonly static TypeInfo[] _compatibleTypes =
-    [
-        KnownTypes.SystemHalf,
-        KnownTypes.SystemSingle,
-        KnownTypes.SystemDouble,
-    ];
+    private static readonly TypeInfo _unmanagedPointerType = KnownTypes.SystemDouble.MakePointerType();
 
     public static FloatingPointPtrMarshallerWriter Instance { get; } = new();
 

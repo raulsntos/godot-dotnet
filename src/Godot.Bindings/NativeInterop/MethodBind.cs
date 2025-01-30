@@ -7,7 +7,7 @@ namespace Godot.NativeInterop;
 
 internal static partial class MethodBind
 {
-    public unsafe static void GetAndCacheMethodBind(ref void* methodBind, StringName className, StringName methodName, [ConstantExpected] long methodHash)
+    public static unsafe void GetAndCacheMethodBind(ref void* methodBind, StringName className, StringName methodName, [ConstantExpected] long methodHash)
     {
         if (methodBind is null)
         {
@@ -19,7 +19,7 @@ internal static partial class MethodBind
         MissingGodotMethodException.ThrowIfNull(methodBind, SR.MissingGodotMethod_MethodBindNotFound);
     }
 
-    public unsafe static void GetAndCacheUtilityFunction(ref delegate* unmanaged[Cdecl]<void*, void**, int, void> utilityFunction, ReadOnlySpan<byte> methodNameAscii, [ConstantExpected] long methodHash)
+    public static unsafe void GetAndCacheUtilityFunction(ref delegate* unmanaged[Cdecl]<void*, void**, int, void> utilityFunction, ReadOnlySpan<byte> methodNameAscii, [ConstantExpected] long methodHash)
     {
         if (utilityFunction is null)
         {
@@ -30,7 +30,7 @@ internal static partial class MethodBind
         MissingGodotMethodException.ThrowIfNull(utilityFunction, SR.MissingGodotMethod_UtilityFunctionNotFound);
     }
 
-    public unsafe static void GetAndCacheBuiltInMethod(ref delegate* unmanaged[Cdecl]<void*, void**, void*, int, void> builtInMethod, GDExtensionVariantType variantType, ReadOnlySpan<byte> methodNameAscii, [ConstantExpected] long methodHash)
+    public static unsafe void GetAndCacheBuiltInMethod(ref delegate* unmanaged[Cdecl]<void*, void**, void*, int, void> builtInMethod, GDExtensionVariantType variantType, ReadOnlySpan<byte> methodNameAscii, [ConstantExpected] long methodHash)
     {
         if (builtInMethod is null)
         {
@@ -41,7 +41,7 @@ internal static partial class MethodBind
         MissingGodotMethodException.ThrowIfNull(builtInMethod, SR.MissingGodotMethod_BuiltInNotFound);
     }
 
-    public unsafe static void GetAndCacheBuiltInConstructor(ref delegate* unmanaged[Cdecl]<void*, void**, void> constructor, GDExtensionVariantType variantType, int constructorIndex)
+    public static unsafe void GetAndCacheBuiltInConstructor(ref delegate* unmanaged[Cdecl]<void*, void**, void> constructor, GDExtensionVariantType variantType, int constructorIndex)
     {
         if (constructor is null)
         {
@@ -51,7 +51,7 @@ internal static partial class MethodBind
         MissingGodotMethodException.ThrowIfNull(constructor, SR.MissingGodotMethod_ConstructorNotFound);
     }
 
-    public unsafe static void GetAndCacheBuiltInDestructor(ref delegate* unmanaged[Cdecl]<void*, void> destructor, GDExtensionVariantType variantType)
+    public static unsafe void GetAndCacheBuiltInDestructor(ref delegate* unmanaged[Cdecl]<void*, void> destructor, GDExtensionVariantType variantType)
     {
         if (destructor is null)
         {
@@ -61,7 +61,7 @@ internal static partial class MethodBind
         MissingGodotMethodException.ThrowIfNull(destructor, SR.MissingGodotMethod_DestructorNotFound);
     }
 
-    public unsafe static void GetAndCacheBuiltInOperator(ref delegate* unmanaged[Cdecl]<void*, void*, void*, void> operatorMethod, GDExtensionVariantOperator operatorKind, GDExtensionVariantType leftVariantType, GDExtensionVariantType rightVariantType)
+    public static unsafe void GetAndCacheBuiltInOperator(ref delegate* unmanaged[Cdecl]<void*, void*, void*, void> operatorMethod, GDExtensionVariantOperator operatorKind, GDExtensionVariantType leftVariantType, GDExtensionVariantType rightVariantType)
     {
         if (operatorMethod is null)
         {
@@ -72,7 +72,7 @@ internal static partial class MethodBind
     }
 
     [Conditional("DEBUG")]
-    public unsafe static void DebugCheckCallError(scoped NativeGodotStringName method, void* instance, NativeGodotVariantPtrSpan args, GDExtensionCallError error)
+    public static unsafe void DebugCheckCallError(scoped NativeGodotStringName method, void* instance, NativeGodotVariantPtrSpan args, GDExtensionCallError error)
     {
         if (error.error == GDExtensionCallErrorType.GDEXTENSION_CALL_OK)
         {

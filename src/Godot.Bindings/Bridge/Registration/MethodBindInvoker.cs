@@ -57,7 +57,7 @@ public readonly partial struct MethodBindInvoker
         _trampolineWithPtrArgs(instanceObj, _delegate, args, outRet);
     }
 
-    private unsafe static GodotObject GetInstanceObject(MethodInfo methodInfo, void* instance)
+    private static unsafe GodotObject GetInstanceObject(MethodInfo methodInfo, void* instance)
     {
         if (methodInfo.IsStatic)
         {
@@ -69,7 +69,7 @@ public readonly partial struct MethodBindInvoker
         return GetInstanceObject(instance);
     }
 
-    private unsafe static GodotObject GetInstanceObject(void* instance)
+    private static unsafe GodotObject GetInstanceObject(void* instance)
     {
         var gcHandle = GCHandle.FromIntPtr((nint)instance);
         var instanceObj = (GodotObject?)gcHandle.Target;

@@ -33,7 +33,7 @@ partial class GodotRegistry
         GodotBridge.GDExtensionInterface.editor_add_plugin(classNameNative.GetUnsafeAddress());
     }
 
-    internal unsafe static void RemoveAllEditorPlugins()
+    internal static unsafe void RemoveAllEditorPlugins()
     {
         while (_pluginRegisterStack.TryPop(out StringName? className))
         {

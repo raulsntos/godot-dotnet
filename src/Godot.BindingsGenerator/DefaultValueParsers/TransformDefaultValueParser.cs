@@ -37,7 +37,7 @@ internal sealed class TransformDefaultValueParser : DefaultValueParser
             return $"{_type.FullNameWithGlobal}.Identity";
         }
 
-        if (TryParseDefaultExpressionAsConstructor(engineDefaultValue, out string? engineTypeName, out string[]? constructorArguments))
+        if (TryParseDefaultExpressionAsConstructor(engineDefaultValue, out string? engineTypeName, out _))
         {
             if (engineTypeName == _type.Name)
             {

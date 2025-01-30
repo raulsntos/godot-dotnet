@@ -609,7 +609,7 @@ public sealed class PackedVector2Array :
     /// Converts this <see cref="PackedVector2Array"/> to a string.
     /// </summary>
     /// <returns>A string representation of this array.</returns>
-    public unsafe override string ToString()
+    public override unsafe string ToString()
     {
         ref NativeGodotPackedVector2Array self = ref NativeValue.DangerousSelfRef;
         using NativeGodotVariant selfVariant = NativeGodotVariant.CreateFromPackedVector2ArrayCopying(self);

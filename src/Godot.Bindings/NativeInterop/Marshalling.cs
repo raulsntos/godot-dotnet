@@ -54,7 +54,7 @@ internal static partial class Marshalling
         }
     }
 
-    private unsafe static void ThrowUnsupportedTypeIfNull<T>([NotNull] void* cb)
+    private static unsafe void ThrowUnsupportedTypeIfNull<T>([NotNull] void* cb)
     {
         if (cb is null)
         {

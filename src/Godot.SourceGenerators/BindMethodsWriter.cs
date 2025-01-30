@@ -432,7 +432,7 @@ internal static class BindMethodsWriter
 
     private static void AppendParameterInfo(this IndentedStringBuilder sb, GodotPropertySpec parameter)
     {
-        string nameValue = !string.IsNullOrEmpty(value: parameter.NameOverride)
+        string nameValue = !string.IsNullOrEmpty(parameter.NameOverride)
             ? parameter.NameOverride!
             : parameter.SymbolName;
 
@@ -476,9 +476,6 @@ internal static class BindMethodsWriter
             sb.AppendLine('{');
             sb.Indent++;
 
-            string enumName = !string.IsNullOrEmpty(constant.EnumNameOverride)
-                ? constant.EnumNameOverride!
-                : constant.EnumSymbolName!;
             sb.AppendLine($"""EnumName = ConstantName.@{constant.EnumSymbolName},""");
             if (constant.IsFlagsEnum)
             {

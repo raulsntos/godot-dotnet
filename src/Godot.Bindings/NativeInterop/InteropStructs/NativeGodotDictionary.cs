@@ -20,7 +20,7 @@ partial struct NativeGodotDictionary
     {
         private readonly uint _safeRefCount;
 
-        private unsafe readonly NativeGodotVariant* _readOnly;
+        private readonly unsafe NativeGodotVariant* _readOnly;
 
         // There are more fields here, but we don't care as we never store this in C#
 
@@ -43,7 +43,7 @@ partial struct NativeGodotDictionary
         get => _p is not null && _p->IsReadOnly;
     }
 
-    internal unsafe readonly NativeGodotVariant* GetPtrw(scoped in NativeGodotVariant key)
+    internal readonly unsafe NativeGodotVariant* GetPtrw(scoped in NativeGodotVariant key)
     {
         return GodotBridge.GDExtensionInterface.dictionary_operator_index(GetUnsafeAddress(), key.GetUnsafeAddress());
     }

@@ -76,7 +76,7 @@ public static partial class GodotRegistry
         RegisterClassCore<T>(isVirtual: false, isAbstract: false, isExposed: false, isRuntime: false, configure);
     }
 
-    private unsafe static void RegisterClassCore<T>(bool isVirtual, bool isAbstract, bool isExposed, bool isRuntime, Action<ClassRegistrationContext> configure) where T : GodotObject
+    private static unsafe void RegisterClassCore<T>(bool isVirtual, bool isAbstract, bool isExposed, bool isRuntime, Action<ClassRegistrationContext> configure) where T : GodotObject
     {
         if (typeof(T).IsAbstract && !isAbstract)
         {
@@ -166,7 +166,7 @@ public static partial class GodotRegistry
         }
     }
 
-    internal unsafe static void UnregisterAllClasses()
+    internal static unsafe void UnregisterAllClasses()
     {
         while (_classRegisterStack.TryPop(out StringName? className))
         {
@@ -179,7 +179,7 @@ public static partial class GodotRegistry
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static bool Set_Native(void* instance, NativeGodotStringName* name, NativeGodotVariant* value)
+    private static unsafe bool Set_Native(void* instance, NativeGodotStringName* name, NativeGodotVariant* value)
     {
         if (instance is not null)
         {
@@ -198,7 +198,7 @@ public static partial class GodotRegistry
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static bool Get_Native(void* instance, NativeGodotStringName* name, NativeGodotVariant* outRet)
+    private static unsafe bool Get_Native(void* instance, NativeGodotStringName* name, NativeGodotVariant* outRet)
     {
         if (instance is not null)
         {
@@ -219,7 +219,7 @@ public static partial class GodotRegistry
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static GDExtensionPropertyInfo* GetPropertyList_Native(void* instance, uint* outCount)
+    private static unsafe GDExtensionPropertyInfo* GetPropertyList_Native(void* instance, uint* outCount)
     {
         if (instance is null)
         {
@@ -250,7 +250,7 @@ public static partial class GodotRegistry
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static void FreePropertyList_Native(void* instance, GDExtensionPropertyInfo* propertyListPtr, uint count)
+    private static unsafe void FreePropertyList_Native(void* instance, GDExtensionPropertyInfo* propertyListPtr, uint count)
     {
         if (instance is not null)
         {
@@ -267,7 +267,7 @@ public static partial class GodotRegistry
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static bool PropertyCanRevert_Native(void* instance, NativeGodotStringName* name)
+    private static unsafe bool PropertyCanRevert_Native(void* instance, NativeGodotStringName* name)
     {
         if (instance is not null)
         {
@@ -285,7 +285,7 @@ public static partial class GodotRegistry
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static bool PropertyGetRevert_Native(void* instance, NativeGodotStringName* name, NativeGodotVariant* outRet)
+    private static unsafe bool PropertyGetRevert_Native(void* instance, NativeGodotStringName* name, NativeGodotVariant* outRet)
     {
         if (instance is not null)
         {
@@ -306,7 +306,7 @@ public static partial class GodotRegistry
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static bool ValidateProperty_Native(void* instance, GDExtensionPropertyInfo* refProperty)
+    private static unsafe bool ValidateProperty_Native(void* instance, GDExtensionPropertyInfo* refProperty)
     {
         if (instance is not null)
         {
@@ -344,7 +344,7 @@ public static partial class GodotRegistry
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static void Notification_Native(void* instance, int what, bool reversed)
+    private static unsafe void Notification_Native(void* instance, int what, bool reversed)
     {
         if (instance is not null)
         {
@@ -358,7 +358,7 @@ public static partial class GodotRegistry
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static void ToString_Native(void* instance, bool* outIsValid, NativeGodotString* outStr)
+    private static unsafe void ToString_Native(void* instance, bool* outIsValid, NativeGodotString* outStr)
     {
         var gcHandle = GCHandle.FromIntPtr((nint)instance);
 
@@ -374,7 +374,7 @@ public static partial class GodotRegistry
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static void* Create_Native(void* userData, bool notifyPostInitialize)
+    private static unsafe void* Create_Native(void* userData, bool notifyPostInitialize)
     {
         var gcHandle = GCHandle.FromIntPtr((nint)userData);
         var context = (ClassRegistrationContext?)gcHandle.Target;
@@ -397,7 +397,7 @@ public static partial class GodotRegistry
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static void Free_Native(void* userData, void* instance)
+    private static unsafe void Free_Native(void* userData, void* instance)
     {
         if (instance is not null)
         {
@@ -417,7 +417,7 @@ public static partial class GodotRegistry
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static void* GetVirtualMethodUserData_Native(void* userData, NativeGodotStringName* name, uint hash)
+    private static unsafe void* GetVirtualMethodUserData_Native(void* userData, NativeGodotStringName* name, uint hash)
     {
         var gcHandle = GCHandle.FromIntPtr((nint)userData);
         var context = (ClassRegistrationContext?)gcHandle.Target;
@@ -437,7 +437,7 @@ public static partial class GodotRegistry
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static void CallVirtualMethod_Native(void* instance, NativeGodotStringName* name, void* userData, void** args, void* outRet)
+    private static unsafe void CallVirtualMethod_Native(void* instance, NativeGodotStringName* name, void* userData, void** args, void* outRet)
     {
         var gcHandle = GCHandle.FromIntPtr((nint)userData);
         var context = (ClassRegistrationContext?)gcHandle.Target;

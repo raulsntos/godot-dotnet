@@ -28,7 +28,7 @@ partial struct NativeGodotString
         }
     }
 
-    internal unsafe static NativeGodotString Create(scoped ReadOnlySpan<byte> utf8)
+    internal static unsafe NativeGodotString Create(scoped ReadOnlySpan<byte> utf8)
     {
         if (!TryCreate(utf8, out NativeGodotString dest))
         {
@@ -38,7 +38,7 @@ partial struct NativeGodotString
         return dest;
     }
 
-    internal unsafe static NativeGodotString Create(scoped ReadOnlySpan<char> utf16)
+    internal static unsafe NativeGodotString Create(scoped ReadOnlySpan<char> utf16)
     {
         if (!TryCreate(utf16, out NativeGodotString dest))
         {
@@ -48,7 +48,7 @@ partial struct NativeGodotString
         return dest;
     }
 
-    internal unsafe static bool TryCreate(scoped ReadOnlySpan<byte> utf8, out NativeGodotString value)
+    internal static unsafe bool TryCreate(scoped ReadOnlySpan<byte> utf8, out NativeGodotString value)
     {
         if (utf8.IsEmpty)
         {
@@ -71,7 +71,7 @@ partial struct NativeGodotString
         }
     }
 
-    internal unsafe static bool TryCreate(scoped ReadOnlySpan<char> utf16, out NativeGodotString value)
+    internal static unsafe bool TryCreate(scoped ReadOnlySpan<char> utf16, out NativeGodotString value)
     {
         if (utf16.IsEmpty)
         {

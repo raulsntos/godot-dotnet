@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace Godot.NativeInterop.Marshallers;
 
-internal unsafe static class NodePathMarshaller
+internal static unsafe class NodePathMarshaller
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void WriteUnmanaged(NativeGodotNodePath* destination, NodePath? value)

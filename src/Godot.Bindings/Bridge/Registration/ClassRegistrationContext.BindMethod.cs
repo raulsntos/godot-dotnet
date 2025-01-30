@@ -139,7 +139,7 @@ partial class ClassRegistrationContext
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static void CallWithPtrArgs_Native(void* methodUserData, void* instance, void** args, void* outRet)
+    private static unsafe void CallWithPtrArgs_Native(void* methodUserData, void* instance, void** args, void* outRet)
     {
         var gcHandle = GCHandle.FromIntPtr((nint)methodUserData);
         var method = (MethodInfo?)gcHandle.Target;
@@ -150,7 +150,7 @@ partial class ClassRegistrationContext
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static void CallWithVariantArgs_Native(void* methodUserData, void* instance, NativeGodotVariant** args, long argCount, NativeGodotVariant* outRet, GDExtensionCallError* outError)
+    private static unsafe void CallWithVariantArgs_Native(void* methodUserData, void* instance, NativeGodotVariant** args, long argCount, NativeGodotVariant* outRet, GDExtensionCallError* outError)
     {
         var gcHandle = GCHandle.FromIntPtr((nint)methodUserData);
         var method = (MethodInfo?)gcHandle.Target;

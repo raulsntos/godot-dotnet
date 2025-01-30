@@ -28,11 +28,11 @@ internal static class ProcessUtils
         string[] pathDirs = Environment.GetEnvironmentVariable("PATH")?.Split(Path.PathSeparator) ?? [];
         char[] invalidPathChars = Path.GetInvalidPathChars();
 
-        var searchDirs = new List<string>();
+        List<string> searchDirs = [];
 
         if (pathDirs is not null)
         {
-            foreach (var pathDir in pathDirs)
+            foreach (string pathDir in pathDirs)
             {
                 if (pathDir.AsSpan().ContainsAny(invalidPathChars))
                 {
@@ -69,11 +69,11 @@ internal static class ProcessUtils
         string[] pathDirs = Environment.GetEnvironmentVariable("PATH")?.Split(Path.PathSeparator) ?? [];
         char[] invalidPathChars = Path.GetInvalidPathChars();
 
-        var searchDirs = new List<string>();
+        List<string>? searchDirs = [];
 
         if (pathDirs is not null)
         {
-            foreach (var pathDir in pathDirs)
+            foreach (string pathDir in pathDirs)
             {
                 if (pathDir.AsSpan().ContainsAny(invalidPathChars))
                 {

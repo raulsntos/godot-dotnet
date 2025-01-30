@@ -211,11 +211,11 @@ public struct Projection : IEquatable<Projection>
     /// <returns>The created projection.</returns>
     public static Projection CreateForHmd(int eye, real_t aspect, real_t intraocularDist, real_t displayWidth, real_t displayToLens, real_t oversample, real_t zNear, real_t zFar)
     {
-        real_t f1 = (intraocularDist * 0.5f) / displayToLens;
-        real_t f2 = ((displayWidth - intraocularDist) * 0.5f) / displayToLens;
-        real_t f3 = (displayWidth / 4.0f) / displayToLens;
+        real_t f1 = intraocularDist * 0.5f / displayToLens;
+        real_t f2 = (displayWidth - intraocularDist) * 0.5f / displayToLens;
+        real_t f3 = displayWidth / 4.0f / displayToLens;
 
-        real_t add = ((f1 + f2) * (oversample - 1.0f)) / 2.0f;
+        real_t add = (f1 + f2) * (oversample - 1.0f) / 2.0f;
         f1 += add;
         f2 += add;
         f3 *= oversample;
@@ -339,15 +339,15 @@ public struct Projection : IEquatable<Projection>
     /// <returns>The created projection.</returns>
     public static Projection CreateOrthogonal(real_t left, real_t right, real_t bottom, real_t top, real_t zNear, real_t zFar)
     {
-        Projection proj = Identity;
-        proj.X.X = 2.0f / (right - left);
-        proj.W.X = -((right + left) / (right - left));
-        proj.Y.Y = 2.0f / (top - bottom);
-        proj.W.Y = -((top + bottom) / (top - bottom));
-        proj.Z.Z = -2.0f / (zFar - zNear);
-        proj.W.Z = -((zFar + zNear) / (zFar - zNear));
-        proj.W.W = 1.0f;
-        return proj;
+        Projection projection = Identity;
+        projection.X.X = 2.0f / (right - left);
+        projection.W.X = -((right + left) / (right - left));
+        projection.Y.Y = 2.0f / (top - bottom);
+        projection.W.Y = -((top + bottom) / (top - bottom));
+        projection.Z.Z = -2.0f / (zFar - zNear);
+        projection.W.Z = -((zFar + zNear) / (zFar - zNear));
+        projection.W.W = 1.0f;
+        return projection;
     }
 
     /// <summary>
@@ -408,14 +408,14 @@ public struct Projection : IEquatable<Projection>
 
         real_t cotangent = cos / sin;
 
-        Projection proj = Identity;
-        proj.X.X = cotangent / aspect;
-        proj.Y.Y = cotangent;
-        proj.Z.Z = -(zFar + zNear) / deltaZ;
-        proj.Z.W = -1;
-        proj.W.Z = -2 * zNear * zFar / deltaZ;
-        proj.W.W = 0;
-        return proj;
+        Projection projection = Identity;
+        projection.X.X = cotangent / aspect;
+        projection.Y.Y = cotangent;
+        projection.Z.Z = -(zFar + zNear) / deltaZ;
+        projection.Z.W = -1;
+        projection.W.Z = -2 * zNear * zFar / deltaZ;
+        projection.W.W = 0;
+        return projection;
     }
 
     /// <summary>
@@ -448,7 +448,7 @@ public struct Projection : IEquatable<Projection>
 
         real_t ymax = zNear * real_t.Tan(real_t.DegreesToRadians(fovyDegrees / 2.0f));
         real_t xmax = ymax * aspect;
-        real_t frustumshift = (intraocularDist / 2.0f) * zNear / convergenceDist;
+        real_t frustumshift = intraocularDist / 2.0f * zNear / convergenceDist;
         real_t left;
         real_t right;
         real_t modeltranslation;
@@ -470,10 +470,10 @@ public struct Projection : IEquatable<Projection>
                 modeltranslation = 0;
                 break;
         }
-        Projection proj = CreateFrustum(left, right, -ymax, ymax, zNear, zFar);
+        Projection projection = CreateFrustum(left, right, -ymax, ymax, zNear, zFar);
         Projection cm = Identity;
         cm.W.X = modeltranslation;
-        return proj * cm;
+        return projection * cm;
     }
 
     /// <summary>
@@ -660,13 +660,13 @@ public struct Projection : IEquatable<Projection>
     /// <returns>The adjusted projection.</returns>
     public readonly Projection PerspectiveZNearAdjusted(real_t newZNear)
     {
-        Projection proj = this;
+        Projection projection = this;
         real_t zFar = GetZFar();
         real_t zNear = newZNear;
         real_t deltaZ = zFar - zNear;
-        proj.Z.Z = -(zFar + zNear) / deltaZ;
-        proj.W.Z = -2 * zNear * zFar / deltaZ;
-        return proj;
+        projection.Z.Z = -(zFar + zNear) / deltaZ;
+        projection.W.Z = -2 * zNear * zFar / deltaZ;
+        return projection;
     }
 
     /// <summary>
@@ -677,10 +677,10 @@ public struct Projection : IEquatable<Projection>
     /// <returns>The offsetted projection.</returns>
     public readonly Projection JitterOffseted(Vector2 offset)
     {
-        Projection proj = this;
-        proj.W.X += offset.X;
-        proj.W.Y += offset.Y;
-        return proj;
+        Projection projection = this;
+        projection.W.X += offset.X;
+        projection.W.Y += offset.Y;
+        return projection;
     }
 
     /// <summary>
@@ -690,125 +690,135 @@ public struct Projection : IEquatable<Projection>
     /// <returns>The inverted projection.</returns>
     public readonly Projection Inverse()
     {
-        Projection proj = this;
+        Projection projection = this;
         int i, j, k;
-        int[] pvt_i = new int[4];
-        int[] pvt_j = new int[4]; /* Locations of pivot matrix */
-        real_t pvt_val; /* Value of current pivot element */
-        real_t hold; /* Temporary storage */
+        // Locations of pivot matrix.
+        int[] pivotI = new int[4];
+        int[] pivotJ = new int[4];
+        // Value of current pivot element.
+        real_t pivotValue;
+        // Temporary storage.
+        real_t hold;
         real_t determinant = 1.0f;
         for (k = 0; k < 4; k++)
         {
-            /* Locate k'th pivot element */
-            pvt_val = proj[k][k]; /* Initialize for search */
-            pvt_i[k] = k;
-            pvt_j[k] = k;
+            // Locate k'th pivot element.
+            // Initialize for search.
+            pivotValue = projection[k][k];
+            pivotI[k] = k;
+            pivotJ[k] = k;
             for (i = k; i < 4; i++)
             {
                 for (j = k; j < 4; j++)
                 {
-                    if (real_t.Abs(proj[i][j]) > real_t.Abs(pvt_val))
+                    if (real_t.Abs(projection[i][j]) > real_t.Abs(pivotValue))
                     {
-                        pvt_i[k] = i;
-                        pvt_j[k] = j;
-                        pvt_val = proj[i][j];
+                        pivotI[k] = i;
+                        pivotJ[k] = j;
+                        pivotValue = projection[i][j];
                     }
                 }
             }
 
-            /* Product of pivots, gives determinant when finished */
-            determinant *= pvt_val;
+            // Product of pivots, gives determinant when finished.
+            determinant *= pivotValue;
             if (Mathf.IsZeroApprox(determinant))
             {
                 return Zero;
             }
 
-            /* "Interchange" rows (with sign change stuff) */
-            i = pvt_i[k];
+            // "Interchange" rows (with sign change stuff).
+            i = pivotI[k];
             if (i != k)
-            { /* If rows are different */
+            {
+                // If rows are different.
                 for (j = 0; j < 4; j++)
                 {
-                    hold = -proj[k][j];
-                    proj[k, j] = proj[i][j];
-                    proj[i, j] = hold;
+                    hold = -projection[k][j];
+                    projection[k, j] = projection[i][j];
+                    projection[i, j] = hold;
                 }
             }
 
-            /* "Interchange" columns */
-            j = pvt_j[k];
+            // "Interchange" columns.
+            j = pivotJ[k];
             if (j != k)
-            { /* If columns are different */
+            {
+                // If columns are different.
                 for (i = 0; i < 4; i++)
                 {
-                    hold = -proj[i][k];
-                    proj[i, k] = proj[i][j];
-                    proj[i, j] = hold;
+                    hold = -projection[i][k];
+                    projection[i, k] = projection[i][j];
+                    projection[i, j] = hold;
                 }
             }
 
-            /* Divide column by minus pivot value */
+            // Divide column by minus pivot value.
             for (i = 0; i < 4; i++)
             {
                 if (i != k)
                 {
-                    proj[i, k] /= (-pvt_val);
+                    projection[i, k] /= -pivotValue;
                 }
             }
 
-            /* Reduce the matrix */
+            // Reduce the matrix.
             for (i = 0; i < 4; i++)
             {
-                hold = proj[i][k];
+                hold = projection[i][k];
                 for (j = 0; j < 4; j++)
                 {
                     if (i != k && j != k)
                     {
-                        proj[i, j] += hold * proj[k][j];
+                        projection[i, j] += hold * projection[k][j];
                     }
                 }
             }
 
-            /* Divide row by pivot */
+            // Divide row by pivot.
             for (j = 0; j < 4; j++)
             {
                 if (j != k)
                 {
-                    proj[k, j] /= pvt_val;
+                    projection[k, j] /= pivotValue;
                 }
             }
 
-            /* Replace pivot by reciprocal (at last we can touch it). */
-            proj[k, k] = 1.0f / pvt_val;
+            // Replace pivot by reciprocal (at last we can touch it).
+            projection[k, k] = 1.0f / pivotValue;
         }
 
-        /* That was most of the work, one final pass of row/column interchange */
-        /* to finish */
+        // That was most of the work, one final pass of row/column interchange to finish.
         for (k = 4 - 2; k >= 0; k--)
-        { /* Don't need to work with 1 by 1 corner*/
-            i = pvt_j[k]; /* Rows to swap correspond to pivot COLUMN */
+        {
+            // Don't need to work with 1 by 1 corner.
+            // Rows to swap correspond to pivot COLUMN.
+            i = pivotJ[k];
             if (i != k)
-            { /* If rows are different */
+            {
+                // If rows are different.
                 for (j = 0; j < 4; j++)
                 {
-                    hold = proj[k][j];
-                    proj[k, j] = -proj[i][j];
-                    proj[i, j] = hold;
+                    hold = projection[k][j];
+                    projection[k, j] = -projection[i][j];
+                    projection[i, j] = hold;
                 }
             }
 
-            j = pvt_i[k]; /* Columns to swap correspond to pivot ROW */
+            // Columns to swap correspond to pivot ROW.
+            j = pivotI[k];
             if (j != k)
-            { /* If columns are different */
+            {
+                // If columns are different.
                 for (i = 0; i < 4; i++)
                 {
-                    hold = proj[i][k];
-                    proj[i, k] = -proj[i][j];
-                    proj[i, j] = hold;
+                    hold = projection[i][k];
+                    projection[i, k] = -projection[i][j];
+                    projection[i, j] = hold;
                 }
             }
         }
-        return proj;
+        return projection;
     }
 
     /// <summary>
@@ -921,52 +931,52 @@ public struct Projection : IEquatable<Projection>
     /// For transforming by inverse of a projection <c>projection.Inverse() * vector</c>
     /// can be used instead. See <see cref="Inverse"/>.
     /// </summary>
-    /// <param name="proj">The projection to apply.</param>
+    /// <param name="projection">The projection to apply.</param>
     /// <param name="vector">A Vector4 to transform.</param>
     /// <returns>The transformed Vector4.</returns>
-    public static Vector4 operator *(Projection proj, Vector4 vector)
+    public static Vector4 operator *(Projection projection, Vector4 vector)
     {
         return new Vector4
         (
-            proj.X.X * vector.X + proj.Y.X * vector.Y + proj.Z.X * vector.Z + proj.W.X * vector.W,
-            proj.X.Y * vector.X + proj.Y.Y * vector.Y + proj.Z.Y * vector.Z + proj.W.Y * vector.W,
-            proj.X.Z * vector.X + proj.Y.Z * vector.Y + proj.Z.Z * vector.Z + proj.W.Z * vector.W,
-            proj.X.W * vector.X + proj.Y.W * vector.Y + proj.Z.W * vector.Z + proj.W.W * vector.W
+            projection.X.X * vector.X + projection.Y.X * vector.Y + projection.Z.X * vector.Z + projection.W.X * vector.W,
+            projection.X.Y * vector.X + projection.Y.Y * vector.Y + projection.Z.Y * vector.Z + projection.W.Y * vector.W,
+            projection.X.Z * vector.X + projection.Y.Z * vector.Y + projection.Z.Z * vector.Z + projection.W.Z * vector.W,
+            projection.X.W * vector.X + projection.Y.W * vector.Y + projection.Z.W * vector.Z + projection.W.W * vector.W
         );
     }
 
     /// <summary>
     /// Returns a Vector4 transformed (multiplied) by the inverse projection.
     /// </summary>
-    /// <param name="proj">The projection to apply.</param>
+    /// <param name="projection">The projection to apply.</param>
     /// <param name="vector">A Vector4 to transform.</param>
     /// <returns>The inversely transformed Vector4.</returns>
-    public static Vector4 operator *(Vector4 vector, Projection proj)
+    public static Vector4 operator *(Vector4 vector, Projection projection)
     {
         return new Vector4
         (
-            proj.X.X * vector.X + proj.X.Y * vector.Y + proj.X.Z * vector.Z + proj.X.W * vector.W,
-            proj.Y.X * vector.X + proj.Y.Y * vector.Y + proj.Y.Z * vector.Z + proj.Y.W * vector.W,
-            proj.Z.X * vector.X + proj.Z.Y * vector.Y + proj.Z.Z * vector.Z + proj.Z.W * vector.W,
-            proj.W.X * vector.X + proj.W.Y * vector.Y + proj.W.Z * vector.Z + proj.W.W * vector.W
+            projection.X.X * vector.X + projection.X.Y * vector.Y + projection.X.Z * vector.Z + projection.X.W * vector.W,
+            projection.Y.X * vector.X + projection.Y.Y * vector.Y + projection.Y.Z * vector.Z + projection.Y.W * vector.W,
+            projection.Z.X * vector.X + projection.Z.Y * vector.Y + projection.Z.Z * vector.Z + projection.Z.W * vector.W,
+            projection.W.X * vector.X + projection.W.Y * vector.Y + projection.W.Z * vector.Z + projection.W.W * vector.W
         );
     }
 
     /// <summary>
     /// Returns a Vector3 transformed (multiplied) by the projection.
     /// </summary>
-    /// <param name="proj">The projection to apply.</param>
+    /// <param name="projection">The projection to apply.</param>
     /// <param name="vector">A Vector3 to transform.</param>
     /// <returns>The transformed Vector3.</returns>
-    public static Vector3 operator *(Projection proj, Vector3 vector)
+    public static Vector3 operator *(Projection projection, Vector3 vector)
     {
         Vector3 ret = new Vector3
         (
-            proj.X.X * vector.X + proj.Y.X * vector.Y + proj.Z.X * vector.Z + proj.W.X,
-            proj.X.Y * vector.X + proj.Y.Y * vector.Y + proj.Z.Y * vector.Z + proj.W.Y,
-            proj.X.Z * vector.X + proj.Y.Z * vector.Y + proj.Z.Z * vector.Z + proj.W.Z
+            projection.X.X * vector.X + projection.Y.X * vector.Y + projection.Z.X * vector.Z + projection.W.X,
+            projection.X.Y * vector.X + projection.Y.Y * vector.Y + projection.Z.Y * vector.Z + projection.W.Y,
+            projection.X.Z * vector.X + projection.Y.Z * vector.Y + projection.Z.Z * vector.Z + projection.W.Z
         );
-        return ret / (proj.X.W * vector.X + proj.Y.W * vector.Y + proj.Z.W * vector.Z + proj.W.W);
+        return ret / (projection.X.W * vector.X + projection.Y.W * vector.Y + projection.Z.W * vector.Z + projection.W.W);
     }
 
     /// <summary>
@@ -994,18 +1004,18 @@ public struct Projection : IEquatable<Projection>
     /// <summary>
     /// Constructs a new <see cref="Transform3D"/> from the <see cref="Projection"/>.
     /// </summary>
-    /// <param name="proj">The <see cref="Projection"/>.</param>
-    public static explicit operator Transform3D(Projection proj)
+    /// <param name="projection">The <see cref="Projection"/>.</param>
+    public static explicit operator Transform3D(Projection projection)
     {
         return new Transform3D
         (
             new Basis
             (
-                new Vector3(proj.X.X, proj.X.Y, proj.X.Z),
-                new Vector3(proj.Y.X, proj.Y.Y, proj.Y.Z),
-                new Vector3(proj.Z.X, proj.Z.Y, proj.Z.Z)
+                new Vector3(projection.X.X, projection.X.Y, projection.X.Z),
+                new Vector3(projection.Y.X, projection.Y.Y, projection.Y.Z),
+                new Vector3(projection.Z.X, projection.Z.Y, projection.Z.Z)
             ),
-            new Vector3(proj.W.X, proj.W.Y, proj.W.Z)
+            new Vector3(projection.W.X, projection.W.Y, projection.W.Z)
         );
     }
 

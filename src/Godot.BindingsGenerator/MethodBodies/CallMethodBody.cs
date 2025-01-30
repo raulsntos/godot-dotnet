@@ -80,7 +80,7 @@ internal abstract class CallMethodBody<TContext> : MethodBody where TContext : C
     protected abstract void UnmarshalParameters(TContext context, IndentedTextWriter writer);
 
     /// <summary>
-    /// Returns the unmarshalled value. Only executes if <see cref="TContext.ReturnType"/>
+    /// Returns the unmarshalled value. Only executes if <see cref="CallMethodBodyContext.ReturnType"/>
     /// is not <see langword="null"/>.
     /// </summary>
     protected abstract void Return(TContext context, IndentedTextWriter writer);

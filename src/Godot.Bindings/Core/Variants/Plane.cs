@@ -177,7 +177,7 @@ public struct Plane : IEquatable<Plane>
         real_t dist = (_normal.Dot(begin) - _d) / den;
 
         // Only allow dist to be in the range of 0 to 1, with tolerance.
-        if (dist < -Mathf.Epsilon || dist > 1.0f + Mathf.Epsilon)
+        if (dist is < (-Mathf.Epsilon) or > (1.0f + Mathf.Epsilon))
         {
             return null;
         }

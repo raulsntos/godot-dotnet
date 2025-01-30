@@ -70,8 +70,8 @@ public abstract class CustomCallable
         return false;
     }
 
-#pragma warning disable CA1707 // Identifiers should not contain underscores
-#pragma warning disable IDE1006 // Naming Styles
+#pragma warning disable CA1707 // Identifiers should not contain underscores.
+#pragma warning disable IDE1006 // Naming Styles.
     /// <summary>
     /// Implements the callback that will be invoked when this callable is called.
     /// </summary>
@@ -81,10 +81,10 @@ public abstract class CustomCallable
     /// A status that indicates whether the call was successful, or the error that occurred otherwise.
     /// </returns>
     protected abstract CallError _Call(ReadOnlySpan<Variant> args, out Variant result);
-#pragma warning restore IDE1006 // Naming Styles
-#pragma warning restore CA1707 // Identifiers should not contain underscores
+#pragma warning restore IDE1006 // Naming Styles.
+#pragma warning restore CA1707 // Identifiers should not contain underscores.
 
-    internal unsafe virtual void Call(NativeGodotVariantPtrSpan args, NativeGodotVariant* outRet, GDExtensionCallError* outError)
+    internal virtual unsafe void Call(NativeGodotVariantPtrSpan args, NativeGodotVariant* outRet, GDExtensionCallError* outError)
     {
         Variant[] variantArgs = new Variant[args.Length];
         for (int i = 0; i < args.Length; i++)
@@ -104,7 +104,7 @@ public abstract class CustomCallable
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static void Call_Native(void* userData, NativeGodotVariant** args, long argsCount, NativeGodotVariant* outRet, GDExtensionCallError* outError)
+    private static unsafe void Call_Native(void* userData, NativeGodotVariant** args, long argsCount, NativeGodotVariant* outRet, GDExtensionCallError* outError)
     {
         var gcHandle = GCHandle.FromIntPtr((nint)userData);
         var callable = (CustomCallable?)gcHandle.Target;
@@ -121,7 +121,7 @@ public abstract class CustomCallable
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static bool IsValid_Native(void* userData)
+    private static unsafe bool IsValid_Native(void* userData)
     {
         var gcHandle = GCHandle.FromIntPtr((nint)userData);
         var callable = (CustomCallable?)gcHandle.Target;
@@ -135,7 +135,7 @@ public abstract class CustomCallable
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static void Free_Native(void* userData)
+    private static unsafe void Free_Native(void* userData)
     {
         var gcHandle = GCHandle.FromIntPtr((nint)userData);
         if (gcHandle.Target is IDisposable disposable)
@@ -146,7 +146,7 @@ public abstract class CustomCallable
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static uint Hash_Native(void* userData)
+    private static unsafe uint Hash_Native(void* userData)
     {
         var gcHandle = GCHandle.FromIntPtr((nint)userData);
         var callable = (CustomCallable?)gcHandle.Target;
@@ -157,7 +157,7 @@ public abstract class CustomCallable
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static bool Equals_Native(void* userDataLeft, void* userDataRight)
+    private static unsafe bool Equals_Native(void* userDataLeft, void* userDataRight)
     {
         var gcHandleLeft = GCHandle.FromIntPtr((nint)userDataLeft);
         var callableLeft = (CustomCallable?)gcHandleLeft.Target;
@@ -169,7 +169,7 @@ public abstract class CustomCallable
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static bool LessThan_Native(void* userDataLeft, void* userDataRight)
+    private static unsafe bool LessThan_Native(void* userDataLeft, void* userDataRight)
     {
         var gcHandleLeft = GCHandle.FromIntPtr((nint)userDataLeft);
         var callableLeft = (CustomCallable?)gcHandleLeft.Target;
@@ -189,7 +189,7 @@ public abstract class CustomCallable
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static void ToString_Native(void* userData, bool* outIsValid, NativeGodotString* outStr)
+    private static unsafe void ToString_Native(void* userData, bool* outIsValid, NativeGodotString* outStr)
     {
         var gcHandle = GCHandle.FromIntPtr((nint)userData);
         var callable = (CustomCallable?)gcHandle.Target;
@@ -207,7 +207,7 @@ public abstract class CustomCallable
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private unsafe static long GetArgumentCount_Native(void* userData, bool* outIsValid)
+    private static unsafe long GetArgumentCount_Native(void* userData, bool* outIsValid)
     {
         var gcHandle = GCHandle.FromIntPtr((nint)userData);
         var callable = (CustomCallable?)gcHandle.Target;

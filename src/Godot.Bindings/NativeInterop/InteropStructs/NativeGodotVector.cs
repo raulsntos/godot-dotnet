@@ -8,9 +8,9 @@ internal readonly ref struct NativeGodotVector<T> where T : unmanaged, allows re
 {
     private readonly nint _writeProxy;
 
-    private unsafe readonly T* _ptr;
+    private readonly unsafe T* _ptr;
 
-    public unsafe readonly int Size
+    public readonly unsafe int Size
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get
@@ -21,7 +21,7 @@ internal readonly ref struct NativeGodotVector<T> where T : unmanaged, allows re
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal unsafe readonly T* GetPtrw()
+    internal readonly unsafe T* GetPtrw()
     {
         return _ptr;
     }

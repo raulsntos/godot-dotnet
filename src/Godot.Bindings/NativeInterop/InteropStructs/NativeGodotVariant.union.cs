@@ -3,15 +3,13 @@ using System.Runtime.InteropServices;
 
 namespace Godot.NativeInterop;
 
-#pragma warning disable IDE1006 // Naming Styles
-
 partial struct NativeGodotVariant
 {
     // VariantType is generated as an enum of type long, so we can't use for the field as it must only take 32-bits.
     [FieldOffset(0)]
     private int _typeField;
 
-    // There's padding here
+    // There's padding here.
 
     [FieldOffset(8)]
     private NativeGodotVariantData _data;
@@ -19,6 +17,7 @@ partial struct NativeGodotVariant
     [StructLayout(LayoutKind.Explicit)]
     private unsafe ref struct NativeGodotVariantData
     {
+#pragma warning disable IDE1006 // Naming Styles.
         [FieldOffset(0)] public bool _bool;
         [FieldOffset(0)] public long _int;
         [FieldOffset(0)] public double _float;
@@ -66,6 +65,7 @@ partial struct NativeGodotVariant
             private readonly real_t _mem2;
             private readonly real_t _mem3;
         }
+#pragma warning restore IDE1006 // Naming Styles.
     }
 
     public VariantType Type
@@ -288,5 +288,3 @@ partial struct NativeGodotVariant
         get => _data._m_obj_data.obj;
     }
 }
-
-#pragma warning restore IDE1006 // Naming Styles

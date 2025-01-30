@@ -13,7 +13,7 @@ internal static class NamingUtils
     private static readonly SearchValues<char> _numberSearchValues = SearchValues.Create("0123456789");
 
     // Hardcoded collection of PascalCase name conversions.
-    private readonly static Dictionary<string, string> _pascalCaseNameOverrides = new()
+    private static readonly Dictionary<string, string> _pascalCaseNameOverrides = new()
     {
         { "BitMap", "Bitmap" },
         { "Environment", "GodotEnvironment" },
@@ -30,7 +30,7 @@ internal static class NamingUtils
     };
 
     // Hardcoded collection of PascalCase part conversions.
-    private readonly static Dictionary<string, string> _pascalCasePartOverrides = new(StringComparer.OrdinalIgnoreCase)
+    private static readonly Dictionary<string, string> _pascalCasePartOverrides = new(StringComparer.OrdinalIgnoreCase)
     {
         { "AA", "AA" }, // Anti Aliasing
         { "AO", "AO" }, // Ambient Occlusion

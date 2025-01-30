@@ -609,7 +609,7 @@ public sealed class PackedInt64Array :
     /// Converts this <see cref="PackedInt64Array"/> to a string.
     /// </summary>
     /// <returns>A string representation of this array.</returns>
-    public unsafe override string ToString()
+    public override unsafe string ToString()
     {
         ref NativeGodotPackedInt64Array self = ref NativeValue.DangerousSelfRef;
         using NativeGodotVariant selfVariant = NativeGodotVariant.CreateFromPackedInt64ArrayCopying(self);

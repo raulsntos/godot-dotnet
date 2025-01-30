@@ -34,7 +34,7 @@ internal static class SourceCodeWriter
     /// Write the member's attributes.
     /// </summary>
     /// <param name="writer">The <see cref="TextWriter"/> to write to.</param>
-    /// <param name="type">The <see cref="TypeInfo"/> to get the attributes from.</param>
+    /// <param name="member">The <see cref="MemberInfo"/> to get the attributes from.</param>
     public static void WriteAttributes(this IndentedTextWriter writer, MemberInfo member)
     {
         if (member is EnumInfo { HasFlagsAttribute: true })
@@ -42,7 +42,7 @@ internal static class SourceCodeWriter
             writer.WriteLine("[global::System.Flags]");
         }
 
-        foreach (var attribute in member.Attributes)
+        foreach (string attribute in member.Attributes)
         {
             writer.WriteLine(attribute);
         }
@@ -80,6 +80,11 @@ internal static class SourceCodeWriter
         if (type.IsAbstract)
         {
             writer.Write("abstract ");
+        }
+
+        if (type.IsReadOnly)
+        {
+            writer.Write("readonly ");
         }
 
         if (type.IsByRefLike)
@@ -135,7 +140,7 @@ internal static class SourceCodeWriter
 
         if (type is EnumInfo enumType)
         {
-            var underlyingType = enumType.UnderlyingType;
+            TypeInfo? underlyingType = enumType.UnderlyingType;
             if (underlyingType is not null)
             {
                 writer.Write($" : {underlyingType.FullNameWithGlobal}");
@@ -162,7 +167,7 @@ internal static class SourceCodeWriter
 
             for (int i = 0; i < type.ImplementedInterfaces.Count; i++)
             {
-                var @interface = type.ImplementedInterfaces[i];
+                TypeInfo? @interface = type.ImplementedInterfaces[i];
                 writer.Write(@interface.Name);
                 if (i < type.ImplementedInterfaces.Count - 1)
                 {
@@ -219,15 +224,15 @@ internal static class SourceCodeWriter
             writer.Write(' ');
         }
 
+        if (@event.IsStatic)
+        {
+            writer.Write("static ");
+        }
+
         if ((@event.AddAccessor?.Body.RequiresUnsafeCode ?? false)
         || (@event.RemoveAccessor?.Body.RequiresUnsafeCode ?? false))
         {
             writer.Write("unsafe ");
-        }
-
-        if (@event.IsStatic)
-        {
-            writer.Write("static ");
         }
 
         writer.Write("event ");
@@ -239,7 +244,7 @@ internal static class SourceCodeWriter
     /// Write the field's declaration without a closing semi-colon.
     /// </summary>
     /// <param name="writer">The <see cref="TextWriter"/> to write to.</param>
-    /// <param name="method">The <see cref="FieldInfo"/> to get the declaration from.</param>
+    /// <param name="field">The <see cref="FieldInfo"/> to get the declaration from.</param>
     public static void WriteFieldDeclaration(this IndentedTextWriter writer, FieldInfo field)
     {
 #if DEBUG
@@ -256,11 +261,6 @@ internal static class SourceCodeWriter
             writer.Write(' ');
         }
 
-        if (field.RequiresUnsafeCode)
-        {
-            writer.Write("unsafe ");
-        }
-
         if (field.IsStatic)
         {
             writer.Write("static ");
@@ -274,6 +274,11 @@ internal static class SourceCodeWriter
         if (field.IsInitOnly)
         {
             writer.Write("readonly ");
+        }
+
+        if (field.RequiresUnsafeCode)
+        {
+            writer.Write("unsafe ");
         }
 
         if (field.IsLiteral)
@@ -293,7 +298,7 @@ internal static class SourceCodeWriter
     /// Write the property's declaration without the get/set accessors or a closing semi-colon.
     /// </summary>
     /// <param name="writer">The <see cref="TextWriter"/> to write to.</param>
-    /// <param name="method">The <see cref="PropertyInfo"/> to get the declaration from.</param>
+    /// <param name="property">The <see cref="PropertyInfo"/> to get the declaration from.</param>
     public static void WritePropertyDeclaration(this IndentedTextWriter writer, PropertyInfo property)
     {
         string? visibility = property.GetVisibilityModifierString();
@@ -301,12 +306,6 @@ internal static class SourceCodeWriter
         {
             writer.Write(visibility);
             writer.Write(' ');
-        }
-
-        if ((property.CanRead && property.Getter.Body.RequiresUnsafeCode)
-        || (property.CanWrite && property.Setter.Body.RequiresUnsafeCode))
-        {
-            writer.Write("unsafe ");
         }
 
         if (property.IsStatic)
@@ -324,6 +323,12 @@ internal static class SourceCodeWriter
             writer.Write("readonly ");
         }
 
+        if ((property.CanRead && property.Getter.Body.RequiresUnsafeCode)
+        || (property.CanWrite && property.Setter.Body.RequiresUnsafeCode))
+        {
+            writer.Write("unsafe ");
+        }
+
         if (property.CanRead && property.Getter.ReturnParameter!.IsRef)
         {
             // Property returns by-ref.
@@ -337,7 +342,8 @@ internal static class SourceCodeWriter
     /// Write the constructor's signature.
     /// </summary>
     /// <param name="writer">The <see cref="TextWriter"/> to write to.</param>
-    /// <param name="method">The <see cref="ConstructorInfo"/> to get the signature from.</param>
+    /// <param name="constructor">The <see cref="ConstructorInfo"/> to get the signature from.</param>
+    /// <param name="containingType">The <see cref="TypeInfo"/> that contains the constructor.</param>
     public static void WriteConstructorSignature(this IndentedTextWriter writer, ConstructorInfo constructor, TypeInfo containingType)
     {
         string? visibility = constructor.GetVisibilityModifierString();
@@ -373,14 +379,14 @@ internal static class SourceCodeWriter
             writer.Write(' ');
         }
 
-        if (method.Body.RequiresUnsafeCode || (method.ReturnType?.IsPointerType ?? false) || method.Parameters.Any(p => p.Type.IsPointerType))
-        {
-            writer.Write("unsafe ");
-        }
-
         if (method.IsStatic)
         {
             writer.Write("static ");
+        }
+
+        if (method.IsNew)
+        {
+            writer.Write("new ");
         }
 
         if (method.IsOverridden)
@@ -407,14 +413,14 @@ internal static class SourceCodeWriter
             }
         }
 
-        if (method.IsNew)
-        {
-            writer.Write("new ");
-        }
-
         if (method.IsReadOnly)
         {
             writer.Write("readonly ");
+        }
+
+        if (method.Body.RequiresUnsafeCode || (method.ReturnType?.IsPointerType ?? false) || method.Parameters.Any(p => p.Type.IsPointerType))
+        {
+            writer.Write("unsafe ");
         }
 
         if (method.IsPartial)
@@ -441,7 +447,7 @@ internal static class SourceCodeWriter
             {
                 var typeParameter = method.TypeParameters[i];
 
-                foreach (var attribute in typeParameter.Attributes)
+                foreach (string attribute in typeParameter.Attributes)
                 {
                     writer.Write(attribute);
                     writer.Write(' ');
@@ -542,7 +548,7 @@ internal static class SourceCodeWriter
 
     private static void WriteParameter(this IndentedTextWriter writer, ParameterInfo parameter)
     {
-        foreach (var attribute in parameter.Attributes)
+        foreach (string attribute in parameter.Attributes)
         {
             writer.Write(attribute);
             writer.Write(' ');

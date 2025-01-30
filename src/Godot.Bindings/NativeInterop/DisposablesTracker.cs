@@ -6,11 +6,9 @@ namespace Godot.NativeInterop;
 
 internal static class DisposablesTracker
 {
-    private static readonly ConcurrentDictionary<WeakReference<GodotObject>, byte> _godotObjectInstances =
-        new();
+    private static readonly ConcurrentDictionary<WeakReference<GodotObject>, byte> _godotObjectInstances = [];
 
-    private static readonly ConcurrentDictionary<WeakReference<IDisposable>, byte> _otherInstances =
-        new();
+    private static readonly ConcurrentDictionary<WeakReference<IDisposable>, byte> _otherInstances = [];
 
     internal static void DisposeAll()
     {
@@ -63,7 +61,7 @@ internal static class DisposablesTracker
         return weakReferenceToSelf;
     }
 
-    public static void UnregisterGodotObject(GodotObject godotObject, WeakReference<GodotObject> weakReferenceToSelf)
+    public static void UnregisterGodotObject(WeakReference<GodotObject> weakReferenceToSelf)
     {
         if (!_godotObjectInstances.TryRemove(weakReferenceToSelf, out _))
         {

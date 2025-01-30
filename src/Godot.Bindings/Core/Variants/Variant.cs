@@ -133,13 +133,13 @@ public partial struct Variant : IDisposable
     /// <summary>
     /// The type contained in this Variant instance.
     /// </summary>
-    public VariantType VariantType => NativeValue.DangerousSelfRef.Type;
+    public readonly VariantType VariantType => NativeValue.DangerousSelfRef.Type;
 
     /// <summary>
     /// Converts the value of this Variant to a string representation.
     /// </summary>
     /// <returns>String representation of the Variant's value.</returns>
-    public override string ToString() => AsString();
+    public override readonly string ToString() => AsString();
 
     /// <summary>
     /// Gets the underlying value of the Variant and returns it as an <see cref="object"/>.
@@ -192,227 +192,227 @@ public partial struct Variant : IDisposable
                 throw new InvalidOperationException(SR.FormatInvalidOperation_VariantTypeInvalid(NativeValue.DangerousSelfRef.Type)),
         };
 
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Variant From<[MustBeVariant] T>(in T from) =>
         CreateTakingOwnership(Marshalling.ConvertToVariant(in from));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public T As<[MustBeVariant] T>() =>
+    public readonly T As<[MustBeVariant] T>() =>
         Marshalling.ConvertFromVariant<T>(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool AsBool() =>
+    public readonly bool AsBool() =>
         NativeGodotVariant.ConvertToBool(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public char AsChar() =>
+    public readonly char AsChar() =>
         (char)NativeGodotVariant.ConvertToInt(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public sbyte AsSByte() =>
+    public readonly sbyte AsSByte() =>
         (sbyte)NativeGodotVariant.ConvertToInt(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public short AsInt16() =>
+    public readonly short AsInt16() =>
         (short)NativeGodotVariant.ConvertToInt(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public int AsInt32() =>
+    public readonly int AsInt32() =>
         (int)NativeGodotVariant.ConvertToInt(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public long AsInt64() =>
+    public readonly long AsInt64() =>
         NativeGodotVariant.ConvertToInt(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public byte AsByte() =>
+    public readonly byte AsByte() =>
         (byte)NativeGodotVariant.ConvertToInt(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ushort AsUInt16() =>
+    public readonly ushort AsUInt16() =>
         (ushort)NativeGodotVariant.ConvertToInt(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public uint AsUInt32() =>
+    public readonly uint AsUInt32() =>
         (uint)NativeGodotVariant.ConvertToInt(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public ulong AsUInt64() =>
+    public readonly ulong AsUInt64() =>
         (ulong)NativeGodotVariant.ConvertToInt(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public float AsSingle() =>
+    public readonly float AsSingle() =>
         (float)NativeGodotVariant.ConvertToFloat(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public double AsDouble() =>
+    public readonly double AsDouble() =>
         NativeGodotVariant.ConvertToFloat(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public string AsString()
+    public readonly string AsString()
     {
         using NativeGodotString value = NativeGodotVariant.GetOrConvertToString(NativeValue.DangerousSelfRef);
         return value.ToString();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Vector2 AsVector2() =>
+    public readonly Vector2 AsVector2() =>
         NativeGodotVariant.ConvertToVector2(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Vector2I AsVector2I() =>
+    public readonly Vector2I AsVector2I() =>
         NativeGodotVariant.ConvertToVector2I(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Rect2 AsRect2() =>
+    public readonly Rect2 AsRect2() =>
         NativeGodotVariant.ConvertToRect2(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Rect2I AsRect2I() =>
+    public readonly Rect2I AsRect2I() =>
         NativeGodotVariant.ConvertToRect2I(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Transform2D AsTransform2D() =>
+    public readonly Transform2D AsTransform2D() =>
         NativeGodotVariant.ConvertToTransform2D(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Vector3 AsVector3() =>
+    public readonly Vector3 AsVector3() =>
         NativeGodotVariant.ConvertToVector3(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Vector3I AsVector3I() =>
+    public readonly Vector3I AsVector3I() =>
         NativeGodotVariant.ConvertToVector3I(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Basis AsBasis() =>
+    public readonly Basis AsBasis() =>
         NativeGodotVariant.ConvertToBasis(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Quaternion AsQuaternion() =>
+    public readonly Quaternion AsQuaternion() =>
         NativeGodotVariant.ConvertToQuaternion(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Transform3D AsTransform3D() =>
+    public readonly Transform3D AsTransform3D() =>
         NativeGodotVariant.ConvertToTransform3D(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Vector4 AsVector4() =>
+    public readonly Vector4 AsVector4() =>
         NativeGodotVariant.ConvertToVector4(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Vector4I AsVector4I() =>
+    public readonly Vector4I AsVector4I() =>
         NativeGodotVariant.ConvertToVector4I(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Projection AsProjection() =>
+    public readonly Projection AsProjection() =>
         NativeGodotVariant.ConvertToProjection(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Aabb AsAabb() =>
+    public readonly Aabb AsAabb() =>
         NativeGodotVariant.ConvertToAabb(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Color AsColor() =>
+    public readonly Color AsColor() =>
         NativeGodotVariant.ConvertToColor(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Plane AsPlane() =>
+    public readonly Plane AsPlane() =>
         NativeGodotVariant.ConvertToPlane(NativeValue.DangerousSelfRef);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Callable AsCallable() =>
+    public readonly Callable AsCallable() =>
         Callable.CreateTakingOwnership(NativeGodotVariant.ConvertToCallable(NativeValue.DangerousSelfRef));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Signal AsSignal() =>
+    public readonly Signal AsSignal() =>
         Signal.CreateTakingOwnership(NativeGodotVariant.ConvertToSignal(NativeValue.DangerousSelfRef));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public PackedByteArray AsPackedByteArray() =>
+    public readonly PackedByteArray AsPackedByteArray() =>
         PackedByteArray.CreateTakingOwnership(NativeGodotVariant.ConvertToPackedByteArray(NativeValue.DangerousSelfRef));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public PackedInt32Array AsPackedInt32Array() =>
+    public readonly PackedInt32Array AsPackedInt32Array() =>
         PackedInt32Array.CreateTakingOwnership(NativeGodotVariant.ConvertToPackedInt32Array(NativeValue.DangerousSelfRef));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public PackedInt64Array AsPackedInt64Array() =>
+    public readonly PackedInt64Array AsPackedInt64Array() =>
         PackedInt64Array.CreateTakingOwnership(NativeGodotVariant.ConvertToPackedInt64Array(NativeValue.DangerousSelfRef));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public PackedFloat32Array AsPackedFloat32Array() =>
+    public readonly PackedFloat32Array AsPackedFloat32Array() =>
         PackedFloat32Array.CreateTakingOwnership(NativeGodotVariant.ConvertToPackedFloat32Array(NativeValue.DangerousSelfRef));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public PackedFloat64Array AsPackedFloat64Array() =>
+    public readonly PackedFloat64Array AsPackedFloat64Array() =>
         PackedFloat64Array.CreateTakingOwnership(NativeGodotVariant.ConvertToPackedFloat64Array(NativeValue.DangerousSelfRef));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public PackedStringArray AsPackedStringArray() =>
+    public readonly PackedStringArray AsPackedStringArray() =>
         PackedStringArray.CreateTakingOwnership(NativeGodotVariant.ConvertToPackedStringArray(NativeValue.DangerousSelfRef));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public PackedVector2Array AsPackedVector2Array() =>
+    public readonly PackedVector2Array AsPackedVector2Array() =>
         PackedVector2Array.CreateTakingOwnership(NativeGodotVariant.ConvertToPackedVector2Array(NativeValue.DangerousSelfRef));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public PackedVector3Array AsPackedVector3Array() =>
+    public readonly PackedVector3Array AsPackedVector3Array() =>
         PackedVector3Array.CreateTakingOwnership(NativeGodotVariant.ConvertToPackedVector3Array(NativeValue.DangerousSelfRef));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public PackedColorArray AsPackedColorArray() =>
+    public readonly PackedColorArray AsPackedColorArray() =>
         PackedColorArray.CreateTakingOwnership(NativeGodotVariant.ConvertToPackedColorArray(NativeValue.DangerousSelfRef));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public PackedVector4Array AsPackedVector4Array() =>
+    public readonly PackedVector4Array AsPackedVector4Array() =>
         PackedVector4Array.CreateTakingOwnership(NativeGodotVariant.ConvertToPackedVector4Array(NativeValue.DangerousSelfRef));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public GodotDictionary<TKey, TValue> AsGodotDictionary<[MustBeVariant] TKey, [MustBeVariant] TValue>()
+    public readonly GodotDictionary<TKey, TValue> AsGodotDictionary<[MustBeVariant] TKey, [MustBeVariant] TValue>()
     {
         return GodotDictionary<TKey, TValue>.CreateTakingOwnership(NativeGodotVariant.ConvertToDictionary(NativeValue.DangerousSelfRef));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public GodotArray<T> AsGodotArray<[MustBeVariant] T>()
+    public readonly GodotArray<T> AsGodotArray<[MustBeVariant] T>()
     {
         return GodotArray<T>.CreateTakingOwnership(NativeGodotVariant.ConvertToArray(NativeValue.DangerousSelfRef));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public GodotObject? AsGodotObject()
+    public readonly GodotObject? AsGodotObject()
     {
         nint nativePtr = NativeGodotVariant.ConvertToObject(NativeValue.DangerousSelfRef);
         return GodotObjectMarshaller.GetOrCreateManagedInstance(nativePtr);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public StringName AsStringName()
+    public readonly StringName AsStringName()
     {
         return StringName.CreateTakingOwnership(NativeGodotVariant.ConvertToStringName(NativeValue.DangerousSelfRef));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public NodePath AsNodePath()
+    public readonly NodePath AsNodePath()
     {
         return NodePath.CreateTakingOwnership(NativeGodotVariant.ConvertToNodePath(NativeValue.DangerousSelfRef));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Rid AsRid()
+    public readonly Rid AsRid()
     {
         return NativeGodotVariant.ConvertToRid(NativeValue.DangerousSelfRef);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public GodotDictionary AsGodotDictionary()
+    public readonly GodotDictionary AsGodotDictionary()
     {
         return GodotDictionary.CreateTakingOwnership(NativeGodotVariant.ConvertToDictionary(NativeValue.DangerousSelfRef));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public GodotArray AsGodotArray()
+    public readonly GodotArray AsGodotArray()
     {
         return GodotArray.CreateTakingOwnership(NativeGodotVariant.ConvertToArray(NativeValue.DangerousSelfRef));
     }
@@ -903,5 +903,5 @@ public partial struct Variant : IDisposable
             : default;
         return CreateTakingOwnership(variantNative);
     }
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member.
 }

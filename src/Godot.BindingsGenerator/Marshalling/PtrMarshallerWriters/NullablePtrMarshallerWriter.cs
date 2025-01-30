@@ -7,13 +7,13 @@ namespace Godot.BindingsGenerator.Marshallers;
 internal sealed class NullablePtrMarshallerWriter : PtrMarshallerWriter
 {
     /// <summary>
-    /// The Nullable<T> type that will be marshalled.
+    /// The Nullable{T} type that will be marshalled.
     /// </summary>
     private readonly TypeInfo _marshallableType;
 
     /// <summary>
     /// The underlying <see cref="PtrMarshallerWriter"/> that will be used
-    /// to marshall the T from the Nullable<T>.
+    /// to marshall the T from the Nullable{T}.
     /// </summary>
     private readonly PtrMarshallerWriter _underlyingMarshaller;
 

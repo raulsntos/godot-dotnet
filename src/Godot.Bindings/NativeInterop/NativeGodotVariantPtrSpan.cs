@@ -6,7 +6,7 @@ namespace Godot.NativeInterop;
 /// Represents a contiguous region of memory that contains pointers to <see cref="NativeGodotVariant"/>,
 /// similar to a <c>Span&lt;NativeGodotVariant*&gt;</c>.
 /// </summary>
-internal unsafe readonly ref struct NativeGodotVariantPtrSpan
+internal readonly unsafe ref struct NativeGodotVariantPtrSpan
 {
     private readonly NativeGodotVariant** _reference;
     private readonly int _length;

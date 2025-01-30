@@ -20,22 +20,13 @@ internal sealed class DesktopPlatformExporter : PlatformExporter
 
     private static RuntimeIdentifierOS DetermineRuntimeIdentifierOS(string platform)
     {
-        if (GodotPlatform.IsWindows(platform))
+        return platform switch
         {
-            return RuntimeIdentifierOS.Win;
-        }
-        else if (GodotPlatform.IsMacOS(platform))
-        {
-            return RuntimeIdentifierOS.OSX;
-        }
-        else if (GodotPlatform.IsLinux(platform))
-        {
-            return RuntimeIdentifierOS.Linux;
-        }
-        else
-        {
-            throw new NotSupportedException(SR.FormatNotSupported_TargetPlatform(platform));
-        }
+            _ when GodotPlatform.IsWindows(platform) => RuntimeIdentifierOS.Win,
+            _ when GodotPlatform.IsMacOS(platform) => RuntimeIdentifierOS.OSX,
+            _ when GodotPlatform.IsLinux(platform) => RuntimeIdentifierOS.Linux,
+            _ => throw new NotSupportedException(SR.FormatNotSupported_TargetPlatform(platform)),
+        };
     }
 
     private static HashSet<RuntimeIdentifierArchitecture> DetermineArchitectures(string platform, ReadOnlySet<string> features)
@@ -107,14 +98,11 @@ internal sealed class DesktopPlatformExporter : PlatformExporter
         Debug.Assert(!string.IsNullOrEmpty(options.PublishOptions.OutputPath));
         string outputPath = options.PublishOptions.OutputPath;
 
-        string nativeAotExtension = "so";
-        if (GodotPlatform.IsWindows(context.TargetPlatform))
+        string nativeAotExtension = context.TargetPlatform switch
         {
-            nativeAotExtension = "dll";
-        }
-        else if (GodotPlatform.IsMacOS(context.TargetPlatform))
-        {
-            nativeAotExtension = "dylib";
+            string platform when GodotPlatform.IsWindows(platform) => "dll",
+            string platform when GodotPlatform.IsMacOS(platform) => "dylib",
+            _ => "so",
         };
 
         string assemblyPath = Path.Join(outputPath, $"{EditorPath.ProjectAssemblyName}.dll");

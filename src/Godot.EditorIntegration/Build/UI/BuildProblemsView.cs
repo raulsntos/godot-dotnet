@@ -138,7 +138,7 @@ internal sealed partial class BuildProblemsView : HBoxContainer
             return;
         }
 
-        var selectedIdxs = new List<int>();
+        List<int> selectedIdxs = [];
         while (selectedItem is not null)
         {
             int selectedIdx = (int)selectedItem.GetMetadata(0);

@@ -77,7 +77,7 @@ partial struct NativeGodotStringName
         return _ptr.GetHashCode();
     }
 
-    internal unsafe static NativeGodotStringName Create(scoped ReadOnlySpan<byte> utf8)
+    internal static unsafe NativeGodotStringName Create(scoped ReadOnlySpan<byte> utf8)
     {
         if (utf8.IsEmpty)
         {
@@ -92,7 +92,7 @@ partial struct NativeGodotStringName
         }
     }
 
-    internal unsafe static NativeGodotStringName Create(scoped ReadOnlySpan<byte> ascii, bool isStatic)
+    internal static unsafe NativeGodotStringName Create(scoped ReadOnlySpan<byte> ascii, bool isStatic)
     {
         Debug.Assert(Ascii.IsValid(ascii), $"StringName is not valid ASCII '{Encoding.UTF8.GetString(ascii)}'.");
 
@@ -109,7 +109,7 @@ partial struct NativeGodotStringName
         }
     }
 
-    internal unsafe static NativeGodotStringName Create(scoped ReadOnlySpan<char> utf16)
+    internal static unsafe NativeGodotStringName Create(scoped ReadOnlySpan<char> utf16)
     {
         if (utf16.IsEmpty)
         {

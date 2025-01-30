@@ -6,7 +6,7 @@ namespace Godot.BindingsGenerator;
 /// Describes one of the generated types that will be written by <see cref="BindingsGenerator"/>
 /// and the path that it should be written to.
 /// </summary>
-public class GeneratedTypeData
+internal sealed class GeneratedTypeData
 {
     /// <summary>
     /// Type information that describes the type that will be written.
@@ -23,6 +23,11 @@ public class GeneratedTypeData
     /// </summary>
     public bool Nullable { get; set; }
 
+    /// <summary>
+    /// Construct a <see cref="GeneratedTypeData"/>.
+    /// </summary>
+    /// <param name="path">Path hint to the file that the type will be written to.</param>
+    /// <param name="type">Type information that describes the type that will be written.</param>
     public GeneratedTypeData(string path, TypeInfo type)
     {
         Type = type;

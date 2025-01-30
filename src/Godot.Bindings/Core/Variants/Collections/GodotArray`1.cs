@@ -30,10 +30,10 @@ public sealed class GodotArray<[MustBeVariant] T> :
     IGenericGodotArray,
     IDisposable
 {
-    private unsafe static void WriteUnmanagedFunc(in GodotArray<T> value, void* destination) =>
+    private static unsafe void WriteUnmanagedFunc(in GodotArray<T> value, void* destination) =>
         *(NativeGodotArray*)destination = value.NativeValue.DangerousSelfRef;
 
-    private unsafe static GodotArray<T> ConvertFromUnmanagedFunc(void* ptr) =>
+    private static unsafe GodotArray<T> ConvertFromUnmanagedFunc(void* ptr) =>
         GodotArray<T>.CreateTakingOwnership(*(NativeGodotArray*)ptr);
 
     private static NativeGodotVariant ConvertToVariantFunc(in GodotArray<T> from) =>

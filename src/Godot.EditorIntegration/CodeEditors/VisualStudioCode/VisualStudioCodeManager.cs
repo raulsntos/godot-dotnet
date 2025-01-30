@@ -29,7 +29,7 @@ internal sealed class VisualStudioCodeManager : CodeEditorManager
     {
         string command;
 
-        var args = new List<string>();
+        List<string> args = [];
 
         if (OperatingSystem.IsMacOS() && TryGetMacOSAppBundleId(out string? bundleId))
         {

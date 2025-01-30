@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace Godot.NativeInterop.Marshallers;
 
-internal unsafe static class StringNameMarshaller
+internal static unsafe class StringNameMarshaller
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void WriteUnmanaged(NativeGodotStringName* destination, StringName? value)

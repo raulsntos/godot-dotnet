@@ -137,7 +137,7 @@ public static partial class Mathf
     public static float AngleDifference(float from, float to)
     {
         float difference = (to - from) % float.Tau;
-        return ((2.0f * difference) % float.Tau) - difference;
+        return (2.0f * difference % float.Tau) - difference;
     }
 
     /// <summary>
@@ -154,7 +154,7 @@ public static partial class Mathf
     public static double AngleDifference(double from, double to)
     {
         double difference = (to - from) % double.Tau;
-        return ((2.0 * difference) % double.Tau) - difference;
+        return (2.0 * difference % double.Tau) - difference;
     }
 
     /// <summary>
@@ -503,13 +503,13 @@ public static partial class Mathf
         float fromRot = from % float.Tau;
 
         float preDiff = (pre - fromRot) % float.Tau;
-        float preRot = fromRot + (2.0f * preDiff) % float.Tau - preDiff;
+        float preRot = fromRot + 2.0f * preDiff % float.Tau - preDiff;
 
         float toDiff = (to - fromRot) % float.Tau;
-        float toRot = fromRot + (2.0f * toDiff) % float.Tau - toDiff;
+        float toRot = fromRot + 2.0f * toDiff % float.Tau - toDiff;
 
         float postDiff = (post - toRot) % float.Tau;
-        float postRot = toRot + (2.0f * postDiff) % float.Tau - postDiff;
+        float postRot = toRot + 2.0f * postDiff % float.Tau - postDiff;
 
         return CubicInterpolate(fromRot, toRot, preRot, postRot, weight);
     }
@@ -530,13 +530,13 @@ public static partial class Mathf
         double fromRot = from % double.Tau;
 
         double preDiff = (pre - fromRot) % double.Tau;
-        double preRot = fromRot + (2.0 * preDiff) % double.Tau - preDiff;
+        double preRot = fromRot + 2.0 * preDiff % double.Tau - preDiff;
 
         double toDiff = (to - fromRot) % double.Tau;
-        double toRot = fromRot + (2.0 * toDiff) % double.Tau - toDiff;
+        double toRot = fromRot + 2.0 * toDiff % double.Tau - toDiff;
 
         double postDiff = (post - toRot) % double.Tau;
-        double postRot = toRot + (2.0 * postDiff) % double.Tau - postDiff;
+        double postRot = toRot + 2.0 * postDiff % double.Tau - postDiff;
 
         return CubicInterpolate(fromRot, toRot, preRot, postRot, weight);
     }
@@ -559,7 +559,7 @@ public static partial class Mathf
     /// <returns>The resulting value of the interpolation.</returns>
     public static float CubicInterpolateInTime(float from, float to, float pre, float post, float weight, float toT, float preT, float postT)
     {
-        /* Barry-Goldman method */
+        // Barry-Goldman method.
         float t = float.Lerp(0.0f, toT, weight);
         float a1 = float.Lerp(pre, from, preT == 0 ? 0.0f : (t - preT) / -preT);
         float a2 = float.Lerp(from, to, toT == 0 ? 0.5f : t / toT);
@@ -587,7 +587,7 @@ public static partial class Mathf
     /// <returns>The resulting value of the interpolation.</returns>
     public static double CubicInterpolateInTime(double from, double to, double pre, double post, double weight, double toT, double preT, double postT)
     {
-        /* Barry-Goldman method */
+        // Barry-Goldman method.
         double t = double.Lerp(0.0, toT, weight);
         double a1 = double.Lerp(pre, from, preT == 0 ? 0.0 : (t - preT) / -preT);
         double a2 = double.Lerp(from, to, toT == 0 ? 0.5 : t / toT);
@@ -619,13 +619,13 @@ public static partial class Mathf
         float fromRot = from % float.Tau;
 
         float preDiff = (pre - fromRot) % float.Tau;
-        float preRot = fromRot + (2.0f * preDiff) % float.Tau - preDiff;
+        float preRot = fromRot + 2.0f * preDiff % float.Tau - preDiff;
 
         float toDiff = (to - fromRot) % float.Tau;
-        float toRot = fromRot + (2.0f * toDiff) % float.Tau - toDiff;
+        float toRot = fromRot + 2.0f * toDiff % float.Tau - toDiff;
 
         float postDiff = (post - toRot) % float.Tau;
-        float postRot = toRot + (2.0f * postDiff) % float.Tau - postDiff;
+        float postRot = toRot + 2.0f * postDiff % float.Tau - postDiff;
 
         return CubicInterpolateInTime(fromRot, toRot, preRot, postRot, weight, toT, preT, postT);
     }
@@ -652,13 +652,13 @@ public static partial class Mathf
         double fromRot = from % double.Tau;
 
         double preDiff = (pre - fromRot) % double.Tau;
-        double preRot = fromRot + (2.0 * preDiff) % double.Tau - preDiff;
+        double preRot = fromRot + 2.0 * preDiff % double.Tau - preDiff;
 
         double toDiff = (to - fromRot) % double.Tau;
-        double toRot = fromRot + (2.0 * toDiff) % double.Tau - toDiff;
+        double toRot = fromRot + 2.0 * toDiff % double.Tau - toDiff;
 
         double postDiff = (post - toRot) % double.Tau;
-        double postRot = toRot + (2.0 * postDiff) % double.Tau - postDiff;
+        double postRot = toRot + 2.0 * postDiff % double.Tau - postDiff;
 
         return CubicInterpolateInTime(fromRot, toRot, preRot, postRot, weight, toT, preT, postT);
     }

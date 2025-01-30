@@ -8,16 +8,7 @@ internal sealed class IntegerPtrMarshallerWriter : PtrMarshallerWriter
     /// <summary>
     /// The type of the fixed pointer to the marshalled value.
     /// </summary>
-    private readonly static TypeInfo _unmanagedPointerType = KnownTypes.SystemInt64.MakePointerType();
-
-    private readonly static TypeInfo[] _compatibleTypes =
-    [
-        KnownTypes.SystemSByte, KnownTypes.SystemByte,
-        KnownTypes.SystemInt16, KnownTypes.SystemUInt16,
-        KnownTypes.SystemInt32, KnownTypes.SystemUInt32,
-        KnownTypes.SystemInt64, KnownTypes.SystemUInt64,
-        KnownTypes.SystemChar, KnownTypes.SystemTextRune,
-    ];
+    private static readonly TypeInfo _unmanagedPointerType = KnownTypes.SystemInt64.MakePointerType();
 
     public static IntegerPtrMarshallerWriter Instance { get; } = new();
 

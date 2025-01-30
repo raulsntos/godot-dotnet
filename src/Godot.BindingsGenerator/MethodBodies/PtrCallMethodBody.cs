@@ -77,7 +77,8 @@ internal abstract class PtrCallMethodBody<TContext> : CallMethodBody<TContext> w
     }
 
     /// <summary>
-    /// Retrieves the method bind that will be invoked in <see cref="CallMethodBody.InvokeMethodBind"/>.
+    /// Retrieves the method bind that will be invoked in
+    /// <see cref="CallMethodBody{TContext}.InvokeMethodBind(TContext, IndentedTextWriter)"/>.
     /// </summary>
     protected abstract void RetrieveMethodBind(TContext context, IndentedTextWriter writer);
 

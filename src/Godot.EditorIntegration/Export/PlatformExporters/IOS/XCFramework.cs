@@ -35,7 +35,7 @@ internal static class XCFramework
             startInfo.ArgumentList.Add("xcodebuild");
             startInfo.ArgumentList.Add("-create-xcframework");
 
-            foreach (var outputPath in outputPaths)
+            foreach (string outputPath in outputPaths)
             {
                 startInfo.ArgumentList.Add("-library");
                 startInfo.ArgumentList.Add(Path.Join(outputPath, baseDylib));

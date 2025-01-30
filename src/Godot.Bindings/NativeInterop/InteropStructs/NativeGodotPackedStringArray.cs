@@ -6,7 +6,7 @@ namespace Godot.NativeInterop;
 partial struct NativeGodotPackedStringArray
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal unsafe static NativeGodotPackedStringArray Create(scoped ReadOnlySpan<string> value)
+    internal static unsafe NativeGodotPackedStringArray Create(scoped ReadOnlySpan<string> value)
     {
         if (value.IsEmpty)
         {
@@ -26,7 +26,7 @@ partial struct NativeGodotPackedStringArray
         return destination;
     }
 
-    internal unsafe readonly string[] ToArray()
+    internal readonly unsafe string[] ToArray()
     {
         int size = Size;
         if (size == 0)

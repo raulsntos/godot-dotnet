@@ -848,20 +848,13 @@ public struct Color : IEquatable<Color>
     private static int ParseCol4(ReadOnlySpan<char> str, int index)
     {
         char character = str[index];
-
-        if (character >= '0' && character <= '9')
+        return character switch
         {
-            return character - '0';
-        }
-        else if (character >= 'a' && character <= 'f')
-        {
-            return character + (10 - 'a');
-        }
-        else if (character >= 'A' && character <= 'F')
-        {
-            return character + (10 - 'A');
-        }
-        return -1;
+            >= '0' and <= '9' => character - '0',
+            >= 'a' and <= 'f' => character + (10 - 'a'),
+            >= 'A' and <= 'F' => character + (10 - 'A'),
+            _ => -1,
+        };
     }
 
     private static int ParseCol8(ReadOnlySpan<char> str, int index)
@@ -953,7 +946,7 @@ public struct Color : IEquatable<Color>
 
         // Check if the amount of hex digits is valid.
         int len = color.Length;
-        if (!(len == 3 || len == 4 || len == 6 || len == 8))
+        if (len is not (3 or 4 or 6 or 8))
         {
             return false;
         }

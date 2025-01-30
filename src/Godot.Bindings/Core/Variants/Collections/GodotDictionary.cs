@@ -470,7 +470,7 @@ public sealed class GodotDictionary :
     /// Converts this <see cref="GodotDictionary"/> to a string.
     /// </summary>
     /// <returns>A string representation of this dictionary.</returns>
-    public unsafe override string ToString()
+    public override unsafe string ToString()
     {
         ref NativeGodotDictionary self = ref NativeValue.DangerousSelfRef;
         NativeGodotVariant selfVariant = new() { Dictionary = self, Type = VariantType.Dictionary };

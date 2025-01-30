@@ -34,6 +34,10 @@ public class GenerateTask : Task
     /// </summary>
     public string? TestOutputPath { get; set; }
 
+    /// <summary>
+    /// Execute the MSBuild task.
+    /// </summary>
+    /// <returns><see langword="true"/> if the task was successful.</returns>
     public override bool Execute()
     {
         // Clean output directories first.

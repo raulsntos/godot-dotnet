@@ -227,7 +227,7 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
         Debug.Assert(context.IsTypeGenerated(type));
 
         // Populate methods.
-        var virtualMethods = new List<(MethodInfo Method, GodotMethodInfo GodotMethod)>();
+        List<(MethodInfo Method, GodotMethodInfo GodotMethod)> virtualMethods = [];
         foreach (var engineMethod in engineClass.Methods)
         {
             if (!ShouldGenerateMethod(type, engineClass, engineMethod))

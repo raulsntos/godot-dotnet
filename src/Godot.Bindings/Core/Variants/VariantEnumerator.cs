@@ -71,7 +71,7 @@ public ref struct VariantEnumerator
         return hasNext;
     }
 
-    private unsafe static bool IterInit(NativeGodotVariant source, ref NativeGodotVariant iterator, out bool isValid)
+    private static unsafe bool IterInit(NativeGodotVariant source, ref NativeGodotVariant iterator, out bool isValid)
     {
         Unsafe.SkipInit(out bool valid);
 
@@ -81,7 +81,7 @@ public ref struct VariantEnumerator
         return result;
     }
 
-    private unsafe static bool IterNext(NativeGodotVariant source, ref NativeGodotVariant iterator, out bool isValid)
+    private static unsafe bool IterNext(NativeGodotVariant source, ref NativeGodotVariant iterator, out bool isValid)
     {
         Unsafe.SkipInit(out bool valid);
 
@@ -91,7 +91,7 @@ public ref struct VariantEnumerator
         return result;
     }
 
-    private unsafe static NativeGodotVariant IterGet(NativeGodotVariant source, ref NativeGodotVariant iterator, out bool isValid)
+    private static unsafe NativeGodotVariant IterGet(NativeGodotVariant source, ref NativeGodotVariant iterator, out bool isValid)
     {
         Unsafe.SkipInit(out bool valid);
         NativeGodotVariant result = default;
