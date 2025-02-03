@@ -11,6 +11,7 @@ I couldn't find a way to achieve the same behavior with Python directly.
 """
 
 import os
+import shutil
 import sys
 import signal
 import argparse
@@ -92,7 +93,7 @@ def build(unknown_args: List[str]):
 
 def clean():
     if os.path.exists(tools.artifacts_dir):
-        os.remove(tools.artifacts_dir)
+        shutil.rmtree(tools.artifacts_dir)
         print("Artifacts directory deleted.", flush=True)
     exit(0)
 
