@@ -6,12 +6,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <IsPackable>true</IsPackable>
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Content Include="$(ProjectRuntimeConfigFilePath)" BuildAction="None" PackageCopyToOutput="true" />
-  </ItemGroup>
 
 </Project>

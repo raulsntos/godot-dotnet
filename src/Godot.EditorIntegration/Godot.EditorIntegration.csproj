@@ -14,6 +14,14 @@
 
   <PropertyGroup>
     <IsPackable>true</IsPackable>
+    <IncludeContentInPack>true</IncludeContentInPack>
+
+    <!--
+      We're packing DLLs into the content directories of the NuGet package.
+      NuGet warns we may not want that since they won't be referenced;
+      that is exactly what we do want here.
+    -->
+    <NoWarn>$(NoWarn);NU5100</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,5 +43,62 @@
       <EmitFormatMethods>true</EmitFormatMethods>
     </EmbeddedResource>
   </ItemGroup>
+
+  <!--
+    For the following packages we directly include the binary into this NuGet package because
+    we don't want/need a separate NuGet package for it.
+    PrivateAssets="all" is needed to prevent this reference from becoming a package reference
+    in this package, as a workaround for https://github.com/NuGet/Home/issues/3891.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\Godot.PluginLoader\Godot.PluginLoader.csproj" PrivateAssets="all" ReferenceOutputAssembly="false">
+      <IncludeOutputInThisPackage>true</IncludeOutputInThisPackage>
+    </ProjectReference>
+    <ProjectReference Include="..\Godot.EditorIntegration.MSBuildLogger\Godot.EditorIntegration.MSBuildLogger.csproj" PrivateAssets="all" ReferenceOutputAssembly="false">
+      <IncludeOutputInThisPackage>true</IncludeOutputInThisPackage>
+    </ProjectReference>
+  </ItemGroup>
+
+  <!-- Include certain project reference binaries into this package. -->
+  <PropertyGroup>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);GetAdditionalBinariesToPackage</TargetsForTfmSpecificBuildOutput>
+  </PropertyGroup>
+  <Target Name="GetAdditionalBinariesToPackage" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <BuildOutputInPackage Include="@(ReferencePath)" Condition="'%(ReferencePath.IncludeOutputInThisPackage)' == 'true'" />
+    </ItemGroup>
+  </Target>
+
+  <!-- Deploy additional binaries to this package. -->
+  <Target Name="DeployAdditionalBinaries" BeforeTargets="_GetPackageFiles;AssignTargetPaths" Condition="'$(DesignTimeBuild)' != 'true'">
+    <ItemGroup>
+      <_AdditionalProjectReferences Include="..\Godot.PluginLoader\Godot.PluginLoader.csproj">
+        <ContentFolderName>Godot.PluginLoader</ContentFolderName>
+      </_AdditionalProjectReferences>
+      <_AdditionalProjectReferences Include="..\Godot.EditorIntegration.MSBuildLogger\Godot.EditorIntegration.MSBuildLogger.csproj">
+        <ContentFolderName>Godot.EditorIntegration.MSBuildLogger</ContentFolderName>
+      </_AdditionalProjectReferences>
+    </ItemGroup>
+
+    <!-- We include Build as a target we invoke to work around https://github.com/dotnet/msbuild/issues/5433 -->
+    <MSBuild Projects="@(_AdditionalProjectReferences)" Targets="Build;BuiltProjectOutputGroup;ReferenceCopyLocalPathsOutputGroup" Properties="UseAppHost=false">
+      <Output TaskParameter="TargetOutputs" ItemName="AdditionalAssets" />
+    </MSBuild>
+
+    <ItemGroup>
+      <!--
+        We're setting both TargetPath and PackagePath here, the former when this is used in a regular build to deploy
+        and the latter for when this called during pack. By putting the PackagePath in any/any, we only have to deploy
+        this once rather than per TFM.
+        Similarly, we set CopyToOutputDirectory for the regular build and PackageCopyToPutput for the packaging process.
+      -->
+      <Content Include="%(AdditionalAssets.Identity)"
+        Condition="'%(AdditionalAssets.TargetPath)' != '' and '%(AdditionalAssets.Extension)' != '.xml'"
+        TargetPath="$([System.IO.Path]::Combine('%(AdditionalAssets.ContentFolderName)', '%(AdditionalAssets.TargetPath)'))"
+        PackagePath="$([System.IO.Path]::Combine('contentFiles', 'any', 'any', '%(AdditionalAssets.ContentFolderName)', '%(AdditionalAssets.TargetPath)'))"
+        CopyToOutputDirectory="PreserveNewest"
+        PackageCopyToOutput="true" />
+    </ItemGroup>
+  </Target>
 
 </Project>

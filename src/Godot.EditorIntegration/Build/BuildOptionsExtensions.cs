@@ -24,7 +24,7 @@ internal static class BuildOptionsExtensions
 
         options.EnableLogger = true;
         options.LoggerTypeFullName = "Godot.EditorIntegration.MSBuildLogger.BuildLogger";
-        options.LoggerAssemblyPath = Path.Join(EditorPath.EditorAssembliesPath, $"Godot.EditorIntegration.MSBuildLogger.dll");
+        options.LoggerAssemblyPath = Path.Join(EditorPath.EditorAssembliesPath, "Godot.EditorIntegration.MSBuildLogger", "Godot.EditorIntegration.MSBuildLogger.dll");
         options.EnableBinaryLog = (bool)editorSettings.GetSetting(EditorSettingNames.CreateBinaryLog);
 
         // TODO: This gets the feature from the running editor which is fine for project builds
