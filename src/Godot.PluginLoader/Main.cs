@@ -13,7 +13,36 @@ internal static unsafe class Main
     private static readonly Dictionary<string, WeakGodotLoadContext> _loadContexts = [];
 
     [UnmanagedCallersOnly]
-    public static void LoadAssembly(nint assemblyPathNative, nint fullyQualifiedTypeNameNative, nint methodNameNative, nint outGDExtensionInitializationFunction)
+    public static bool LoadAssembly(nint assemblyPathNative, nint fullyQualifiedTypeNameNative, nint methodNameNative, nint outGDExtensionInitializationFunction)
+    {
+        try
+        {
+            LoadAssemblyCore(assemblyPathNative, fullyQualifiedTypeNameNative, methodNameNative, outGDExtensionInitializationFunction);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine($"Failed to load assembly. Exception: {e}");
+            return false;
+        }
+    }
+
+    [UnmanagedCallersOnly]
+    public static bool UnloadAssembly(nint assemblyPathNative)
+    {
+        try
+        {
+            UnloadAssemblyCore(assemblyPathNative);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.Error.WriteLine($"Failed to unload assembly. Exception: {e}");
+            return false;
+        }
+    }
+
+    private static void LoadAssemblyCore(nint assemblyPathNative, nint fullyQualifiedTypeNameNative, nint methodNameNative, nint outGDExtensionInitializationFunction)
     {
         ArgumentNullException.ThrowIfNull((void*)outGDExtensionInitializationFunction);
 
@@ -59,8 +88,7 @@ internal static unsafe class Main
         }
     }
 
-    [UnmanagedCallersOnly]
-    public static void UnloadAssembly(nint assemblyPathNative)
+    private static void UnloadAssemblyCore(nint assemblyPathNative)
     {
         string assemblyPath = MarshalToString(assemblyPathNative);
 
