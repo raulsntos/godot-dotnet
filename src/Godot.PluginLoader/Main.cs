@@ -62,6 +62,11 @@ internal static unsafe class Main
 
             var assembly = alc.LoadFromAssemblyPath(assemblyPath);
 
+            if (IsGodotSharpAssembly(assembly))
+            {
+                throw new InvalidOperationException("Assembly uses old GodotSharp bindings.");
+            }
+
             var type = Type.GetType(fullyQualifiedTypeName, alc.LoadFromAssemblyName, null, throwOnError: true)!;
 
             // Match semantics of hostfxr's load_assembly_and_get_function_pointer.
@@ -111,6 +116,22 @@ internal static unsafe class Main
             // If the ALC is still alive, then something is keeping it alive and can't be unloaded.
             throw new InvalidOperationException($"Failed to unload assembly '{assemblyPath}'. Possible causes: Strong GC handles, running threads, etc.");
         }
+    }
+
+    private static bool IsGodotSharpAssembly(Assembly assembly)
+    {
+        // If the assembly contains a reference to the 'GodotSharp' assembly,
+        // it must be an assembly using the old C# bindings; otherwise, assume
+        // it's using the new Godot .NET bindings or custom bindings.
+        foreach (var referencedAssembly in assembly.GetReferencedAssemblies())
+        {
+            if (referencedAssembly.Name == "GodotSharp")
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static string MarshalToString(nint stringNative, [CallerArgumentExpression(nameof(stringNative))] string? paramName = null)
