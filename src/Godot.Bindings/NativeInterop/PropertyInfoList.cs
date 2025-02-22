@@ -100,17 +100,31 @@ internal sealed class PropertyInfoList : IList<PropertyInfo>
 
             // Update the property info with the data from the managed type.
             refProperty.type = (GDExtensionVariantType)propertyInfo.Type;
-            StringNameMarshaller.WriteUnmanaged(refProperty.name, propertyInfo.Name);
+            refProperty.name = StringNameMarshaller.ConvertToUnmanaged(propertyInfo.Name);
             refProperty.hint = (uint)propertyInfo.Hint;
-            StringMarshaller.WriteUnmanaged(refProperty.hint_string, propertyInfo.HintString);
-            StringNameMarshaller.WriteUnmanaged(refProperty.class_name, propertyInfo.ClassName);
+            refProperty.hint_string = StringMarshaller.ConvertToUnmanaged(propertyInfo.HintString);
+            refProperty.class_name = StringNameMarshaller.ConvertToUnmanaged(propertyInfo.ClassName);
             refProperty.usage = (uint)propertyInfo.Usage;
         }
         return ptr;
     }
 
-    internal static unsafe void FreeNative(GDExtensionPropertyInfo* ptr)
+    internal static unsafe void FreeNative(GDExtensionPropertyInfo* ptr, int count)
     {
+        if (ptr is null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < count; i++)
+        {
+            ref GDExtensionPropertyInfo refProperty = ref ptr[i];
+
+            StringNameMarshaller.Free(refProperty.name);
+            StringMarshaller.Free(refProperty.hint_string);
+            StringNameMarshaller.Free(refProperty.class_name);
+        }
+
         NativeMemory.Free(ptr);
     }
 }

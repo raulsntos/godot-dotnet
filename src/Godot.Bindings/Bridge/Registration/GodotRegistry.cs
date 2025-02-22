@@ -260,9 +260,10 @@ public static partial class GodotRegistry
             Debug.Assert(instanceObj is not null);
 
             var propertyList = instanceObj.GetPropertyListStorage();
+            Debug.Assert(propertyList.Count == count);
             propertyList.Clear();
 
-            PropertyInfoList.FreeNative(propertyListPtr);
+            PropertyInfoList.FreeNative(propertyListPtr, (int)count);
         }
     }
 
