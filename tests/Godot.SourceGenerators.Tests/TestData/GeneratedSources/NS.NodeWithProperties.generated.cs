@@ -26,9 +26,9 @@ partial class NodeWithProperties
     {
         context.BindConstructor(() => new NodeWithProperties());
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@MyProperty, global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Int32)
-        {
-            Usage = global::Godot.PropertyUsageFlags.Default,
-        },
+            {
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
             static (NodeWithProperties __instance) =>
             {
                 return __instance.@MyProperty;
@@ -38,9 +38,9 @@ partial class NodeWithProperties
                 __instance.@MyProperty = value;
             });
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@MyNamedProperty, global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Int32)
-        {
-            Usage = global::Godot.PropertyUsageFlags.Default,
-        },
+            {
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
             static (NodeWithProperties __instance) =>
             {
                 return __instance.@MyNamedProperty;
@@ -50,9 +50,9 @@ partial class NodeWithProperties
                 __instance.@MyNamedProperty = value;
             });
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@MyPropertyWithDefaultValue, global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Int32)
-        {
-            Usage = global::Godot.PropertyUsageFlags.Default,
-        },
+            {
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
             static (NodeWithProperties __instance) =>
             {
                 return __instance.@MyPropertyWithDefaultValue;
@@ -62,9 +62,9 @@ partial class NodeWithProperties
                 __instance.@MyPropertyWithDefaultValue = value;
             });
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@myField, global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Int32)
-        {
-            Usage = global::Godot.PropertyUsageFlags.Default,
-        },
+            {
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
             static (NodeWithProperties __instance) =>
             {
                 return __instance.@myField;
@@ -74,9 +74,9 @@ partial class NodeWithProperties
                 __instance.@myField = value;
             });
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@myNamedField, global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Int32)
-        {
-            Usage = global::Godot.PropertyUsageFlags.Default,
-        },
+            {
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
             static (NodeWithProperties __instance) =>
             {
                 return __instance.@myNamedField;
@@ -86,9 +86,9 @@ partial class NodeWithProperties
                 __instance.@myNamedField = value;
             });
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@myFieldWithDefaultValue, global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Int32)
-        {
-            Usage = global::Godot.PropertyUsageFlags.Default,
-        },
+            {
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
             static (NodeWithProperties __instance) =>
             {
                 return __instance.@myFieldWithDefaultValue;
