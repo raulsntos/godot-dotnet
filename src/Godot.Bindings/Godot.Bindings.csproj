@@ -32,7 +32,12 @@
     <ProjectReference Include="..\Godot.BindingsGenerator\Godot.BindingsGenerator.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
-  <UsingTask TaskName="Godot.BindingsGenerator.GenerateTask" AssemblyFile="$(ArtifactsBinDir)\Godot.BindingsGenerator\$(Configuration)\net9.0\Godot.BindingsGenerator.dll" />
+  <!--
+    TaskHostFactory ensures that the GenerateTasks assembly is always loaded in an isolated process.
+    This avoids issues when the MSBuild process is long-lived (i.e. /nodeReuse:true).
+    See https://github.com/rainersigwald/build-task-in-solution-demo.
+  -->
+  <UsingTask TaskName="Godot.BindingsGenerator.GenerateTask" AssemblyFile="$(ArtifactsBinDir)\Godot.BindingsGenerator\$(Configuration)\net9.0\Godot.BindingsGenerator.dll" TaskFactory="TaskHostFactory" />
 
   <!-- Generate the bindings before building the project. -->
   <ItemGroup Condition="'$(GenerateGodotBindings)' == 'true'">
