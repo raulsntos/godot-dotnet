@@ -35,7 +35,7 @@ internal unsafe class GodotObjectMarshaller
         NativeGodotStringName nativeClassName = default;
         if (GodotBridge.GDExtensionInterface.object_get_class_name((void*)nativePtr, GodotBridge.LibraryPtr, nativeClassName.GetUnsafeAddress()))
         {
-            StringName nativeClassNameManaged = StringName.CreateTakingOwnership(nativeClassName);
+            using StringName nativeClassNameManaged = StringName.CreateCopying(nativeClassName);
             Debug.Assert(InteropUtils.CreateHelpers.ContainsKey(nativeClassNameManaged), $"Create helper for class named '{nativeClassNameManaged}' not found.");
             if (InteropUtils.CreateHelpers.TryGetValue(nativeClassNameManaged, out var createHelper))
             {

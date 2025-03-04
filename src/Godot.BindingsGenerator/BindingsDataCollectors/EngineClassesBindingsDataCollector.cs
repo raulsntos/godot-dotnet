@@ -171,7 +171,7 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                         writer.WriteLine("if (_singleton is null)");
                         writer.OpenBlock();
                         writer.WriteLine($"using global::Godot.NativeInterop.NativeGodotStringName nameNative = global::Godot.NativeInterop.NativeGodotStringName.Create(\"{singleton.Name}\"u8);");
-                        writer.WriteLine("nint singletonPtr = (nint)global::Godot.Bridge.GodotBridge.GDExtensionInterface.global_get_singleton(nameNative.GetUnsafeAddress());");
+                        writer.WriteLine("nint singletonPtr = (nint)global::Godot.Bridge.GodotBridge.GDExtensionInterface.global_get_singleton(&nameNative);");
                         writer.WriteLine($"_singleton = ({type.FullNameWithGlobal})global::Godot.NativeInterop.Marshallers.GodotObjectMarshaller.GetOrCreateManagedInstance(singletonPtr);");
                         writer.CloseBlock();
                         writer.WriteLine($"return _singleton;");

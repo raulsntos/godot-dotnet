@@ -37,12 +37,12 @@ partial class GodotObject
         NativeGodotStringName nameNative = name.NativeValue.DangerousSelfRef;
         returnValue = default;
 
-        if (GodotBridge.GDExtensionInterface.object_has_script_method((void*)NativePtr, nameNative.GetUnsafeAddress()))
+        if (GodotBridge.GDExtensionInterface.object_has_script_method((void*)NativePtr, &nameNative))
         {
             GDExtensionCallError error;
             fixed (NativeGodotVariant** argsPtr = args)
             {
-                GodotBridge.GDExtensionInterface.object_call_script_method((void*)NativePtr, nameNative.GetUnsafeAddress(), argsPtr, args.Length, returnValue.GetUnsafeAddress(), &error);
+                GodotBridge.GDExtensionInterface.object_call_script_method((void*)NativePtr, &nameNative, argsPtr, args.Length, returnValue.GetUnsafeAddress(), &error);
             }
             if (error.error == GDExtensionCallErrorType.GDEXTENSION_CALL_OK)
             {

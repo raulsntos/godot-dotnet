@@ -116,7 +116,7 @@ partial class BindingsData
         RegisterPtrMarshaller(KnownTypes.GodotBasis, new BlittablePtrMarshallerWriter(KnownTypes.GodotBasis));
         RegisterRuntimePtrMarshaller(KnownTypes.GodotCallable, "CallableMarshaller");
         RegisterPtrMarshaller(KnownTypes.GodotColor, new BlittablePtrMarshallerWriter(KnownTypes.GodotColor));
-        RegisterRuntimePtrMarshaller(KnownTypes.GodotNodePath, "NodePathMarshaller");
+        RegisterPtrMarshaller(KnownTypes.GodotNodePath, new InteropStructPtrMarshallerWriter(KnownTypes.GodotNodePath, KnownTypes.NativeGodotNodePath.MakePointerType()));
         RegisterPtrMarshaller(KnownTypes.GodotPlane, new BlittablePtrMarshallerWriter(KnownTypes.GodotPlane));
         RegisterPtrMarshaller(KnownTypes.GodotProjection, new BlittablePtrMarshallerWriter(KnownTypes.GodotProjection));
         RegisterPtrMarshaller(KnownTypes.GodotQuaternion, new BlittablePtrMarshallerWriter(KnownTypes.GodotQuaternion));
@@ -125,7 +125,7 @@ partial class BindingsData
         RegisterPtrMarshaller(KnownTypes.GodotRid, new BlittablePtrMarshallerWriter(KnownTypes.GodotRid));
         RegisterPtrMarshaller(KnownTypes.GodotSignal, new InteropStructPtrMarshallerWriter(KnownTypes.GodotSignal, KnownTypes.NativeGodotSignal.MakePointerType()));
         RegisterRuntimePtrMarshaller(KnownTypes.SystemString, "StringMarshaller");
-        RegisterRuntimePtrMarshaller(KnownTypes.GodotStringName, "StringNameMarshaller");
+        RegisterPtrMarshaller(KnownTypes.GodotStringName, new InteropStructPtrMarshallerWriter(KnownTypes.GodotStringName, KnownTypes.NativeGodotStringName.MakePointerType()));
         RegisterPtrMarshaller(KnownTypes.GodotTransform2D, new BlittablePtrMarshallerWriter(KnownTypes.GodotTransform2D));
         RegisterPtrMarshaller(KnownTypes.GodotTransform3D, new BlittablePtrMarshallerWriter(KnownTypes.GodotTransform3D));
         RegisterPtrMarshaller(KnownTypes.GodotVector2, new BlittablePtrMarshallerWriter(KnownTypes.GodotVector2));
@@ -147,7 +147,7 @@ partial class BindingsData
         RegisterVariantMarshaller(KnownTypes.GodotBasis, new InteropStructVariantMarshallerWriter(KnownTypes.GodotBasis, "Basis"));
         RegisterRuntimeVariantMarshaller(KnownTypes.GodotCallable, "CallableMarshaller");
         RegisterVariantMarshaller(KnownTypes.GodotColor, new InteropStructVariantMarshallerWriter(KnownTypes.GodotColor, "Color"));
-        RegisterRuntimeVariantMarshaller(KnownTypes.GodotNodePath, "NodePathMarshaller");
+        RegisterVariantMarshaller(KnownTypes.GodotNodePath, new InteropStructVariantMarshallerWriter(KnownTypes.GodotNodePath, "NodePath", KnownTypes.NativeGodotNodePath, createMethodSuffix: "TakingOwnership"));
         RegisterVariantMarshaller(KnownTypes.GodotPlane, new InteropStructVariantMarshallerWriter(KnownTypes.GodotPlane, "Plane"));
         RegisterVariantMarshaller(KnownTypes.GodotProjection, new InteropStructVariantMarshallerWriter(KnownTypes.GodotProjection, "Projection"));
         RegisterVariantMarshaller(KnownTypes.GodotQuaternion, new InteropStructVariantMarshallerWriter(KnownTypes.GodotQuaternion, "Quaternion"));
@@ -156,7 +156,7 @@ partial class BindingsData
         RegisterVariantMarshaller(KnownTypes.GodotRid, new InteropStructVariantMarshallerWriter(KnownTypes.GodotRid, "Rid"));
         RegisterVariantMarshaller(KnownTypes.GodotSignal, new InteropStructVariantMarshallerWriter(KnownTypes.GodotSignal, "Signal", KnownTypes.NativeGodotSignal, createMethodSuffix: "TakingOwnership"));
         RegisterRuntimeVariantMarshaller(KnownTypes.SystemString, "StringMarshaller");
-        RegisterRuntimeVariantMarshaller(KnownTypes.GodotStringName, "StringNameMarshaller");
+        RegisterVariantMarshaller(KnownTypes.GodotStringName, new InteropStructVariantMarshallerWriter(KnownTypes.GodotStringName, "StringName", KnownTypes.NativeGodotStringName, createMethodSuffix: "TakingOwnership"));
         RegisterVariantMarshaller(KnownTypes.GodotTransform2D, new InteropStructVariantMarshallerWriter(KnownTypes.GodotTransform2D, "Transform2D"));
         RegisterVariantMarshaller(KnownTypes.GodotTransform3D, new InteropStructVariantMarshallerWriter(KnownTypes.GodotTransform3D, "Transform3D"));
         RegisterVariantMarshaller(KnownTypes.GodotVector2, new InteropStructVariantMarshallerWriter(KnownTypes.GodotVector2, "Vector2"));
@@ -230,12 +230,7 @@ partial class BindingsData
         {
             RegisterType(engineTypeName, type, unmanagedType);
 
-            var marshallerType = new TypeInfo("PackedArrayMarshaller", "Godot.NativeInterop.Marshallers")
-            {
-                TypeAttributes = TypeAttributes.ReferenceType,
-            };
-
-            RegisterPtrMarshaller(type, new RuntimePtrMarshallerWriter(marshallerType, type, unmanagedType.MakePointerType()));
+            RegisterPtrMarshaller(type, new InteropStructPtrMarshallerWriter(type, unmanagedType.MakePointerType()));
             RegisterPtrMarshaller(unmanagedType, new InteropStructPtrMarshallerWriter(unmanagedType));
 
             RegisterVariantMarshaller(type, new InteropStructVariantMarshallerWriter(type, engineTypeName, unmanagedType, createMethodSuffix: "Copying"));
@@ -252,12 +247,12 @@ partial class BindingsData
         _typeDB.RegisterUnmanagedType(KnownTypes.GodotArrayGeneric, KnownTypes.NativeGodotArray);
         _typeDB.RegisterUnmanagedType(KnownTypes.GodotDictionaryGeneric, KnownTypes.NativeGodotDictionary);
 
-        RegisterRuntimePtrMarshaller(KnownTypes.GodotArray, "GodotArrayMarshaller");
-        RegisterRuntimePtrMarshaller(KnownTypes.GodotArrayGeneric, "GodotArrayMarshaller");
+        RegisterPtrMarshaller(KnownTypes.GodotArray, new InteropStructPtrMarshallerWriter(KnownTypes.GodotArray, KnownTypes.NativeGodotArray.MakePointerType()));
+        RegisterPtrMarshaller(KnownTypes.GodotArrayGeneric, new InteropStructPtrMarshallerWriter(KnownTypes.GodotArrayGeneric, KnownTypes.NativeGodotArray.MakePointerType()));
         RegisterPtrMarshaller(KnownTypes.NativeGodotArray, new InteropStructPtrMarshallerWriter(KnownTypes.NativeGodotArray));
 
-        RegisterRuntimePtrMarshaller(KnownTypes.GodotDictionary, "GodotDictionaryMarshaller");
-        RegisterRuntimePtrMarshaller(KnownTypes.GodotDictionaryGeneric, "GodotDictionaryMarshaller");
+        RegisterPtrMarshaller(KnownTypes.GodotDictionary, new InteropStructPtrMarshallerWriter(KnownTypes.GodotDictionary, KnownTypes.NativeGodotDictionary.MakePointerType()));
+        RegisterPtrMarshaller(KnownTypes.GodotDictionaryGeneric, new InteropStructPtrMarshallerWriter(KnownTypes.GodotDictionaryGeneric, KnownTypes.NativeGodotDictionary.MakePointerType()));
         RegisterPtrMarshaller(KnownTypes.NativeGodotDictionary, new InteropStructPtrMarshallerWriter(KnownTypes.NativeGodotDictionary));
 
         RegisterVariantMarshaller(KnownTypes.GodotArray, new InteropStructVariantMarshallerWriter(KnownTypes.GodotArray, "Array", KnownTypes.NativeGodotArray, createMethodSuffix: "Copying"));

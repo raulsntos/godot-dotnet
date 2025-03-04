@@ -32,7 +32,7 @@ internal sealed class VariantVariantMarshallerWriter : VariantMarshallerWriter
 
         if (type == KnownTypes.NativeGodotVariant)
         {
-            writer.WriteLine($"{destination} = {source}.GetUnsafeAddress();");
+            writer.WriteLine($"{destination} = &{source};");
             return;
         }
 

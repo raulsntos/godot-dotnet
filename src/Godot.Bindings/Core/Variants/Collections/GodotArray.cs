@@ -144,6 +144,17 @@ public sealed class GodotArray :
     }
 
     /// <summary>
+    /// Constructs a new <see cref="GodotArray"/> from the value borrowed from
+    /// <paramref name="nativeValueToCopy"/>, copying the value.
+    /// Since the new instance is a copy of the value, the caller is responsible
+    /// of disposing the new instance to avoid memory leaks.
+    /// </summary>
+    internal static GodotArray CreateCopying(NativeGodotArray nativeValueToCopy)
+    {
+        return new GodotArray(NativeGodotArray.Create(nativeValueToCopy));
+    }
+
+    /// <summary>
     /// Constructs a new <see cref="GodotArray"/> from the given span.
     /// </summary>
     /// <param name="span">The elements to construct from.</param>
@@ -1014,7 +1025,7 @@ public sealed class GodotArray :
         ref NativeGodotArray self = ref NativeValue.DangerousSelfRef;
         NativeGodotVariant selfVariant = new() { Array = self, Type = VariantType.Array };
         using NativeGodotString str = default;
-        GodotBridge.GDExtensionInterface.variant_stringify(selfVariant.GetUnsafeAddress(), str.GetUnsafeAddress());
+        GodotBridge.GDExtensionInterface.variant_stringify(&selfVariant, &str);
         return str.ToString();
     }
 

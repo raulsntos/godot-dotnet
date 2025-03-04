@@ -30,11 +30,15 @@ public sealed class GodotArray<[MustBeVariant] T> :
     IGenericGodotArray,
     IDisposable
 {
-    private static unsafe void WriteUnmanagedFunc(in GodotArray<T> value, void* destination) =>
-        *(NativeGodotArray*)destination = value.NativeValue.DangerousSelfRef;
+    private static unsafe void WriteUnmanagedFunc(in GodotArray<T> value, void* destination)
+    {
+        *(NativeGodotArray*)destination = value is not null
+            ? NativeGodotArray.Create(value.NativeValue.DangerousSelfRef)
+            : default;
+    }
 
     private static unsafe GodotArray<T> ConvertFromUnmanagedFunc(void* ptr) =>
-        GodotArray<T>.CreateTakingOwnership(*(NativeGodotArray*)ptr);
+        GodotArray<T>.CreateCopying(*(NativeGodotArray*)ptr);
 
     private static NativeGodotVariant ConvertToVariantFunc(in GodotArray<T> from) =>
         from is not null
@@ -140,6 +144,17 @@ public sealed class GodotArray<[MustBeVariant] T> :
     }
 
     /// <summary>
+    /// Constructs a new <see cref="GodotArray{T}"/> from the value borrowed from
+    /// <paramref name="nativeValueToCopy"/>, copying the value.
+    /// Since the new instance is a copy of the value, the caller is responsible
+    /// of disposing the new instance to avoid memory leaks.
+    /// </summary>
+    internal static GodotArray<T> CreateCopying(NativeGodotArray nativeValueToCopy)
+    {
+        return new GodotArray<T>(GodotArray.CreateCopying(nativeValueToCopy));
+    }
+
+    /// <summary>
     /// Converts an untyped <see cref="GodotArray"/> to a typed <see cref="GodotArray{T}"/>.
     /// </summary>
     /// <param name="from">The untyped array to convert.</param>
@@ -186,8 +201,10 @@ public sealed class GodotArray<[MustBeVariant] T> :
 
     private void Dispose(bool disposing)
     {
-        // Always dispose `_underlyingArray` even if disposing is true.
-        _underlyingArray.Dispose();
+        if (disposing)
+        {
+            _underlyingArray.Dispose();
+        }
 
         if (_weakReferenceToSelf is not null)
         {

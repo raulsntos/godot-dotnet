@@ -101,6 +101,17 @@ public sealed class PackedColorArray :
     }
 
     /// <summary>
+    /// Constructs a new <see cref="PackedColorArray"/> from the value borrowed from
+    /// <paramref name="nativeValueToCopy"/>, copying the value.
+    /// Since the new instance is a copy of the value, the caller is responsible
+    /// of disposing the new instance to avoid memory leaks.
+    /// </summary>
+    internal static PackedColorArray CreateCopying(NativeGodotPackedColorArray nativeValueToCopy)
+    {
+        return new PackedColorArray(NativeGodotPackedColorArray.Create(nativeValueToCopy));
+    }
+
+    /// <summary>
     /// Releases the unmanaged <see cref="PackedColorArray"/> instance.
     /// </summary>
     ~PackedColorArray()
@@ -614,7 +625,7 @@ public sealed class PackedColorArray :
         ref NativeGodotPackedColorArray self = ref NativeValue.DangerousSelfRef;
         using NativeGodotVariant selfVariant = NativeGodotVariant.CreateFromPackedColorArrayCopying(self);
         using NativeGodotString str = default;
-        GodotBridge.GDExtensionInterface.variant_stringify(selfVariant.GetUnsafeAddress(), str.GetUnsafeAddress());
+        GodotBridge.GDExtensionInterface.variant_stringify(&selfVariant, &str);
         return str.ToString();
     }
 

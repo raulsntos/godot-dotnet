@@ -66,6 +66,17 @@ public sealed class NodePath : IDisposable, IEquatable<NodePath?>
     }
 
     /// <summary>
+    /// Constructs a new <see cref="NodePath"/> from the value borrowed from
+    /// <paramref name="nativeValueToCopy"/>, copying the value.
+    /// Since the new instance is a copy of the value, the caller is responsible
+    /// of disposing the new instance to avoid memory leaks.
+    /// </summary>
+    internal static NodePath CreateCopying(NativeGodotNodePath nativeValueToCopy)
+    {
+        return new NodePath(NativeGodotNodePath.Create(nativeValueToCopy));
+    }
+
+    /// <summary>
     /// Constructs a <see cref="NodePath"/> from a string <paramref name="path"/>,
     /// e.g.: <c>"Path2D/PathFollow2D/Sprite2D:texture:size"</c>.
     /// A path is absolute if it starts with a slash. Absolute paths

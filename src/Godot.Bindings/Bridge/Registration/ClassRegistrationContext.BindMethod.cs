@@ -125,7 +125,7 @@ partial class ClassRegistrationContext
                 methodInfoNative.default_arguments = argsDefaultValues;
             }
 
-            var methodGCHandle = GCHandle.Alloc(methodInfo, GCHandleType.Weak);
+            var methodGCHandle = GCHandle.Alloc(methodInfo, GCHandleType.Normal);
             var methodInfoPtr = GCHandle.ToIntPtr(methodGCHandle);
 
             methodInfoNative.call_func = &CallWithVariantArgs_Native;

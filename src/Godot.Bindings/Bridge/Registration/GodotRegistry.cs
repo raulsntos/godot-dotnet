@@ -153,10 +153,10 @@ public static partial class GodotRegistry
             baseClassName = godotNativeName;
         }
 
-        NativeGodotStringName classNameNative = className.NativeValue.DangerousSelfRef;
-        NativeGodotStringName baseClassNameNative = baseClassName.NativeValue.DangerousSelfRef;
+        NativeGodotStringName* classNameNativePtr = className.NativeValue.DangerousSelfRef.GetUnsafeAddress();
+        NativeGodotStringName* baseClassNameNativePtr = baseClassName.NativeValue.DangerousSelfRef.GetUnsafeAddress();
 
-        GodotBridge.GDExtensionInterface.classdb_register_extension_class4(GodotBridge.LibraryPtr, &classNameNative, &baseClassNameNative, &creationInfo);
+        GodotBridge.GDExtensionInterface.classdb_register_extension_class4(GodotBridge.LibraryPtr, classNameNativePtr, baseClassNameNativePtr, &creationInfo);
 
         context.RegisterBindings();
 
@@ -170,9 +170,9 @@ public static partial class GodotRegistry
     {
         while (_classRegisterStack.TryPop(out StringName? className))
         {
-            NativeGodotStringName classNameNative = className.NativeValue.DangerousSelfRef;
+            NativeGodotStringName* classNameNativePtr = className.NativeValue.DangerousSelfRef.GetUnsafeAddress();
 
-            GodotBridge.GDExtensionInterface.classdb_unregister_extension_class(GodotBridge.LibraryPtr, &classNameNative);
+            GodotBridge.GDExtensionInterface.classdb_unregister_extension_class(GodotBridge.LibraryPtr, classNameNativePtr);
 
             _registeredClasses.Remove(className);
         }
@@ -188,8 +188,8 @@ public static partial class GodotRegistry
 
             Debug.Assert(instanceObj is not null);
 
-            StringName nameManaged = StringName.CreateTakingOwnership(*name);
-            Variant valueManaged = Variant.CreateTakingOwnership(*value);
+            StringName nameManaged = StringName.CreateCopying(*name);
+            Variant valueManaged = Variant.CreateCopying(*value);
 
             return instanceObj._Set(nameManaged, valueManaged);
         }
@@ -207,7 +207,7 @@ public static partial class GodotRegistry
 
             Debug.Assert(instanceObj is not null);
 
-            StringName nameManaged = StringName.CreateTakingOwnership(*name);
+            StringName nameManaged = StringName.CreateCopying(*name);
 
             bool ok = instanceObj._Get(nameManaged, out Variant valueManaged);
 
@@ -277,7 +277,7 @@ public static partial class GodotRegistry
 
             Debug.Assert(instanceObj is not null);
 
-            StringName nameManaged = StringName.CreateTakingOwnership(*name);
+            StringName nameManaged = StringName.CreateCopying(*name);
 
             return instanceObj._PropertyCanRevert(nameManaged);
         }
@@ -295,7 +295,7 @@ public static partial class GodotRegistry
 
             Debug.Assert(instanceObj is not null);
 
-            StringName nameManaged = StringName.CreateTakingOwnership(*name);
+            StringName nameManaged = StringName.CreateCopying(*name);
 
             bool ok = instanceObj._PropertyGetRevert(nameManaged, out Variant valueManaged);
 
@@ -425,7 +425,7 @@ public static partial class GodotRegistry
 
         Debug.Assert(context is not null);
 
-        StringName methodNameStr = StringName.CreateTakingOwnership(*name);
+        StringName methodNameStr = StringName.CreateCopying(*name);
 
         if (!context.RegisteredVirtualMethodOverrides.TryGetValue(methodNameStr, out var virtualMethodInfo))
         {
@@ -445,7 +445,7 @@ public static partial class GodotRegistry
 
         Debug.Assert(context is not null);
 
-        StringName methodNameStr = StringName.CreateTakingOwnership(*name);
+        StringName methodNameStr = StringName.CreateCopying(*name);
 
         // We already checked that the method is registered in 'GetVirtualMethodUserData_Native',
         // this method would not have been called otherwise.

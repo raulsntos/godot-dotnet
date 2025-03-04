@@ -4,7 +4,7 @@ namespace Godot.NativeInterop;
 
 partial struct NativeGodotVariant
 {
-    internal static NativeGodotVariant Create(scoped NativeGodotVariant from)
+    internal static NativeGodotVariant Create(scoped in NativeGodotVariant from)
     {
         return from.Type switch
         {
@@ -31,19 +31,19 @@ partial struct NativeGodotVariant
         };
     }
 
-    private static unsafe NativeGodotVariant CreateCore(scoped NativeGodotVariant from)
+    private static unsafe NativeGodotVariant CreateCore(scoped in NativeGodotVariant from)
     {
         NativeGodotVariant dest = default;
-        GodotBridge.GDExtensionInterface.variant_new_copy(dest.GetUnsafeAddress(), from.GetUnsafeAddress());
+        GodotBridge.GDExtensionInterface.variant_new_copy(&dest, from.GetUnsafeAddress());
         return dest;
     }
 
-    internal static unsafe bool Equals(scoped NativeGodotVariant left, scoped NativeGodotVariant right)
+    internal static unsafe bool Equals(scoped in NativeGodotVariant left, scoped in NativeGodotVariant right)
     {
         return GodotBridge.GDExtensionInterface.variant_hash_compare(left.GetUnsafeAddress(), right.GetUnsafeAddress());
     }
 
-    internal static unsafe int Compare(scoped NativeGodotVariant left, scoped NativeGodotVariant right)
+    internal static unsafe int Compare(scoped in NativeGodotVariant left, scoped in NativeGodotVariant right)
     {
         // If the types are different we can avoid interop and just compare the type numeric value,
         // comparing different types is questionable anyway.
@@ -70,19 +70,19 @@ partial struct NativeGodotVariant
         }
         return 0;
 
-        static bool LessThan(scoped NativeGodotVariant left, scoped NativeGodotVariant right)
+        static bool LessThan(scoped in NativeGodotVariant left, scoped in NativeGodotVariant right)
         {
             bool valid = false;
             NativeGodotVariant result = default;
-            GodotBridge.GDExtensionInterface.variant_evaluate(GDExtensionVariantOperator.GDEXTENSION_VARIANT_OP_LESS, left.GetUnsafeAddress(), right.GetUnsafeAddress(), result.GetUnsafeAddress(), &valid);
+            GodotBridge.GDExtensionInterface.variant_evaluate(GDExtensionVariantOperator.GDEXTENSION_VARIANT_OP_LESS, left.GetUnsafeAddress(), right.GetUnsafeAddress(), &result, &valid);
             return ConvertToBool(result);
         }
 
-        static bool GreaterThan(scoped NativeGodotVariant left, scoped NativeGodotVariant right)
+        static bool GreaterThan(scoped in NativeGodotVariant left, scoped in NativeGodotVariant right)
         {
             bool valid = false;
             NativeGodotVariant result = default;
-            GodotBridge.GDExtensionInterface.variant_evaluate(GDExtensionVariantOperator.GDEXTENSION_VARIANT_OP_LESS, left.GetUnsafeAddress(), right.GetUnsafeAddress(), result.GetUnsafeAddress(), &valid);
+            GodotBridge.GDExtensionInterface.variant_evaluate(GDExtensionVariantOperator.GDEXTENSION_VARIANT_OP_LESS, left.GetUnsafeAddress(), right.GetUnsafeAddress(), &result, &valid);
             return ConvertToBool(result);
         }
     }

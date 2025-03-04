@@ -29,11 +29,15 @@ public sealed class GodotDictionary<[MustBeVariant] TKey, [MustBeVariant] TValue
     IGenericGodotDictionary,
     IDisposable
 {
-    private static unsafe void WriteUnmanagedFunc(in GodotDictionary<TKey, TValue> value, void* destination) =>
-        *(NativeGodotDictionary*)destination = value.NativeValue.DangerousSelfRef;
+    private static unsafe void WriteUnmanagedFunc(in GodotDictionary<TKey, TValue> value, void* destination)
+    {
+        *(NativeGodotDictionary*)destination = value is not null
+            ? value.NativeValue.DangerousSelfRef
+            : default;
+    }
 
     private static unsafe GodotDictionary<TKey, TValue> ConvertFromUnmanagedFunc(void* ptr) =>
-        GodotDictionary<TKey, TValue>.CreateTakingOwnership(*(NativeGodotDictionary*)ptr);
+        GodotDictionary<TKey, TValue>.CreateCopying(*(NativeGodotDictionary*)ptr);
 
     private static NativeGodotVariant ConvertToVariantFunc(in GodotDictionary<TKey, TValue> from) =>
         from is not null
@@ -132,6 +136,17 @@ public sealed class GodotDictionary<[MustBeVariant] TKey, [MustBeVariant] TValue
     }
 
     /// <summary>
+    /// Constructs a new <see cref="GodotDictionary{TKey, TValue}"/> from the
+    /// value borrowed from <paramref name="nativeValueToCopy"/>, copying the value.
+    /// Since the new instance is a copy of the value, the caller is responsible
+    /// of disposing the new instance to avoid memory leaks.
+    /// </summary>
+    internal static GodotDictionary<TKey, TValue> CreateCopying(NativeGodotDictionary nativeValueToCopy)
+    {
+        return new GodotDictionary<TKey, TValue>(GodotDictionary.CreateCopying(nativeValueToCopy));
+    }
+
+    /// <summary>
     /// Converts an untyped <see cref="GodotDictionary"/> to a typed <see cref="GodotDictionary{TKey, TValue}"/>.
     /// </summary>
     /// <param name="from">The untyped dictionary to convert.</param>
@@ -170,8 +185,10 @@ public sealed class GodotDictionary<[MustBeVariant] TKey, [MustBeVariant] TValue
 
     private void Dispose(bool disposing)
     {
-        // Always dispose `_underlyingDict` even if disposing is true.
-        _underlyingDict.Dispose();
+        if (disposing)
+        {
+            _underlyingDict.Dispose();
+        }
 
         if (_weakReferenceToSelf is not null)
         {

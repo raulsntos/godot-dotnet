@@ -101,6 +101,17 @@ public sealed class PackedVector4Array :
     }
 
     /// <summary>
+    /// Constructs a new <see cref="PackedVector4Array"/> from the value borrowed from
+    /// <paramref name="nativeValueToCopy"/>, copying the value.
+    /// Since the new instance is a copy of the value, the caller is responsible
+    /// of disposing the new instance to avoid memory leaks.
+    /// </summary>
+    internal static PackedVector4Array CreateCopying(NativeGodotPackedVector4Array nativeValueToCopy)
+    {
+        return new PackedVector4Array(NativeGodotPackedVector4Array.Create(nativeValueToCopy));
+    }
+
+    /// <summary>
     /// Releases the unmanaged <see cref="PackedVector4Array"/> instance.
     /// </summary>
     ~PackedVector4Array()
@@ -614,7 +625,7 @@ public sealed class PackedVector4Array :
         ref NativeGodotPackedVector4Array self = ref NativeValue.DangerousSelfRef;
         using NativeGodotVariant selfVariant = NativeGodotVariant.CreateFromPackedVector4ArrayCopying(self);
         using NativeGodotString str = default;
-        GodotBridge.GDExtensionInterface.variant_stringify(selfVariant.GetUnsafeAddress(), str.GetUnsafeAddress());
+        GodotBridge.GDExtensionInterface.variant_stringify(&selfVariant, &str);
         return str.ToString();
     }
 

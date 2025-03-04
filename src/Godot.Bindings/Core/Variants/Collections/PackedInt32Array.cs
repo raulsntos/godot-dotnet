@@ -101,6 +101,17 @@ public sealed class PackedInt32Array :
     }
 
     /// <summary>
+    /// Constructs a new <see cref="PackedInt32Array"/> from the value borrowed from
+    /// <paramref name="nativeValueToCopy"/>, copying the value.
+    /// Since the new instance is a copy of the value, the caller is responsible
+    /// of disposing the new instance to avoid memory leaks.
+    /// </summary>
+    internal static PackedInt32Array CreateCopying(NativeGodotPackedInt32Array nativeValueToCopy)
+    {
+        return new PackedInt32Array(NativeGodotPackedInt32Array.Create(nativeValueToCopy));
+    }
+
+    /// <summary>
     /// Releases the unmanaged <see cref="PackedInt32Array"/> instance.
     /// </summary>
     ~PackedInt32Array()
@@ -614,7 +625,7 @@ public sealed class PackedInt32Array :
         ref NativeGodotPackedInt32Array self = ref NativeValue.DangerousSelfRef;
         using NativeGodotVariant selfVariant = NativeGodotVariant.CreateFromPackedInt32ArrayCopying(self);
         using NativeGodotString str = default;
-        GodotBridge.GDExtensionInterface.variant_stringify(selfVariant.GetUnsafeAddress(), str.GetUnsafeAddress());
+        GodotBridge.GDExtensionInterface.variant_stringify(&selfVariant, &str);
         return str.ToString();
     }
 

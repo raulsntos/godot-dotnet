@@ -17,7 +17,7 @@ public partial class ClassRegistrationContext
 
     internal ClassRegistrationContext(StringName className)
     {
-        GCHandle = GCHandle.Alloc(this, GCHandleType.Weak);
+        GCHandle = GCHandle.Alloc(this, GCHandleType.Normal);
         ClassName = className;
     }
 

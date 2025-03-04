@@ -13,7 +13,7 @@ internal static partial class MethodBind
         {
             NativeGodotStringName classNameNative = className.NativeValue.DangerousSelfRef;
             NativeGodotStringName methodNameNative = methodName.NativeValue.DangerousSelfRef;
-            methodBind = GodotBridge.GDExtensionInterface.classdb_get_method_bind(classNameNative.GetUnsafeAddress(), methodNameNative.GetUnsafeAddress(), methodHash);
+            methodBind = GodotBridge.GDExtensionInterface.classdb_get_method_bind(&classNameNative, &methodNameNative, methodHash);
         }
 
         MissingGodotMethodException.ThrowIfNull(methodBind, SR.MissingGodotMethod_MethodBindNotFound);
@@ -24,7 +24,7 @@ internal static partial class MethodBind
         if (utilityFunction is null)
         {
             using NativeGodotStringName methodNameNative = NativeGodotStringName.Create(methodNameAscii, isStatic: false);
-            utilityFunction = GodotBridge.GDExtensionInterface.variant_get_ptr_utility_function(methodNameNative.GetUnsafeAddress(), methodHash);
+            utilityFunction = GodotBridge.GDExtensionInterface.variant_get_ptr_utility_function(&methodNameNative, methodHash);
         }
 
         MissingGodotMethodException.ThrowIfNull(utilityFunction, SR.MissingGodotMethod_UtilityFunctionNotFound);
@@ -35,7 +35,7 @@ internal static partial class MethodBind
         if (builtInMethod is null)
         {
             using NativeGodotStringName methodNameNative = NativeGodotStringName.Create(methodNameAscii, isStatic: false);
-            builtInMethod = GodotBridge.GDExtensionInterface.variant_get_ptr_builtin_method(variantType, methodNameNative.GetUnsafeAddress(), methodHash);
+            builtInMethod = GodotBridge.GDExtensionInterface.variant_get_ptr_builtin_method(variantType, &methodNameNative, methodHash);
         }
 
         MissingGodotMethodException.ThrowIfNull(builtInMethod, SR.MissingGodotMethod_BuiltInNotFound);
@@ -84,7 +84,7 @@ internal static partial class MethodBind
         string errorText = GetCallErrorMessage(error, where, args);
         GD.PushError(errorText);
 
-        static string GetCallErrorWhere(scoped NativeGodotStringName method, NativeGodotVariant instance, NativeGodotVariantPtrSpan args)
+        static string GetCallErrorWhere(scoped NativeGodotStringName method, scoped in NativeGodotVariant instance, NativeGodotVariantPtrSpan args)
         {
             string? methodstr = null;
             string basestr = GetVariantTypeName(instance);
@@ -143,7 +143,7 @@ internal static partial class MethodBind
             }
         }
 
-        static string GetVariantTypeName(NativeGodotVariant variant)
+        static string GetVariantTypeName(scoped in NativeGodotVariant variant)
         {
             if (variant.Type == VariantType.Object)
             {

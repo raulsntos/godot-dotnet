@@ -40,7 +40,7 @@ public readonly struct Signal : IAwaitable<SignalAwaiter, Variant[]>
                 return null;
             }
 
-            return StringName.CreateTakingOwnership(name);
+            return StringName.CreateCopying(name);
         }
     }
 
@@ -58,6 +58,17 @@ public readonly struct Signal : IAwaitable<SignalAwaiter, Variant[]>
     internal static Signal CreateTakingOwnership(NativeGodotSignal nativeValueToOwn)
     {
         return new Signal(nativeValueToOwn);
+    }
+
+    /// <summary>
+    /// Constructs a new <see cref="Signal"/> from the value borrowed from
+    /// <paramref name="nativeValueToCopy"/>, copying the value.
+    /// Since the new instance is a copy of the value, the caller is responsible
+    /// of disposing the new instance to avoid memory leaks.
+    /// </summary>
+    internal static Signal CreateCopying(NativeGodotSignal nativeValueToCopy)
+    {
+        return new Signal(NativeGodotSignal.Create(nativeValueToCopy));
     }
 
     /// <summary>

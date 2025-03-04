@@ -25,7 +25,7 @@ public abstract class CustomCallable
 
     internal unsafe NativeGodotCallable ConstructCallable()
     {
-        var gcHandle = GCHandle.Alloc(this, GCHandleType.Weak);
+        var gcHandle = GCHandle.Alloc(this, GCHandleType.Normal);
 
         var info = new GDExtensionCallableCustomInfo2()
         {

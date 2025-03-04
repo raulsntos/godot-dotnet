@@ -44,13 +44,24 @@ internal sealed class InteropStructVariantMarshallerWriter : VariantMarshallerWr
             throw new ArgumentException($"Type '{type.FullName}' can't be marshalled by this marshaller. Only '{_marshallableType.FullName}' is supported.", nameof(type));
         }
 
-        writer.Write($"{destination} = global::Godot.NativeInterop.NativeGodotVariant");
-        writer.Write($".CreateFrom{_engineTypeName}{_createMethodSuffix}({source}");
+        writer.Write($"{destination} = ");
+        if (type.IsReferenceType)
+        {
+            writer.Write($"{source} is not null ? ");
+        }
+        writer.Write("global::Godot.NativeInterop.NativeGodotVariant");
+        writer.Write($".CreateFrom{_engineTypeName}{_createMethodSuffix}(");
+        writer.Write(source);
         if (type != _unmanagedType)
         {
             writer.Write($".NativeValue.DangerousSelfRef");
         }
-        writer.WriteLine(").GetUnsafeAddress();");
+        writer.Write(").GetUnsafeAddress()");
+        if (type.IsReferenceType)
+        {
+            writer.Write(" : default");
+        }
+        writer.WriteLine(';');
     }
 
     protected override void WriteConvertFromVariantCore(IndentedTextWriter writer, TypeInfo type, string source, string destination)

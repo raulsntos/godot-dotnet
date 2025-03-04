@@ -94,8 +94,10 @@ public partial struct Variant : IDisposable
     /// Since the new instance references the same value, disposing the new
     /// instance will also dispose the original value.
     /// </summary>
-    internal static Variant CreateTakingOwnership(in NativeGodotVariant nativeValueToOwn) =>
-        new(nativeValueToOwn);
+    internal static Variant CreateTakingOwnership(in NativeGodotVariant nativeValueToOwn)
+    {
+        return new Variant(nativeValueToOwn);
+    }
 
     /// <summary>
     /// Constructs a new <see cref="Variant"/> from the value borrowed from
@@ -103,8 +105,10 @@ public partial struct Variant : IDisposable
     /// Since the new instance is a copy of the value, the caller is responsible
     /// of disposing the new instance to avoid memory leaks.
     /// </summary>
-    internal static Variant CreateCopying(in NativeGodotVariant nativeValueToCopy) =>
-        new(NativeGodotVariant.Create(nativeValueToCopy));
+    internal static Variant CreateCopying(in NativeGodotVariant nativeValueToCopy)
+    {
+        return new Variant(NativeGodotVariant.Create(nativeValueToCopy));
+    }
 
     /// <summary>
     /// Releases the unmanaged instance associated with this Variant, if any.

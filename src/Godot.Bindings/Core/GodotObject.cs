@@ -26,7 +26,7 @@ partial class GodotObject : IDisposable
     /// <param name="nativePtr">The pointer to the native object in the engine's side.</param>
     protected internal GodotObject(nint nativePtr)
     {
-        _gcHandle = GCHandle.Alloc(this, GCHandleType.Weak);
+        _gcHandle = GCHandle.Alloc(this, GCHandleType.Normal);
 
         NativePtr = nativePtr;
 
@@ -49,7 +49,7 @@ partial class GodotObject : IDisposable
 
     private static unsafe nint ConstructGodotObject(scoped NativeGodotStringName nativeClassName)
     {
-        return (nint)GodotBridge.GDExtensionInterface.classdb_construct_object2(nativeClassName.GetUnsafeAddress());
+        return (nint)GodotBridge.GDExtensionInterface.classdb_construct_object2(&nativeClassName);
     }
 
     /// <summary>
@@ -64,7 +64,7 @@ partial class GodotObject : IDisposable
         if (IsUserDefinedType())
         {
             using NativeGodotStringName extensionClassName = NativeGodotStringName.Create(GetType().Name);
-            GodotBridge.GDExtensionInterface.object_set_instance((void*)NativePtr, extensionClassName.GetUnsafeAddress(), (void*)gcHandlePtr);
+            GodotBridge.GDExtensionInterface.object_set_instance((void*)NativePtr, &extensionClassName, (void*)gcHandlePtr);
         }
 
         GDExtensionInstanceBindingCallbacks bindingsCallbacks = default;

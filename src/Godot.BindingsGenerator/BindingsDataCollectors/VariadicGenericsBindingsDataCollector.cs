@@ -60,7 +60,7 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
 
                     for (int i = 0; i < genericTypeArgumentCount; i++)
                     {
-                        writer.WriteLine($"__arg{i}.GetUnsafeAddress(),");
+                        writer.WriteLine($"&__arg{i},");
                     }
 
                     writer.Indent--;
@@ -114,7 +114,7 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
 
                         for (int i = 0; i < genericTypeArgumentCount; i++)
                         {
-                            writer.WriteLine($"__arg{i}.GetUnsafeAddress(),");
+                            writer.WriteLine($"&__arg{i},");
                         }
 
                         writer.Indent--;
@@ -173,7 +173,7 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
 
                     for (int i = 0; i < genericTypeArgumentCount; i++)
                     {
-                        writer.WriteLine($"__arg{i}.GetUnsafeAddress(),");
+                        writer.WriteLine($"&__arg{i},");
                     }
 
                     writer.Indent--;
@@ -223,7 +223,7 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
 
                         for (int i = 0; i < genericTypeArgumentCount; i++)
                         {
-                            writer.WriteLine($"__arg{i}.GetUnsafeAddress(),");
+                            writer.WriteLine($"&__arg{i},");
                         }
 
                         writer.Indent--;

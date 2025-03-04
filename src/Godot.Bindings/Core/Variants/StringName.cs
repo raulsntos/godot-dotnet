@@ -52,6 +52,17 @@ public sealed class StringName : IDisposable, IEquatable<StringName?>
     }
 
     /// <summary>
+    /// Constructs a new <see cref="StringName"/> from the value borrowed from
+    /// <paramref name="nativeValueToCopy"/>, copying the value.
+    /// Since the new instance is a copy of the value, the caller is responsible
+    /// of disposing the new instance to avoid memory leaks.
+    /// </summary>
+    internal static StringName CreateCopying(NativeGodotStringName nativeValueToCopy)
+    {
+        return new StringName(NativeGodotStringName.Create(nativeValueToCopy));
+    }
+
+    /// <summary>
     /// Constructs a new static <see cref="StringName"/> from an ASCII literal.
     /// This is an internal method to avoid checking if the ASCII value is valid
     /// to use it in generated code where we know the value is already valid.

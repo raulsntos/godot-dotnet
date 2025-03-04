@@ -76,7 +76,7 @@ unsafe partial class EditorInternal
         Debug.Assert(_progress_add_task is not null);
         using NativeGodotString taskNative = NativeGodotString.Create(task);
         using NativeGodotString labelNative = NativeGodotString.Create(label);
-        _progress_add_task(taskNative.GetUnsafeAddress(), labelNative.GetUnsafeAddress(), steps, canCancel);
+        _progress_add_task(&taskNative, &labelNative, steps, canCancel);
     }
 
     private static delegate* unmanaged[Cdecl]<NativeGodotString*, NativeGodotString*, int, bool, bool> _progress_task_step;
@@ -86,7 +86,7 @@ unsafe partial class EditorInternal
         Debug.Assert(_progress_task_step is not null);
         using NativeGodotString taskNative = NativeGodotString.Create(task);
         using NativeGodotString stateNative = NativeGodotString.Create(state);
-        return _progress_task_step(taskNative.GetUnsafeAddress(), stateNative.GetUnsafeAddress(), step, forceRefresh);
+        return _progress_task_step(&taskNative, &stateNative, step, forceRefresh);
     }
 
     private static delegate* unmanaged[Cdecl]<NativeGodotString*, void> _progress_end_task;
@@ -95,7 +95,7 @@ unsafe partial class EditorInternal
     {
         Debug.Assert(_progress_end_task is not null);
         using NativeGodotString taskNative = NativeGodotString.Create(task);
-        _progress_end_task(taskNative.GetUnsafeAddress());
+        _progress_end_task(&taskNative);
     }
 
     private static delegate* unmanaged[Cdecl]<NativeGodotString*, NativeGodotString*, void> _show_warning;
@@ -110,7 +110,7 @@ unsafe partial class EditorInternal
         Debug.Assert(_show_warning is not null);
         using NativeGodotString textNative = NativeGodotString.Create(text);
         using NativeGodotString titleNative = NativeGodotString.Create(title);
-        _show_warning(textNative.GetUnsafeAddress(), titleNative.GetUnsafeAddress());
+        _show_warning(&textNative, &titleNative);
     }
 
     private static delegate* unmanaged[Cdecl]<void*, void> _add_control_to_editor_run_bar;
@@ -128,7 +128,7 @@ unsafe partial class EditorInternal
     {
         Debug.Assert(_is_macos_app_bundle_installed is not null);
         using NativeGodotString bundleIdNative = NativeGodotString.Create(bundleId);
-        return _is_macos_app_bundle_installed(bundleIdNative.GetUnsafeAddress());
+        return _is_macos_app_bundle_installed(&bundleIdNative);
     }
 
     private static delegate* unmanaged[Cdecl]<NativeGodotString*, NativeGodotPackedStringArray*, bool> _lipo_create_file;
@@ -138,7 +138,7 @@ unsafe partial class EditorInternal
         Debug.Assert(_lipo_create_file is not null);
         using NativeGodotString outputPathNative = NativeGodotString.Create(outputPath);
         NativeGodotPackedStringArray filesNative = files.NativeValue.DangerousSelfRef;
-        return _lipo_create_file(outputPathNative.GetUnsafeAddress(), filesNative.GetUnsafeAddress());
+        return _lipo_create_file(&outputPathNative, &filesNative);
     }
 
     // TODO: The methods below should be moved to the bindings.

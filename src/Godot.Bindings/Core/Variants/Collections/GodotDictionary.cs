@@ -53,6 +53,17 @@ public sealed class GodotDictionary :
     }
 
     /// <summary>
+    /// Constructs a new <see cref="GodotDictionary"/> from the value borrowed from
+    /// <paramref name="nativeValueToCopy"/>, copying the value.
+    /// Since the new instance is a copy of the value, the caller is responsible
+    /// of disposing the new instance to avoid memory leaks.
+    /// </summary>
+    internal static GodotDictionary CreateCopying(NativeGodotDictionary nativeValueToCopy)
+    {
+        return new GodotDictionary(NativeGodotDictionary.Create(nativeValueToCopy));
+    }
+
+    /// <summary>
     /// Releases the unmanaged <see cref="GodotDictionary"/> instance.
     /// </summary>
     ~GodotDictionary()
@@ -103,7 +114,7 @@ public sealed class GodotDictionary :
                 throw new KeyNotFoundException(SR.FormatKeyNotFound_DictionaryKeyNotFound(key));
             }
 
-            return Variant.CreateTakingOwnership(*value);
+            return Variant.CreateCopying(*value);
         }
         set
         {
@@ -405,7 +416,7 @@ public sealed class GodotDictionary :
             return false;
         }
 
-        value = Variant.CreateTakingOwnership(*valueNative);
+        value = Variant.CreateCopying(*valueNative);
         return true;
     }
 
@@ -475,7 +486,7 @@ public sealed class GodotDictionary :
         ref NativeGodotDictionary self = ref NativeValue.DangerousSelfRef;
         NativeGodotVariant selfVariant = new() { Dictionary = self, Type = VariantType.Dictionary };
         using NativeGodotString str = default;
-        GodotBridge.GDExtensionInterface.variant_stringify(selfVariant.GetUnsafeAddress(), str.GetUnsafeAddress());
+        GodotBridge.GDExtensionInterface.variant_stringify(&selfVariant, &str);
         return str.ToString();
     }
 

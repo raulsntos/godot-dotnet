@@ -64,7 +64,7 @@ public readonly partial struct Callable
                 return null;
             }
 
-            return StringName.CreateTakingOwnership(method);
+            return StringName.CreateCopying(method);
         }
     }
 

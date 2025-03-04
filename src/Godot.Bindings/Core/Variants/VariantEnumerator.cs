@@ -65,7 +65,7 @@ public ref struct VariantEnumerator
 
         _isEnumeratorActive = true;
 
-        Current = Variant.CreateTakingOwnership(IterGet(_source, ref _iterator, out valid));
+        Current = Variant.CreateCopying(IterGet(_source, ref _iterator, out valid));
         ThrowIfInvalid(valid, _source);
 
         return hasNext;
