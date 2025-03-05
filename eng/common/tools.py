@@ -67,7 +67,7 @@ msbuild_engine: Union[str, None] = None
 use_installed_dotnet_cli: bool = True
 
 # Enable repos to use a particular version of the on-line dotnet-install scripts.
-#    default URL: https://dotnet.microsoft.com/download/dotnet/scripts/v1/dotnet-install.sh
+#    default URL: https://builds.dotnet.microsoft.com/dotnet/scripts/v1/dotnet-install.sh
 dotnet_install_script_version: str = "v1"
 
 # True to use global NuGet cache instead of restoring packages to repository-local directory.
@@ -265,7 +265,7 @@ def install_dotnet(dotnet_root: str, version: str, architecture: str = "", runti
     variations.append(install_parameters)
 
     dotnet_builds = install_parameters.copy()
-    dotnet_builds["azure_feed"] = "https://dotnetbuilds.azureedge.net/public"
+    dotnet_builds["azure_feed"] = "https://ci.dot.net/public"
     variations.append(dotnet_builds)
 
     install_success = False
@@ -308,7 +308,7 @@ def install_dotnet(dotnet_root: str, version: str, architecture: str = "", runti
 def get_dotnet_install_script(dotnet_root: str) -> str:
     install_script_name = "dotnet-install.sh" if os.name != "nt" else "dotnet-install.ps1"
     install_script = os.path.join(dotnet_root, install_script_name)
-    install_script_url = f"https://dotnet.microsoft.com/download/dotnet/scripts/{dotnet_install_script_version}/{install_script_name}"
+    install_script_url = f"https://builds.dotnet.microsoft.com/dotnet/scripts/{dotnet_install_script_version}/{install_script_name}"
 
     if not os.path.exists(install_script):
         os.makedirs(dotnet_root, exist_ok=True)
