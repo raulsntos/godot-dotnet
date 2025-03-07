@@ -41,8 +41,11 @@ internal sealed class CreateVariantCopying : MethodBody
 
         writer.WriteLine($"{marshaller.UnmanagedPointerType.FullNameWithGlobal} __valueNative = null;");
 
-        writer.WriteLine("try");
-        writer.OpenBlock();
+        if (marshaller.NeedsCleanup)
+        {
+            writer.WriteLine("try");
+            writer.OpenBlock();
+        }
 
         marshaller.WriteConvertToUnmanaged(writer, targetTypeUnmanaged, "value", "__valueNative");
 
@@ -50,12 +53,15 @@ internal sealed class CreateVariantCopying : MethodBody
         writer.WriteLine($"_variantFrom{_targetTypeName}Constructor(destination.GetUnsafeAddress(), __valueNative);");
         writer.WriteLine("return destination;");
 
-        writer.CloseBlock();
-        writer.WriteLine("finally");
-        writer.OpenBlock();
+        if (marshaller.NeedsCleanup)
+        {
+            writer.CloseBlock();
+            writer.WriteLine("finally");
+            writer.OpenBlock();
 
-        marshaller.WriteFree(writer, targetTypeUnmanaged, "__valueNative");
+            marshaller.WriteFree(writer, targetTypeUnmanaged, "__valueNative");
 
-        writer.CloseBlock();
+            writer.CloseBlock();
+        }
     }
 }
