@@ -201,7 +201,7 @@ internal static class BindMethodsWriter
                 for (int i = 0; i < method.Parameters.Count; i++)
                 {
                     var parameter = method.Parameters[i];
-                    sb.Append(parameter.MarshalInfo.FullyQualifiedTypeName);
+                    sb.Append(parameter.MarshalInfo.FullyQualifiedMarshalAsTypeName);
                     if (method.ReturnParameter is not null || i < method.Parameters.Count - 1)
                     {
                         sb.Append(", ");
@@ -209,7 +209,7 @@ internal static class BindMethodsWriter
                 }
                 if (method.ReturnParameter is not null)
                 {
-                    sb.Append(method.ReturnParameter.Value.MarshalInfo.FullyQualifiedTypeName);
+                    sb.Append(method.ReturnParameter.Value.MarshalInfo.FullyQualifiedMarshalAsTypeName);
                 }
                 sb.Append('>');
             }
@@ -269,7 +269,7 @@ internal static class BindMethodsWriter
                 for (int i = 0; i < method.Parameters.Count; i++)
                 {
                     GodotPropertySpec parameter = method.Parameters[i];
-                    sb.Append($"{parameter.MarshalInfo.FullyQualifiedTypeName} @{parameter.SymbolName}");
+                    sb.Append($"{parameter.MarshalInfo.FullyQualifiedMarshalAsTypeName} @{parameter.SymbolName}");
                     if (i < method.Parameters.Count - 1)
                     {
                         sb.Append(", ");
@@ -286,21 +286,32 @@ internal static class BindMethodsWriter
             {
                 sb.Append("return ");
             }
-            sb.Append(method.IsStatic ? spec.SymbolName : "__instance");
-            sb.Append($".@{method.SymbolName}(");
+
+            var methodInvocation = new IndentedStringBuilder();
+            methodInvocation.Append(method.IsStatic ? spec.SymbolName : "__instance");
+            methodInvocation.Append($".@{method.SymbolName}(");
             if (method.Parameters.Count != 0)
             {
                 for (int i = 0; i < method.Parameters.Count; i++)
                 {
                     GodotPropertySpec parameter = method.Parameters[i];
-                    sb.Append($"@{parameter.SymbolName}");
+                    AppendConvertFromGodotType(methodInvocation, parameter, $"@{parameter.SymbolName}");
                     if (i < method.Parameters.Count - 1)
                     {
-                        sb.Append(", ");
+                        methodInvocation.Append(", ");
                     }
                 }
             }
-            sb.Append(")");
+            methodInvocation.Append(")");
+
+            if (method.ReturnParameter is not null)
+            {
+                AppendConvertToGodotType(sb, method.ReturnParameter.Value, methodInvocation.ToString());
+            }
+            else
+            {
+                sb.Append(methodInvocation.ToString());
+            }
 
             sb.AppendLine(';');
 
@@ -366,16 +377,20 @@ internal static class BindMethodsWriter
             sb.AppendLine($"static ({spec.SymbolName} __instance) =>");
             sb.AppendLine('{');
             sb.Indent++;
-            sb.AppendLine($"return __instance.@{property.SymbolName};");
+            sb.Append("return ");
+            AppendConvertToGodotType(sb, property, $"__instance.@{property.SymbolName}");
+            sb.AppendLine(';');
             sb.Indent--;
             sb.Append('}');
             sb.AppendLine(',');
 
             // Generate setter.
-            sb.AppendLine($"static ({spec.SymbolName} __instance, {property.MarshalInfo.FullyQualifiedTypeName} value) =>");
+            sb.AppendLine($"static ({spec.SymbolName} __instance, {property.MarshalInfo.FullyQualifiedMarshalAsTypeName} value) =>");
             sb.AppendLine('{');
             sb.Indent++;
-            sb.AppendLine($"__instance.@{property.SymbolName} = value;");
+            sb.Append($"__instance.@{property.SymbolName} = ");
+            AppendConvertFromGodotType(sb, property, "value");
+            sb.AppendLine(';');
             sb.Indent--;
             sb.Append('}');
 
@@ -548,6 +563,58 @@ internal static class BindMethodsWriter
 
         sb.Indent--;
         sb.Append('}');
+    }
+
+    private static void AppendConvertToGodotType(IndentedStringBuilder sb, GodotPropertySpec spec, string source)
+    {
+        if (spec.MarshalInfo.TypeIsSpeciallyRecognized)
+        {
+            if (spec.MarshalInfo.VariantType is VariantType.Array or VariantType.Dictionary
+             || spec.MarshalInfo.VariantType.IsPackedArray())
+            {
+                // Specially-recognized types that are marshalled as collection types
+                // should support spread expressions to convert them.
+                // We also add a cast in case the compiler can't figure out the target type.
+                sb.Append($"({spec.MarshalInfo.FullyQualifiedMarshalAsTypeName})");
+                sb.Append('(');
+                sb.Append($"[.. {source}]");
+                sb.Append(')');
+                return;
+            }
+        }
+        else if (spec.MarshalInfo.UsesCustomMarshaller)
+        {
+            sb.Append(spec.MarshalInfo.FullyQualifiedMarshallerTypeName);
+            sb.Append($".ConvertToGodotType({source})");
+            return;
+        }
+
+        // Core Variant types shouldn't need to be converted.
+        sb.Append(source);
+    }
+
+    private static void AppendConvertFromGodotType(IndentedStringBuilder sb, GodotPropertySpec spec, string source)
+    {
+        if (spec.MarshalInfo.TypeIsSpeciallyRecognized)
+        {
+            if (spec.MarshalInfo.VariantType is VariantType.Array or VariantType.Dictionary
+             || spec.MarshalInfo.VariantType.IsPackedArray())
+            {
+                // Specially-recognized types that are marshalled as collection types
+                // should support spread expressions to convert them.
+                sb.Append($"[.. {source}]");
+                return;
+            }
+        }
+        else if (spec.MarshalInfo.UsesCustomMarshaller)
+        {
+            sb.Append(spec.MarshalInfo.FullyQualifiedMarshallerTypeName);
+            sb.Append($".ConvertFromGodotType({source})");
+            return;
+        }
+
+        // Core Variant types shouldn't need to be converted.
+        sb.Append(source);
     }
 
     /// <summary>

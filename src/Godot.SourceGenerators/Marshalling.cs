@@ -11,7 +11,7 @@ internal static class Marshalling
 {
     public static MarshalInfo GetMarshallingInformation(Compilation compilation, ITypeSymbol typeSymbol)
     {
-        if (!TryGetVariantType(typeSymbol, out VariantType variantType, out VariantTypeMetadata variantTypeMetadata))
+        if (!TryGetVariantType(compilation, typeSymbol, out VariantType variantType, out VariantTypeMetadata variantTypeMetadata, out string? fullyQualifiedMarshalAsTypeName))
         {
             throw new ArgumentException($"Can't marshal type '{typeSymbol}'.", nameof(typeSymbol));
         }
@@ -25,11 +25,22 @@ internal static class Marshalling
             ? typeSymbol.GetGodotNativeTypeName()
             : null;
 
+        string fullyQualifiedTypeName = typeSymbol.FullNameWithGlobal();
+
+        // Ensure the type name is fully-qualified, including the global namespace.
+        if (!string.IsNullOrEmpty(fullyQualifiedMarshalAsTypeName)
+         && !fullyQualifiedMarshalAsTypeName!.StartsWith("global::", StringComparison.Ordinal))
+        {
+            fullyQualifiedMarshalAsTypeName = $"global::{fullyQualifiedMarshalAsTypeName}";
+        }
+
         return new MarshalInfo()
         {
             VariantType = variantType,
             VariantTypeMetadata = variantTypeMetadata,
-            FullyQualifiedTypeName = typeSymbol.FullNameWithGlobal(),
+            FullyQualifiedTypeName = fullyQualifiedTypeName,
+            FullyQualifiedMarshalAsTypeName = fullyQualifiedMarshalAsTypeName,
+            FullyQualifiedMarshallerTypeName = null,
 
             Hint = hint,
             HintString = hintString,
@@ -38,7 +49,31 @@ internal static class Marshalling
         };
     }
 
-    private static bool TryGetVariantType(ITypeSymbol typeSymbol, out VariantType variantType, out VariantTypeMetadata variantTypeMetadata)
+    private static bool TryGetVariantType(Compilation compilation, ITypeSymbol typeSymbol, out VariantType variantType, out VariantTypeMetadata variantTypeMetadata, out string? fullyQualifiedMarshalAsTypeName)
+    {
+        fullyQualifiedMarshalAsTypeName = null;
+
+        if (TryGetVariantTypeForCoreTypes(typeSymbol, out variantType, out variantTypeMetadata))
+        {
+            return true;
+        }
+
+        if (TryGetVariantTypeForSpecialTypes(compilation, typeSymbol, out variantType, out variantTypeMetadata, out fullyQualifiedMarshalAsTypeName))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Try to get the variant type and metadata associated with one of the types in the Variant union.
+    /// </summary>
+    /// <param name="typeSymbol">The managed type symbol.</param>
+    /// <param name="variantType">The associated Variant type kind.</param>
+    /// <param name="variantTypeMetadata">The associated Variant type metadata.</param>
+    /// <returns>Whether an associated Variant type exists for the specified managed type.</returns>
+    private static bool TryGetVariantTypeForCoreTypes(ITypeSymbol typeSymbol, out VariantType variantType, out VariantTypeMetadata variantTypeMetadata)
     {
         variantType = VariantType.Nil;
         variantTypeMetadata = VariantTypeMetadata.None;
@@ -156,11 +191,145 @@ internal static class Marshalling
         return false;
     }
 
+    /// <summary>
+    /// Try to get the variant type and metadata associated with one of the specially-recognized managed types.
+    /// </summary>
+    /// <param name="compilation">The current compilation.</param>
+    /// <param name="typeSymbol">The managed type symbol.</param>
+    /// <param name="variantType">The associated Variant type kind.</param>
+    /// <param name="variantTypeMetadata">The associated Variant type metadata.</param>
+    /// <param name="fullyQualifiedMarshalAsTypeName">
+    /// The fully-qualifed name of the type to use for marshalling.
+    /// </param>
+    /// <returns>Whether an associated Variant type exists for the specified managed type.</returns>
+    private static bool TryGetVariantTypeForSpecialTypes(Compilation compilation, ITypeSymbol typeSymbol, out VariantType variantType, out VariantTypeMetadata variantTypeMetadata, [NotNullWhen(true)] out string? fullyQualifiedMarshalAsTypeName)
+    {
+        variantType = VariantType.Nil;
+        variantTypeMetadata = VariantTypeMetadata.None;
+        fullyQualifiedMarshalAsTypeName = null;
+
+        var typeKind = typeSymbol.TypeKind;
+
+        if (typeKind is TypeKind.Array)
+        {
+            var arrayTypeSymbol = (IArrayTypeSymbol)typeSymbol;
+
+            if (arrayTypeSymbol.Rank != 1)
+            {
+                return false;
+            }
+
+            var elementTypeSymbol = arrayTypeSymbol.ElementType;
+
+            if (TryGetPackedArrayType(typeSymbol, elementTypeSymbol, out variantType, out fullyQualifiedMarshalAsTypeName))
+            {
+                return true;
+            }
+
+            // Validate that the element type is compatible.
+            if (TryGetVariantTypeForCoreTypes(elementTypeSymbol, out _, out _))
+            {
+                variantType = VariantType.Array;
+                fullyQualifiedMarshalAsTypeName = MakeGenericGodotArray(elementTypeSymbol);
+                return true;
+            }
+
+            return false;
+        }
+
+        if (typeKind is TypeKind.Class)
+        {
+            string typeName = typeSymbol.FullNameWithoutGenericTypeArguments();
+
+            switch (typeName)
+            {
+                case KnownTypeNames.SystemCollectionsGenericList:
+                {
+                    if (!TryGetArrayLikeElementType(compilation, typeSymbol, out var elementTypeSymbol))
+                    {
+                        return false;
+                    }
+
+                    // Prefer packed arrays for array-like types.
+                    if (TryGetPackedArrayType(typeSymbol, elementTypeSymbol, out variantType, out fullyQualifiedMarshalAsTypeName))
+                    {
+                        return true;
+                    }
+
+                    // Validate that the element type is compatible.
+                    if (TryGetVariantTypeForCoreTypes(elementTypeSymbol, out _, out _))
+                    {
+                        variantType = VariantType.Array;
+                        fullyQualifiedMarshalAsTypeName = MakeGenericGodotArray(elementTypeSymbol);
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                case KnownTypeNames.SystemCollectionsGenericDictionary:
+                {
+                    if (!TryGetDictionaryLikeKeyValueTypes(compilation, typeSymbol, out var keyTypeSymbol, out var valueTypeSymbol))
+                    {
+                        return false;
+                    }
+
+                    // Validate that the key and value types are compatible.
+                    if (TryGetVariantTypeForCoreTypes(keyTypeSymbol, out _, out _)
+                     && TryGetVariantTypeForCoreTypes(valueTypeSymbol, out _, out _))
+                    {
+                        variantType = VariantType.Dictionary;
+                        fullyQualifiedMarshalAsTypeName = MakeGenericGodotDictionary(keyTypeSymbol, valueTypeSymbol);
+                        return true;
+                    }
+
+                    return false;
+                }
+            }
+        }
+
+        return false;
+
+        static bool TryGetPackedArrayType(ITypeSymbol typeSymbol, ITypeSymbol elementTypeSymbol, out VariantType packedArrayType, [NotNullWhen(true)] out string? fullyQualifiedMarshalAsTypeName)
+        {
+            (packedArrayType, fullyQualifiedMarshalAsTypeName) = elementTypeSymbol.SpecialType switch
+            {
+                SpecialType.System_Byte => (VariantType.PackedByteArray, KnownTypeNames.GodotPackedByteArray),
+                SpecialType.System_Int32 => (VariantType.PackedInt32Array, KnownTypeNames.GodotPackedInt32Array),
+                SpecialType.System_Int64 => (VariantType.PackedInt64Array, KnownTypeNames.GodotPackedInt64Array),
+                SpecialType.System_Single => (VariantType.PackedFloat64Array, KnownTypeNames.GodotPackedFloat64Array),
+                SpecialType.System_Double => (VariantType.PackedFloat64Array, KnownTypeNames.GodotPackedFloat64Array),
+                SpecialType.System_String => (VariantType.PackedStringArray, KnownTypeNames.GodotPackedStringArray),
+
+                _ => (VariantType.Nil, null),
+            };
+
+            if (fullyQualifiedMarshalAsTypeName != null)
+            {
+                return true;
+            }
+
+            (packedArrayType, fullyQualifiedMarshalAsTypeName) = typeSymbol.FullName() switch
+            {
+                KnownTypeNames.GodotVector2 => (VariantType.PackedVector2Array, KnownTypeNames.GodotPackedVector2Array),
+                KnownTypeNames.GodotVector3 => (VariantType.PackedVector3Array, KnownTypeNames.GodotPackedVector3Array),
+                KnownTypeNames.GodotVector4 => (VariantType.PackedVector4Array, KnownTypeNames.GodotPackedVector4Array),
+
+                _ => (VariantType.Nil, null),
+            };
+
+            return fullyQualifiedMarshalAsTypeName != null;
+        }
+    }
+
     private static bool TryGetArrayLikeElementType(Compilation compilation, ITypeSymbol arrayLikeTypeSymbol, [NotNullWhen(true)] out ITypeSymbol? elementTypeSymbol)
     {
         elementTypeSymbol = null;
 
-        if (arrayLikeTypeSymbol.ContainingAssembly.Name == "Godot.Bindings")
+        // Godot Core types.
+
+        // NOTE: ContainingAssembly can be null if the type is a C# array (e.g.: int[])
+        if (arrayLikeTypeSymbol.ContainingAssembly?.Name == "Godot.Bindings")
         {
             string arrayLikeTypeName = arrayLikeTypeSymbol.FullName();
             string? elementTypeName = arrayLikeTypeName switch
@@ -197,22 +366,59 @@ internal static class Marshalling
             arrayLikeTypeName = arrayLikeTypeSymbol.FullNameWithoutGenericTypeArguments();
             if (arrayLikeTypeName == KnownTypeNames.GodotArray)
             {
-                if (arrayLikeTypeSymbol is not INamedTypeSymbol { IsGenericType: true } genericArrayLikeTypeSymbol)
-                {
-                    // The array-like type is the non-generic GodotArray so the element type
-                    // is Variant, but that's the same as not being able to get the element
-                    // type because we can't get a property hint from Variant.
-                    return false;
-                }
+                // If the type is generic, it must be `GodotArray<T>` so we can get the element type
+                // from its first type argument. Otherwise, it's the non-generic `GodotArray` so the
+                // element type is Variant, but that's the same as not being able to get the element
+                // type because we can't get a property hint from Variant.
+                return TryGetFirstTypeArgument(arrayLikeTypeSymbol, out elementTypeSymbol);
+            }
+        }
 
-                // The array-like type must be GodotArray<T> so we can get
-                // the element type from its first type argument.
-                elementTypeSymbol = genericArrayLikeTypeSymbol.TypeArguments[0];
-                return true;
+        // Specially-recognized types.
+
+        var typeKind = arrayLikeTypeSymbol.TypeKind;
+
+        if (typeKind == TypeKind.Array)
+        {
+            var arrayTypeSymbol = (IArrayTypeSymbol)arrayLikeTypeSymbol;
+
+            if (arrayTypeSymbol.Rank != 1)
+            {
+                return false;
+            }
+
+            elementTypeSymbol = arrayTypeSymbol.ElementType;
+            return true;
+        }
+
+        if (typeKind == TypeKind.Class)
+        {
+            string typeName = arrayLikeTypeSymbol.FullNameWithoutGenericTypeArguments();
+            if (typeName == KnownTypeNames.SystemCollectionsGenericList)
+            {
+                // We don't specially-recognize any non-generic array-like types.
+                // If the type is generic, it must be `System.Collections.Generic.List<T>`
+                // so we can get the element type from its first type argument.
+                return TryGetFirstTypeArgument(arrayLikeTypeSymbol, out elementTypeSymbol);
             }
         }
 
         return false;
+
+        static bool TryGetFirstTypeArgument(ITypeSymbol typeSymbol, [NotNullWhen(true)] out ITypeSymbol? firstTypeArgument)
+        {
+            if (typeSymbol is not INamedTypeSymbol { IsGenericType: true } genericTypeSymbol)
+            {
+                // Type is not generic, so there are no type arguments.
+                firstTypeArgument = null;
+                return false;
+            }
+
+            Debug.Assert(genericTypeSymbol.TypeArguments.Length == 1);
+
+            firstTypeArgument = genericTypeSymbol.TypeArguments[0];
+            return true;
+        }
     }
 
     private static bool TryGetDictionaryLikeKeyValueTypes(Compilation compilation, ITypeSymbol dictionaryLikeTypeSymbol, [NotNullWhen(true)] out ITypeSymbol? keyTypeSymbol, [NotNullWhen(true)] out ITypeSymbol? valueTypeSymbol)
@@ -220,28 +426,56 @@ internal static class Marshalling
         keyTypeSymbol = null;
         valueTypeSymbol = null;
 
+        // Godot Core types.
+
         if (dictionaryLikeTypeSymbol.ContainingAssembly.Name == "Godot.Bindings")
         {
             string dictionaryLikeTypeName = dictionaryLikeTypeSymbol.FullNameWithoutGenericTypeArguments();
             if (dictionaryLikeTypeName == KnownTypeNames.GodotDictionary)
             {
-                if (dictionaryLikeTypeSymbol is not INamedTypeSymbol { IsGenericType: true } genericArrayLikeTypeSymbol)
-                {
-                    // The dictionary-like type is the non-generic GodotDictionary so the
-                    // element type is Variant, but that's the same as not being able to
-                    // get the element type because we can't get a property hint from Variant.
-                    return false;
-                }
+                // If the type is generic, it must be `GodotDictionary<TKey, TValue>` so we can get
+                // the element type from its first and second type arguments. Otherwise, it's the
+                // non-generic `GodotDictionary` so the key and value types are both Variant, but
+                // that's the same as not being able to get the key and value types because we can't
+                // get a property hint from Variant.
+                return TryGetFirstAndSecondTypeArguments(dictionaryLikeTypeSymbol, out keyTypeSymbol, out valueTypeSymbol);
+            }
+        }
 
-                // The dictionary-like type must be GodotDictionary<TKey, TValue> so
-                // we can get the key and value types from its type arguments.
-                keyTypeSymbol = genericArrayLikeTypeSymbol.TypeArguments[0];
-                valueTypeSymbol = genericArrayLikeTypeSymbol.TypeArguments[1];
-                return true;
+        // Specially-recognized types.
+
+        var typeKind = dictionaryLikeTypeSymbol.TypeKind;
+
+        if (typeKind == TypeKind.Class)
+        {
+            string typeName = dictionaryLikeTypeSymbol.FullNameWithoutGenericTypeArguments();
+            if (typeName == KnownTypeNames.SystemCollectionsGenericList)
+            {
+                // We don't specially-recognize any non-generic dictionary-like types.
+                // If the type is generic, it must be `System.Collections.Generic.Dictionary<TKey, TValue>`
+                // so we can get the element type from its first and second type arguments.
+                return TryGetFirstAndSecondTypeArguments(dictionaryLikeTypeSymbol, out keyTypeSymbol, out valueTypeSymbol);
             }
         }
 
         return false;
+
+        static bool TryGetFirstAndSecondTypeArguments(ITypeSymbol typeSymbol, [NotNullWhen(true)] out ITypeSymbol? firstTypeArgument, out ITypeSymbol? secondTypeArgument)
+        {
+            if (typeSymbol is not INamedTypeSymbol { IsGenericType: true } genericTypeSymbol)
+            {
+                // Type is not generic, so there are no type arguments.
+                firstTypeArgument = null;
+                secondTypeArgument = null;
+                return false;
+            }
+
+            Debug.Assert(genericTypeSymbol.TypeArguments.Length == 2);
+
+            firstTypeArgument = genericTypeSymbol.TypeArguments[0];
+            secondTypeArgument = genericTypeSymbol.TypeArguments[1];
+            return true;
+        }
     }
 
     /// <summary>
@@ -387,7 +621,7 @@ internal static class Marshalling
             return false;
         }
 
-        if (!TryGetVariantType(elementTypeSymbol, out VariantType elementVariantType, out _))
+        if (!TryGetVariantTypeForCoreTypes(elementTypeSymbol, out VariantType elementVariantType, out _))
         {
             // The element type, and by extension the array-like type, is not marshallable.
             return false;
@@ -418,8 +652,8 @@ internal static class Marshalling
             return false;
         }
 
-        if (!TryGetVariantType(keyTypeSymbol, out VariantType keyVariantType, out _)
-         || !TryGetVariantType(valueTypeSymbol, out VariantType valueVariantType, out _))
+        if (!TryGetVariantTypeForCoreTypes(keyTypeSymbol, out VariantType keyVariantType, out _)
+         || !TryGetVariantTypeForCoreTypes(valueTypeSymbol, out VariantType valueVariantType, out _))
         {
             // The key type or the value type, and by extension the dictionary-like type, is not marshallable.
             return false;
@@ -473,5 +707,15 @@ internal static class Marshalling
         }
 
         return usage;
+    }
+
+    private static string MakeGenericGodotArray(ITypeSymbol elementTypeSymbol)
+    {
+        return $"global::{KnownTypeNames.GodotArray}<{elementTypeSymbol.FullNameWithGlobal()}>";
+    }
+
+    private static string MakeGenericGodotDictionary(ITypeSymbol keyTypeSymbol, ITypeSymbol valueTypeSymbol)
+    {
+        return $"global::{KnownTypeNames.GodotDictionary}<{keyTypeSymbol.FullNameWithGlobal()}, {valueTypeSymbol.FullNameWithGlobal()}>";
     }
 }

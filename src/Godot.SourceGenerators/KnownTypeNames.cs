@@ -23,6 +23,10 @@ internal static class KnownTypeNames
     public const string SystemIntPtr = "System.IntPtr";
     public const string SystemUIntPtr = "System.UIntPtr";
 
+    // System collections.
+    public const string SystemCollectionsGenericList = "System.Collections.Generic.List";
+    public const string SystemCollectionsGenericDictionary = "System.Collections.Generic.Dictionary";
+
     // Godot types.
     public const string GodotAabb = "Godot.Aabb";
     public const string GodotBasis = "Godot.Basis";

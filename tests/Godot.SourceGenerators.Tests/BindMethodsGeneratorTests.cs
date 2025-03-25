@@ -79,6 +79,15 @@ public class BindMethodsGeneratorTests
     }
 
     [Fact]
+    public async Task SpeciallyRecognizedMarshalling()
+    {
+        await Verifier.Verify(
+            ["NodeWithSpeciallyRecognizedMarshalling.cs"],
+            ["NS.NodeWithSpeciallyRecognizedMarshalling.generated.cs"]
+        );
+    }
+
+    [Fact]
     public async Task NestedNamespaces()
     {
         await Verifier.Verify(
