@@ -6,7 +6,7 @@ namespace Godot.Bridge;
 
 partial class ClassRegistrationContext
 {
-    private readonly HashSet<StringName> _registeredProperties = [];
+    private readonly HashSet<StringName> _registeredProperties = new(StringNameEqualityComparer.Default);
 
     /// <summary>
     /// Register a property in the class.

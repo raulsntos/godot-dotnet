@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using Godot.NativeInterop;
 
 namespace Godot.Bridge;
 
 partial class ClassRegistrationContext
 {
-    internal readonly Dictionary<StringName, VirtualMethodOverrideInfo> RegisteredVirtualMethodOverrides = [];
+    internal readonly Dictionary<StringName, VirtualMethodOverrideInfo> RegisteredVirtualMethodOverrides = new(StringNameEqualityComparer.Default);
 
     /// <summary>
     /// Register the override of a built-in virtual method in the class.

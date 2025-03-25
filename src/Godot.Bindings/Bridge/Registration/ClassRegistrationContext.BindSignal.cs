@@ -6,7 +6,7 @@ namespace Godot.Bridge;
 
 partial class ClassRegistrationContext
 {
-    private readonly HashSet<StringName> _registeredSignals = [];
+    private readonly HashSet<StringName> _registeredSignals = new(StringNameEqualityComparer.Default);
 
     private const int ParameterSpanThreshold = 8;
 

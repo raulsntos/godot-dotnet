@@ -9,12 +9,12 @@ namespace Godot.Bridge;
 
 partial class ClassRegistrationContext
 {
-    private readonly HashSet<StringName> _registeredMethods = [];
+    private readonly HashSet<StringName> _registeredMethods = new(StringNameEqualityComparer.Default);
 
     // The MethodInfo must be referenced somewhere so the GC doesn't release it.
     // We need to keep it alive because it contains the MethodBindInvoker that
     // invokes the method in the 'call_func' and 'ptrcall_func' callbacks.
-    internal readonly Dictionary<StringName, MethodInfo> RegisteredMethodImplementations = [];
+    private readonly Dictionary<StringName, MethodInfo> _registeredMethodImplementations = new(StringNameEqualityComparer.Default);
 
     /// <summary>
     /// Register a method in the class.
@@ -30,7 +30,7 @@ partial class ClassRegistrationContext
             throw new ArgumentException(SR.FormatArgument_MethodAlreadyRegistered(methodInfo.Name, ClassName), nameof(methodInfo));
         }
 
-        RegisteredMethodImplementations[methodInfo.Name] = methodInfo;
+        _registeredMethodImplementations[methodInfo.Name] = methodInfo;
 
         _registerBindingActions.Enqueue(() =>
         {

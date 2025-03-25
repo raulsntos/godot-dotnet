@@ -14,7 +14,7 @@ namespace Godot.Bridge;
 /// </summary>
 public static partial class GodotRegistry
 {
-    private static readonly Dictionary<StringName, ClassRegistrationContext> _registeredClasses = [];
+    private static readonly Dictionary<StringName, ClassRegistrationContext> _registeredClasses = new(StringNameEqualityComparer.Default);
     private static readonly Stack<StringName> _classRegisterStack = [];
 
     /// <summary>
@@ -424,10 +424,10 @@ public static partial class GodotRegistry
         var context = (ClassRegistrationContext?)gcHandle.Target;
 
         Debug.Assert(context is not null);
+        Debug.Assert(name is not null);
 
-        StringName methodNameStr = StringName.CreateCopying(*name);
-
-        if (!context.RegisteredVirtualMethodOverrides.TryGetValue(methodNameStr, out var virtualMethodInfo))
+        var lookup = context.RegisteredVirtualMethodOverrides.GetAlternateLookup<NativeGodotStringName>();
+        if (!lookup.TryGetValue(*name, out var virtualMethodInfo))
         {
             // Virtual method not registered, it likely means it wasn't overridden.
             // Returning null so it falls back to the default implementation.
@@ -444,14 +444,15 @@ public static partial class GodotRegistry
         var context = (ClassRegistrationContext?)gcHandle.Target;
 
         Debug.Assert(context is not null);
+        Debug.Assert(name is not null);
 
-        StringName methodNameStr = StringName.CreateCopying(*name);
+        var lookup = context.RegisteredVirtualMethodOverrides.GetAlternateLookup<NativeGodotStringName>();
 
         // We already checked that the method is registered in 'GetVirtualMethodUserData_Native',
         // this method would not have been called otherwise.
-        Debug.Assert(context.RegisteredVirtualMethodOverrides.ContainsKey(methodNameStr), $"Virtual method '{methodNameStr}' has not been registered in class '{context.ClassName}'.");
+        Debug.Assert(lookup.ContainsKey(*name), $"Virtual method '{StringName.CreateTakingOwnership(*name)}' has not been registered in class '{context.ClassName}'.");
 
-        var virtualMethodInfo = context.RegisteredVirtualMethodOverrides[methodNameStr];
+        var virtualMethodInfo = lookup[*name];
         virtualMethodInfo.Invoker.CallVirtualWithPtrArgs(instance, args, outRet);
     }
 }

@@ -6,7 +6,7 @@ namespace Godot.Bridge;
 
 partial class GodotRegistry
 {
-    private static readonly HashSet<StringName> _registeredPlugins = [];
+    private static readonly HashSet<StringName> _registeredPlugins = new(StringNameEqualityComparer.Default);
     private static readonly Stack<StringName> _pluginRegisterStack = [];
 
     /// <summary>
