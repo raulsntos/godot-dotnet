@@ -71,6 +71,11 @@ partial class Marshalling
             return NativeGodotVariant.CreateFromInt((long)UnsafeAs<ulong>(value));
         }
 
+        if (typeof(T) == typeof(nint))
+        {
+            return NativeGodotVariant.CreateFromInt(UnsafeAs<nint>(value));
+        }
+
         if (typeof(T) == typeof(Half))
         {
             return NativeGodotVariant.CreateFromFloat((double)UnsafeAs<Half>(value));

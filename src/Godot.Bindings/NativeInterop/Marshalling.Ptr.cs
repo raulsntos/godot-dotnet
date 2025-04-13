@@ -82,6 +82,12 @@ partial class Marshalling
             return;
         }
 
+        if (typeof(T) == typeof(nint))
+        {
+            *(nint*)destination = UnsafeAs<nint>(value);
+            return;
+        }
+
         if (typeof(T) == typeof(Half))
         {
             *(double*)destination = (double)UnsafeAs<Half>(value);
