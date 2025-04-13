@@ -9,7 +9,11 @@ internal sealed class BindingsGeneratorOptions
 
     public ArchBits Bits { get; init; } = ArchBits.Bits64;
 
-    public enum FloatTypePrecision { SinglePrecision, DoublePrecision };
+    public enum FloatTypePrecision
+    {
+        SinglePrecision = GodotFloatTypePrecision.Single,
+        DoublePrecision = GodotFloatTypePrecision.Double,
+    };
 
     public FloatTypePrecision FloatPrecision { get; init; } = FloatTypePrecision.SinglePrecision;
 

@@ -40,4 +40,11 @@ public class GodotApiHeader
     /// </summary>
     [JsonPropertyName("version_full_name")]
     public string VersionFullName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Precision used by the floating point type.
+    /// </summary>
+    /// <value></value>
+    [JsonPropertyName("precision")]
+    public GodotFloatTypePrecision Precision { get; set; } = GodotFloatTypePrecision.Single;
 }
