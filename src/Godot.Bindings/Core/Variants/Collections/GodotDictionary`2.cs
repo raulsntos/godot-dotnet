@@ -14,11 +14,16 @@ internal interface IGenericGodotDictionary
 }
 
 /// <summary>
-/// Typed wrapper around Godot's Dictionary class, a dictionary of Variant
-/// typed elements allocated in the engine in C++. Useful when
-/// interfacing with the engine. Otherwise prefer .NET collections
+/// Typed wrapper around Godot's Dictionary class, a dictionary of <typeparamref name="TKey"/>
+/// and <typeparamref name="TValue"/> annotated, Variant typed elements allocated in the engine in C++.
+/// Useful when interfacing with the engine. Otherwise prefer .NET collections
 /// such as <see cref="Dictionary{TKey, TValue}"/>.
 /// </summary>
+/// <remarks>
+/// While the elements are statically annotated to <typeparamref name="TKey"/> and <typeparamref name="TValue"/>,
+/// the underlying dictionary still stores <see cref="Variant"/>, which has the same memory footprint per element
+/// as an untyped <see cref="GodotDictionary"/>.
+/// </remarks>
 /// <typeparam name="TKey">The type of the dictionary's keys.</typeparam>
 /// <typeparam name="TValue">The type of the dictionary's values.</typeparam>
 [DebuggerTypeProxy(typeof(GodotDictionary<,>.DebugView))]
