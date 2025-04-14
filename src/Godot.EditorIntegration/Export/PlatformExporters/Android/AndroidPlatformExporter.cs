@@ -80,19 +80,13 @@ internal sealed class AndroidPlatformExporter : PlatformExporter
 
         PackedStringArray tags = [options.GodotArchitecture];
 
+        HashSet<string> exportedJars = [];
+
         foreach (string path in Directory.EnumerateFiles(outputPath, "*", SearchOption.AllDirectories))
         {
             string relativePath = Path.GetRelativePath(outputPath, path);
 
-            if (path.EndsWith(".jar", StringComparison.OrdinalIgnoreCase))
-            {
-                // We exclude jar files from the export since they should
-                // already be included in the Godot templates, adding them
-                // again would cause conflicts.
-                continue;
-            }
-
-            if (IsSharedObject(path))
+            if (IsSharedObject(path) || ShouldExportJar(path, exportedJars))
             {
                 string target = Path.Join(projectDataDirName, Path.GetDirectoryName(relativePath));
                 context.ExportPlugin.AddSharedObject(path, tags, target);
@@ -117,6 +111,18 @@ internal sealed class AndroidPlatformExporter : PlatformExporter
             }
 
             return false;
+        }
+
+        static bool ShouldExportJar(string path, HashSet<string> alreadyExportedJars)
+        {
+            if (!path.EndsWith(".jar", StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            // Don't export the same jar multiple times to avoid conflicts.
+            // This can happen when exporting to multiple architectures.
+            return alreadyExportedJars.Add(Path.GetFileName(path));
         }
     }
 }
