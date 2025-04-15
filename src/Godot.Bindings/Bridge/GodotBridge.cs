@@ -38,11 +38,12 @@ public static partial class GodotBridge
     private static unsafe GetProcAddressFunction _getProcAddress;
     private static unsafe void* _libraryPtr;
 
-    private static GDExtensionGodotVersion _godotVersion;
+    private static GodotVersion? _godotVersion;
 
     private static GDExtensionInterface _gdextensionInterface;
 
     internal static unsafe void* LibraryPtr => _libraryPtr;
+    internal static GodotVersion GodotVersion => _godotVersion ?? throw new InvalidOperationException(SR.InvalidOperation_GodotBridgeNotInitialized);
     internal static GDExtensionInterface GDExtensionInterface => _gdextensionInterface;
 
     private static bool _initialized;
@@ -66,10 +67,9 @@ public static partial class GodotBridge
         InitializeGDExtensionInterface();
 
         // Load the Godot version.
-        fixed (GDExtensionGodotVersion* godotVersion = &_godotVersion)
-        {
-            _gdextensionInterface.get_godot_version(godotVersion);
-        }
+        GDExtensionGodotVersion2 godotVersion = default;
+        _gdextensionInterface.get_godot_version2(&godotVersion);
+        _godotVersion = GodotVersion.Create(godotVersion);
 
         *initialization = new GDExtensionInitialization()
         {

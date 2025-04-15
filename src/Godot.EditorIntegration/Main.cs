@@ -5,6 +5,7 @@ using Godot.Bridge;
 using Godot.EditorIntegration.Build.UI;
 using Godot.EditorIntegration.Export;
 using Godot.EditorIntegration.Internals;
+using Godot.EditorIntegration.UpgradeAssistant;
 
 [assembly: DisableRuntimeMarshalling]
 [assembly: DisableGodotEntryPointGeneration]
@@ -20,12 +21,15 @@ internal static class Main
             return;
         }
 
-        GodotRegistry.RegisterClass<DotNetEditorPlugin>(DotNetEditorPlugin.BindMethods);
-        GodotRegistry.RegisterClass<DotNetExportPlugin>(DotNetExportPlugin.BindMethods);
+        GodotRegistry.RegisterInternalClass<DotNetEditorPlugin>(DotNetEditorPlugin.BindMethods);
+        GodotRegistry.RegisterInternalClass<DotNetExportPlugin>(DotNetExportPlugin.BindMethods);
 
-        GodotRegistry.RegisterClass<MSBuildPanel>(MSBuildPanel.BindMethods);
-        GodotRegistry.RegisterClass<BuildProblemsView>(BuildProblemsView.BindMethods);
-        GodotRegistry.RegisterClass<BuildOutputView>(BuildOutputView.BindMethods);
+        GodotRegistry.RegisterInternalClass<MSBuildPanel>(MSBuildPanel.BindMethods);
+        GodotRegistry.RegisterInternalClass<BuildProblemsView>(BuildProblemsView.BindMethods);
+        GodotRegistry.RegisterInternalClass<BuildOutputView>(BuildOutputView.BindMethods);
+
+        GodotRegistry.RegisterInternalClass<ResourceFormatLoaderCSharpScript>(ResourceFormatLoaderCSharpScript.BindMethods);
+        GodotRegistry.RegisterInternalClass<CSharpScript>(CSharpScript.BindMethods);
 
         GodotRegistry.AddEditorPluginByType<DotNetEditorPlugin>();
     }

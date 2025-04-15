@@ -226,6 +226,9 @@
   <data name="InvalidOperation_GodotBridgeAlreadyInitialized" xml:space="preserve">
     <value>GodotBridge has already been initialized.</value>
   </data>
+  <data name="InvalidOperation_GodotBridgeNotInitialized" xml:space="preserve">
+    <value>GodotBridge has not been initialized.</value>
+  </data>
   <data name="InvalidOperation_MarshallingUnsupportedForType" xml:space="preserve">
     <value>Marshalling is not supported for the type '{typeName}'.</value>
   </data>
@@ -261,6 +264,9 @@
   </data>
   <data name="InvalidOperation_VariantCantBeEnumerated" xml:space="preserve">
     <value>Can't enumerate Variant '{variantValue}'.</value>
+  </data>
+  <data name="InvalidOperation_VariantEvaluateOperationInvalid" xml:space="preserve">
+    <value>Operation {op} is invalid between '{left}' and '{right}'.</value>
   </data>
   <data name="KeyNotFound_DictionaryKeyNotFound" xml:space="preserve">
     <value>The given key '{key}' was not present in the dictionary.</value>

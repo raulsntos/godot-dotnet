@@ -1,6 +1,7 @@
 using System;
-using System.Linq;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using Godot.Collections;
 using Godot.EditorIntegration.Build;
 using Godot.EditorIntegration.Build.Cli;
@@ -9,9 +10,9 @@ using Godot.EditorIntegration.CodeEditors;
 using Godot.EditorIntegration.Export;
 using Godot.EditorIntegration.Internals;
 using Godot.EditorIntegration.ProjectEditor;
+using Godot.EditorIntegration.UpgradeAssistant;
 using Microsoft.VisualStudio.SolutionPersistence.Model;
 using Microsoft.VisualStudio.SolutionPersistence.Serializer;
-using System.Threading;
 
 namespace Godot.EditorIntegration;
 
@@ -104,6 +105,11 @@ internal sealed partial class DotNetEditorPlugin : EditorPlugin
             }
 
             // NOTE: The order in which changes are made to the project is important.
+
+            // TODO: It would be nice to use EditorProgress but it messes things up because the upgrade needs to finish before the editor continues loading other stuff.
+            var upgradeAssistant = new GodotUpgradeAssistant();
+            upgradeAssistant.Prepare();
+            upgradeAssistant.Upgrade();
 
             msbuildProject.EnsureGodotSdkIsUpToDate();
 

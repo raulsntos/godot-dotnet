@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using Godot.Bridge;
 using Godot.Collections;
 using Godot.NativeInterop;
 using Godot.NativeInterop.Marshallers;
@@ -132,6 +133,35 @@ public partial struct Variant : IDisposable
     public readonly VariantEnumerator Enumerate()
     {
         return new VariantEnumerator(this);
+    }
+
+    /// <summary>
+    /// Evaluate an operator on two variants.
+    /// </summary>
+    /// <param name="op">The operator to evaluate.</param>
+    /// <param name="left">The first variant.</param>
+    /// <param name="right">The second variant.</param>
+    /// <returns>The result of the evaluated operation.</returns>
+    /// <exception cref="InvalidOperationException">The operation is invalid.</exception>
+    internal static unsafe Variant Evaluate(VariantOperator op, Variant left, Variant right)
+    {
+        bool valid = false;
+
+        GDExtensionVariantOperator opNative = (GDExtensionVariantOperator)op;
+
+        NativeGodotVariant leftNative = left.NativeValue.DangerousSelfRef;
+        NativeGodotVariant rightNative = right.NativeValue.DangerousSelfRef;
+
+        Unsafe.SkipInit(out NativeGodotVariant ret);
+
+        GodotBridge.GDExtensionInterface.variant_evaluate(opNative, &leftNative, &rightNative, &ret, &valid);
+
+        if (!valid)
+        {
+            throw new InvalidOperationException(SR.FormatInvalidOperation_VariantEvaluateOperationInvalid(op, left, right));
+        }
+
+        return new Variant(ret);
     }
 
     /// <summary>
