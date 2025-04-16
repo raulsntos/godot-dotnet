@@ -71,8 +71,8 @@ partial class ClassRegistrationContext
         Action<TInstance, TValue> setter
     ) where TInstance : GodotObject
     {
-        using StringName getterName = new($"get_{propertyInfo.Name}");
-        using StringName setterName = new($"set_{propertyInfo.Name}");
+        StringName getterName = new($"get_{propertyInfo.Name}");
+        StringName setterName = new($"set_{propertyInfo.Name}");
 
         var returnInfo = new ReturnInfo(propertyInfo.Type)
         {
