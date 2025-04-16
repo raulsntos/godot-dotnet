@@ -37,7 +37,7 @@ The `GodotBridge.Initialize` allows us to configure the initialization by settin
 The C# project can be compiled using the following command:
 
 ```bash
-dotnet publish /p:NativeLib=Static /p:SelfContained=true -r [RID] -c [Configuration]
+dotnet publish /p:PublishAot=true -r [RID] -c [Configuration]
 ```
 
 The above command will create a static native library for the specified platform according to the `[RID]` runtime identifier (e.g.: win-x64, linux-x64, osx-x64) in the `./bin/{Configuration}/{TargetFramework}/{RID}/publish` directory.
