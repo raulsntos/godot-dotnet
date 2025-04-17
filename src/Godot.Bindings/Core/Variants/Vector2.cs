@@ -1143,7 +1143,7 @@ public struct Vector2 : IEquatable<Vector2>
     /// Converts this <see cref="Vector2"/> to a string.
     /// </summary>
     /// <returns>A string representation of this vector.</returns>
-    public override readonly string ToString() => ToString();
+    public override readonly string ToString() => ToString(null);
 
     /// <summary>
     /// Converts this <see cref="Vector2"/> to a string with the given <paramref name="format"/>.
