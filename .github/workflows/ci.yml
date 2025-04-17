@@ -50,7 +50,7 @@ jobs:
 
       - name: Build and test solution
         run: |
-          ${{ matrix.cibuild-script }} /p:GenerateGodotBindings=true
+          ${{ matrix.cibuild-script }} --generate
 
       - name: Build sample project
         run: |
