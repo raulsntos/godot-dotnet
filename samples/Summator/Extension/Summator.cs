@@ -22,7 +22,7 @@ public partial class Summator : RefCounted
         return _count;
     }
 
-    internal static void BindMethods(ClassRegistrationContext context)
+    internal static void BindMembers(ClassRegistrationContext context)
     {
         context.BindConstructor(() => new Summator());
 

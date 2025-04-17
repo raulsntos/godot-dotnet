@@ -136,6 +136,6 @@ internal static class EntryPointWriter
             GodotRegistrationSpec.Kind.InternalClass => "RegisterInternalClass",
             var kind => throw new InvalidOperationException($"Invalid registration kind '{kind}'."),
         });
-        sb.AppendLine($"<{spec.FullyQualifiedSymbolName}>({spec.FullyQualifiedSymbolName}.BindMethods);");
+        sb.AppendLine($"<{spec.FullyQualifiedSymbolName}>({spec.FullyQualifiedSymbolName}.BindMembers);");
     }
 }

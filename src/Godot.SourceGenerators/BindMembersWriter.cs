@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace Godot.SourceGenerators;
 
-internal static class BindMethodsWriter
+internal static class BindMembersWriter
 {
     public static void Write(IndentedStringBuilder sb, GodotClassSpec spec)
     {
@@ -40,7 +40,7 @@ internal static class BindMethodsWriter
         WriteCachedStringNames(sb, spec);
 
         sb.AppendLineNoTabs("#pragma warning disable CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.");
-        sb.AppendLine("internal static void BindMethods(global::Godot.Bridge.ClassRegistrationContext context)");
+        sb.AppendLine("internal static void BindMembers(global::Godot.Bridge.ClassRegistrationContext context)");
         sb.AppendLineNoTabs("#pragma warning restore CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.");
         sb.OpenBlock();
 
@@ -48,7 +48,7 @@ internal static class BindMethodsWriter
 
         WriteBindConstructor(sb, spec);
 
-        WriteBindMethods(sb, spec);
+        WriteBindMembers(sb, spec);
 
         WriteBindConstants(sb, spec);
 
@@ -181,7 +181,7 @@ internal static class BindMethodsWriter
         }
     }
 
-    private static void WriteBindMethods(IndentedStringBuilder sb, GodotClassSpec spec)
+    private static void WriteBindMembers(IndentedStringBuilder sb, GodotClassSpec spec)
     {
         foreach (var method in spec.Methods)
         {

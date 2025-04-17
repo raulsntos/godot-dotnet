@@ -29,7 +29,7 @@ partial class NodeWithSpeciallyRecognizedMarshalling
     {
     }
 #pragma warning disable CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.
-    internal static void BindMethods(global::Godot.Bridge.ClassRegistrationContext context)
+    internal static void BindMembers(global::Godot.Bridge.ClassRegistrationContext context)
 #pragma warning restore CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.
     {
         context.BindConstructor(() => new NodeWithSpeciallyRecognizedMarshalling());

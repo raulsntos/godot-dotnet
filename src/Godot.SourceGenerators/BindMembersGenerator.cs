@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.Text;
 namespace Godot.SourceGenerators;
 
 [Generator]
-internal sealed class BindMethodsGenerator : IIncrementalGenerator
+internal sealed class BindMembersGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -45,7 +45,7 @@ internal sealed class BindMethodsGenerator : IIncrementalGenerator
         string hintName = $"{spec.Value.GetHintName()}.generated.cs";
 
         var sb = new IndentedStringBuilder();
-        BindMethodsWriter.Write(sb, spec.Value);
+        BindMembersWriter.Write(sb, spec.Value);
 
         var sourceText = SourceText.From(sb.ToString(), Encoding.UTF8);
         context.AddSource(hintName, sourceText);

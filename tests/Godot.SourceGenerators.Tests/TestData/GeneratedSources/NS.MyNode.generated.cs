@@ -20,7 +20,7 @@ partial class MyNode
         public static global::Godot.StringName @MySignal { get; } = global::Godot.StringName.CreateStaticFromAscii("MySignal"u8);
     }
 #pragma warning disable CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.
-    internal static void BindMethods(global::Godot.Bridge.ClassRegistrationContext context)
+    internal static void BindMembers(global::Godot.Bridge.ClassRegistrationContext context)
 #pragma warning restore CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.
     {
         context.BindConstructor(() => MyNode.@MyConstructorMethod());

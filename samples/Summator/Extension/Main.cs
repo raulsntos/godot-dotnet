@@ -17,7 +17,7 @@ public class Main
             return;
         }
 
-        GodotRegistry.RegisterClass<Summator>(Summator.BindMethods);
+        GodotRegistry.RegisterClass<Summator>(Summator.BindMembers);
     }
 
     public static void DeinitializeSummatorTypes(InitializationLevel level)

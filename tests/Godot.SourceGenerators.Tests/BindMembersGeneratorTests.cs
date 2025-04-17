@@ -2,9 +2,9 @@ using System.Threading.Tasks;
 
 namespace Godot.SourceGenerators.Tests;
 
-using Verifier = CSharpSourceGeneratorVerifier<BindMethodsGenerator>;
+using Verifier = CSharpSourceGeneratorVerifier<BindMembersGenerator>;
 
-public class BindMethodsGeneratorTests
+public class BindMembersGeneratorTests
 {
     [Fact]
     public async Task BindEveryKindOfMember()
@@ -16,7 +16,7 @@ public class BindMethodsGeneratorTests
     }
 
     [Fact]
-    public async Task BindMethods()
+    public async Task BindMembers()
     {
         await Verifier.Verify(
             ["NodeWithMethods.cs"],
