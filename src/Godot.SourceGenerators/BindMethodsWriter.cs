@@ -157,7 +157,7 @@ internal static class BindMethodsWriter
             return;
         }
 
-        sb.AppendLine($"""context.SetIcon("{spec.IconPath}")""");
+        sb.AppendLine($"""context.SetIcon("{spec.IconPath}");""");
     }
 
     private static void WriteBindConstructor(IndentedStringBuilder sb, GodotClassSpec spec)
