@@ -107,8 +107,8 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                     IsStatic = true,
                     Body = MethodBody.Create(writer =>
                     {
-                        writer.WriteLine($"var createHelpers = new global::System.Collections.Generic.Dictionary<StringName, global::System.Func<nint, global::Godot.GodotObject>>(capacity: {context.Api.Classes.Length});");
-                        writer.WriteLine($"var registerVirtualOverridesHelpers = new global::System.Collections.Generic.Dictionary<StringName, global::System.Action<global::Godot.Bridge.ClassRegistrationContext>>(capacity: {context.Api.Classes.Length});");
+                        writer.WriteLine($"var createHelpers = new global::System.Collections.Generic.Dictionary<global::Godot.StringName, global::System.Func<nint, global::Godot.GodotObject>>(capacity: {context.Api.Classes.Length});");
+                        writer.WriteLine($"var registerVirtualOverridesHelpers = new global::System.Collections.Generic.Dictionary<global::Godot.StringName, global::Godot.NativeInterop.InteropUtils.RegisterVirtualOverrideHelper>(capacity: {context.Api.Classes.Length});");
 
                         foreach (var engineClass in context.Api.Classes)
                         {
@@ -303,6 +303,10 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                 IsNew = engineClass.Name != "Object",
                 Parameters =
                 {
+                    new ParameterInfo("type", new TypeInfo("Type", "System"))
+                    {
+                        Attributes = { "[global::System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(global::System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicMethods | global::System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.NonPublicMethods)]" }
+                    },
                     new ParameterInfo("context", new TypeInfo("ClassRegistrationContext", "Godot.Bridge")),
                 },
                 Body = new RegisterVirtualOverrides(type, virtualMethods),
