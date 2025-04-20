@@ -36,7 +36,7 @@ internal static unsafe class CallableMarshaller
             return Callable.CreateTakingOwnership(customCallable);
         }
 
-        return Callable.CreateTakingOwnership(*value);
+        return Callable.CreateCopying(*value);
     }
 
     public static void Free(NativeGodotCallable* value)

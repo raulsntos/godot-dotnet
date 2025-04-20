@@ -106,6 +106,17 @@ public readonly partial struct Callable
 
     /// <summary>
     /// Constructs a new <see cref="Callable"/> from the value borrowed from
+    /// <paramref name="nativeValueToCopy"/>, copying the value.
+    /// Since the new instance is a copy of the value, the caller is responsible
+    /// of disposing the new instance to avoid memory leaks.
+    /// </summary>
+    internal static Callable CreateCopying(NativeGodotCallable nativeValueToCopy)
+    {
+        return new Callable(NativeGodotCallable.Create(nativeValueToCopy));
+    }
+
+    /// <summary>
+    /// Constructs a new <see cref="Callable"/> from the value borrowed from
     /// <paramref name="customCallable"/>, taking ownership of the value.
     /// Since the new instance references the same value, disposing the new
     /// instance will also dispose the original value.
