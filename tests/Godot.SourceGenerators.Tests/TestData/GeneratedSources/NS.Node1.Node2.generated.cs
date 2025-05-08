@@ -19,7 +19,9 @@ partial class Node1
         public new partial class SignalName : global::Godot.Node.SignalName
         {
         }
+#pragma warning disable CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.
         internal static void BindMethods(global::Godot.Bridge.ClassRegistrationContext context)
+#pragma warning restore CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.
         {
             context.BindConstructor(() => new Node2());
             context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@Node2Property, global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Int32)

@@ -48,7 +48,9 @@ partial class NodeWithConstants
     public new partial class SignalName : global::Godot.Node.SignalName
     {
     }
+#pragma warning disable CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.
     internal static void BindMethods(global::Godot.Bridge.ClassRegistrationContext context)
+#pragma warning restore CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.
     {
         context.BindConstructor(() => new NodeWithConstants());
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyConstant, (long)(@MyConstant)));
