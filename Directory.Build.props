@@ -17,6 +17,12 @@
     <GenerateDocumentationFile Condition="'$(IsTestProject)' != 'true'">true</GenerateDocumentationFile>
   </PropertyGroup>
 
+  <!-- Feature switches. -->
+  <PropertyGroup>
+    <!-- Enable NuGet static graph evaluation to optimize incremental restore. -->
+    <RestoreUseStaticGraphEvaluation>true</RestoreUseStaticGraphEvaluation>
+  </PropertyGroup>
+
   <PropertyGroup>
     <!-- Avoid capturing the test output in CI so the results are displayed in the GitHub logs. -->
     <TestCaptureOutput Condition="'$(ContinuousIntegrationBuild)' == 'true'">false</TestCaptureOutput>
