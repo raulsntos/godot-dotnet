@@ -8,7 +8,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <!-- System -->
-    <SystemCommandLineVersion>2.0.0-beta4.24209.3</SystemCommandLineVersion>
+    <SystemCommandLineVersion>2.0.0-beta5.25306.1</SystemCommandLineVersion>
     <!-- MSBuild -->
     <MicrosoftBuildVersion>17.10.4</MicrosoftBuildVersion>
     <MicrosoftBuildLocatorVersion>1.7.8</MicrosoftBuildLocatorVersion>

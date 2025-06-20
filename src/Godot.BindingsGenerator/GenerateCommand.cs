@@ -8,9 +8,9 @@ using Godot.BindingsGenerator.ApiDump;
 
 namespace Godot.BindingsGenerator;
 
-internal sealed class GenerateCommand : CliRootCommand
+internal sealed class GenerateCommand : RootCommand
 {
-    private static readonly CliOption<FileInfo> _extensionApiPathOption = new CliOption<FileInfo>(
+    private static readonly Option<FileInfo> _extensionApiPathOption = new Option<FileInfo>(
         name: "--extension-api"
     )
     {
@@ -18,7 +18,7 @@ internal sealed class GenerateCommand : CliRootCommand
         Arity = ArgumentArity.ExactlyOne,
     }.AcceptExistingOnly();
 
-    private static readonly CliOption<FileInfo> _extensionInterfacePathOption = new CliOption<FileInfo>(
+    private static readonly Option<FileInfo> _extensionInterfacePathOption = new Option<FileInfo>(
         name: "--extension-interface"
     )
     {
@@ -26,14 +26,14 @@ internal sealed class GenerateCommand : CliRootCommand
         Arity = ArgumentArity.ExactlyOne,
     }.AcceptExistingOnly();
 
-    private static readonly CliOption<DirectoryInfo?> _outputPathOption = new(
+    private static readonly Option<DirectoryInfo?> _outputPathOption = new(
         name: "--output", aliases: ["-o"])
     {
         Description = "Path to the directory where the C# bindings will be generated.",
         Arity = ArgumentArity.ZeroOrOne,
     };
 
-    private static readonly CliOption<DirectoryInfo?> _testOutputPathOption = new(
+    private static readonly Option<DirectoryInfo?> _testOutputPathOption = new(
         name: "--test-output")
     {
         Description = "Path to the directory where the C# tests will be generated.",

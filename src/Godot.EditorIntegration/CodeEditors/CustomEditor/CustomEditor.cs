@@ -55,7 +55,7 @@ internal sealed class CustomEditorManager : CodeEditorManager
     {
         _compositeFormats.Clear();
 
-        foreach (string execArg in CliParser.SplitCommandLine(execArgs))
+        foreach (string execArg in CommandLineParser.SplitCommandLine(execArgs))
         {
             string arg = execArg;
 

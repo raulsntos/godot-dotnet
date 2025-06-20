@@ -2,4 +2,4 @@
 using Godot.BindingsGenerator;
 
 var rootCommand = new GenerateCommand();
-return await new CliConfiguration(rootCommand).InvokeAsync(args);
+return await new CommandLineConfiguration(rootCommand).InvokeAsync(args);
