@@ -448,48 +448,38 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
 
             Debug.Assert(property.Getter is not null || property.Setter is not null);
 
+#if DEBUG
             if (property.Getter is not null && property.Setter is not null)
             {
-                if (type.Name == "Node" && property.Name == "Name")
+                var getterReturnType = property.Getter.ReturnType;
+                var setterParameterType = property.Setter.Parameters[0].Type;
+
+                if (getterReturnType != setterParameterType)
                 {
-                    // HARDCODED: Ignore the type mismatch in the Node.Name property.
-                    // TODO: The old bindings_generator had a special case for this property, but ideally it should be fixed.
-                    // https://github.com/godotengine/godot/pull/76560
-                    property.Setter.Body = MethodBody.Create(writer => writer.WriteLine("SetName(value?.ToString());"));
+                    // The types don't match, check if the types are T[] and ReadOnlySpan<T>
+                    // which is a special case that is allowed.
+                    if (!CheckArrayAndSpanMatch(getterReturnType, setterParameterType))
+                    {
+                        Debug.Fail($"Property '{type.Name}.{property.Name}' getter has a return type that does not match the setter parameter type.");
+                    }
                 }
-                else
+
+                static bool CheckArrayAndSpanMatch(TypeInfo? getterReturnType, TypeInfo setterParameterType)
                 {
-#if DEBUG
-                    var getterReturnType = property.Getter.ReturnType;
-                    var setterParameterType = property.Setter.Parameters[0].Type;
-
-                    if (getterReturnType != setterParameterType)
+                    if (getterReturnType?.GenericTypeDefinition == KnownTypes.SystemArray
+                        && setterParameterType.GenericTypeDefinition == KnownTypes.SystemReadOnlySpan)
                     {
-                        // The types don't match, check if the types are T[] and ReadOnlySpan<T>
-                        // which is a special case that is allowed.
-                        if (!CheckArrayAndSpanMatch(getterReturnType, setterParameterType))
+                        // Check that the T types match.
+                        if (getterReturnType.GenericTypeArguments[0] == setterParameterType.GenericTypeArguments[0])
                         {
-                            Debug.Fail($"Property '{type.Name}.{property.Name}' getter has a return type that does not match the setter parameter type.");
+                            return true;
                         }
                     }
 
-                    static bool CheckArrayAndSpanMatch(TypeInfo? getterReturnType, TypeInfo setterParameterType)
-                    {
-                        if (getterReturnType?.GenericTypeDefinition == KnownTypes.SystemArray
-                            && setterParameterType.GenericTypeDefinition == KnownTypes.SystemReadOnlySpan)
-                        {
-                            // Check that the T types match.
-                            if (getterReturnType.GenericTypeArguments[0] == setterParameterType.GenericTypeArguments[0])
-                            {
-                                return true;
-                            }
-                        }
-
-                        return false;
-                    }
-#endif
+                    return false;
                 }
             }
+#endif
 
             // Use the getter/setter type as the property type.
             property.Type = property.Getter?.ReturnType ?? property.Setter?.Parameters[0].Type ?? property.Type;
