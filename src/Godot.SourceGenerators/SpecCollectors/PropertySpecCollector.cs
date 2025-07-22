@@ -88,7 +88,7 @@ internal static class PropertySpecCollector
     private static GodotPropertySpec CollectCore(Compilation compilation, string symbolName, ITypeSymbol typeSymbol, AttributeData? attribute, CancellationToken cancellationToken = default)
     {
         string? nameOverride = null;
-        PropertyHint hintOverride =  PropertyHint.None;
+        PropertyHint hintOverride = PropertyHint.None;
         string? hintStringOverride = null;
 
         if (attribute is not null)
