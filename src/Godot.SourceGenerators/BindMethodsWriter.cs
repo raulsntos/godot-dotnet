@@ -524,13 +524,13 @@ internal static class BindMethodsWriter
 
         List<string> lines = [];
 
-        if (marshalInfo.Hint != PropertyHint.None)
+        if (property.HintOverride != PropertyHint.None || marshalInfo.Hint != PropertyHint.None)
         {
-            lines.Add($"Hint = {marshalInfo.Hint.FullNameWithGlobal()},");
+            lines.Add($"Hint = {(property.HintOverride == PropertyHint.None ? marshalInfo.Hint : property.HintOverride).FullNameWithGlobal()},");
         }
-        if (!string.IsNullOrEmpty(marshalInfo.HintString))
+        if (!string.IsNullOrEmpty(property.HintStringOverride) || !string.IsNullOrEmpty(marshalInfo.HintString))
         {
-            lines.Add($"""HintString = "{marshalInfo.HintString}",""");
+            lines.Add($"""HintString = "{property.HintStringOverride ?? marshalInfo.HintString}",""");
         }
         if (marshalInfo.Usage != PropertyUsageFlags.None)
         {
