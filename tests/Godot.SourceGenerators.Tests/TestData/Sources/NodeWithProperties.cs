@@ -26,4 +26,10 @@ public partial class NodeWithProperties : Node
 
     [BindProperty]
     public int myFieldWithDefaultValue = 42;
+
+    [BindProperty(Hint = PropertyHint.Layers3DPhysics)]
+    public int myFieldWithHintOverride;
+
+    [BindProperty(HintString = "my_hint_string")]
+    public int myFieldWithHintStringOverride;
 }

@@ -88,6 +88,8 @@ internal static class PropertySpecCollector
     private static GodotPropertySpec CollectCore(Compilation compilation, string symbolName, ITypeSymbol typeSymbol, AttributeData? attribute, CancellationToken cancellationToken = default)
     {
         string? nameOverride = null;
+        PropertyHint hintOverride =  PropertyHint.None;
+        string? hintStringOverride = null;
 
         if (attribute is not null)
         {
@@ -97,6 +99,15 @@ internal static class PropertySpecCollector
                 {
                     case "Name":
                         nameOverride = constant.Value as string;
+                        break;
+                    case "Hint":
+                        if (constant.Value is long longValue)
+                        {
+                            hintOverride = (PropertyHint)longValue;
+                        }
+                        break;
+                    case "HintString":
+                        hintStringOverride = constant.Value as string;
                         break;
                 }
             }
@@ -110,6 +121,8 @@ internal static class PropertySpecCollector
             FullyQualifiedTypeName = typeSymbol.FullNameWithGlobal(),
             MarshalInfo = marshalInfo,
             NameOverride = nameOverride,
+            HintOverride = hintOverride,
+            HintStringOverride = hintStringOverride
         };
     }
 }
