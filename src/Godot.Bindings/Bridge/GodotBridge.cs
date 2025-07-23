@@ -78,6 +78,15 @@ public static partial class GodotBridge
             minimum_initialization_level = (GDExtensionInitializationLevel)configuration.MinimumInitLevel,
         };
 
+        GodotSynchronizationContext.InitializeSynchronizationContext();
+
+        var mainLoopCallbacks = new GDExtensionMainLoopCallbacks()
+        {
+            frame_func = Marshal.GetFunctionPointerForDelegate(Frame_Native),
+        };
+
+        _gdextensionInterface.register_main_loop_callbacks(_libraryPtr, &mainLoopCallbacks);
+
         _initialized = true;
     }
 
@@ -134,6 +143,21 @@ public static partial class GodotBridge
             GodotRegistry.UnregisterAllClasses();
 
             DisposablesTracker.DisposeAll();
+        }
+    }
+
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    private static void Frame_Native()
+    {
+        try
+        {
+            GodotSynchronizationContext.ExecutePendingContinuations();
+        }
+        catch (Exception e)
+        {
+            // TODO: Send the exception frames to the script debugger, if active.
+            // TODO: Maybe try-catch the GD.PushError() for good measure.
+            GD.PushError(e.ToString());
         }
     }
 }
