@@ -157,7 +157,7 @@ public static partial class GodotRegistry
         NativeGodotStringName* classNameNativePtr = className.NativeValue.DangerousSelfRef.GetUnsafeAddress();
         NativeGodotStringName* baseClassNameNativePtr = baseClassName.NativeValue.DangerousSelfRef.GetUnsafeAddress();
 
-        GodotBridge.GDExtensionInterface.classdb_register_extension_class4(GodotBridge.LibraryPtr, classNameNativePtr, baseClassNameNativePtr, &creationInfo);
+        GodotBridge.GDExtensionInterface.classdb_register_extension_class5(GodotBridge.LibraryPtr, classNameNativePtr, baseClassNameNativePtr, &creationInfo);
 
         context.RegisterBindings();
 
