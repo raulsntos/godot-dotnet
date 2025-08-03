@@ -281,28 +281,48 @@ partial class Marshalling
 
         if (typeof(T).IsEnum)
         {
-            // `Type.GetTypeCode(typeof(T).GetEnumUnderlyingType())` is not optimized away.
-            // Fortunately, `Unsafe.SizeOf<T>()` works and is optimized away.
-            // We don't need to know whether it's signed or unsigned.
+            // `typeof(T).GetEnumUnderlyingType()` is optimized away.
 
-            if (Unsafe.SizeOf<T>() == 1)
+            Type enumType = typeof(T).GetEnumUnderlyingType();
+
+            if (enumType == typeof(sbyte))
             {
                 return NativeGodotVariant.CreateFromInt(UnsafeAs<sbyte>(value));
             }
 
-            if (Unsafe.SizeOf<T>() == 2)
+            if (enumType == typeof(short))
             {
                 return NativeGodotVariant.CreateFromInt(UnsafeAs<short>(value));
             }
 
-            if (Unsafe.SizeOf<T>() == 4)
+            if (enumType == typeof(int))
             {
                 return NativeGodotVariant.CreateFromInt(UnsafeAs<int>(value));
             }
 
-            if (Unsafe.SizeOf<T>() == 8)
+            if (enumType == typeof(long))
             {
                 return NativeGodotVariant.CreateFromInt(UnsafeAs<long>(value));
+            }
+
+            if (enumType == typeof(byte))
+            {
+                return NativeGodotVariant.CreateFromInt(UnsafeAs<byte>(value));
+            }
+
+            if (enumType == typeof(ushort))
+            {
+                return NativeGodotVariant.CreateFromInt(UnsafeAs<ushort>(value));
+            }
+
+            if (enumType == typeof(uint))
+            {
+                return NativeGodotVariant.CreateFromInt(UnsafeAs<uint>(value));
+            }
+
+            if (enumType == typeof(ulong))
+            {
+                return NativeGodotVariant.CreateFromInt((long)UnsafeAs<ulong>(value));
             }
 
             ThrowUnsupportedType<T>();
@@ -578,28 +598,48 @@ partial class Marshalling
 
         if (typeof(T).IsEnum)
         {
-            // `Type.GetTypeCode(typeof(T).GetEnumUnderlyingType())` is not optimized away.
-            // Fortunately, `Unsafe.SizeOf<T>()` works and is optimized away.
-            // We don't need to know whether it's signed or unsigned.
+            // `typeof(T).GetEnumUnderlyingType()` is optimized away.
 
-            if (Unsafe.SizeOf<T>() == 1)
+            Type enumType = typeof(T).GetEnumUnderlyingType();
+
+            if (enumType == typeof(sbyte))
             {
                 return UnsafeAsT((sbyte)NativeGodotVariant.ConvertToInt(value));
             }
 
-            if (Unsafe.SizeOf<T>() == 2)
+            if (enumType == typeof(short))
             {
                 return UnsafeAsT((short)NativeGodotVariant.ConvertToInt(value));
             }
 
-            if (Unsafe.SizeOf<T>() == 4)
+            if (enumType == typeof(int))
             {
                 return UnsafeAsT((int)NativeGodotVariant.ConvertToInt(value));
             }
 
-            if (Unsafe.SizeOf<T>() == 8)
+            if (enumType == typeof(long))
             {
                 return UnsafeAsT(NativeGodotVariant.ConvertToInt(value));
+            }
+
+            if (enumType == typeof(byte))
+            {
+                return UnsafeAsT((byte)NativeGodotVariant.ConvertToInt(value));
+            }
+
+            if (enumType == typeof(ushort))
+            {
+                return UnsafeAsT((ushort)NativeGodotVariant.ConvertToInt(value));
+            }
+
+            if (enumType == typeof(uint))
+            {
+                return UnsafeAsT((uint)NativeGodotVariant.ConvertToInt(value));
+            }
+
+            if (enumType == typeof(ulong))
+            {
+                return UnsafeAsT((ulong)NativeGodotVariant.ConvertToInt(value));
             }
 
             ThrowUnsupportedType<T>();

@@ -329,31 +329,55 @@ partial class Marshalling
 
         if (typeof(T).IsEnum)
         {
-            // `Type.GetTypeCode(typeof(T).GetEnumUnderlyingType())` is not optimized away.
-            // Fortunately, `Unsafe.SizeOf<T>()` works and is optimized away.
-            // We don't need to know whether it's signed or unsigned.
+            // `typeof(T).GetEnumUnderlyingType()` is optimized away.
 
-            if (Unsafe.SizeOf<T>() == 1)
+            Type enumType = typeof(T).GetEnumUnderlyingType();
+
+            if (enumType == typeof(sbyte))
             {
                 *(long*)destination = UnsafeAs<sbyte>(value);
                 return;
             }
 
-            if (Unsafe.SizeOf<T>() == 2)
+            if (enumType == typeof(short))
             {
                 *(long*)destination = UnsafeAs<short>(value);
                 return;
             }
 
-            if (Unsafe.SizeOf<T>() == 4)
+            if (enumType == typeof(int))
             {
                 *(long*)destination = UnsafeAs<int>(value);
                 return;
             }
 
-            if (Unsafe.SizeOf<T>() == 8)
+            if (enumType == typeof(long))
             {
                 *(long*)destination = UnsafeAs<long>(value);
+                return;
+            }
+
+            if (enumType == typeof(byte))
+            {
+                *(long*)destination = UnsafeAs<byte>(value);
+                return;
+            }
+
+            if (enumType == typeof(ushort))
+            {
+                *(long*)destination = UnsafeAs<ushort>(value);
+                return;
+            }
+
+            if (enumType == typeof(uint))
+            {
+                *(long*)destination = UnsafeAs<uint>(value);
+                return;
+            }
+
+            if (enumType == typeof(ulong))
+            {
+                *(long*)destination = (long)UnsafeAs<ulong>(value);
                 return;
             }
 
@@ -662,28 +686,48 @@ partial class Marshalling
 
         if (typeof(T).IsEnum)
         {
-            // `Type.GetTypeCode(typeof(T).GetEnumUnderlyingType())` is not optimized away.
-            // Fortunately, `Unsafe.SizeOf<T>()` works and is optimized away.
-            // We don't need to know whether it's signed or unsigned.
+            // `typeof(T).GetEnumUnderlyingType()` is optimized away.
 
-            if (Unsafe.SizeOf<T>() == 1)
+            Type enumType = typeof(T).GetEnumUnderlyingType();
+
+            if (enumType == typeof(sbyte))
             {
                 return UnsafeAsT((sbyte)*(long*)value);
             }
 
-            if (Unsafe.SizeOf<T>() == 2)
+            if (enumType == typeof(short))
             {
                 return UnsafeAsT((short)*(long*)value);
             }
 
-            if (Unsafe.SizeOf<T>() == 4)
+            if (enumType == typeof(int))
             {
                 return UnsafeAsT((int)*(long*)value);
             }
 
-            if (Unsafe.SizeOf<T>() == 8)
+            if (enumType == typeof(long))
             {
                 return UnsafeAsT(*(long*)value);
+            }
+
+            if (enumType == typeof(byte))
+            {
+                return UnsafeAsT((byte)*(long*)value);
+            }
+
+            if (enumType == typeof(ushort))
+            {
+                return UnsafeAsT((ushort)*(long*)value);
+            }
+
+            if (enumType == typeof(uint))
+            {
+                return UnsafeAsT((uint)*(long*)value);
+            }
+
+            if (enumType == typeof(ulong))
+            {
+                return UnsafeAsT(*(ulong*)value);
             }
 
             ThrowUnsupportedType<T>();
