@@ -33,11 +33,15 @@
     <Content Include="$(OutputPath)\Godot.Common.dll" Pack="true" PackagePath="lib\$(TargetFramework)" />
   </ItemGroup>
 
+  <Import Project="..\Godot.Common.CodeAnalysis\Godot.Common.CodeAnalysis.projitems" />
+
   <ItemGroup>
     <PackageReference Include="System.CommandLine" Version="$(SystemCommandLineVersion)" />
     <PackageReference Include="JetBrains.Rider.PathLocator" Version="$(JetBrainsRiderPathLocatorVersion)" />
     <PackageReference Include="Microsoft.Build" Version="$(MicrosoftBuildVersion)" ExcludeAssets="runtime" />
     <PackageReference Include="Microsoft.Build.Locator" Version="$(MicrosoftBuildLocatorVersion)" />
+    <PackageReference Update="Microsoft.CodeAnalysis.CSharp.Workspaces" PrivateAssets="contentfiles;analyzers;build" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="$(MicrosoftCodeAnalysisWorkspacesMSBuildVersion)" />
     <PackageReference Include="Microsoft.VisualStudio.SolutionPersistence" Version="$(MicrosoftVisualStudioSolutionPersistenceVersion)" />
   </ItemGroup>
 
@@ -100,7 +104,7 @@
         We're setting both TargetPath and PackagePath here, the former when this is used in a regular build to deploy
         and the latter for when this called during pack. By putting the PackagePath in any/any, we only have to deploy
         this once rather than per TFM.
-        Similarly, we set CopyToOutputDirectory for the regular build and PackageCopyToPutput for the packaging process.
+        Similarly, we set CopyToOutputDirectory for the regular build and PackageCopyToOutput for the packaging process.
       -->
       <Content Include="%(AdditionalAssets.Identity)"
         Condition="'%(AdditionalAssets.TargetPath)' != '' and '%(AdditionalAssets.Extension)' != '.xml'"
