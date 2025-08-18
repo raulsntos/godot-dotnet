@@ -31,6 +31,8 @@ internal static partial class EditorInternal
         _add_control_to_editor_run_bar = (delegate* unmanaged[Cdecl]<void*, void>)LoadProcAddress("add_control_to_editor_run_bar"u8);
         _is_macos_app_bundle_installed = (delegate* unmanaged[Cdecl]<NativeGodotString*, bool>)LoadProcAddress("is_macos_app_bundle_installed"u8);
         _lipo_create_file = (delegate* unmanaged[Cdecl]<NativeGodotString*, NativeGodotPackedStringArray*, bool>)LoadProcAddress("lipo_create_file"u8);
+        _register_dotnet_source_code_plugin = (delegate* unmanaged[Cdecl]<nint, void>)LoadProcAddress("register_dotnet_source_code_plugin"u8);
+        _unregister_dotnet_source_code_plugin = (delegate* unmanaged[Cdecl]<nint, void>)LoadProcAddress("unregister_dotnet_source_code_plugin"u8);
 
         // TODO: The methods below should be moved to the bindings.
 
