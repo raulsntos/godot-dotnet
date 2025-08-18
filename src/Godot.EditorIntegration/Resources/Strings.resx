@@ -178,6 +178,21 @@
   <data name="CodeEditorErrorOnLaunch" xml:space="preserve">
     <value>Error when trying to launch code editor: '{editorId}'. Exception message: '{exceptionMessage}'.</value>
   </data>
+  <data name="DotNetEditorExtensionSourceCodePlugin_ClassNameCannotBeAReservedWord" xml:space="preserve">
+    <value>Class name cannot be a reserved word.</value>
+  </data>
+  <data name="DotNetEditorExtensionSourceCodePlugin_ClassNameMustBeAValidIdentifier" xml:space="preserve">
+    <value>Class name must be a valid identifier.</value>
+  </data>
+  <data name="DotNetEditorExtensionSourceCodePlugin_ClassNameOnlyContainsLowercaseAsciiCharacters" xml:space="preserve">
+    <value>Class name only contains lower-cased ascii characters. Such names may become reserved for the language.</value>
+  </data>
+  <data name="DotNetEditorExtensionSourceCodePlugin_PathMustEndWithCSharpExtension" xml:space="preserve">
+    <value>Path must end with a '.cs' extension.</value>
+  </data>
+  <data name="DotNetEditorExtensionSourceCodePlugin_ReplaceWithMethodBody" xml:space="preserve">
+    <value>Replace with method body.</value>
+  </data>
   <data name="DotNetEditorPlugin_AlertTitleError" xml:space="preserve">
     <value>Error</value>
   </data>

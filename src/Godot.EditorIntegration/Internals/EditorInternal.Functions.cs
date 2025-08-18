@@ -141,6 +141,22 @@ unsafe partial class EditorInternal
         return _lipo_create_file(&outputPathNative, &filesNative);
     }
 
+    private static delegate* unmanaged[Cdecl]<nint, void> _register_dotnet_source_code_plugin;
+
+    public static void RegisterDotNetSourceCodePlugin(EditorExtensionSourceCodePlugin plugin)
+    {
+        Debug.Assert(_register_dotnet_source_code_plugin is not null);
+        _register_dotnet_source_code_plugin(plugin.NativePtr);
+    }
+
+    private static delegate* unmanaged[Cdecl]<nint, void> _unregister_dotnet_source_code_plugin;
+
+    public static void UnregisterDotNetSourceCodePlugin(EditorExtensionSourceCodePlugin plugin)
+    {
+        Debug.Assert(_unregister_dotnet_source_code_plugin is not null);
+        _unregister_dotnet_source_code_plugin(plugin.NativePtr);
+    }
+
     // TODO: The methods below should be moved to the bindings.
 
     private static delegate* unmanaged[Cdecl]<NativeGodotString*, NativeGodotVariant*, bool, NativeGodotVariant*, void> _editor_def;
