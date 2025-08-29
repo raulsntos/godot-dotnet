@@ -45,7 +45,13 @@ partial class GodotObject : IDisposable
     /// Constructs a <see cref="GodotObject"/> with the given <paramref name="nativeClassName"/>.
     /// </summary>
     /// <param name="nativeClassName">The name of the Godot engine class.</param>
-    private protected GodotObject(scoped NativeGodotStringName nativeClassName) : this(ConstructGodotObject(nativeClassName)) { }
+    private protected GodotObject(scoped NativeGodotStringName nativeClassName) : this(ConstructGodotObject(nativeClassName))
+    {
+        // We need to emit this notification manually to finish initialization of user-constructed objects.
+        // The nint constructor doesn't emit this notification because it's used when creating instances from
+        // marshalled objects that have already been initialized.
+        Notification((int)NotificationPostinitialize);
+    }
 
     private static unsafe nint ConstructGodotObject(scoped NativeGodotStringName nativeClassName)
     {
@@ -70,8 +76,6 @@ partial class GodotObject : IDisposable
         GDExtensionInstanceBindingCallbacks bindingsCallbacks = default;
 
         GodotBridge.GDExtensionInterface.object_set_instance_binding((void*)NativePtr, GodotBridge.LibraryPtr, (void*)gcHandlePtr, &bindingsCallbacks);
-
-        Notification((int)NotificationPostinitialize);
 
         bool IsUserDefinedType()
         {
