@@ -46,6 +46,20 @@ internal readonly record struct GodotPropertySpec : IEquatable<GodotPropertySpec
     public string? NameOverride { get; init; }
 
     /// <summary>
+    /// Hint specified in the <c>[BindProperty]</c> attribute for this property,
+    /// or PropertyType.None if a hint was not specified.
+    /// If unspecified the hint of the property will be calculated from the <see cref="MarshalInfo"/>.
+    /// </summary>
+    public PropertyHint HintOverride { get; init; }
+
+    /// <summary>
+    /// Hint string specified in the <c>[BindProperty]</c> attribute for this property,
+    /// or <see langword="null"/> if a hint string was not specified.
+    /// If unspecified the hint string of the property will be calculated from the <see cref="MarshalInfo"/>.
+    /// </summary>
+    public string? HintStringOverride { get; init; }
+
+    /// <summary>
     /// Group information specified in the <c>[PropertyGroup]</c> attribute,
     /// if the property is annotated to define a group from this property.
     /// </summary>
