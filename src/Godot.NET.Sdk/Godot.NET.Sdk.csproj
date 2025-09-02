@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.Build.NoTargets/3.7.56">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <PackageType>MSBuildSdk</PackageType>
+    <PackageTags>MSBuildSdk</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Exclude target framework from the package dependencies as we don't include the build output -->
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+
+    <!--
+      TODO: Workaround to avoid NU5017 apparently caused because there are no symbols in this project.
+      This is expected, but our default symbol configuration makes it report an error and fail to build.
+      See: https://github.com/NuGet/Home/issues/10372
+    -->
+    <IncludeSymbols>false</IncludeSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <Description>MSBuild .NET SDK for Godot projects.</Description>
+  </PropertyGroup>
+
+  <Target Name="GenerateSdkPackageVersions" BeforeTargets="BeforeBuild">
+    <PropertyGroup>
+      <GeneratedFilePath>$(IntermediateOutputPath)SdkPackageVersions.props</GeneratedFilePath>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <SdkPackageVersionsLines Include="&lt;Project&gt;" />
+      <SdkPackageVersionsLines Include="  &lt;PropertyGroup&gt;" />
+      <SdkPackageVersionsLines Include="    &lt;PackageVersion_GodotSharp&gt;$(Version)&lt;/PackageVersion_GodotSharp&gt;" />
+      <SdkPackageVersionsLines Include="    &lt;PackageVersion_Godot_NET_Sdk&gt;$(Version)&lt;/PackageVersion_Godot_NET_Sdk&gt;" />
+      <SdkPackageVersionsLines Include="    &lt;PackageVersion_Godot_SourceGenerators&gt;$(Version)&lt;/PackageVersion_Godot_SourceGenerators&gt;" />
+      <SdkPackageVersionsLines Include="    &lt;PackageVersion_GodotDotNet&gt;$(Version)&lt;/PackageVersion_GodotDotNet&gt;" />
+      <SdkPackageVersionsLines Include="  &lt;/PropertyGroup&gt;" />
+      <SdkPackageVersionsLines Include="&lt;/Project&gt;" />
+    </ItemGroup>
+
+    <WriteLinesToFile File="$(GeneratedFilePath)" Lines="@(SdkPackageVersionsLines)" Overwrite="true" />
+  </Target>
+
+  <ItemGroup>
+    <!-- Package Sdk\Sdk.props and Sdk\Sdk.targets file -->
+    <None Include="Sdk\Sdk.props" Pack="true" PackagePath="Sdk" />
+    <None Include="Sdk\Sdk.targets" Pack="true" PackagePath="Sdk" />
+    <None Include="$(IntermediateOutputPath)SdkPackageVersions.props" Pack="true" PackagePath="Sdk"
+      Link="Sdk\SdkPackageVersions.props" />
+    <None Include="Sdk\Android.props" Pack="true" PackagePath="Sdk" />
+    <None Include="Sdk\iOS.props" Pack="true" PackagePath="Sdk" />
+    <None Include="Sdk\iOS.targets" Pack="true" PackagePath="Sdk" />
+  </ItemGroup>
+
+</Project>
