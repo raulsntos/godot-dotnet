@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/Godot/Godot.csproj" />
+    <Project Path="src/Godot.NET.Sdk/Godot.NET.Sdk.csproj" />
     <Project Path="src/Godot.Tasks/Godot.Tasks.csproj" />
     <Project Path="src/Godot.Bindings/Godot.Bindings.csproj" />
     <Project Path="src/Godot.BindingsGenerator/Godot.BindingsGenerator.csproj" />
