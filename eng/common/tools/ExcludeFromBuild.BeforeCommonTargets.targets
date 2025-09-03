@@ -23,7 +23,7 @@
       this import is done early, the BeforeCommonTargets hook must be used.
   -->
 
-  <!-- Exclude test projects from source-only and non-source only product builds by default. -->
+  <!-- Exclude test projects from product builds by default. -->
   <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
     <ExcludeFromProductBuild Condition="'$(ExcludeFromProductBuild)' == ''">true</ExcludeFromProductBuild>
   </PropertyGroup>
