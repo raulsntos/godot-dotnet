@@ -1,0 +1,22 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Godot/Godot.csproj" />
+    <Project Path="src/Godot.Bindings/Godot.Bindings.csproj" />
+    <Project Path="src/Godot.BindingsGenerator/Godot.BindingsGenerator.csproj" />
+    <Project Path="src/Godot.BindingsGenerator.ApiDump/Godot.BindingsGenerator.ApiDump.csproj" />
+    <Project Path="src/Godot.BindingsGenerator.Reflection/Godot.BindingsGenerator.Reflection.csproj" />
+    <Project Path="src/Godot.EditorIntegration/Godot.EditorIntegration.csproj" />
+    <Project Path="src/Godot.EditorIntegration.MSBuildLogger/Godot.EditorIntegration.MSBuildLogger.csproj" />
+    <Project Path="src/Godot.EditorIntegration.OpenVisualStudio/Godot.EditorIntegration.OpenVisualStudio.csproj" />
+    <Project Path="src/Godot.PluginLoader/Godot.PluginLoader.csproj" />
+    <Project Path="src/Godot.SourceGenerators/Godot.SourceGenerators.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Godot.Bindings.Tests/Godot.Bindings.Tests.csproj" />
+    <Project Path="tests/Godot.BindingsGenerator.Tests/Godot.BindingsGenerator.Tests.csproj" />
+    <Project Path="tests/Godot.SourceGenerators.Tests/Godot.SourceGenerators.Tests.csproj" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/Summator/Extension/Summator.csproj" />
+  </Folder>
+</Solution>
