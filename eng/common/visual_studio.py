@@ -104,7 +104,7 @@ def locate_visual_studio(vs_requirements: dict = {}) -> Union[dict, None]:
     if "vswhere" in tools.global_json.tools:
         vswhere_version = tools.global_json.tools.vswhere
     else:
-        vswhere_version = "2.5.2"
+        vswhere_version = "3.1.7"
 
     vswhere_dir = os.path.join(tools.tools_dir, "vswhere", vswhere_version)
     vswhere_exe = os.path.join(vswhere_dir, "vswhere.exe")
