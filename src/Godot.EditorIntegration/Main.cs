@@ -20,12 +20,12 @@ internal static class Main
             return;
         }
 
-        GodotRegistry.RegisterClass<DotNetEditorPlugin>(DotNetEditorPlugin.BindMethods);
-        GodotRegistry.RegisterClass<DotNetExportPlugin>(DotNetExportPlugin.BindMethods);
+        GodotRegistry.RegisterInternalClass<DotNetEditorPlugin>(DotNetEditorPlugin.BindMethods);
+        GodotRegistry.RegisterInternalClass<DotNetExportPlugin>(DotNetExportPlugin.BindMethods);
 
-        GodotRegistry.RegisterClass<MSBuildPanel>(MSBuildPanel.BindMethods);
-        GodotRegistry.RegisterClass<BuildProblemsView>(BuildProblemsView.BindMethods);
-        GodotRegistry.RegisterClass<BuildOutputView>(BuildOutputView.BindMethods);
+        GodotRegistry.RegisterInternalClass<MSBuildPanel>(MSBuildPanel.BindMethods);
+        GodotRegistry.RegisterInternalClass<BuildProblemsView>(BuildProblemsView.BindMethods);
+        GodotRegistry.RegisterInternalClass<BuildOutputView>(BuildOutputView.BindMethods);
 
         GodotRegistry.AddEditorPluginByType<DotNetEditorPlugin>();
     }
