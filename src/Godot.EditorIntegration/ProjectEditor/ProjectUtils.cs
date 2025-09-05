@@ -1,4 +1,5 @@
 using System;
+using Godot.Bridge;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Locator;
@@ -7,9 +8,20 @@ namespace Godot.EditorIntegration.ProjectEditor;
 
 internal static class ProjectUtils
 {
-    // TODO: The Godot.NET.Sdk is in the main repo (https://github.com/godotengine/godot)
-    // and we're currently hardcoding the latest version, make sure to keep it in sync.
-    private static string GodotSdkAttrValue => $"Godot.NET.Sdk/4.4.0-dev";
+    private static string? _godotSdkAttrValue;
+
+    private static string GodotSdkAttrValue
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(_godotSdkAttrValue))
+            {
+                _godotSdkAttrValue = $"Godot.NET.Sdk/{GodotBridge.GodotVersion.GetGodotDotNetVersion()}";
+            }
+
+            return _godotSdkAttrValue;
+        }
+    }
 
     public static void MSBuildLocatorRegisterDefaults()
     {
