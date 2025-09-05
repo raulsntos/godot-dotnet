@@ -90,4 +90,13 @@ internal static class DotNetCliOptions
                 args.Add("-ds:False");
             }
         });
+
+    public static CliOptionDescriptor<string?> GetProperty =>
+        new((value, args) =>
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                args.Add($"--getProperty:{value}");
+            }
+        });
 }

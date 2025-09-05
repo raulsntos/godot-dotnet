@@ -36,6 +36,7 @@ internal abstract class CommonBuildOptions : CommonOptions
 {
     public bool NoRestore { get; set; }
     public bool SelfContained { get; set; }
+    public string? GetProperty { get; set; }
 }
 
 /// <summary>

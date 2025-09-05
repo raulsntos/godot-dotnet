@@ -41,6 +41,7 @@ internal static class DotNetCli
                 ThrowIfNullWhenOptionEnabled(options.LogsPath);
                 return options.LogsPath;
             }),
+            DotNetCliOptions.GetProperty.WithValue(options.GetProperty),
         ]);
     }
 
@@ -76,6 +77,7 @@ internal static class DotNetCli
                 ThrowIfNullWhenOptionEnabled(options.LogsPath);
                 return options.LogsPath;
             }),
+            DotNetCliOptions.GetProperty.WithValue(options.GetProperty),
         ]);
     }
 
