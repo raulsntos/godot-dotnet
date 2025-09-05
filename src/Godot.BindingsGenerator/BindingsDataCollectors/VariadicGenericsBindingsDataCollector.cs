@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Godot.BindingsGenerator.Reflection;
 
 namespace Godot.BindingsGenerator;
@@ -273,10 +274,8 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
                     method.TypeParameters.Add(typeParameter);
                 }
 
-                var actionType = new TypeInfo("Action", "System")
-                {
-                    GenericTypeArgumentCount = genericTypeArgumentCount + 1,
-                }.MakeGenericType(method.TypeParameters);
+                var actionType = KnownTypes.SystemActionOf(method.TypeParameters);
+                Debug.Assert(actionType.GenericTypeArgumentCount == genericTypeArgumentCount + 1);
 
                 method.Parameters.Add(new ParameterInfo("action", actionType));
 
@@ -365,10 +364,8 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
                 };
                 method.TypeParameters.Add(returnTypeParameter);
 
-                var funcType = new TypeInfo("Func", "System")
-                {
-                    GenericTypeArgumentCount = genericTypeArgumentCount + 2,
-                }.MakeGenericType(method.TypeParameters);
+                var funcType = KnownTypes.SystemFuncOf(method.TypeParameters);
+                Debug.Assert(funcType.GenericTypeArgumentCount == genericTypeArgumentCount + 2);
 
                 method.Parameters.Add(new ParameterInfo("func", funcType));
 
@@ -446,7 +443,6 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
 
             var fromStaticMethods = CreateGenericMethods(fromStaticMethodPrototype, static (MethodInfo method, int genericTypeArgumentCount) =>
             {
-                var actionType = new TypeInfo("Action", "System");
                 if (genericTypeArgumentCount > 0)
                 {
                     for (int i = 0; i < genericTypeArgumentCount; i++)
@@ -457,12 +453,10 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
                         };
                         method.TypeParameters.Add(typeParameter);
                     }
-
-                    actionType = new TypeInfo("Action", "System")
-                    {
-                        GenericTypeArgumentCount = genericTypeArgumentCount,
-                    }.MakeGenericType(method.TypeParameters);
                 }
+
+                var actionType = KnownTypes.SystemActionOf(method.TypeParameters);
+                Debug.Assert(actionType.GenericTypeArgumentCount == genericTypeArgumentCount);
 
                 method.Parameters.Add(new ParameterInfo("action", actionType));
 
@@ -544,10 +538,8 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
                 };
                 method.TypeParameters.Add(returnTypeParameter);
 
-                var funcType = new TypeInfo("Func", "System")
-                {
-                    GenericTypeArgumentCount = genericTypeArgumentCount + 1,
-                }.MakeGenericType(method.TypeParameters);
+                var funcType = KnownTypes.SystemFuncOf(method.TypeParameters);
+                Debug.Assert(funcType.GenericTypeArgumentCount == genericTypeArgumentCount + 1);
 
                 method.Parameters.Add(new ParameterInfo("func", funcType));
 
@@ -636,7 +628,6 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
 
             var fromMethods = CreateGenericMethods(fromMethodPrototype, static (MethodInfo method, int genericTypeArgumentCount) =>
             {
-                var actionType = new TypeInfo("Action", "System");
                 if (genericTypeArgumentCount > 0)
                 {
                     for (int i = 0; i < genericTypeArgumentCount; i++)
@@ -647,12 +638,10 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
                         };
                         method.TypeParameters.Add(typeParameter);
                     }
-
-                    actionType = new TypeInfo("Action", "System")
-                    {
-                        GenericTypeArgumentCount = genericTypeArgumentCount,
-                    }.MakeGenericType(method.TypeParameters);
                 }
+
+                var actionType = KnownTypes.SystemActionOf(method.TypeParameters);
+                Debug.Assert(actionType.GenericTypeArgumentCount == genericTypeArgumentCount);
 
                 method.Parameters.Add(new ParameterInfo("action", actionType));
 
@@ -708,10 +697,8 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
                 };
                 method.TypeParameters.Add(returnTypeParameter);
 
-                var funcType = new TypeInfo("Func", "System")
-                {
-                    GenericTypeArgumentCount = genericTypeArgumentCount + 1,
-                }.MakeGenericType(method.TypeParameters);
+                var funcType = KnownTypes.SystemFuncOf(method.TypeParameters);
+                Debug.Assert(funcType.GenericTypeArgumentCount == genericTypeArgumentCount + 1);
 
                 method.Parameters.Add(new ParameterInfo("func", funcType));
 
@@ -787,10 +774,8 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
                     method.Parameters.Add(new ParameterInfo($"parameter{i}", new TypeInfo("ParameterInfo", "Godot.Bridge")));
                 }
 
-                var actionType = new TypeInfo("Action", "System")
-                {
-                    GenericTypeArgumentCount = genericTypeArgumentCount + 1,
-                }.MakeGenericType(method.TypeParameters);
+                var actionType = KnownTypes.SystemActionOf(method.TypeParameters);
+                Debug.Assert(actionType.GenericTypeArgumentCount == genericTypeArgumentCount + 1);
 
                 method.Parameters.Add(new ParameterInfo("action", actionType));
 
@@ -851,10 +836,8 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
                 method.TypeParameters.Add(returnTypeParameter);
                 method.Parameters.Add(new ParameterInfo("returnInfo", new TypeInfo("ReturnInfo", "Godot.Bridge")));
 
-                var funcType = new TypeInfo("Func", "System")
-                {
-                    GenericTypeArgumentCount = genericTypeArgumentCount + 2,
-                }.MakeGenericType(method.TypeParameters);
+                var funcType = KnownTypes.SystemFuncOf(method.TypeParameters);
+                Debug.Assert(funcType.GenericTypeArgumentCount == genericTypeArgumentCount + 2);
 
                 method.Parameters.Add(new ParameterInfo("func", funcType));
 
@@ -897,7 +880,6 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
 
             var bindStaticMethodMethods = CreateGenericMethods(bindStaticMethodMethodPrototype, static (MethodInfo method, int genericTypeArgumentCount) =>
             {
-                var actionType = new TypeInfo("Action", "System");
                 if (genericTypeArgumentCount > 0)
                 {
                     for (int i = 0; i < genericTypeArgumentCount; i++)
@@ -909,12 +891,10 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
                         method.TypeParameters.Add(typeParameter);
                         method.Parameters.Add(new ParameterInfo($"parameter{i}", new TypeInfo("ParameterInfo", "Godot.Bridge")));
                     }
-
-                    actionType = new TypeInfo("Action", "System")
-                    {
-                        GenericTypeArgumentCount = genericTypeArgumentCount,
-                    }.MakeGenericType(method.TypeParameters);
                 }
+
+                var actionType = KnownTypes.SystemActionOf(method.TypeParameters);
+                Debug.Assert(actionType.GenericTypeArgumentCount == genericTypeArgumentCount);
 
                 method.Parameters.Add(new ParameterInfo("action", actionType));
 
@@ -967,10 +947,8 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
                 method.TypeParameters.Add(returnTypeParameter);
                 method.Parameters.Add(new ParameterInfo("returnInfo", new TypeInfo("ReturnInfo", "Godot.Bridge")));
 
-                var funcType = new TypeInfo("Func", "System")
-                {
-                    GenericTypeArgumentCount = genericTypeArgumentCount + 1,
-                }.MakeGenericType(method.TypeParameters);
+                var funcType = KnownTypes.SystemFuncOf(method.TypeParameters);
+                Debug.Assert(funcType.GenericTypeArgumentCount == genericTypeArgumentCount + 1);
 
                 method.Parameters.Add(new ParameterInfo("func", funcType));
 
@@ -1130,10 +1108,8 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
                     method.TypeParameters.Add(typeParameter);
                 }
 
-                var actionType = new TypeInfo("Action", "System")
-                {
-                    GenericTypeArgumentCount = genericTypeArgumentCount + 1,
-                }.MakeGenericType(method.TypeParameters);
+                var actionType = KnownTypes.SystemActionOf(method.TypeParameters);
+                Debug.Assert(actionType.GenericTypeArgumentCount == genericTypeArgumentCount + 1);
 
                 method.Parameters.Add(new ParameterInfo("action", actionType));
 
@@ -1165,10 +1141,8 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
                 };
                 method.TypeParameters.Add(returnTypeParameter);
 
-                var funcType = new TypeInfo("Func", "System")
-                {
-                    GenericTypeArgumentCount = genericTypeArgumentCount + 2,
-                }.MakeGenericType(method.TypeParameters);
+                var funcType = KnownTypes.SystemFuncOf(method.TypeParameters);
+                Debug.Assert(funcType.GenericTypeArgumentCount == genericTypeArgumentCount + 2);
 
                 method.Parameters.Add(new ParameterInfo("func", funcType));
 

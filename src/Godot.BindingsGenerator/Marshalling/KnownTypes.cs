@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Godot.BindingsGenerator.Reflection;
 
 namespace Godot.BindingsGenerator;
@@ -164,6 +167,48 @@ internal static class KnownTypes
     public static TypeInfo SystemFrozenDictionaryOf(TypeInfo keyType, TypeInfo valueType)
     {
         return SystemFrozenDictionary.MakeGenericType([keyType, valueType]);
+    }
+
+    public static TypeInfo SystemAction { get; } = new TypeInfo("Action", "System")
+    {
+        TypeAttributes = TypeAttributes.ReferenceType,
+        GenericTypeArgumentCount = 0,
+    };
+
+    public static TypeInfo SystemActionOf(IEnumerable<TypeInfo> typeArguments)
+    {
+        int typeArgumentsCount = typeArguments.Count();
+
+        // The System.Action type only supports from 0 to 16 generic type arguments.
+        ArgumentOutOfRangeException.ThrowIfNegative(typeArgumentsCount);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(typeArgumentsCount, 16);
+
+        if (typeArgumentsCount == 0)
+        {
+            return SystemAction;
+        }
+
+        return new TypeInfo("Action", "System")
+        {
+            TypeAttributes = TypeAttributes.ReferenceType,
+            GenericTypeArgumentCount = typeArgumentsCount,
+        }.MakeGenericType(typeArguments);
+    }
+
+    public static TypeInfo SystemFuncOf(IEnumerable<TypeInfo> typeArguments)
+    {
+        int typeArgumentsCount = typeArguments.Count();
+
+        // The System.Func type only supports from 1 to 16 generic type arguments
+        // (with the last one being the return type).
+        ArgumentOutOfRangeException.ThrowIfZero(typeArgumentsCount);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(typeArgumentsCount, 16);
+
+        return new TypeInfo("Func", "System")
+        {
+            TypeAttributes = TypeAttributes.ReferenceType,
+            GenericTypeArgumentCount = typeArgumentsCount,
+        }.MakeGenericType(typeArguments);
     }
 
     public static TypeInfo Nullable { get; } = new TypeInfo("Nullable", "System")

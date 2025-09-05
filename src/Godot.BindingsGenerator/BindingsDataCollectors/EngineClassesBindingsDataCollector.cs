@@ -497,13 +497,11 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
         Debug.Assert(context.IsTypeGenerated(type));
 
         // Populate signals.
-        var actionType = new TypeInfo("Action", "System");
         foreach (var engineSignal in engineClass.Signals)
         {
             string eventName = NamingUtils.SnakeToPascalCase(engineSignal.Name);
 
-            TypeInfo eventHandlerType;
-
+            List<TypeInfo> signalParameterTypes = [];
             List<ParameterInfo> signalParameters = [];
             foreach (var arg in engineSignal.Arguments)
             {
@@ -511,20 +509,13 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                 var argType = context.TypeDB.GetTypeFromEngineName(arg.Type, arg.Meta);
                 var parameter = new ParameterInfo(argName, argType);
                 signalParameters.Add(parameter);
+                signalParameterTypes.Add(argType);
             }
+
+            TypeInfo eventHandlerType = KnownTypes.SystemActionOf(signalParameterTypes);
 
             if (engineSignal.Arguments.Length != 0)
             {
-                var @delegate = new DelegateInfo($"{NamingUtils.SnakeToPascalCase(engineSignal.Name)}EventHandler")
-                {
-                    VisibilityAttributes = VisibilityAttributes.Public,
-                    ContainingType = type,
-                    Parameters = signalParameters,
-                };
-
-                type.NestedTypes.Add(@delegate);
-                eventHandlerType = @delegate;
-
                 // Add trampoline so we can create the Callable in the event's add/remove accessors.
                 var eventTrampoline = new MethodInfo($"{eventName}Trampoline")
                 {
@@ -543,11 +534,11 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                     {
                         writer.WriteLine($"(({eventHandlerType.FullNameWithGlobal})@delegate)(");
                         writer.Indent++;
-                        for (int i = 0; i < @delegate.Parameters.Count; i++)
+                        for (int i = 0; i < signalParameterTypes.Count; i++)
                         {
-                            var parameter = @delegate.Parameters[i];
-                            writer.Write($"global::Godot.NativeInterop.Marshalling.ConvertFromVariant<{parameter.Type.FullNameWithGlobal}>(args[{i}])");
-                            if (i < @delegate.Parameters.Count - 1)
+                            var parameterType = signalParameterTypes[i];
+                            writer.Write($"global::Godot.NativeInterop.Marshalling.ConvertFromVariant<{parameterType.FullNameWithGlobal}>(args[{i}])");
+                            if (i < signalParameterTypes.Count - 1)
                             {
                                 writer.WriteLine(',');
                             }
@@ -562,10 +553,6 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                     }),
                 };
                 type.DeclaredMethods.Add(eventTrampoline);
-            }
-            else
-            {
-                eventHandlerType = actionType;
             }
 
             var @event = new EventInfo(eventName, eventHandlerType)

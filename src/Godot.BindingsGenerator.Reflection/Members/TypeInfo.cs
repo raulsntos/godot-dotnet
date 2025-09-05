@@ -228,10 +228,10 @@ public class TypeInfo : VisibleMemberInfo, IEquatable<TypeInfo>
             throw new InvalidOperationException($"Type is a pointer type. Pointer types can't make generic types.");
         }
 
-        var typeArgumentsArray = typeArguments.ToArray();
-        if (GenericTypeArgumentCount != typeArgumentsArray.Length)
+        int typeArgumentsCount = typeArguments.Count();
+        if (GenericTypeArgumentCount != typeArgumentsCount)
         {
-            throw new ArgumentException($"Generic type argument mismatch. Expected {GenericTypeArgumentCount} arguments, received {typeArgumentsArray.Length}.", nameof(typeArguments));
+            throw new ArgumentException($"Generic type argument mismatch. Expected {GenericTypeArgumentCount} arguments, received {typeArgumentsCount}.", nameof(typeArguments));
         }
 
         var genericType = new TypeInfo(this)
