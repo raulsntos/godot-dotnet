@@ -17,6 +17,35 @@ Directory structure:
 - [`test.cmd`](./test.cmd) - Shortcut for `build.cmd -test`
 - [`test.sh`](./test.sh) - Shortcut for `build.sh --test`
 
+# Using the bindings
+
+To use the bindings in a C# project, see the instructions in the [Godot.Bindings](src/Godot.Bindings) project.
+
+## Getting nightly builds
+
+godot-dotnet publishes nightly artifacts to a public azure repository which can be added as a nuget source.
+
+Adding the nightly builds as a source:
+
+```bash
+dotnet nuget add source https://pkgs.dev.azure.com/godotengine/godot-dotnet/_packaging/godot-nightly/nuget/v3/index.json
+```
+
+Add Godot.Bindings and Godot.SourceGenerators as dependencies:
+
+```xml
+<ItemGroup>
+    <PackageReference Include="Godot.Bindings" Version="4.4.0-nightly"/>
+    <PackageReference Include="Godot.SourceGenerators" Version="4.4.0-nightly" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+</ItemGroup>
+```
+
+When restored there will be a warning that `Godot.Bindings 4.4.0-nightly.<id>.1 was resolved instead` if you wish you can set the version to that instead of simply nightly.
+
+# Building from source
+
+If you wish to contribute to the repository or use a custom a custom version of godot you will need to build the bindings from source.
+
 ## Generate the bindings
 
 To generate the bindings, see the instructions in the [Godot.BindingsGenerator](src/Godot.BindingsGenerator) tool project.
@@ -43,6 +72,22 @@ More information about package versioning and the _build kinds_ in the [build in
 
 The output of the build will be stored in the `artifacts` directory at the root of the repository. Only shipping packages are meant to be published through official channels.
 
-## Use the bindings
+## Using the bindings
 
-To use the bindings in a C# project, see the instructions in the [Godot.Bindings](src/Godot.Bindings) project.
+Add `Godot` as a PackageReference:
+
+```xml
+<ItemGroup>
+    <PackageReference Include="Godot" Version="$(Version)"/>
+</ItemGroup>
+```
+
+Bindings generated through this method will not contain a `-nightly` version tag but rather `-dev` or `-ci` depending on the configuration. They may additionaly contain a .<id> if compiled with `/p:OfficialBuildId=id`.
+
+| Nuget source             | Version                       |
+| -------------------------| ------------------------------|
+| nightly builds           | <GodotVersion>-nightly.<id>.1 |
+| build from source        | <GodotVersion>-dev.<id>       |
+| build from source (--ci) | <GodotVersion>-ci.<id>        |
+
+More information about package versioning and the _build kinds_ in the [build infrastructure documentation](eng/common).
