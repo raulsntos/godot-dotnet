@@ -16,7 +16,7 @@ public class BindMembersGeneratorTests
     }
 
     [Fact]
-    public async Task BindMembers()
+    public async Task BindMethods()
     {
         await Verifier.Verify(
             ["NodeWithMethods.cs"],
@@ -25,7 +25,7 @@ public class BindMembersGeneratorTests
     }
 
     [Fact]
-    public async Task BindConstants()
+    public async Task BindConstantsAndEnums()
     {
         await Verifier.Verify(
             ["NodeWithConstants.cs"],
@@ -57,6 +57,15 @@ public class BindMembersGeneratorTests
         await Verifier.Verify(
             ["NodeWithSignals.cs"],
             ["NS.NodeWithSignals.generated.cs"]
+        );
+    }
+
+    [Fact]
+    public async Task ExplicitInterfaceImplementations()
+    {
+        await Verifier.Verify(
+            ["NodeWithExplicitInterfaceImplementations.cs"],
+            ["NS.NodeWithExplicitInterfaceImplementations.generated.cs"]
         );
     }
 

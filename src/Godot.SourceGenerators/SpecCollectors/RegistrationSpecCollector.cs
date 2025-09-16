@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Godot.Common.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 
 namespace Godot.SourceGenerators;
@@ -36,8 +37,8 @@ internal static class RegistrationSpecCollector
         return new GodotRegistrationSpec()
         {
             SymbolName = typeSymbol.Name,
-            FullyQualifiedSymbolName = typeSymbol.FullNameWithGlobal(),
-            FullyQualifiedBaseSymbolName = typeSymbol.BaseType!.FullNameWithGlobal(),
+            FullyQualifiedSymbolName = typeSymbol.FullQualifiedNameWithGlobal(),
+            FullyQualifiedBaseSymbolName = typeSymbol.BaseType!.FullQualifiedNameWithGlobal(),
             RegistrationKind = registrationKind,
         };
     }

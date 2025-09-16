@@ -26,7 +26,7 @@ charset = utf-8-bom
 [*.sln]
 indent_style = tab
 
-[*.{slnx,csproj,proj,props,targets,nuspec,resx}]
+[*.{slnx,csproj,proj,projitems,props,targets,nuspec,resx}]
 indent_style = space
 indent_size = 2
 
@@ -109,6 +109,9 @@ dotnet_diagnostic.IDE0055.severity = warning
 
 # IDE1006: Naming rule violation.
 dotnet_diagnostic.IDE1006.severity = suggestion
+
+# RS2008: Enable analyzer release tracking for the analyzer project containing rule '{0}'.
+dotnet_diagnostic.RS2008.severity = none
 
 # Severity levels for dotnet_naming_rule only affect IDE environments.
 # To have them extra visible to people, we can set them as 'warning' here without affecting compilation.

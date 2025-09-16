@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Godot.Common.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 
 namespace Godot.SourceGenerators;
@@ -12,6 +13,18 @@ internal static class ClassSpecCollector
         if (!typeSymbol.TryGetAttribute(KnownTypeNames.GodotClassAttribute, out var attribute))
         {
             // Classes must have the attribute to be registered.
+            return null;
+        }
+
+        if (!typeSymbol.DerivesFrom(KnownTypeNames.GodotObject))
+        {
+            // Classes must derive from GodotObject to be registered.
+            return null;
+        }
+
+        if (typeSymbol.IsGenericType)
+        {
+            // Generic types can't be registered.
             return null;
         }
 
@@ -135,10 +148,10 @@ internal static class ClassSpecCollector
         return new GodotClassSpec()
         {
             SymbolName = typeSymbol.Name,
-            FullyQualifiedSymbolName = typeSymbol.FullNameWithGlobal(),
-            FullyQualifiedNamespace = typeSymbol.ContainingNamespace?.FullName(),
+            FullyQualifiedSymbolName = typeSymbol.FullQualifiedNameWithGlobal(),
+            FullyQualifiedNamespace = typeSymbol.ContainingNamespace?.FullQualifiedNameOmitGlobal(),
             ContainingTypeSymbols = [.. containingTypeSymbols],
-            FullyQualifiedBaseTypeName = typeSymbol.BaseType?.FullNameWithGlobal() ?? KnownTypeNames.GodotObject,
+            FullyQualifiedBaseTypeName = typeSymbol.BaseType?.FullQualifiedNameWithGlobal() ?? KnownTypeNames.GodotObject,
             Constructor = constructor,
             Constants = [.. constants],
             Properties = [.. properties],

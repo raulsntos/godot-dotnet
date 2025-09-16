@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using Godot.Common.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 
 namespace Godot.SourceGenerators;

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
+using Godot.Common.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 
 namespace Godot.SourceGenerators;
@@ -39,10 +41,20 @@ internal static class SignalSpecCollector
             return null;
         }
 
+        if (string.IsNullOrEmpty(nameOverride) && !delegateTypeSymbol.Name.EndsWith("EventHandler", StringComparison.OrdinalIgnoreCase))
+        {
+            // Signal delegates must end with 'EventHandler' suffix.
+            return null;
+        }
+
         foreach (var parameterSymbol in delegateInvokeMethod.Parameters)
         {
-            GodotPropertySpec parameterSpec = PropertySpecCollector.Collect(compilation, parameterSymbol, cancellationToken);
-            parameters.Add(parameterSpec);
+            GodotPropertySpec? parameterSpec = PropertySpecCollector.Collect(compilation, parameterSymbol, cancellationToken);
+            if (parameterSpec is null)
+            {
+                return null;
+            }
+            parameters.Add(parameterSpec.Value);
         }
 
         return new GodotSignalSpec()

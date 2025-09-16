@@ -1,6 +1,6 @@
 # Godot.SourceGenerators
 
-C# source generators for the .NET Godot bindings.
+C# source generators for the Godot .NET bindings.
 
 ## Usage
 

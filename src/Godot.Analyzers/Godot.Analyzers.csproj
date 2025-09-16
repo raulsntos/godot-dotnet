@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <Description>C# analyzers for the Godot game engine .NET bindings.</Description>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <AutoGenerateAssemblyVersion>true</AutoGenerateAssemblyVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Nothing in lib but that's expected. -->
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <IncludeSymbols>false</IncludeSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Godot.Analyzers.Tests" />
+  </ItemGroup>
+
+  <Import Project="..\Godot.Common.CodeAnalysis\Godot.Common.CodeAnalysis.projitems" />
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Strings.resx">
+      <ClassName>Godot.Analyzers.SR</ClassName>
+      <EmitFormatMethods>true</EmitFormatMethods>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <!-- Package the project as an analyzer. -->
+  <ItemGroup>
+    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+  </ItemGroup>
+
+</Project>

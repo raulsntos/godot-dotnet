@@ -7,7 +7,6 @@
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
     <EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
     <EnableAotAnalyzer>true</EnableAotAnalyzer>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <EnablePackageValidation>true</EnablePackageValidation>
   </PropertyGroup>
 

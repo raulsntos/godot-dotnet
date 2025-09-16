@@ -1,4 +1,5 @@
 using System;
+using Godot.Common.CodeAnalysis;
 
 namespace Godot.SourceGenerators;
 
@@ -20,6 +21,13 @@ internal readonly record struct GodotPropertySpec : IEquatable<GodotPropertySpec
     /// <see cref="MarshalInfo.FullyQualifiedTypeName"/> when marshalling).
     /// </summary>
     public required string FullyQualifiedTypeName { get; init; }
+
+    /// <summary>
+    /// If this method is an explicit interface implementation,
+    /// it contains the fully qualified name of the interface's type symbol,
+    /// including the global namespace. Otherwise, it is <see langword="null"/>.
+    /// </summary>
+    public string? ExplicitInterfaceFullyQualifiedTypeName { get; init; }
 
     /// <summary>
     /// Determines whether the property has an specified default value.

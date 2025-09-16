@@ -14,6 +14,13 @@ internal readonly record struct GodotMethodSpec : IEquatable<GodotMethodSpec>
     public required string SymbolName { get; init; }
 
     /// <summary>
+    /// If this method is an explicit interface implementation,
+    /// it contains the fully qualified name of the interface's type symbol,
+    /// including the global namespace. Otherwise, it is <see langword="null"/>.
+    /// </summary>
+    public string? ExplicitInterfaceFullyQualifiedTypeName { get; init; }
+
+    /// <summary>
     /// Indicates whether the method should be registered as a static method.
     /// </summary>
     public bool IsStatic { get; init; }

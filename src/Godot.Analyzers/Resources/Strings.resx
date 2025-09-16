@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+  Microsoft ResX Schema
+
+  Version 2.0
+
+  The primary goals of this format is to allow a simple XML format
+  that is mostly human readable. The generation and parsing of the
+  various data types are done through the TypeConverter classes
+  associated with the data types.
+
+  Example:
+
+  ... ado.net/XML headers & schema ...
+  <resheader name="resmimetype">text/microsoft-resx</resheader>
+  <resheader name="version">2.0</resheader>
+  <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+  <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+  <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+  <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+  <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>[base64 mime encoded serialized .NET Framework object]</value>
+  </data>
+  <data name="Icon1" type="System.Drawing.Icon, System.Drawing"
+  mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>[base64 mime encoded string representing a byte array form of the .NET Framework
+  object]</value>
+    <comment>This is a comment</comment>
+  </data>
+
+  There are any number of "resheader" rows that contain simple
+  name/value pairs.
+
+  Each data row contains a name, and value. The row also contains a
+  type or mimetype. Type corresponds to a .NET class that support
+  text/value conversion through the TypeConverter architecture.
+  Classes that don't support this are serialized and stored with the
+  mimetype set.
+
+  The mimetype is used for serialized objects, and tells the
+  ResXResourceReader how to depersist the object. This is currently not
+  extensible. For a given mimetype the value must be set accordingly:
+
+  Note - application/x-microsoft.net.object.binary.base64 is the format
+  that the ResXResourceWriter will generate, however the reader can
+  read any of the formats listed below.
+
+  mimetype: application/x-microsoft.net.object.binary.base64
+  value   : The object must be serialized with
+      : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+      : and then encoded with base64 encoding.
+
+  mimetype: application/x-microsoft.net.object.soap.base64
+  value   : The object must be serialized with
+      : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+      : and then encoded with base64 encoding.
+
+  mimetype: application/x-microsoft.net.object.bytearray.base64
+  value   : The object must be serialized into a byte array
+      : using a System.ComponentModel.TypeConverter
+      : and then encoded with base64 encoding.
+  -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"
+                  msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0"
+                  msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"
+                msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"
+                  msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="GODOT0001_GodotAttributeHasNoEffectOutsideGodotClass_Description" xml:space="preserve">
+    <value>The attribute has no effect outside of classes with the '[GodotClass]' attribute. Remove the attribute or add the '[GodotClass]' to the containing class.</value>
+  </data>
+  <data name="GODOT0001_GodotAttributeHasNoEffectOutsideGodotClass_MessageFormat" xml:space="preserve">
+    <value>The '[{0}]' attribute is ignored because it's not within a class marked with the '[GodotClass]' attribute</value>
+  </data>
+  <data name="GODOT0001_GodotAttributeHasNoEffectOutsideGodotClass_Title" xml:space="preserve">
+    <value>Attribute has no effect outside of classes with the '[GodotClass]' attribute</value>
+  </data>
+  <data name="GODOT0002_BoundMembersMustHaveUniqueNames_Description" xml:space="preserve">
+    <value>All bound members (methods, properties, signals, constants, etc.) must have unique names within the class. Rename the member, use the attribute's 'Name' property to override the name, or remove the attribute.</value>
+  </data>
+  <data name="GODOT0002_BoundMembersMustHaveUniqueNames_MessageFormat" xml:space="preserve">
+    <value>The type '{0}' already binds a member with the name '{1}'</value>
+  </data>
+  <data name="GODOT0002_BoundMembersMustHaveUniqueNames_Title" xml:space="preserve">
+    <value>Bound members must have unique names</value>
+  </data>
+  <data name="GODOT0003_MarhsallingRequiresCopying_Description" xml:space="preserve">
+    <value>Marshalling requires copying data between managed and unmanaged memory. Consider using a type from the 'Godot' or 'Godot.Collections' namespaces.</value>
+  </data>
+  <data name="GODOT0003_MarhsallingRequiresCopying_MessageFormat" xml:space="preserve">
+    <value>Marshalling the type '{0}' requires copying data between managed and unmanaged memory.</value>
+  </data>
+  <data name="GODOT0003_MarhsallingRequiresCopying_Title" xml:space="preserve">
+    <value>Marshalling requires copying data between managed and unmanaged memory.</value>
+  </data>
+  <data name="GODOT0003_ReplaceSpeciallyRecognizedTypeWithGodotType_CodeFix" xml:space="preserve">
+    <value>Replace type with '{newTypeName}'</value>
+  </data>
+  <data name="GODOT0004_AddToolToGodotClass_CodeFix" xml:space="preserve">
+    <value>Add 'Tool = true' to '[GodotClass]' attribute</value>
+  </data>
+  <data name="GODOT0004_GodotClassWithEditorCallbacksShouldBeTool_Description" xml:space="preserve">
+    <value>Class contains Godot editor callbacks but it's not marked as tool. Add 'Tool = true' to the '[GodotClass]' attribute.</value>
+  </data>
+  <data name="GODOT0004_GodotClassWithEditorCallbacksShouldBeTool_MessageFormat" xml:space="preserve">
+    <value>'{0}' is a Godot editor callback but its containing class is not marked as tool, the editor callback will not be executed.</value>
+  </data>
+  <data name="GODOT0004_GodotClassWithEditorCallbacksShouldBeTool_Title" xml:space="preserve">
+    <value>Class contains Godot editor callbacks but it's not marked as tool.</value>
+  </data>
+  <data name="GODOT0101_GodotClassMustDeriveFromGodotObject_Description" xml:space="preserve">
+    <value>Registered classes must derive from 'GodotObject'. Change the base class to derive from 'GodotObject' or remove the '[GodotClass]' attribute.</value>
+  </data>
+  <data name="GODOT0101_GodotClassMustDeriveFromGodotObject_MessageFormat" xml:space="preserve">
+    <value>Type '{0}' is marked with '[GodotClass]' but does not derive from 'GodotObject'</value>
+  </data>
+  <data name="GODOT0101_GodotClassMustDeriveFromGodotObject_Title" xml:space="preserve">
+    <value>Class must derive from 'GodotObject'</value>
+  </data>
+  <data name="GODOT0102_GodotClassMustNotBeGeneric_Description" xml:space="preserve">
+    <value>Registered classes must not be generic. Change the class to remove the generic type arguments or remove the '[GodotClass]' attribute.</value>
+  </data>
+  <data name="GODOT0102_GodotClassMustNotBeGeneric_MessageFormat" xml:space="preserve">
+    <value>Type '{0}' is marked with '[GodotClass]' but is generic</value>
+  </data>
+  <data name="GODOT0102_GodotClassMustNotBeGeneric_Title" xml:space="preserve">
+    <value>Class must not be generic</value>
+  </data>
+  <data name="GODOT0301_ConstantTypeIsNotSupported_Description" xml:space="preserve">
+    <value>Bound constants must be an integer type. Change the type to a supported type or remove the '[BindConstant]' attribute.</value>
+  </data>
+  <data name="GODOT0301_ConstantTypeIsNotSupported_MessageFormat" xml:space="preserve">
+    <value>Type '{0}' is not supported for bound constants</value>
+  </data>
+  <data name="GODOT0301_ConstantTypeIsNotSupported_Title" xml:space="preserve">
+    <value>Type is not supported for bound constants</value>
+  </data>
+  <data name="GODOT0302_AddConstModifier_CodeFix" xml:space="preserve">
+    <value>Add 'const' modifier</value>
+  </data>
+  <data name="GODOT0302_ConstantMustBeConst_Description" xml:space="preserve">
+    <value>Bound constants must be declared as const. Change the field to be const or remove the '[BindConstant]' attribute.</value>
+  </data>
+  <data name="GODOT0302_ConstantMustBeConst_MessageFormat" xml:space="preserve">
+    <value>Bound constant '{0}' must be declared as const</value>
+  </data>
+  <data name="GODOT0302_ConstantMustBeConst_Title" xml:space="preserve">
+    <value>Bound constants must be const</value>
+  </data>
+  <data name="GODOT0501_PropertyTypeIsNotSupported_Description" xml:space="preserve">
+    <value>Bound properties must be Variant compatible. Change the type to a supported type or remove the '[BindProperty]' attribute.</value>
+  </data>
+  <data name="GODOT0501_PropertyTypeIsNotSupported_MessageFormat" xml:space="preserve">
+    <value>Type '{0}' is not supported for bound properties</value>
+  </data>
+  <data name="GODOT0501_PropertyTypeIsNotSupported_Title" xml:space="preserve">
+    <value>Type is not supported for bound properties</value>
+  </data>
+  <data name="GODOT0502_PropertyMustNotBeStatic_Description" xml:space="preserve">
+    <value>Bound properties must be instance members. Remove the 'static' modifier or remove the '[BindProperty]' attribute.</value>
+  </data>
+  <data name="GODOT0502_PropertyMustNotBeStatic_MessageFormat" xml:space="preserve">
+    <value>Bound property '{0}' must be an instance member</value>
+  </data>
+  <data name="GODOT0502_PropertyMustNotBeStatic_Title" xml:space="preserve">
+    <value>Bound properties must not be static</value>
+  </data>
+  <data name="GODOT0503_PropertyMustNotBeConst_Description" xml:space="preserve">
+    <value>Bound properties must not be declared as const. Remove the 'const' modifier or remove the '[BindProperty]' attribute.</value>
+  </data>
+  <data name="GODOT0503_PropertyMustNotBeConst_MessageFormat" xml:space="preserve">
+    <value>Bound property '{0}' must not be declared as const</value>
+  </data>
+  <data name="GODOT0503_PropertyMustNotBeConst_Title" xml:space="preserve">
+    <value>Bound properties must not be declared as const</value>
+  </data>
+  <data name="GODOT0503_RemoveConstModifier_CodeFix" xml:space="preserve">
+    <value>Remove 'const' modifier</value>
+  </data>
+  <data name="GODOT0504_PropertyMustNotBeReadOnly_Description" xml:space="preserve">
+    <value>Bound properties must not be readonly. Remove the 'readonly' modifier or remove the '[BindProperty]' attribute.</value>
+  </data>
+  <data name="GODOT0504_PropertyMustNotBeReadOnly_MessageFormat" xml:space="preserve">
+    <value>Bound property '{0}' must not be readonly</value>
+  </data>
+  <data name="GODOT0504_PropertyMustNotBeReadOnly_Title" xml:space="preserve">
+    <value>Bound properties must not be readonly</value>
+  </data>
+  <data name="GODOT0505_PropertyMustHaveGetterAndSetter_Description" xml:space="preserve">
+    <value>Bound properties must define a getter and a setter. Add missing accessor or remove the '[BindProperty]' attribute.</value>
+  </data>
+  <data name="GODOT0505_PropertyMustHaveGetter_MessageFormat" xml:space="preserve">
+    <value>Bound property '{0}' must declare a setter</value>
+  </data>
+  <data name="GODOT0505_PropertyMustHaveSetter_MessageFormat" xml:space="preserve">
+    <value>Bound property '{0}' must declare a getter</value>
+  </data>
+  <data name="GODOT0505_PropertyMustHaveGetterAndSetter_Title" xml:space="preserve">
+    <value>Bound properties must declare both a getter and a setter</value>
+  </data>
+  <data name="GODOT0506_PropertyMustNotBeIndexer_Description" xml:space="preserve">
+    <value>Bound properties can't be indexers. Remove the '[BindProperty]' attribute.</value>
+  </data>
+  <data name="GODOT0506_PropertyMustNotBeIndexer_MessageFormat" xml:space="preserve">
+    <value>Indexer can't be bound as a property</value>
+  </data>
+  <data name="GODOT0506_PropertyMustNotBeIndexer_Title" xml:space="preserve">
+    <value>Bound property must not be indexers</value>
+  </data>
+  <data name="GODOT0601_MethodParameterTypeIsNotSupported_Description" xml:space="preserve">
+    <value>Bound method parameters must be Variant compatible. Change the type to a supported type or remove the '[BindMethod]' attribute.</value>
+  </data>
+  <data name="GODOT0601_MethodParameterTypeIsNotSupported_MessageFormat" xml:space="preserve">
+    <value>Type '{0}' is not supported for bound method parameters</value>
+  </data>
+  <data name="GODOT0601_MethodParameterTypeIsNotSupported_Title" xml:space="preserve">
+    <value>Type is not supported for bound method parameters</value>
+  </data>
+  <data name="GODOT0601_MethodReturnTypeIsNotSupported_Description" xml:space="preserve">
+    <value>Bound method return types must be Variant compatible. Change the type to a supported type or remove the '[BindMethod]' attribute.</value>
+  </data>
+  <data name="GODOT0601_MethodReturnTypeIsNotSupported_MessageFormat" xml:space="preserve">
+    <value>Type '{0}' is not supported for the return type of a bound method</value>
+  </data>
+  <data name="GODOT0601_MethodReturnTypeIsNotSupported_Title" xml:space="preserve">
+    <value>Type is not supported for bound method return types</value>
+  </data>
+  <data name="GODOT0701_SignalParameterTypeIsNotSupported_Description" xml:space="preserve">
+    <value>Signal parameters must be Variant compatible. Change the type to a supported type or remove the '[Signal]' attribute.</value>
+  </data>
+  <data name="GODOT0701_SignalParameterTypeIsNotSupported_MessageFormat" xml:space="preserve">
+    <value>Type '{0}' is not supported for signal parameters</value>
+  </data>
+  <data name="GODOT0701_SignalParameterTypeIsNotSupported_Title" xml:space="preserve">
+    <value>Type is not supported for signal parameters</value>
+  </data>
+  <data name="GODOT0702_SignalShouldBeVoidReturnType_Description" xml:space="preserve">
+    <value>Signals should return void. Change the return type to void or remove the '[Signal]' attribute.</value>
+  </data>
+  <data name="GODOT0702_SignalShouldBeVoidReturnType_MessageFormat" xml:space="preserve">
+    <value>The return type of the signal '{0}' should be void. Return values will be ignored</value>
+  </data>
+  <data name="GODOT0702_SignalShouldBeVoidReturnType_Title" xml:space="preserve">
+    <value>The return type of signals should be void</value>
+  </data>
+  <data name="GODOT0704_SignalDelegateMissingSuffix_Description" xml:space="preserve">
+    <value>Rename the delegate to end with 'EventHandler' or remove the '[Signal]' attribute.</value>
+  </data>
+  <data name="GODOT0704_SignalDelegateMissingSuffix_MessageFormat" xml:space="preserve">
+    <value>The name of the delegate '{0}' must end with 'EventHandler'</value>
+  </data>
+  <data name="GODOT0704_SignalDelegateMissingSuffix_Title" xml:space="preserve">
+    <value>The name of the delegate must end with 'EventHandler'</value>
+  </data>
+  <data name="GODOT0801_GenericTypeArgumentMustBeVariant_Description" xml:space="preserve">
+    <value>Change the generic type argument to a Variant compatible type.</value>
+  </data>
+  <data name="GODOT0801_GenericTypeArgumentMustBeVariant_MessageFormat" xml:space="preserve">
+    <value>The generic type argument '{0}' must be a Variant compatible type</value>
+  </data>
+  <data name="GODOT0801_GenericTypeArgumentMustBeVariant_Title" xml:space="preserve">
+    <value>The generic type argument must be a Variant compatible type</value>
+  </data>
+  <data name="GODOT0802_GenericTypeParameterMustBeVariantAnnotated_Description" xml:space="preserve">
+    <value>Add the '[MustBeVariant]' attribute to the generic type parameter.</value>
+  </data>
+  <data name="GODOT0802_GenericTypeParameterMustBeVariantAnnotated_MessageFormat" xml:space="preserve">
+    <value>The generic type parameter '{0}' must be annotated with the '[MustBeVariant]' attribute</value>
+  </data>
+  <data name="GODOT0802_GenericTypeParameterMustBeVariantAnnotated_Title" xml:space="preserve">
+    <value>The generic type parameter must be annotated with the '[MustBeVariant]' attribute</value>
+  </data>
+</root>

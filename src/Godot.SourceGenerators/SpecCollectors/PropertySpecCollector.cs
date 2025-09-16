@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Godot.Common.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -16,10 +17,31 @@ internal static class PropertySpecCollector
             return null;
         }
 
-        return CollectCore(compilation, propertySymbol.Name, propertySymbol.Type, attribute, cancellationToken) with
+        if (propertySymbol.IsIndexer)
+        {
+            // Indexers cannot be registered as properties.
+            return null;
+        }
+
+        // If this is an explicit interface implementation, avoid including the interface name in the symbol name.
+        string symbolName = propertySymbol.Name;
+        string? explicitInterfaceSymbolName = null;
+        if (propertySymbol.ExplicitInterfaceImplementations.Length > 0)
+        {
+            symbolName = propertySymbol.ExplicitInterfaceImplementations[0].Name;
+            explicitInterfaceSymbolName = propertySymbol.ExplicitInterfaceImplementations[0].ContainingType.FullQualifiedNameWithGlobal();
+        }
+
+        var spec = CollectCore(compilation, symbolName, propertySymbol.Type, attribute, cancellationToken);
+        if (spec is null)
+        {
+            return null;
+        }
+        return spec.Value with
         {
             GroupDefinition = PropertyGroupSpecCollector.Collect(compilation, propertySymbol, cancellationToken),
             SubgroupDefinition = PropertySubgroupSpecCollector.Collect(compilation, propertySymbol, cancellationToken),
+            ExplicitInterfaceFullyQualifiedTypeName = explicitInterfaceSymbolName,
         };
     }
 
@@ -31,18 +53,28 @@ internal static class PropertySpecCollector
             return null;
         }
 
-        return CollectCore(compilation, fieldSymbol.Name, fieldSymbol.Type, attribute, cancellationToken) with
+        var spec = CollectCore(compilation, fieldSymbol.Name, fieldSymbol.Type, attribute, cancellationToken);
+        if (spec is null)
+        {
+            return null;
+        }
+        return spec.Value with
         {
             GroupDefinition = PropertyGroupSpecCollector.Collect(compilation, fieldSymbol, cancellationToken),
             SubgroupDefinition = PropertySubgroupSpecCollector.Collect(compilation, fieldSymbol, cancellationToken),
         };
     }
 
-    public static GodotPropertySpec Collect(Compilation compilation, IParameterSymbol parameterSymbol, CancellationToken cancellationToken = default)
+    public static GodotPropertySpec? Collect(Compilation compilation, IParameterSymbol parameterSymbol, CancellationToken cancellationToken = default)
     {
         parameterSymbol.TryGetAttribute(KnownTypeNames.BindPropertyAttribute, out var attribute);
 
-        return CollectCore(compilation, parameterSymbol.Name, parameterSymbol.Type, attribute, cancellationToken) with
+        var spec = CollectCore(compilation, parameterSymbol.Name, parameterSymbol.Type, attribute, cancellationToken);
+        if (spec is null)
+        {
+            return null;
+        }
+        return spec.Value with
         {
             HasExplicitDefaultValue = parameterSymbol.HasExplicitDefaultValue,
             ExplicitDefaultValue = GetExplicitDefaultValueExpression(parameterSymbol, cancellationToken),
@@ -77,7 +109,7 @@ internal static class PropertySpecCollector
         }
     }
 
-    public static GodotPropertySpec Collect(Compilation compilation, ITypeSymbol returnTypeSymbol, CancellationToken cancellationToken = default)
+    public static GodotPropertySpec? Collect(Compilation compilation, ITypeSymbol returnTypeSymbol, CancellationToken cancellationToken = default)
     {
         returnTypeSymbol.TryGetAttribute(KnownTypeNames.BindPropertyAttribute, out var attribute);
 
@@ -85,7 +117,7 @@ internal static class PropertySpecCollector
         return CollectCore(compilation, "", returnTypeSymbol, attribute, cancellationToken);
     }
 
-    private static GodotPropertySpec CollectCore(Compilation compilation, string symbolName, ITypeSymbol typeSymbol, AttributeData? attribute, CancellationToken cancellationToken = default)
+    private static GodotPropertySpec? CollectCore(Compilation compilation, string symbolName, ITypeSymbol typeSymbol, AttributeData? attribute, CancellationToken cancellationToken = default)
     {
         string? nameOverride = null;
 
@@ -102,12 +134,15 @@ internal static class PropertySpecCollector
             }
         }
 
-        var marshalInfo = Marshalling.GetMarshallingInformation(compilation, typeSymbol);
+        if (!Marshalling.TryGetMarshallingInformation(compilation, typeSymbol, out var marshalInfo))
+        {
+            return null;
+        }
 
         return new GodotPropertySpec()
         {
             SymbolName = symbolName,
-            FullyQualifiedTypeName = typeSymbol.FullNameWithGlobal(),
+            FullyQualifiedTypeName = typeSymbol.FullQualifiedNameWithGlobal(),
             MarshalInfo = marshalInfo,
             NameOverride = nameOverride,
         };

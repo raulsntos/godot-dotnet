@@ -5,6 +5,7 @@
     <dependencies>
       <group targetFramework="net9.0">
         <dependency id="Godot.Bindings" version="[$version$]" />
+        <dependency id="Godot.Analyzers" version="[$version$]" />
         <dependency id="Godot.SourceGenerators" version="[$version$]" />
       </group>
     </dependencies>

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Godot.Common.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 
 namespace Godot.SourceGenerators;
@@ -51,7 +52,7 @@ internal static class ConstantSpecCollector
             }
         }
 
-        bool isFlagsEnum = enumTypeSymbol.TryGetAttribute(KnownTypeNames.SystemFlagsAttribute, out _);
+        bool isFlagsEnum = enumTypeSymbol.HasAttribute(KnownTypeNames.SystemFlagsAttribute);
 
         foreach (var fieldSymbol in enumTypeSymbol.GetMembers().OfType<IFieldSymbol>())
         {

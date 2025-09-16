@@ -15,7 +15,7 @@ internal static class Constants
     {
         ExecutingAssemblyPath = Path.GetFullPath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location!)!);
 
-        var testDataPath = Path.Combine(ExecutingAssemblyPath, "TestData");
+        string testDataPath = Path.Combine(ExecutingAssemblyPath, "TestData");
 
         SourceFolderPath = Path.Combine(testDataPath, "Sources");
         GeneratedSourceFolderPath = Path.Combine(testDataPath, "GeneratedSources");

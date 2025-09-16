@@ -9,14 +9,17 @@
     <Project Path="src/Godot.EditorIntegration.MSBuildLogger/Godot.EditorIntegration.MSBuildLogger.csproj" />
     <Project Path="src/Godot.EditorIntegration.OpenVisualStudio/Godot.EditorIntegration.OpenVisualStudio.csproj" />
     <Project Path="src/Godot.PluginLoader/Godot.PluginLoader.csproj" />
+    <Project Path="src/Godot.Analyzers/Godot.Analyzers.csproj" />
     <Project Path="src/Godot.SourceGenerators/Godot.SourceGenerators.csproj" />
     <Project Path="src/Godot.Common/Godot.Common.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Godot.Bindings.Tests/Godot.Bindings.Tests.csproj" />
     <Project Path="tests/Godot.BindingsGenerator.Tests/Godot.BindingsGenerator.Tests.csproj" />
+    <Project Path="tests/Godot.Analyzers.Tests/Godot.Analyzers.Tests.csproj" />
     <Project Path="tests/Godot.SourceGenerators.Tests/Godot.SourceGenerators.Tests.csproj" />
     <Project Path="tests/Godot.Common.Tests/Godot.Common.Tests.csproj" />
+    <Project Path="tests/Godot.Common.CodeAnalysis.Tests/Godot.Common.CodeAnalysis.Tests.csproj" />
   </Folder>
   <Folder Name="/samples/">
     <Project Path="samples/Summator/Extension/Summator.csproj" />

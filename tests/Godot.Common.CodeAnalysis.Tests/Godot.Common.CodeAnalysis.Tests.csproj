@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(RepoRoot)src\Godot.Bindings\Godot.Bindings.csproj" />
+  </ItemGroup>
+
+  <Import Project="$(RepoRoot)src\Godot.Common.CodeAnalysis\Godot.Common.CodeAnalysis.projitems" />
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing" Version="$(MicrosoftCodeAnalysisCSharpAnalyzerTestingVersion)" />
+  </ItemGroup>
+
+</Project>

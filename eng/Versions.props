@@ -21,12 +21,14 @@
     -->
     <MicrosoftCodeAnalysisVersion_LatestVS>4.8.0</MicrosoftCodeAnalysisVersion_LatestVS>
     <MicrosoftCodeAnalysisCSharpVersion>$(MicrosoftCodeAnalysisVersion_LatestVS)</MicrosoftCodeAnalysisCSharpVersion>
-    <MicrosoftCodeAnalysisTestingVersion>1.1.2-beta1.24169.1</MicrosoftCodeAnalysisTestingVersion>
+    <MicrosoftCodeAnalysisCSharpWorkspacesVersion>$(MicrosoftCodeAnalysisVersion_LatestVS)</MicrosoftCodeAnalysisCSharpWorkspacesVersion>
+    <MicrosoftCodeAnalysisWorkspacesMSBuildVersion>$(MicrosoftCodeAnalysisVersion_LatestVS)</MicrosoftCodeAnalysisWorkspacesMSBuildVersion>
+    <MicrosoftCodeAnalysisCommonVersion>$(MicrosoftCodeAnalysisVersion_LatestVS)</MicrosoftCodeAnalysisCommonVersion>
+    <MicrosoftCodeAnalysisTestingVersion>1.1.2</MicrosoftCodeAnalysisTestingVersion>
     <MicrosoftCodeAnalysisCSharpAnalyzerTestingVersion>$(MicrosoftCodeAnalysisTestingVersion)</MicrosoftCodeAnalysisCSharpAnalyzerTestingVersion>
     <MicrosoftCodeAnalysisCSharpCodeFixTestingVersion>$(MicrosoftCodeAnalysisTestingVersion)</MicrosoftCodeAnalysisCSharpCodeFixTestingVersion>
     <MicrosoftCodeAnalysisCSharpSourceGeneratorsTestingVersion>$(MicrosoftCodeAnalysisTestingVersion)</MicrosoftCodeAnalysisCSharpSourceGeneratorsTestingVersion>
-    <MicrosoftCodeAnalysisAnalyzersVersion>3.3.4</MicrosoftCodeAnalysisAnalyzersVersion>
-    <MicrosoftCodeAnalysisResxSourceGeneratorVersion>3.11.0-beta1.24324.1</MicrosoftCodeAnalysisResxSourceGeneratorVersion>
+    <MicrosoftCodeAnalysisResxSourceGeneratorVersion>5.0.0-1.25277.114</MicrosoftCodeAnalysisResxSourceGeneratorVersion>
     <!-- NuGet -->
     <NuGetVersioningVersion>6.10.0</NuGetVersioningVersion>
     <!-- Solution Persistence -->

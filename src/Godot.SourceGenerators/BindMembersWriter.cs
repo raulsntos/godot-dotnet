@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Godot.Common.CodeAnalysis;
 
 namespace Godot.SourceGenerators;
 
@@ -71,20 +72,25 @@ internal static class BindMembersWriter
         string baseTypeFullName = spec.FullyQualifiedBaseTypeName;
 
         {
+            HashSet<string> usedNames = [];
+
             sb.AppendLine($"public new partial class MethodName : {baseTypeFullName}.MethodName");
             sb.OpenBlock();
             foreach (var method in spec.Methods)
             {
-                string value = !string.IsNullOrEmpty(method.NameOverride)
-                    ? method.NameOverride!
-                    : method.SymbolName;
-                AddCachedStringName(method.SymbolName, value);
+                if (usedNames.Add(method.SymbolName))
+                {
+                    string value = !string.IsNullOrEmpty(method.NameOverride)
+                        ? method.NameOverride!
+                        : method.SymbolName;
+                    AddCachedStringName(method.SymbolName, value);
+                }
             }
             sb.CloseBlock();
         }
 
         {
-            HashSet<string> visitedEnums = [];
+            HashSet<string> usedNames = [];
 
             sb.AppendLine($"public new partial class ConstantName : {baseTypeFullName}.ConstantName");
             sb.OpenBlock();
@@ -92,7 +98,7 @@ internal static class BindMembersWriter
             {
                 if (!string.IsNullOrEmpty(constant.EnumSymbolName))
                 {
-                    if (visitedEnums.Add(constant.EnumSymbolName!))
+                    if (usedNames.Add(constant.EnumSymbolName!))
                     {
                         string value = !string.IsNullOrEmpty(constant.EnumNameOverride)
                             ? constant.EnumNameOverride!
@@ -102,38 +108,52 @@ internal static class BindMembersWriter
                 }
 
                 {
-                    string value = !string.IsNullOrEmpty(constant.NameOverride)
-                        ? constant.NameOverride!
-                        : constant.SymbolName;
-                    AddCachedStringName($"{constant.EnumSymbolName}{constant.SymbolName}", value);
+                    string symbolName = $"{constant.EnumSymbolName}{constant.SymbolName}";
+                    if (usedNames.Add(symbolName))
+                    {
+                        string value = !string.IsNullOrEmpty(constant.NameOverride)
+                            ? constant.NameOverride!
+                            : constant.SymbolName;
+                        AddCachedStringName(symbolName, value);
+                    }
                 }
             }
             sb.CloseBlock();
         }
 
         {
+            HashSet<string> usedNames = [];
+
             sb.AppendLine($"public new partial class PropertyName : {baseTypeFullName}.PropertyName");
             sb.OpenBlock();
             foreach (var property in spec.Properties)
             {
-                string value = !string.IsNullOrEmpty(property.NameOverride)
-                    ? property.NameOverride!
-                    : property.SymbolName;
-                AddCachedStringName(property.SymbolName, value);
+                if (usedNames.Add(property.SymbolName))
+                {
+                    string value = !string.IsNullOrEmpty(property.NameOverride)
+                        ? property.NameOverride!
+                        : property.SymbolName;
+                    AddCachedStringName(property.SymbolName, value);
+                }
             }
             sb.CloseBlock();
         }
 
         {
+            HashSet<string> usedNames = [];
+
             sb.AppendLine($"public new partial class SignalName : {baseTypeFullName}.SignalName");
             sb.OpenBlock();
             foreach (var signal in spec.Signals)
             {
                 string signalName = RemoveSignalDelegateSuffix(signal.SymbolName);
-                string value = !string.IsNullOrEmpty(signal.NameOverride)
-                    ? signal.NameOverride!
-                    : signalName;
-                AddCachedStringName(signalName, value);
+                if (usedNames.Add(signalName))
+                {
+                    string value = !string.IsNullOrEmpty(signal.NameOverride)
+                        ? signal.NameOverride!
+                        : signalName;
+                    AddCachedStringName(signalName, value);
+                }
             }
             sb.CloseBlock();
         }
@@ -290,7 +310,15 @@ internal static class BindMembersWriter
             }
 
             var methodInvocation = new IndentedStringBuilder();
+            if (method.ExplicitInterfaceFullyQualifiedTypeName is not null)
+            {
+                methodInvocation.Append($"(({method.ExplicitInterfaceFullyQualifiedTypeName})");
+            }
             methodInvocation.Append(method.IsStatic ? spec.SymbolName : "__instance");
+            if (method.ExplicitInterfaceFullyQualifiedTypeName is not null)
+            {
+                methodInvocation.Append(')');
+            }
             methodInvocation.Append($".@{method.SymbolName}(");
             if (method.Parameters.Count != 0)
             {
@@ -380,7 +408,12 @@ internal static class BindMembersWriter
             sb.AppendLine('{');
             sb.Indent++;
             sb.Append("return ");
-            AppendConvertToGodotType(sb, property, $"__instance.@{property.SymbolName}");
+            string instanceSource = "__instance";
+            if (property.ExplicitInterfaceFullyQualifiedTypeName is not null)
+            {
+                instanceSource = $"(({property.ExplicitInterfaceFullyQualifiedTypeName})__instance)";
+            }
+            AppendConvertToGodotType(sb, property, $"{instanceSource}.@{property.SymbolName}");
             sb.AppendLine(';');
             sb.Indent--;
             sb.Append('}');
@@ -390,7 +423,16 @@ internal static class BindMembersWriter
             sb.AppendLine($"static ({spec.SymbolName} __instance, {property.MarshalInfo.FullyQualifiedMarshalAsTypeName} value) =>");
             sb.AppendLine('{');
             sb.Indent++;
-            sb.Append($"__instance.@{property.SymbolName} = ");
+            if (property.ExplicitInterfaceFullyQualifiedTypeName is not null)
+            {
+                sb.Append($"(({property.ExplicitInterfaceFullyQualifiedTypeName})");
+            }
+            sb.Append("__instance");
+            if (property.ExplicitInterfaceFullyQualifiedTypeName is not null)
+            {
+                sb.Append(')');
+            }
+            sb.Append($".@{property.SymbolName} = ");
             AppendConvertFromGodotType(sb, property, "value");
             sb.AppendLine(';');
             sb.Indent--;
