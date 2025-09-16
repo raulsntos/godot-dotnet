@@ -18,6 +18,8 @@ partial class NodeWithProperties
         public static global::Godot.StringName @myField { get; } = global::Godot.StringName.CreateStaticFromAscii("myField"u8);
         public static global::Godot.StringName @myNamedField { get; } = global::Godot.StringName.CreateStaticFromAscii("my_named_field"u8);
         public static global::Godot.StringName @myFieldWithDefaultValue { get; } = global::Godot.StringName.CreateStaticFromAscii("myFieldWithDefaultValue"u8);
+        public static global::Godot.StringName @myFieldWithHintOverride { get; } = global::Godot.StringName.CreateStaticFromAscii("myFieldWithHintOverride"u8);
+        public static global::Godot.StringName @myFieldWithHintStringOverride { get; } = global::Godot.StringName.CreateStaticFromAscii("myFieldWithHintStringOverride"u8);
     }
     public new partial class SignalName : global::Godot.Node.SignalName
     {
@@ -98,6 +100,32 @@ partial class NodeWithProperties
             static (NodeWithProperties __instance, int value) =>
             {
                 __instance.@myFieldWithDefaultValue = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@myFieldWithHintOverride, global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Int32)
+            {
+                Hint = global::Godot.PropertyHint.Layers3DPhysics,
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithProperties __instance) =>
+            {
+                return __instance.@myFieldWithHintOverride;
+            },
+            static (NodeWithProperties __instance, int value) =>
+            {
+                __instance.@myFieldWithHintOverride = value;
+            });
+        context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@myFieldWithHintStringOverride, global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Int32)
+            {
+                HintString = "my_hint_string",
+                Usage = global::Godot.PropertyUsageFlags.Default,
+            },
+            static (NodeWithProperties __instance) =>
+            {
+                return __instance.@myFieldWithHintStringOverride;
+            },
+            static (NodeWithProperties __instance, int value) =>
+            {
+                __instance.@myFieldWithHintStringOverride = value;
             });
     }
 }

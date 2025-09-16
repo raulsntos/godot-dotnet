@@ -16,6 +16,18 @@ public sealed class BindPropertyAttribute : Attribute
     public string? Name { get; init; }
 
     /// <summary>
+    /// Specifies the hint that will be used to register the property.
+    /// If unspecified it will use the hint calculated from the property type.
+    /// </summary>
+    public PropertyHint Hint { get; init; } = PropertyHint.None;
+
+    /// <summary>
+    /// Specifies the hint string that will be used to register the property.
+    /// If unspecified it will use the hint string calculated from the property type.
+    /// </summary>
+    public string? HintString { get; init; }
+
+    /// <summary>
     /// Specifies the marshaller type that will be used to marshal this property.
     /// If unspecified the default marshaller for the annotated property's type
     /// will be used instead. If there is no default marshaller, a marshaller must
