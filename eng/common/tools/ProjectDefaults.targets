@@ -15,6 +15,10 @@
 
     <!-- Include readme file in the package. -->
     <None Include="$(PackageReadmeFileFullPath)" Pack="true" PackagePath="$(PackageReadmeFile)" Visible="true" />
+
+    <!-- Include license and third party notices in the package. -->
+    <None Include="$(RepoRoot)LICENSE.txt" Pack="true" PackagePath="LICENSE.txt" Visible="true" />
+    <None Include="$(RepoRoot)THIRD-PARTY-NOTICES.txt" Pack="true" PackagePath="THIRD-PARTY-NOTICES.txt" Visible="true" />
   </ItemGroup>
 
 </Project>
