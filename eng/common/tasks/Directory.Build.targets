@@ -1,7 +1,11 @@
 <Project>
 
   <!--
-    Empty file to prevent MSBuild from importing Directory.Build.targets from a parent directory.
+    File to prevent MSBuild from importing Directory.Build.targets from a parent directory.
+    We import only the absolutely necessary props from eng/common, because some of it
+    depends on this project being built first.
   -->
+
+  <Import Project="$(MSBuildThisFileDirectory)..\..\BuildTask.targets" />
 
 </Project>

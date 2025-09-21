@@ -1,0 +1,52 @@
+<Project>
+
+  <!-- Define constant to identify Godot builds. -->
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);GODOT</DefineConstants>
+  </PropertyGroup>
+
+  <!-- Generate Godot version constants. -->
+  <UsingTask TaskName="Godot.Tasks.GenerateGodotVersionConstantsTask" AssemblyFile="$(_GodotTasksAssemblyPath)" />
+  <Target Name="_GenerateGodotVersionConstants" BeforeTargets="BeforeBuild" TaskFactory="TaskHostFactory">
+    <Godot.Tasks.GenerateGodotVersionConstantsTask>
+      <Output TaskParameter="GodotVersionConstants" PropertyName="_GodotVersionConstants" />
+    </Godot.Tasks.GenerateGodotVersionConstantsTask>
+    <PropertyGroup>
+      <DefineConstants>$(DefineConstants);$(_GodotVersionConstants)</DefineConstants>
+    </PropertyGroup>
+  </Target>
+
+  <!--
+    Define constant to determine whether the real_t type in Godot is double precision or not.
+    By default this is false, like the official Godot builds. If someone is using a custom
+    Godot build where real_t is double, they can override the 'GodotFloat64' property.
+  -->
+  <PropertyGroup>
+    <DefineConstants Condition="'$(GodotFloat64)' == 'true'">$(DefineConstants);GODOT_REAL_T_IS_DOUBLE</DefineConstants>
+  </PropertyGroup>
+
+  <!-- Define constants to identify the target Godot platform. -->
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);$(_GodotPlatformConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <!-- Define constant to identify project running on the editor. -->
+  <PropertyGroup>
+    <!-- TODO: For now it's always set to true, but it should be implemented properly (see the 'Godot.NET.Sdk' implementation). -->
+    <DefineConstants>$(DefineConstants);TOOLS</DefineConstants>
+  </PropertyGroup>
+
+  <!-- Check for incompatible Godot package references using custom MSBuild task -->
+  <PropertyGroup>
+    <EnableGodotPackageCompatibilityCheck Condition="'$(EnableGodotPackageCompatibilityCheck)' == ''">true</EnableGodotPackageCompatibilityCheck>
+  </PropertyGroup>
+  <UsingTask TaskName="Godot.Tasks.CheckGodotPackageCompatibilityTask" AssemblyFile="$(_GodotTasksAssemblyPath)" />
+  <Target Name="_CheckGodotPackageCompatibility" BeforeTargets="Build" TaskFactory="TaskHostFactory" Condition="'$(EnableGodotPackageCompatibilityCheck)' == 'true'">
+    <Godot.Tasks.CheckGodotPackageCompatibilityTask
+      TargetFramework="$(TargetFramework)"
+      RuntimeIdentifier="$(RuntimeIdentifier)"
+      ProjectAssetsFile="$(ProjectAssetsFile)"
+      UsesGodotDotNet="true" />
+  </Target>
+
+</Project>

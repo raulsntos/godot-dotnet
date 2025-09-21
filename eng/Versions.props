@@ -30,7 +30,8 @@
     <MicrosoftCodeAnalysisCSharpSourceGeneratorsTestingVersion>$(MicrosoftCodeAnalysisTestingVersion)</MicrosoftCodeAnalysisCSharpSourceGeneratorsTestingVersion>
     <MicrosoftCodeAnalysisResxSourceGeneratorVersion>5.0.0-1.25277.114</MicrosoftCodeAnalysisResxSourceGeneratorVersion>
     <!-- NuGet -->
-    <NuGetVersioningVersion>6.10.0</NuGetVersioningVersion>
+    <NuGetVersioningVersion>6.13.1</NuGetVersioningVersion>
+    <NuGetProjectModelVersion>6.13.1</NuGetProjectModelVersion>
     <!-- Solution Persistence -->
     <MicrosoftVisualStudioSolutionPersistenceVersion>1.0.9</MicrosoftVisualStudioSolutionPersistenceVersion>
     <!-- MSTest -->

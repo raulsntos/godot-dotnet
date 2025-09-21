@@ -3,4 +3,7 @@
   <!-- Import the build infrastructure. -->
   <Import Project="eng/common/Main.targets" />
 
+  <!-- Import specific targets for MSBuild tasks projects. -->
+  <Import Project="eng/BuildTask.targets" Condition="'$(IsBuildTaskProject)' == 'true'" />
+
 </Project>

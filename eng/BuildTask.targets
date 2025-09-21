@@ -1,0 +1,74 @@
+<Project>
+
+  <PropertyGroup>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <!-- Build Tasks should not include any dependencies. -->
+    <SuppressDependenciesWhenPacking Condition="'$(SuppressDependenciesWhenPacking)' == ''">true</SuppressDependenciesWhenPacking>
+    <!-- Build Tasks should have this set per https://github.com/dotnet/arcade/blob/master/Documentation/CorePackages/Versioning.md#recommended-settings -->
+    <AutoGenerateAssemblyVersion>true</AutoGenerateAssemblyVersion>
+    <BuildTaskTargetFolder Condition="'$(BuildTaskTargetFolder)' == ''">tools</BuildTaskTargetFolder>
+    <PackTasks Condition="'$(PackTasks)' == ''">true</PackTasks>
+    <TargetsForTfmSpecificContentInPackage Condition="'$(PackTasks)' == 'true'">$(TargetsForTfmSpecificContentInPackage);_AddBuildOutputToPackage</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+
+  <!-- Default to including all *.props and *.targets files from the project directory into the NuGet package root. -->
+  <ItemGroup Condition="'$(EnableDefaultItems)' != 'false'">
+    <None Condition="'$(EnableDefaultNoneItems)' != 'false'"
+          Include="**/*.props;**/*.targets"
+          Pack="true"
+          PackagePath="%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <!-- Don't include assemblies that MSBuild ships with. -->
+  <ItemGroup>
+    <PackageReference Update="Microsoft.Build" Publish="false" />
+    <PackageReference Update="Microsoft.Build.Framework" Publish="false" />
+    <PackageReference Update="Microsoft.Build.Tasks.Core" Publish="false" />
+    <PackageReference Update="Microsoft.Build.Utilities.Core" Publish="false" />
+    <PackageReference Update="Microsoft.NET.StringTools" Publish="false" />
+    <PackageReference Update="System.Resources.Extensions" Publish="false" />
+  </ItemGroup>
+
+  <!-- Don't include assemblies that are provided by the SDK, next to MSBuild. -->
+  <ItemGroup>
+    <PackageReference Update="Newtonsoft.Json" Publish="false" />
+    <PackageReference Update="NuGet.Commands" Publish="false" />
+    <PackageReference Update="NuGet.Configuration" Publish="false" />
+    <PackageReference Update="NuGet.Frameworks" Publish="false" />
+    <PackageReference Update="NuGet.Packaging" Publish="false" />
+    <PackageReference Update="NuGet.ProjectModel" Publish="false" />
+    <PackageReference Update="NuGet.Versioning" Publish="false" />
+    <PackageReference Update="System.CodeDom" Publish="false" />
+    <PackageReference Update="System.Security.Cryptography.ProtectedData" Publish="false" />
+    <PackageReference Update="System.Text.Encoding.CodePages" Publish="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+      Update all PackageReference items to default Publish to true.
+      This forces the publish output to contain the dlls.
+     -->
+    <PackageReference Update="@(PackageReference)">
+      <Publish Condition="'%(PackageReference.Publish)' == ''">true</Publish>
+      <ExcludeAssets Condition="'%(PackageReference.Publish)' == 'false'">runtime</ExcludeAssets>
+    </PackageReference>
+
+    <!--
+      Update all Reference items to have Pack="false".
+      This removes the frameworkDependency nodes from the generated nuspec.
+    -->
+    <Reference Update="@(Reference)" Pack="false" />
+  </ItemGroup>
+
+  <!-- Publish .NET assets and include them in the package under $(BuildTaskTargetFolder) directory. -->
+  <Target Name="_AddBuildOutputToPackage" DependsOnTargets="Publish">
+    <PropertyGroup>
+      <BuildTaskTargetTfmSpecificFolder Condition="'$(BuildTaskTargetTfmSpecificFolder)' == ''">net</BuildTaskTargetTfmSpecificFolder>
+    </PropertyGroup>
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="$(PublishDir)**"
+                              PackagePath="$(BuildTaskTargetFolder)/$(BuildTaskTargetTfmSpecificFolder)/%(RecursiveDir)%(FileName)%(Extension)"/>
+    </ItemGroup>
+  </Target>
+
+</Project>
