@@ -140,7 +140,7 @@
     <value>Running: {command}</value>
   </data>
   <data name="BuildProjectFailed" xml:space="preserve">
-    <value>Building .NET project failed with errors.</value>
+    <value>Building .NET project failed with errors. Check MSBuild panel for details.</value>
   </data>
   <data name="BuildProjectProgressLabel" xml:space="preserve">
     <value>Building .NET project...</value>
@@ -239,7 +239,7 @@
     <value>A build is already in progress.</value>
   </data>
   <data name="InvalidOperation_BuildFailed" xml:space="preserve">
-    <value>Failed to build .NET project.</value>
+    <value>Failed to build .NET project. Check MSBuild panel for details.</value>
   </data>
   <data name="InvalidOperation_CreateFatBinaryFailed" xml:space="preserve">
     <value>Failed to create fat binary.</value>
