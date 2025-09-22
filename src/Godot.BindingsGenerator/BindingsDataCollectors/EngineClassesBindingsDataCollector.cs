@@ -6,6 +6,7 @@ using System.Linq;
 using Godot.BindingsGenerator.ApiDump;
 using Godot.BindingsGenerator.Reflection;
 using Godot.BindingsGenerator.Logging;
+using Godot.Common;
 
 namespace Godot.BindingsGenerator;
 

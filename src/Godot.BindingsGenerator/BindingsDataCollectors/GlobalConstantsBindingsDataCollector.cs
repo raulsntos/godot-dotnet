@@ -1,4 +1,5 @@
 using Godot.BindingsGenerator.Reflection;
+using Godot.Common;
 
 namespace Godot.BindingsGenerator;
 

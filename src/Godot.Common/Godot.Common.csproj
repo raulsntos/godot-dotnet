@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <IsTrimmable>true</IsTrimmable>
+    <IsAotCompatible>true</IsAotCompatible>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+    <EnableAotAnalyzer>true</EnableAotAnalyzer>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <EnablePackageValidation>true</EnablePackageValidation>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <DevelopmentDependency>true</DevelopmentDependency>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Godot.BindingsGenerator.ApiDump\Godot.BindingsGenerator.ApiDump.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\Godot.BindingsGenerator.Reflection\Godot.BindingsGenerator.Reflection.csproj" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

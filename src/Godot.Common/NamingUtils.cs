@@ -6,9 +6,12 @@ using System.Text;
 using Godot.BindingsGenerator.ApiDump;
 using Godot.BindingsGenerator.Reflection;
 
-namespace Godot.BindingsGenerator;
+namespace Godot.Common;
 
-internal static class NamingUtils
+/// <summary>
+/// Helper methods to convert between the Godot's Core and .NET naming conventions.
+/// </summary>
+public static class NamingUtils
 {
     private static readonly SearchValues<char> _numberSearchValues = SearchValues.Create("0123456789");
 
@@ -47,7 +50,9 @@ internal static class NamingUtils
         { "IP", "IP" }, // Internet Protocol
         { "IV", "IV" }, // Initialization Vector
         { "MACOS", "MacOS" },
+        { "METALFX", "MetalFX" },
         { "NODEPATH", "NodePath" },
+        { "OPENXR", "OpenXR" },
         { "OS", "OS" }, // Operating System
         { "POSTPROCESSING", "PostProcessing" },
         { "PINGPONG", "PingPong" },
@@ -65,6 +70,15 @@ internal static class NamingUtils
         { "XRAPI", "XRApi" },
     };
 
+    /// <summary>
+    /// Converts a snake_case identifier to PascalCase, following .NET naming conventions.
+    /// </summary>
+    /// <remarks>
+    /// This method is used to convert the names of methods, properties, enum constants,
+    /// and field constants to PascalCase (e.g.: MY_CONSTANT -> MyConstant).
+    /// </remarks>
+    /// <param name="value">Identifier in snake_case format.</param>
+    /// <returns>Identifier in PascalCase format.</returns>
     public static string SnakeToPascalCase(string value)
     {
         if (value.Length == 0)
@@ -130,6 +144,15 @@ internal static class NamingUtils
         }).TrimEnd('\0');
     }
 
+    /// <summary>
+    /// Converts a snake_case identifier to camelCase, following .NET naming conventions.
+    /// </summary>
+    /// <remarks>
+    /// This method is used to convert the names of method parameters to camelCase
+    /// (e.g.: my_method_parameter -> myMethodParameter).
+    /// </remarks>
+    /// <param name="value">Identifier in snake_case format.</param>
+    /// <returns>Identifier in camelCase format.</returns>
     public static string SnakeToCamelCase(string value)
     {
         if (value.Length == 0)
@@ -207,6 +230,15 @@ internal static class NamingUtils
         }).TrimEnd('\0');
     }
 
+    /// <summary>
+    /// Converts a PascalCase identifier to PascalCase, following .NET naming conventions.
+    /// </summary>
+    /// <remarks>
+    /// This method is used to convert the names of types to PascalCase
+    /// (e.g.: HTTPRequest -> HttpRequest).
+    /// </remarks>
+    /// <param name="value">Identifier in PascalCase format.</param>
+    /// <returns>Identifier in PascalCase format.</returns>
     public static string PascalToPascalCase(string value)
     {
         // Some special types include a dot in their name (e.g.: Variant.Type and Variant.Operator), remove it.
@@ -263,22 +295,32 @@ internal static class NamingUtils
         });
     }
 
-    public static int DetermineEnumPrefix(GodotEnumInfo @enum)
+    /// <summary>
+    /// Find the index of the part in the enum constant names where they stop sharing a common prefix.
+    /// This is used to strip the common prefix from enum constant names.
+    /// </summary>
+    /// <remarks>
+    /// Godot enum constants often share a common prefix that is redundant when the enum is used in C#
+    /// (e.g.: IMAGE_FORMAT_PNG, IMAGE_FORMAT_JPEG -> ImageFormat.Png, ImageFormat.Jpeg).
+    /// </remarks>
+    /// <param name="engineEnum">The Godot enum information.</param>
+    /// <returns>The index of the part where the enum constant names stop sharing a common prefix.</returns>
+    /// <exception cref="ArgumentException">Enum contains no values.</exception>
+    public static int DetermineEnumPrefix(GodotEnumInfo engineEnum)
     {
-        if (@enum.Values.Length == 0)
+        if (engineEnum.Values.Length == 0)
         {
-            throw new ArgumentException("Enum contains no values.", nameof(@enum));
+            throw new ArgumentException("Enum contains no values.", nameof(engineEnum));
         }
 
-
-        if (@enum.Values.Length == 1)
+        if (engineEnum.Values.Length == 1)
         {
             // If there's only one value, extract the prefix from the name of the enum.
 
             int currentPart = 0;
             (int Start, int Length) referenceRange = default;
-            string reference = @enum.Name.ToUpperInvariant();
-            foreach (var part in new SpanPascalCaseEnumerator(@enum.Name))
+            string reference = engineEnum.Name.ToUpperInvariant();
+            foreach (var part in new SpanPascalCaseEnumerator(engineEnum.Name))
             {
                 // Since the enum name is PascalCase we need to maintain a separate range for the enum names
                 // to account for the underscores (equal to the parts we've iterated so far).
@@ -286,7 +328,7 @@ internal static class NamingUtils
                 (int Start, int Length) currentRange = (referenceRange.Start + currentPart, part.Length);
 
                 var referencePart = reference.AsSpan(referenceRange.Start, referenceRange.Length);
-                if (!AreAllPartsEqualToReference(currentRange, referencePart, @enum))
+                if (!AreAllPartsEqualToReference(currentRange, referencePart, engineEnum))
                 {
                     // We found the first part that doesn't match.
                     break;
@@ -301,7 +343,7 @@ internal static class NamingUtils
         {
             int currentPart = 0;
             (int Start, int Length) currentRange = default;
-            foreach (var part in new SpanSnakeCaseEnumerator(@enum.Values[0].Name))
+            foreach (var part in new SpanSnakeCaseEnumerator(engineEnum.Values[0].Name))
             {
                 currentRange = (currentRange.Start + currentRange.Length, part.Length);
 
@@ -311,7 +353,7 @@ internal static class NamingUtils
                     currentRange.Start++;
                 }
 
-                if (!AreAllPartsEqual(currentRange, @enum))
+                if (!AreAllPartsEqual(currentRange, engineEnum))
                 {
                     // We found the first part that doesn't match.
 
@@ -367,6 +409,13 @@ internal static class NamingUtils
         }
     }
 
+    /// <summary>
+    /// Apply the prefix stripping to the enum constants. This modifies the enum in place.
+    /// See <see cref="DetermineEnumPrefix"/> for more information.
+    /// </summary>
+    /// <param name="engineEnum">Godot enum information that is the source of truth.</param>
+    /// <param name="enum">C# enum information that will be modified.</param>
+    /// <param name="prefixLength">The parts of the name to strip from the beginning.</param>
     public static void ApplyPrefixToEnumConstants(GodotEnumInfo engineEnum, EnumInfo @enum, int prefixLength)
     {
         if (prefixLength <= 0)
@@ -413,6 +462,16 @@ internal static class NamingUtils
         }
     }
 
+    /// <summary>
+    /// Remove the max constant from an enum. This modifies the enum in place.
+    /// </summary>
+    /// <remarks>
+    /// Godot enums sometimes contain a max constant that represents the number
+    /// of elements in an enum. These are unnecessary in C# and can break
+    /// compatibility when their values change between Godot versions.
+    /// </remarks>
+    /// <param name="engineEnum">Godot enum information that is the source of truth.</param>
+    /// <param name="enum">C# enum information that will be modified.</param>
     public static void RemoveMaxConstant(GodotEnumInfo engineEnum, EnumInfo @enum)
     {
         int maxEnumFieldIndex = 0;

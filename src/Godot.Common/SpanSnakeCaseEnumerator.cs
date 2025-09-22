@@ -1,6 +1,6 @@
 using System;
 
-namespace Godot.BindingsGenerator;
+namespace Godot.Common;
 
 internal ref struct SpanSnakeCaseEnumerator
 {

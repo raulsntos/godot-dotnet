@@ -30,6 +30,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Godot.Common\Godot.Common.csproj" PrivateAssets="all" />
+    <Content Include="$(OutputPath)\Godot.Common.dll" Pack="true" PackagePath="lib\$(TargetFramework)" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.CommandLine" Version="$(SystemCommandLineVersion)" />
     <PackageReference Include="JetBrains.Rider.PathLocator" Version="$(JetBrainsRiderPathLocatorVersion)" />
     <PackageReference Include="Microsoft.Build" Version="$(MicrosoftBuildVersion)" ExcludeAssets="runtime" />

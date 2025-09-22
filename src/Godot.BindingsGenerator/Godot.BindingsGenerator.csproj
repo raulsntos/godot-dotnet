@@ -29,6 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Godot.Common\Godot.Common.csproj" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ClangSharp" Version="$(ClangSharpVersion)" />
     <PackageReference Include="ClangSharp.PInvokeGenerator" Version="$(ClangSharpVersion)" />
     <PackageReference Include="System.CommandLine" Version="$(SystemCommandLineVersion)" />

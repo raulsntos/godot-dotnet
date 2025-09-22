@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Godot.BindingsGenerator.ApiDump;
 using Godot.BindingsGenerator.Reflection;
 
-namespace Godot.BindingsGenerator.Tests;
+namespace Godot.Common.Tests;
 
 public class NamingUtilsTests
 {

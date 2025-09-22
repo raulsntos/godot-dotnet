@@ -1,7 +1,7 @@
 using System;
 using System.Buffers;
 
-namespace Godot.BindingsGenerator;
+namespace Godot.Common;
 
 internal ref struct SpanPascalCaseEnumerator
 {

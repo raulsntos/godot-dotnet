@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(RepoRoot)src\Godot.Common\Godot.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(RepoRoot)src\Godot.BindingsGenerator.ApiDump\Godot.BindingsGenerator.ApiDump.csproj" />
+    <ProjectReference Include="$(RepoRoot)src\Godot.BindingsGenerator.Reflection\Godot.BindingsGenerator.Reflection.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using Godot.BindingsGenerator.ApiDump;
 using Godot.BindingsGenerator.Reflection;
+using Godot.Common;
 
 namespace Godot.BindingsGenerator;
 
