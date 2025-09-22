@@ -693,8 +693,8 @@ public struct Projection : IEquatable<Projection>
         Projection projection = this;
         int i, j, k;
         // Locations of pivot matrix.
-        int[] pivotI = new int[4];
-        int[] pivotJ = new int[4];
+        Span<int> pivotI = stackalloc int[4];
+        Span<int> pivotJ = stackalloc int[4];
         // Value of current pivot element.
         real_t pivotValue;
         // Temporary storage.
