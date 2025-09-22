@@ -353,7 +353,7 @@ public struct Quaternion : IEquatable<Quaternion>
     /// <returns>A <see langword="bool"/> for whether the quaternion is normalized or not.</returns>
     public readonly bool IsNormalized()
     {
-        return real_t.Abs(LengthSquared() - 1) <= Mathf.Epsilon;
+        return Mathf.IsEqualApprox(LengthSquared(), 1, Mathf.Epsilon);
     }
 
     /// <summary>

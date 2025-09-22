@@ -337,7 +337,7 @@ public struct Vector4 : IEquatable<Vector4>
     /// <returns>A <see langword="bool"/> indicating whether or not the vector is normalized.</returns>
     public readonly bool IsNormalized()
     {
-        return real_t.Abs(LengthSquared() - 1.0f) < Mathf.Epsilon;
+        return Mathf.IsEqualApprox(LengthSquared(), 1, Mathf.Epsilon);
     }
 
     /// <summary>
