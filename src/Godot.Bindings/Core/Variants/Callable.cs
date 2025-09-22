@@ -143,7 +143,7 @@ public readonly partial struct Callable
     /// </summary>
     /// <param name="args">Arguments that will be passed to the method call.</param>
     /// <returns>The value returned by the method.</returns>
-    public Variant Call(ReadOnlySpan<Variant> args = default)
+    public Variant Call(params ReadOnlySpan<Variant> args)
     {
         ref NativeGodotCallable self = ref NativeValue.DangerousSelfRef;
         NativeGodotVariant ret = NativeGodotCallable.Call(ref self, args);
@@ -155,7 +155,7 @@ public readonly partial struct Callable
     /// Arguments can be passed and should match the method's signature.
     /// </summary>
     /// <param name="args">Arguments that will be passed to the method call.</param>
-    public void CallDeferred(ReadOnlySpan<Variant> args = default)
+    public void CallDeferred(params ReadOnlySpan<Variant> args)
     {
         ref NativeGodotCallable self = ref NativeValue.DangerousSelfRef;
         NativeGodotCallable.CallDeferred(ref self, args);
