@@ -157,8 +157,8 @@
   <data name="Argument_SignalAlreadyRegistered" xml:space="preserve">
     <value>Signal '{signalName}' already registered in class '{typeName}'.</value>
   </data>
-  <data name="Argument_TargetVectorAndUpVectorCantBeParallel" xml:space="preserve">
-    <value>The target vector and up vector can't be parallel to each other.</value>
+  <data name="Argument_TargetVectorAndUpVectorAreColinear" xml:space="preserve">
+    <value>Target and up vectors are colinear. This is not advised as it may cause unwanted rotation around local Z axis.</value>
   </data>
   <data name="Argument_ValueIsNotNormalized" xml:space="preserve">
     <value>Argument is not normalized.</value>

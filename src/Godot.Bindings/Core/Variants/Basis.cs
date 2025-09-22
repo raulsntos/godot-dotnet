@@ -647,7 +647,7 @@ public struct Basis : IEquatable<Basis>
 #if DEBUG
         if (column0.IsZeroApprox())
         {
-            throw new ArgumentException(SR.Argument_TargetVectorAndUpVectorCantBeParallel);
+            throw new ArgumentException(SR.Argument_TargetVectorAndUpVectorAreColinear);
         }
 #endif
         column0.Normalize();

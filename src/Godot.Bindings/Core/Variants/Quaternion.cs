@@ -584,18 +584,44 @@ public struct Quaternion : IEquatable<Quaternion>
     /// <param name="arcTo">The end point of the arc.</param>
     public Quaternion(Vector3 arcFrom, Vector3 arcTo)
     {
-        Vector3 c = arcFrom.Cross(arcTo);
-        real_t d = arcFrom.Dot(arcTo);
-
-        if (d < -1.0f + Mathf.Epsilon)
+#if DEBUG
+        if (arcFrom.IsZeroApprox() || arcTo.IsZeroApprox())
         {
-            X = 0f;
-            Y = 1f;
-            Z = 0f;
-            W = 0f;
+            throw new ArgumentException(SR.Argument_VectorCantBeZero);
+        }
+#endif
+
+#if REAL_T_IS_DOUBLE
+        const real_t AlmostOne = 0.999999999999999;
+#else
+        const real_t AlmostOne = 0.99999975f;
+#endif
+
+        Vector3 n0 = arcFrom.Normalized();
+        Vector3 n1 = arcTo.Normalized();
+        real_t d = n0.Dot(n1);
+
+        if (real_t.Abs(d) > AlmostOne)
+        {
+            if (d >= 0.0f)
+            {
+                // Vectors are the same.
+                X = 0.0f;
+                Y = 0.0f;
+                Z = 0.0f;
+                W = 1.0f;
+                return;
+            }
+
+            Vector3 axis = n0.GetAnyPerpendicular();
+            X = axis.X;
+            Y = axis.Y;
+            Z = axis.Z;
+            W = 0.0f;
         }
         else
         {
+            Vector3 c = n0.Cross(n1);
             real_t s = real_t.Sqrt((1.0f + d) * 2.0f);
             real_t rs = 1.0f / s;
 
@@ -604,6 +630,8 @@ public struct Quaternion : IEquatable<Quaternion>
             Z = c.Z * rs;
             W = s * 0.5f;
         }
+
+        this = Normalized();
     }
 
     /// <summary>

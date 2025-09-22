@@ -357,6 +357,27 @@ public struct Vector3 : IEquatable<Vector3>
         );
     }
 
+    internal readonly Vector3 GetAnyPerpendicular()
+    {
+        // Return the any perpendicular vector by cross product with the Vector3.Right or Vector3.Up,
+        // whichever has the greater angle to the current vector with the sign of each element positive.
+        // The only essence is "to avoid being parallel to the current vector", and there is no mathematical
+        // basis for using Vector3.Right and Vector3.Up, since it could be a different vector depending on
+        // the prior branching code 'ABS(x) <= ABS(y) && ABS(x) <= ABS(z)'. However, it would be reasonable
+        // to use any of the axes of the basis, as it is simpler to calculate.
+
+        if (IsZeroApprox())
+        {
+            throw new ArgumentException(SR.Argument_VectorCantBeZero);
+        }
+
+        Vector3 v = (real_t.Abs(X) <= real_t.Abs(Y) && real_t.Abs(X) <= real_t.Abs(Z))
+            ? Vector3.Right
+            : Vector3.Up;
+
+        return Cross(v).Normalized();
+    }
+
     /// <summary>
     /// Returns the inverse of this vector. This is the same as <c>new Vector3(1 / v.X, 1 / v.Y, 1 / v.Z)</c>.
     /// </summary>
