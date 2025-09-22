@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 
 namespace Godot;
@@ -1745,7 +1746,7 @@ public static partial class Mathf
     /// <returns>The position of the first non-zero digit.</returns>
     public static int StepDecimals(double step)
     {
-        double[] sd =
+        ReadOnlySpan<double> sd =
         [
             0.9999,
             0.09999,

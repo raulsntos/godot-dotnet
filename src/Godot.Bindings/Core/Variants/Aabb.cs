@@ -502,7 +502,7 @@ public struct Aabb : IEquatable<Aabb>
     /// </returns>
     public readonly bool IntersectsPlane(Plane plane)
     {
-        Span<Vector3> points =
+        ReadOnlySpan<Vector3> points =
         [
             new Vector3(_position.X, _position.Y, _position.Z),
             new Vector3(_position.X, _position.Y, _position.Z + _size.Z),
