@@ -236,7 +236,9 @@ public readonly partial struct Callable
     ///     static void Trampoline(object delegateObj, NativeGodotVariantPtrSpan args, out NativeGodotVariant ret)
     ///     {
     ///         if (args.Count != 1)
-    ///             throw new ArgumentException($&quot;Callable expected {1} arguments but received {args.Count}.&quot;);
+    ///         {
+    ///             throw new ArgumentException($&quot;Callable expected 1 argument but received {args.Count}.&quot;);
+    ///         }
     ///
     ///         TResult res = ((Func&lt;int, string&gt;)delegateObj)(
     ///             VariantConversionCallbacks.GetToManagedCallback&lt;int&gt;()(args[0])

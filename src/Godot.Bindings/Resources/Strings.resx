@@ -131,7 +131,7 @@
     <value>The bytes are not using ASCII encoding or contain invalid characters.</value>
   </data>
   <data name="Argument_CallableArgumentCountMismatch" xml:space="preserve">
-    <value>Invalid argument count for invoking callable. Expected {argCountExpected} arguments, received {argCountReceived}.</value>
+    <value>Invalid argument count for invoking callable. Expected {argCountExpected} argument(s), received {argCountReceived}.</value>
   </data>
   <data name="Argument_ConstantAlreadyRegistered" xml:space="preserve">
     <value>Constant '{constantName}' already registered in class '{typeName}'.</value>
@@ -191,7 +191,7 @@
     <value>Invalid Color Name: {colorName}</value>
   </data>
   <data name="CallError_ArgumentCountMismatch" xml:space="preserve">
-    <value>Invalid call to {methodName}. Expected {expectedArgumentCount} arguments.</value>
+    <value>Invalid call to {methodName}. Expected {expectedArgumentCount} argument(s).</value>
   </data>
   <data name="CallError_InstanceIsNull" xml:space="preserve">
     <value>Attempt to call {methodName} on a null instance.</value>
