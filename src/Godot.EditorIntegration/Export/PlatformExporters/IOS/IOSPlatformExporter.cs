@@ -121,7 +121,7 @@ internal sealed class IOSPlatformExporter : PlatformExporter
 
                 if (path.EndsWith(".dat", StringComparison.OrdinalIgnoreCase))
                 {
-                    context.ExportPlugin.AddIOSBundleFile(path);
+                    context.ExportPlugin.AddAppleEmbeddedPlatformBundleFile(path);
                 }
                 else
                 {
@@ -174,6 +174,6 @@ internal sealed class IOSPlatformExporter : PlatformExporter
             throw new InvalidOperationException(SR.InvalidOperation_GenerateXCFrameworkFailed);
         }
 
-        context.ExportPlugin.AddIOSEmbeddedFramework(xcFrameworkPath);
+        context.ExportPlugin.AddAppleEmbeddedPlatformBundleFile(xcFrameworkPath);
     }
 }
