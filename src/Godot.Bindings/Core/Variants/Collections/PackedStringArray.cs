@@ -78,13 +78,13 @@ public sealed class PackedStringArray :
     }
 
     /// <summary>
-    /// Constructs a new <see cref="PackedStringArray"/> from the given span.
+    /// Constructs a new <see cref="PackedStringArray"/> from the given collection's elements.
     /// </summary>
-    /// <param name="array">The elements to construct from.</param>
+    /// <param name="collection">The elements to construct from.</param>
     /// <returns>A new Packed String Array.</returns>
-    public PackedStringArray(ReadOnlySpan<string> array)
+    public PackedStringArray(ReadOnlySpan<string> collection)
     {
-        NativeValue = NativeGodotPackedStringArray.Create(array).AsMovable();
+        NativeValue = NativeGodotPackedStringArray.Create(collection).AsMovable();
         _weakReferenceToSelf = DisposablesTracker.RegisterDisposable(this);
     }
 

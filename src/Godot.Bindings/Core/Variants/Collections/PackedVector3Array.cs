@@ -79,13 +79,13 @@ public sealed class PackedVector3Array :
     }
 
     /// <summary>
-    /// Constructs a new <see cref="PackedVector3Array"/> from the given span.
+    /// Constructs a new <see cref="PackedVector3Array"/> from the given collection's elements.
     /// </summary>
-    /// <param name="array">The elements to construct from.</param>
+    /// <param name="collection">The elements to construct from.</param>
     /// <returns>A new Packed Vector3 Array.</returns>
-    public PackedVector3Array(ReadOnlySpan<Vector3> array)
+    public PackedVector3Array(ReadOnlySpan<Vector3> collection)
     {
-        NativeValue = NativeGodotPackedVector3Array.Create(array).AsMovable();
+        NativeValue = NativeGodotPackedVector3Array.Create(collection).AsMovable();
         _weakReferenceToSelf = DisposablesTracker.RegisterDisposable(this);
     }
 

@@ -127,13 +127,13 @@ public sealed class GodotArray<[MustBeVariant] T> :
     }
 
     /// <summary>
-    /// Constructs a new <see cref="GodotArray{T}"/> from the given items.
+    /// Constructs a new <see cref="GodotArray{T}"/> from the given collection's elements.
     /// </summary>
-    /// <param name="array">The items to put in the new array.</param>
+    /// <param name="collection">The items to put in the new array.</param>
     /// <returns>A new Godot Array.</returns>
-    public GodotArray(ReadOnlySpan<T> array)
+    public GodotArray(ReadOnlySpan<T> collection)
     {
-        _underlyingArray = GodotArray.CreateTakingOwnership(NativeGodotArray.Create(array));
+        _underlyingArray = GodotArray.CreateTakingOwnership(NativeGodotArray.Create(collection));
         _weakReferenceToSelf = DisposablesTracker.RegisterDisposable(this);
     }
 

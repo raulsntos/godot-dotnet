@@ -80,55 +80,55 @@ public sealed class GodotArray :
     /// <summary>
     /// Constructs a new <see cref="GodotArray"/> from the given Variants.
     /// </summary>
-    /// <param name="array">The Variants to put in the new array.</param>
+    /// <param name="collection">The Variants to put in the new array.</param>
     /// <returns>A new Godot Array.</returns>
-    public GodotArray(ReadOnlySpan<Variant> array)
+    public GodotArray(ReadOnlySpan<Variant> collection)
     {
-        NativeValue = NativeGodotArray.Create(array).AsMovable();
+        NativeValue = NativeGodotArray.Create(collection).AsMovable();
         _weakReferenceToSelf = DisposablesTracker.RegisterDisposable(this);
     }
 
     /// <summary>
     /// Constructs a new <see cref="GodotArray"/> from the given StringNames.
     /// </summary>
-    /// <param name="array">The StringNames to put in the new array.</param>
+    /// <param name="collection">The StringNames to put in the new array.</param>
     /// <returns>A new Godot Array.</returns>
-    public GodotArray(ReadOnlySpan<StringName> array)
+    public GodotArray(ReadOnlySpan<StringName> collection)
     {
-        NativeValue = NativeGodotArray.Create(array).AsMovable();
+        NativeValue = NativeGodotArray.Create(collection).AsMovable();
         _weakReferenceToSelf = DisposablesTracker.RegisterDisposable(this);
     }
 
     /// <summary>
     /// Constructs a new <see cref="GodotArray"/> from the given NodePaths.
     /// </summary>
-    /// <param name="array">The NodePaths to put in the new array.</param>
+    /// <param name="collection">The NodePaths to put in the new array.</param>
     /// <returns>A new Godot Array.</returns>
-    public GodotArray(ReadOnlySpan<NodePath> array)
+    public GodotArray(ReadOnlySpan<NodePath> collection)
     {
-        NativeValue = NativeGodotArray.Create(array).AsMovable();
+        NativeValue = NativeGodotArray.Create(collection).AsMovable();
         _weakReferenceToSelf = DisposablesTracker.RegisterDisposable(this);
     }
 
     /// <summary>
     /// Constructs a new <see cref="GodotArray"/> from the given RIDs.
     /// </summary>
-    /// <param name="array">The RIDs to put in the new array.</param>
+    /// <param name="collection">The RIDs to put in the new array.</param>
     /// <returns>A new Godot Array.</returns>
-    public GodotArray(ReadOnlySpan<Rid> array)
+    public GodotArray(ReadOnlySpan<Rid> collection)
     {
-        NativeValue = NativeGodotArray.Create(array).AsMovable();
+        NativeValue = NativeGodotArray.Create(collection).AsMovable();
         _weakReferenceToSelf = DisposablesTracker.RegisterDisposable(this);
     }
 
     /// <summary>
     /// Constructs a new <see cref="GodotArray"/> from the given objects.
     /// </summary>
-    /// <param name="array">The objects to put in the new array.</param>
+    /// <param name="collection">The objects to put in the new array.</param>
     /// <returns>A new Godot Array.</returns>
-    public GodotArray(ReadOnlySpan<GodotObject> array)
+    public GodotArray(ReadOnlySpan<GodotObject> collection)
     {
-        NativeValue = NativeGodotArray.Create(array).AsMovable();
+        NativeValue = NativeGodotArray.Create(collection).AsMovable();
         _weakReferenceToSelf = DisposablesTracker.RegisterDisposable(this);
     }
 
@@ -155,20 +155,20 @@ public sealed class GodotArray :
     }
 
     /// <summary>
-    /// Constructs a new <see cref="GodotArray"/> from the given span.
+    /// Constructs a new <see cref="GodotArray"/> from the given collection's elements.
     /// </summary>
-    /// <param name="span">The elements to construct from.</param>
+    /// <param name="collection">The elements to construct from.</param>
     /// <returns>A new Godot Array.</returns>
-    public static GodotArray Create(ReadOnlySpan<Variant> span) =>
-        new GodotArray(span);
+    public static GodotArray Create(ReadOnlySpan<Variant> collection) =>
+        new GodotArray(collection);
 
     /// <summary>
-    /// Constructs a new <see cref="GodotArray"/> from the given span.
+    /// Constructs a new <see cref="GodotArray"/> from the given collection's elements.
     /// </summary>
-    /// <param name="span">The elements to construct from.</param>
+    /// <param name="collection">The elements to construct from.</param>
     /// <returns>A new Godot Array.</returns>
-    public static GodotArray<T> Create<[MustBeVariant] T>(ReadOnlySpan<T> span) =>
-        new GodotArray<T>(span);
+    public static GodotArray<T> Create<[MustBeVariant] T>(ReadOnlySpan<T> collection) =>
+        new GodotArray<T>(collection);
 
     /// <summary>
     /// Releases the unmanaged <see cref="GodotArray"/> instance.

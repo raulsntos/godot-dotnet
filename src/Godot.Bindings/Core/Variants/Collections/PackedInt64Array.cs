@@ -79,13 +79,13 @@ public sealed class PackedInt64Array :
     }
 
     /// <summary>
-    /// Constructs a new <see cref="PackedInt64Array"/> from the given span.
+    /// Constructs a new <see cref="PackedInt64Array"/> from the given collection's elements.
     /// </summary>
-    /// <param name="array">The elements to construct from.</param>
+    /// <param name="collection">The elements to construct from.</param>
     /// <returns>A new Packed Int64 Array.</returns>
-    public PackedInt64Array(ReadOnlySpan<long> array)
+    public PackedInt64Array(ReadOnlySpan<long> collection)
     {
-        NativeValue = NativeGodotPackedInt64Array.Create(array).AsMovable();
+        NativeValue = NativeGodotPackedInt64Array.Create(collection).AsMovable();
         _weakReferenceToSelf = DisposablesTracker.RegisterDisposable(this);
     }
 

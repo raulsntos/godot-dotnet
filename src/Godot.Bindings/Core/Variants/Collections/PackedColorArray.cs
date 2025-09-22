@@ -79,13 +79,13 @@ public sealed class PackedColorArray :
     }
 
     /// <summary>
-    /// Constructs a new <see cref="PackedColorArray"/> from the given span.
+    /// Constructs a new <see cref="PackedColorArray"/> from the given collection's elements.
     /// </summary>
-    /// <param name="array">The elements to construct from.</param>
+    /// <param name="collection">The elements to construct from.</param>
     /// <returns>A new Packed Color Array.</returns>
-    public PackedColorArray(ReadOnlySpan<Color> array)
+    public PackedColorArray(ReadOnlySpan<Color> collection)
     {
-        NativeValue = NativeGodotPackedColorArray.Create(array).AsMovable();
+        NativeValue = NativeGodotPackedColorArray.Create(collection).AsMovable();
         _weakReferenceToSelf = DisposablesTracker.RegisterDisposable(this);
     }
 
