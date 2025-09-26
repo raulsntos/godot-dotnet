@@ -8,6 +8,7 @@ using Godot.Bridge;
 using Godot.NativeInterop;
 
 namespace Godot.Collections;
+
 using Range = System.Range;
 
 /// <summary>
@@ -83,6 +84,7 @@ public sealed class PackedVector3Array :
     /// </summary>
     /// <param name="collection">The elements to construct from.</param>
     /// <returns>A new Packed Vector3 Array.</returns>
+    [OverloadResolutionPriority(1)]
     public PackedVector3Array(ReadOnlySpan<Vector3> collection)
     {
         NativeValue = NativeGodotPackedVector3Array.Create(collection).AsMovable();

@@ -82,6 +82,7 @@ public sealed class PackedStringArray :
     /// </summary>
     /// <param name="collection">The elements to construct from.</param>
     /// <returns>A new Packed String Array.</returns>
+    [OverloadResolutionPriority(1)]
     public PackedStringArray(ReadOnlySpan<string> collection)
     {
         NativeValue = NativeGodotPackedStringArray.Create(collection).AsMovable();

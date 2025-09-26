@@ -8,6 +8,7 @@ using Godot.Bridge;
 using Godot.NativeInterop;
 
 namespace Godot.Collections;
+
 using Range = System.Range;
 
 /// <summary>
@@ -83,6 +84,7 @@ public sealed class PackedColorArray :
     /// </summary>
     /// <param name="collection">The elements to construct from.</param>
     /// <returns>A new Packed Color Array.</returns>
+    [OverloadResolutionPriority(1)]
     public PackedColorArray(ReadOnlySpan<Color> collection)
     {
         NativeValue = NativeGodotPackedColorArray.Create(collection).AsMovable();

@@ -8,6 +8,7 @@ using Godot.Bridge;
 using Godot.NativeInterop;
 
 namespace Godot.Collections;
+
 using Range = System.Range;
 
 /// <summary>
@@ -83,6 +84,7 @@ public sealed class PackedFloat32Array :
     /// </summary>
     /// <param name="collection">The elements to construct from.</param>
     /// <returns>A new Packed Float32 Array.</returns>
+    [OverloadResolutionPriority(1)]
     public PackedFloat32Array(ReadOnlySpan<float> collection)
     {
         NativeValue = NativeGodotPackedFloat32Array.Create(collection).AsMovable();
