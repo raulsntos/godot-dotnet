@@ -16,6 +16,15 @@ public class BindMembersGeneratorTests
     }
 
     [Fact]
+    public async Task BindConstructorWithBuilder()
+    {
+        await Verifier.Verify(
+            ["MyNodeWithBuilder.cs"],
+            ["NS.MyNodeWithBuilder.generated.cs"]
+        );
+    }
+
+    [Fact]
     public async Task BindMethods()
     {
         await Verifier.Verify(

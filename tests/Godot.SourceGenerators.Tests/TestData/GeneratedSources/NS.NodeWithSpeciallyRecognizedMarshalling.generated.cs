@@ -32,7 +32,7 @@ partial class NodeWithSpeciallyRecognizedMarshalling
     internal static void BindMembers(global::Godot.Bridge.ClassRegistrationContext context)
 #pragma warning restore CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.
     {
-        context.BindConstructor(() => new NodeWithSpeciallyRecognizedMarshalling());
+        context.BindConstructor(() => new global::NS.NodeWithSpeciallyRecognizedMarshalling());
         context.BindMethod(MethodName.@MethodThatTakesArrayOfInts,
             new global::Godot.Bridge.ParameterInfo(global::Godot.StringName.CreateStaticFromAscii("array"u8), global::Godot.VariantType.PackedInt32Array)
             {

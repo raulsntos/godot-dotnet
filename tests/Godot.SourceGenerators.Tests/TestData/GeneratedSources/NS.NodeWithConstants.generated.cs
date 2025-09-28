@@ -52,7 +52,7 @@ partial class NodeWithConstants
     internal static void BindMembers(global::Godot.Bridge.ClassRegistrationContext context)
 #pragma warning restore CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.
     {
-        context.BindConstructor(() => new NodeWithConstants());
+        context.BindConstructor(() => new global::NS.NodeWithConstants());
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyConstant, (long)(@MyConstant)));
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyNamedConstant, (long)(@MyNamedConstant)));
         context.BindConstant(new global::Godot.Bridge.ConstantInfo(ConstantName.@MyEnumRed, (long)(@MyEnum.@Red))

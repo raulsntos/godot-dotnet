@@ -184,6 +184,30 @@
   <data name="GODOT0102_GodotClassMustNotBeGeneric_Title" xml:space="preserve">
     <value>Class must not be generic</value>
   </data>
+  <data name="GODOT0201_BuilderMethodInaccessible_MessageFormat" xml:space="preserve">
+    <value>Method '{0}' is inaccessible. The method must be accessible from the target type '{1}'. Consider making the method 'public' or 'internal'</value>
+  </data>
+  <data name="GODOT0201_BuilderMethodMustBeStatic_MessageFormat" xml:space="preserve">
+    <value>Method '{0}' has an invalid signature. The method must be static</value>
+  </data>
+  <data name="GODOT0201_BuilderMethodMustHaveNoGenericTypeParameters_MessageFormat" xml:space="preserve">
+    <value>Method '{0}' has an invalid signature. The method must have no generic type parameters</value>
+  </data>
+  <data name="GODOT0201_BuilderMethodMustHaveNoParameters_MessageFormat" xml:space="preserve">
+    <value>Method '{0}' has an invalid signature. The method must have no parameters</value>
+  </data>
+  <data name="GODOT0201_BuilderMethodMustReturnCompatibleType_MessageFormat" xml:space="preserve">
+    <value>Method '{0}' has an invalid signature. The method must return a type assignable to '{1}'</value>
+  </data>
+  <data name="GODOT0201_BuilderMethodNotAvailable_Description" xml:space="preserve">
+    <value>Builder method must be a static method with no parameters, accessible from the annotated type and returning the annotated type or an assignable type.</value>
+  </data>
+  <data name="GODOT0201_BuilderMethodNotAvailable_Title" xml:space="preserve">
+    <value>Valid builder method not found or inaccessible</value>
+  </data>
+  <data name="GODOT0201_BuilderMethodNotFound_MessageFormat" xml:space="preserve">
+    <value>Method '{0}' not found. Make sure the specified type contains the method with the specified name. Consider using 'nameof' to ensure the name is correct</value>
+  </data>
   <data name="GODOT0301_ConstantTypeIsNotSupported_Description" xml:space="preserve">
     <value>Bound constants must be an integer type. Change the type to a supported type or remove the '[BindConstant]' attribute.</value>
   </data>

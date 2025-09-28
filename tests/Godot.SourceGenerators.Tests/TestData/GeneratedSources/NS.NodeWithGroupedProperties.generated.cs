@@ -28,7 +28,7 @@ partial class NodeWithGroupedProperties
     internal static void BindMembers(global::Godot.Bridge.ClassRegistrationContext context)
 #pragma warning restore CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.
     {
-        context.BindConstructor(() => new NodeWithGroupedProperties());
+        context.BindConstructor(() => new global::NS.NodeWithGroupedProperties());
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@UngroupedProperty, global::Godot.VariantType.String)
             {
                 Usage = global::Godot.PropertyUsageFlags.Default,

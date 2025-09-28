@@ -3,9 +3,9 @@ using Godot;
 namespace NS;
 
 [GodotClass]
+[BindConstructor(typeof(MyNode), nameof(MyConstructorMethod))]
 public partial class MyNode : Node
 {
-    [BindConstructor]
     public static MyNode MyConstructorMethod() => new();
 
     [Signal]

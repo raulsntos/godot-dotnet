@@ -20,6 +20,6 @@ partial class MyNestedNamespacesNode
     internal static void BindMembers(global::Godot.Bridge.ClassRegistrationContext context)
 #pragma warning restore CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.
     {
-        context.BindConstructor(() => new MyNestedNamespacesNode());
+        context.BindConstructor(() => new global::NamespaceA.NamespaceB.MyNestedNamespacesNode());
     }
 }

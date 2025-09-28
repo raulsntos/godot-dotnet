@@ -24,7 +24,7 @@ partial class ParameterDefaultValues
     internal static void BindMembers(global::Godot.Bridge.ClassRegistrationContext context)
 #pragma warning restore CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.
     {
-        context.BindConstructor(() => new ParameterDefaultValues());
+        context.BindConstructor(() => new global::NS.ParameterDefaultValues());
         context.BindMethod(MethodName.@Method1,
             new global::Godot.Bridge.ParameterInfo(global::Godot.StringName.CreateStaticFromAscii("parameterByte"u8), global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Byte, 42)
             {

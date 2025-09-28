@@ -10,10 +10,29 @@ namespace Godot.SourceGenerators;
 internal readonly record struct GodotConstructorSpec : IEquatable<GodotConstructorSpec>
 {
     /// <summary>
-    /// The name of the static method that will be used to construct the type.
-    /// This is the method in the type that has the <c>[BindConstructor]</c> attribute.
-    /// If this is <see langword="null"/>, the type will be constructed using the
-    /// parameter-less constructor.
+    /// Fully qualified name of the builder type, including the global namespace.
     /// </summary>
-    public string? MethodSymbolName { get; init; }
+    public required string FullyQualifiedBuilderTypeName { get; init; }
+
+    /// <summary>
+    /// The name of the method used to construct the type.
+    /// </summary>
+    public required string MethodSymbolName { get; init; }
+
+    /// <summary>
+    /// Indicates that the method to use to construct the type should be the
+    /// parameterless constructor of the type specified by
+    /// <see cref="FullyQualifiedBuilderTypeName"/>.
+    /// </summary>
+    public bool IsConstructor { get; private init; }
+
+    public static GodotConstructorSpec CreateForConstructor(ITypeSymbol typeSymbol)
+    {
+        return new GodotConstructorSpec()
+        {
+            FullyQualifiedBuilderTypeName = typeSymbol.FullQualifiedNameWithGlobal(),
+            MethodSymbolName = ".ctor",
+            IsConstructor = true,
+        };
+    }
 }

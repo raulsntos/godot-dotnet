@@ -190,14 +190,16 @@ internal static class BindMembersWriter
             return;
         }
 
-        if (string.IsNullOrEmpty(spec.Constructor.Value.MethodSymbolName))
+        var constructor = spec.Constructor.Value;
+
+        if (constructor.IsConstructor)
         {
-            // The spec doesn't specify a method name, just use the class constructor.
-            sb.AppendLine($"context.BindConstructor(() => new {spec.SymbolName}());");
+            // The spec refers to a type constructor.
+            sb.AppendLine($"context.BindConstructor(() => new {constructor.FullyQualifiedBuilderTypeName}());");
         }
         else
         {
-            sb.AppendLine($"context.BindConstructor(() => {spec.SymbolName}.@{spec.Constructor.Value.MethodSymbolName}());");
+            sb.AppendLine($"context.BindConstructor(() => {constructor.FullyQualifiedBuilderTypeName}.@{constructor.MethodSymbolName}());");
         }
     }
 

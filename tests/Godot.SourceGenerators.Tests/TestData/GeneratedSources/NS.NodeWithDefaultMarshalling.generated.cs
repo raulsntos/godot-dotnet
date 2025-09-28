@@ -102,7 +102,7 @@ partial class NodeWithDefaultMarshalling
     internal static void BindMembers(global::Godot.Bridge.ClassRegistrationContext context)
 #pragma warning restore CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.
     {
-        context.BindConstructor(() => new NodeWithDefaultMarshalling());
+        context.BindConstructor(() => new global::NS.NodeWithDefaultMarshalling());
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@PropertyByte, global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Byte)
             {
                 Usage = global::Godot.PropertyUsageFlags.Default,

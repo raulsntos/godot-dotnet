@@ -21,7 +21,7 @@ partial class Node1
     internal static void BindMembers(global::Godot.Bridge.ClassRegistrationContext context)
 #pragma warning restore CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.
     {
-        context.BindConstructor(() => new Node1());
+        context.BindConstructor(() => new global::NS.Node1());
         context.BindProperty(new global::Godot.Bridge.PropertyInfo(PropertyName.@Node1Property, global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Int32)
             {
                 Usage = global::Godot.PropertyUsageFlags.Default,

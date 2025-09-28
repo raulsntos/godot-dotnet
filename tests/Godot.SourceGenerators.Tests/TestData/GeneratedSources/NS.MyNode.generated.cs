@@ -23,7 +23,7 @@ partial class MyNode
     internal static void BindMembers(global::Godot.Bridge.ClassRegistrationContext context)
 #pragma warning restore CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.
     {
-        context.BindConstructor(() => MyNode.@MyConstructorMethod());
+        context.BindConstructor(() => global::NS.MyNode.@MyConstructorMethod());
         context.BindMethod(MethodName.@MyMethod,
             static (MyNode __instance) =>
             {

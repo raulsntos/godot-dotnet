@@ -41,7 +41,14 @@ internal static class ClassSpecCollector
         // Initialize constructor spec if the class is instantiable.
         if (!typeSymbol.IsAbstract)
         {
-            constructor = new GodotConstructorSpec();
+            constructor = GodotConstructorSpec.CreateForConstructor(typeSymbol);
+        }
+
+        // Collect custom constructor spec and override the default one if found.
+        var customConstructor = ConstructorSpecCollector.Collect(compilation, typeSymbol, cancellationToken);
+        if (customConstructor is not null)
+        {
+            constructor = customConstructor;
         }
 
         // Collect containing symbols.
@@ -71,19 +78,13 @@ internal static class ClassSpecCollector
             containingType = containingType.ContainingType;
         }
 
-        // Collect method and constructor specs.
+        // Collect method specs.
         foreach (var methodSymbol in members.OfType<IMethodSymbol>())
         {
             GodotMethodSpec? methodSpec = MethodSpecCollector.Collect(compilation, methodSymbol, cancellationToken);
             if (methodSpec is not null)
             {
                 methods.Add(methodSpec.Value);
-            }
-
-            GodotConstructorSpec? ctorSpec = ConstructorSpecCollector.Collect(compilation, methodSymbol, cancellationToken);
-            if (ctorSpec is not null)
-            {
-                constructor = ctorSpec;
             }
         }
 

@@ -25,7 +25,7 @@ partial class NodeWithSignals
     internal static void BindMembers(global::Godot.Bridge.ClassRegistrationContext context)
 #pragma warning restore CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.
     {
-        context.BindConstructor(() => new NodeWithSignals());
+        context.BindConstructor(() => new global::NS.NodeWithSignals());
         context.BindSignal(new global::Godot.Bridge.SignalInfo(SignalName.@MySignal));
         context.BindSignal(new global::Godot.Bridge.SignalInfo(SignalName.@MyNamedSignal));
         context.BindSignal(new global::Godot.Bridge.SignalInfo(SignalName.@MySignalWithParameters)

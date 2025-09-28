@@ -94,6 +94,67 @@ internal static class Descriptors
     #endregion
 
     #region 02XX: Rules about the [BindConstructor] attribute.
+
+    public static readonly DiagnosticDescriptor GODOT0201_BuilderMethodNotFound = new(
+        id: "GODOT0201",
+        title: SR.GODOT0201_BuilderMethodNotAvailable_Title,
+        messageFormat: SR.GODOT0201_BuilderMethodNotFound_MessageFormat,
+        description: SR.GODOT0201_BuilderMethodNotAvailable_Description,
+        category: Category.Usage,
+        defaultSeverity: DiagnosticSeverity.Error,
+        isEnabledByDefault: true,
+        helpLinkUri: FormatHelpLink("GODOT0201"));
+
+    public static readonly DiagnosticDescriptor GODOT0201_BuilderMethodInaccessible = new(
+        id: "GODOT0201",
+        title: SR.GODOT0201_BuilderMethodNotAvailable_Title,
+        messageFormat: SR.GODOT0201_BuilderMethodInaccessible_MessageFormat,
+        description: SR.GODOT0201_BuilderMethodNotAvailable_Description,
+        category: Category.Usage,
+        defaultSeverity: DiagnosticSeverity.Error,
+        isEnabledByDefault: true,
+        helpLinkUri: FormatHelpLink("GODOT0201"));
+
+    public static readonly DiagnosticDescriptor GODOT0201_BuilderMethodMustBeStatic = new(
+        id: "GODOT0201",
+        title: SR.GODOT0201_BuilderMethodNotAvailable_Title,
+        messageFormat: SR.GODOT0201_BuilderMethodMustBeStatic_MessageFormat,
+        description: SR.GODOT0201_BuilderMethodNotAvailable_Description,
+        category: Category.Usage,
+        defaultSeverity: DiagnosticSeverity.Error,
+        isEnabledByDefault: true,
+        helpLinkUri: FormatHelpLink("GODOT0201"));
+
+    public static readonly DiagnosticDescriptor GODOT0201_BuilderMethodMustHaveNoGenericTypeParameters = new(
+        id: "GODOT0201",
+        title: SR.GODOT0201_BuilderMethodNotAvailable_Title,
+        messageFormat: SR.GODOT0201_BuilderMethodMustHaveNoGenericTypeParameters_MessageFormat,
+        description: SR.GODOT0201_BuilderMethodNotAvailable_Description,
+        category: Category.Usage,
+        defaultSeverity: DiagnosticSeverity.Error,
+        isEnabledByDefault: true,
+        helpLinkUri: FormatHelpLink("GODOT0201"));
+
+    public static readonly DiagnosticDescriptor GODOT0201_BuilderMethodMustHaveNoParameters = new(
+        id: "GODOT0201",
+        title: SR.GODOT0201_BuilderMethodNotAvailable_Title,
+        messageFormat: SR.GODOT0201_BuilderMethodMustHaveNoParameters_MessageFormat,
+        description: SR.GODOT0201_BuilderMethodNotAvailable_Description,
+        category: Category.Usage,
+        defaultSeverity: DiagnosticSeverity.Error,
+        isEnabledByDefault: true,
+        helpLinkUri: FormatHelpLink("GODOT0201"));
+
+    public static readonly DiagnosticDescriptor GODOT0201_BuilderMethodMustReturnCompatibleType = new(
+        id: "GODOT0201",
+        title: SR.GODOT0201_BuilderMethodNotAvailable_Title,
+        messageFormat: SR.GODOT0201_BuilderMethodMustReturnCompatibleType_MessageFormat,
+        description: SR.GODOT0201_BuilderMethodNotAvailable_Description,
+        category: Category.Usage,
+        defaultSeverity: DiagnosticSeverity.Error,
+        isEnabledByDefault: true,
+        helpLinkUri: FormatHelpLink("GODOT0201"));
+
     #endregion
 
     #region 03XX: Rules about the [BindConstant] attribute.
