@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DefaultItemExcludesInProjectFolder>$(DefaultItemExcludesInProjectFolder);TestData\**</DefaultItemExcludesInProjectFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(RepoRoot)\src\Godot.UpgradeAssistant.Providers\Godot.UpgradeAssistant.Providers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing" Version="$(MicrosoftCodeAnalysisCSharpAnalyzerTestingVersion)" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing" Version="$(MicrosoftCodeAnalysisCSharpCodeFixTestingVersion)" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="$(MicrosoftCodeAnalysisCSharpVersion)" />
+    <PackageReference Include="NuGet.Protocol" Version="$(NuGetProtocolVersion)" />
+    <PackageReference Include="Serilog" Version="$(SerilogVersion)" />
+  </ItemGroup>
+
+  <ItemGroup Label="Godot References">
+    <!-- References to the Godot bindings packages used in the tests. -->
+    <ProjectReference Include="$(RepoRoot)\src\Godot.Bindings\Godot.Bindings.csproj" />
+    <PackageDownload Include="GodotSharp" Version="[4.5.0]" />
+    <PackageDownload Include="GodotSharpEditor" Version="[4.5.0]" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="ArchivedAssemblies\**\*.dll" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="TestData\**\*.cs" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>
