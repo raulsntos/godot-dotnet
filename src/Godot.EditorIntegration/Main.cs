@@ -5,6 +5,7 @@ using Godot.Bridge;
 using Godot.EditorIntegration.Build.UI;
 using Godot.EditorIntegration.Export;
 using Godot.EditorIntegration.Internals;
+using Godot.EditorIntegration.UpgradeAssistant;
 
 [assembly: DisableRuntimeMarshalling]
 [assembly: DisableGodotEntryPointGeneration]
@@ -27,6 +28,9 @@ internal static class Main
         GodotRegistry.RegisterInternalClass<MSBuildPanel>(MSBuildPanel.BindMembers);
         GodotRegistry.RegisterInternalClass<BuildProblemsView>(BuildProblemsView.BindMembers);
         GodotRegistry.RegisterInternalClass<BuildOutputView>(BuildOutputView.BindMembers);
+
+        GodotRegistry.RegisterInternalClass<ResourceFormatLoaderCSharpScript>(ResourceFormatLoaderCSharpScript.BindMembers);
+        GodotRegistry.RegisterInternalClass<CSharpScript>(CSharpScript.BindMembers);
 
         GodotRegistry.AddEditorPluginByType<DotNetEditorPlugin>();
     }

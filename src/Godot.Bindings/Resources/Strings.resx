@@ -265,6 +265,9 @@
   <data name="InvalidOperation_VariantCantBeEnumerated" xml:space="preserve">
     <value>Can't enumerate Variant '{variantValue}'.</value>
   </data>
+  <data name="InvalidOperation_VariantEvaluateOperationInvalid" xml:space="preserve">
+    <value>Operation {op} is invalid between '{left}' and '{right}'.</value>
+  </data>
   <data name="KeyNotFound_DictionaryKeyNotFound" xml:space="preserve">
     <value>The given key '{key}' was not present in the dictionary.</value>
   </data>

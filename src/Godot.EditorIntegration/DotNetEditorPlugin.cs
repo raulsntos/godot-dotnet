@@ -10,6 +10,7 @@ using Godot.EditorIntegration.CodeEditors;
 using Godot.EditorIntegration.Export;
 using Godot.EditorIntegration.Internals;
 using Godot.EditorIntegration.ProjectEditor;
+using Godot.EditorIntegration.UpgradeAssistant;
 using Microsoft.VisualStudio.SolutionPersistence.Model;
 using Microsoft.VisualStudio.SolutionPersistence.Serializer;
 
@@ -93,31 +94,6 @@ internal sealed partial class DotNetEditorPlugin : EditorPlugin
         _toolBarBuildButton.Show();
 
         return true;
-    }
-
-    private static void ApplyNecessaryChangesToSolution()
-    {
-        try
-        {
-            var msbuildProject = MSBuildProject.Open(EditorPath.ProjectCSProjPath);
-            if (msbuildProject is null)
-            {
-                throw new InvalidOperationException(SR.DotNetEditorPlugin_InvalidOperation_CannotOpenCSharpProject);
-            }
-
-            // NOTE: The order in which changes are made to the project is important.
-
-            msbuildProject.EnsureGodotSdkIsUpToDate();
-
-            if (msbuildProject.HasUnsavedChanges)
-            {
-                msbuildProject.Save();
-            }
-        }
-        catch (Exception e)
-        {
-            GD.PushError(e.ToString());
-        }
     }
 
     private enum MenuOptions
@@ -259,7 +235,17 @@ internal sealed partial class DotNetEditorPlugin : EditorPlugin
 
         if (File.Exists(EditorPath.ProjectCSProjPath))
         {
-            ApplyNecessaryChangesToSolution();
+            // TODO(@raulsntos): The time at which the upgrade assistant is executed is important, it needs to run early enough to prevent showing errors in the console about broken scenes/resources with attached `.cs` files, but not too early otherwise the scenes/resources fail to load. This also means this process needs to block the editor from continuing loading the project until the upgrade is done, so using EditorProgress doesn't seem to be possible (although it'd be nice to have a progress bar).
+            // EditorProgress.Invoke("upgrade_dotnet_project", SR.DotNetEditorPlugin_UpgradeSolutionEditorProgressLabel, 3, progress =>
+            {
+                var upgradeAssistant = new GodotUpgradeAssistant();
+
+                // progress.Step(SR.DotNetEditorPlugin_UpgradeSolutionEditorProgressStep_Prepare);
+                upgradeAssistant.Prepare();
+
+                // progress.Step(SR.DotNetEditorPlugin_UpgradeSolutionEditorProgressStep_Upgrade);
+                upgradeAssistant.Upgrade();
+            }//);
         }
         else
         {
