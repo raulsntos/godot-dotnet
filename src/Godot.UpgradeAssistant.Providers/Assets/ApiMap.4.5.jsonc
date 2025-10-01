@@ -1,0 +1,109 @@
+// This file contains the mapping for Godot APIs that changed from Godot 4.4 to 4.5.
+// APIs are sorted by kind and then alphabetically.
+{
+  ////////////////////////////////////////////////////////////
+  //                       NAMESPACES                       //
+  ////////////////////////////////////////////////////////////
+
+  ////////////////////////////////////////////////////////////
+  //                         TYPES                          //
+  ////////////////////////////////////////////////////////////
+
+  ////////////////////////////////////////////////////////////
+  //                         FIELDS                         //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.JsonRpc.MethodName.SetScope": {
+    // Replaced in https://github.com/godotengine/godot/pull/104890
+    "value": "Godot.JsonRpc.MethodName.SetMethod",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "needsManualUpgrade": true,
+    "version": "4.5.0",
+  },
+  "Godot.RenderingDevice.Features.Address": {
+    // Renamed in https://github.com/godotengine/godot/pull/103941
+    "value": "Godot.RenderingDevice.Features.BufferDeviceAddress",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.5.0",
+  },
+  "Godot.RenderingServer.MethodName.InstanceResetPhysicsInterpolation": {
+    // Removed in https://github.com/godotengine/godot/pull/104269
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.5.0",
+  },
+  "Godot.RenderingServer.MethodName.InstanceSetInterpolated": {
+    // Removed in https://github.com/godotengine/godot/pull/104269
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.5.0",
+  },
+
+  ////////////////////////////////////////////////////////////
+  //                       PROPERTIES                       //
+  ////////////////////////////////////////////////////////////
+
+  ////////////////////////////////////////////////////////////
+  //                        METHODS                         //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.EditorExportPlatformExtension._GetOptionIcon": {
+    // Replaced in https://github.com/godotengine/godot/pull/108825
+    "value": "Godot.EditorExportPlatformExtension._GetOptionIcon",
+    "kind": "method",
+    "state": "Replaced",
+    "needsManualUpgrade": true,
+    "version": "4.5.0",
+  },
+  "Godot.JsonRpc.SetScope": {
+    // Replaced in https://github.com/godotengine/godot/pull/104890
+    "value": "Godot.JsonRpc.SetMethod",
+    "kind": "method",
+    "state": "Replaced",
+    "needsManualUpgrade": true,
+    "version": "4.5.0",
+  },
+  "Godot.Node.GetRpcConfig": {
+    // Replaced in https://github.com/godotengine/godot/pull/106848
+    "value": "Godot.Node.GetNodeRpcConfig",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.5.0",
+  },
+  "Godot.RenderingServer.InstanceResetPhysicsInterpolation": {
+    // Removed in https://github.com/godotengine/godot/pull/104269
+    "kind": "method",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.5.0",
+  },
+  "Godot.RenderingServer.InstanceSetInterpolated": {
+    // Removed in https://github.com/godotengine/godot/pull/104269
+    "kind": "method",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.5.0",
+  },
+  "Godot.RenderingServerInstance.InstanceResetPhysicsInterpolation": {
+    // Removed in https://github.com/godotengine/godot/pull/104269
+    "kind": "method",
+    "state": "Removed",
+    "version": "4.5.0",
+  },
+  "Godot.RenderingServerInstance.InstanceSetInterpolated": {
+    // Removed in https://github.com/godotengine/godot/pull/104269
+    "kind": "method",
+    "state": "Removed",
+    "version": "4.5.0",
+  },
+
+  ////////////////////////////////////////////////////////////
+  //                        EVENTS                          //
+  ////////////////////////////////////////////////////////////
+}

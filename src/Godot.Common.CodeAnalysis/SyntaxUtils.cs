@@ -14,6 +14,157 @@ namespace Godot.Common.CodeAnalysis;
 /// </summary>
 internal static class SyntaxUtils
 {
+    /// <summary>
+    /// Concatenate identifier names using <c>.</c> as separator
+    /// and skipping <see langword="null"/> or empty identifiers.
+    /// </summary>
+    /// <param name="leftIdentifier">The preceding identifier.</param>
+    /// <param name="rightIdentifier">The subsequent identifier.</param>
+    /// <returns>The concatenated identifiers.</returns>
+    public static string ConcatIdentifiers(string? leftIdentifier, string? rightIdentifier)
+    {
+        if (!string.IsNullOrEmpty(leftIdentifier) && !string.IsNullOrEmpty(rightIdentifier))
+        {
+            return $"{leftIdentifier}.{rightIdentifier}";
+        }
+
+        if (string.IsNullOrEmpty(leftIdentifier) && string.IsNullOrEmpty(rightIdentifier))
+        {
+            return "";
+        }
+
+        return string.IsNullOrEmpty(leftIdentifier) ? rightIdentifier! : leftIdentifier!;
+    }
+
+    /// <summary>
+    /// Check if the syntax node is an alias-qualified syntax node where the alias is the global namespace.
+    /// </summary>
+    /// <seealso cref="IsAliasQualifiedSyntax(SyntaxNode, out AliasQualifiedNameSyntax?)"/>
+    /// <param name="syntaxNode">The syntax node to check.</param>
+    /// <returns>Whether the syntax node is an expression qualified by the global namespace.</returns>
+    public static bool IsGlobalQualifiedSyntax(SyntaxNode syntaxNode)
+    {
+        return IsAliasQualifiedSyntax(syntaxNode, out var aliasQualifiedNameSyntax)
+            && aliasQualifiedNameSyntax.Alias.Identifier.IsKind(SyntaxKind.GlobalKeyword);
+    }
+
+    /// <summary>
+    /// Check if the syntax node is an alias-qualified syntax.
+    /// </summary>
+    /// <remarks>
+    /// An expression is considered alias-qualified when the leftmost part of the expression
+    /// is a syntax node of type <see cref="AliasQualifiedNameSyntax"/>.
+    /// </remarks>
+    /// <param name="syntaxNode">The syntax node to check.</param>
+    /// <param name="aliasQualifiedNameSyntax">The retrieved alias-qualified name syntax.</param>
+    /// <returns>Whether the syntax node is a simple member access expression.</returns>
+    public static bool IsAliasQualifiedSyntax(SyntaxNode syntaxNode, [NotNullWhen(true)] out AliasQualifiedNameSyntax? aliasQualifiedNameSyntax)
+    {
+        // Check if the syntax node is already an alias-qualified syntax.
+        if (syntaxNode is AliasQualifiedNameSyntax syntaxNodeAsAlias)
+        {
+            aliasQualifiedNameSyntax = syntaxNodeAsAlias;
+            return true;
+        }
+
+        if (syntaxNode is QualifiedNameSyntax { Left: AliasQualifiedNameSyntax aliasInQualifiedSyntax })
+        {
+            aliasQualifiedNameSyntax = aliasInQualifiedSyntax;
+            return true;
+        }
+
+        if (syntaxNode is MemberAccessExpressionSyntax syntaxNodeAsMemberAccess)
+        {
+            // Get the leftmost part of the expression.
+            ExpressionSyntax expression = syntaxNodeAsMemberAccess.Expression;
+            while (expression is MemberAccessExpressionSyntax memberAccessExpressionSyntax)
+            {
+                expression = memberAccessExpressionSyntax.Expression;
+            }
+
+            aliasQualifiedNameSyntax = expression as AliasQualifiedNameSyntax;
+            return aliasQualifiedNameSyntax is not null;
+        }
+
+        aliasQualifiedNameSyntax = null;
+        return false;
+    }
+
+    /// <summary>
+    /// Check if the syntax node is a simple <see cref="MemberAccessExpressionSyntax"/>.
+    /// </summary>
+    /// <param name="syntaxNode">The syntax node to check.</param>
+    /// <returns>Whether the syntax node is a simple member access expression.</returns>
+    public static bool IsSimpleMemberAccessExpression(SyntaxNode syntaxNode)
+    {
+        if (syntaxNode is not MemberAccessExpressionSyntax)
+        {
+            return false;
+        }
+
+        if (syntaxNode.Parent is MemberAccessExpressionSyntax)
+        {
+            return false;
+        }
+
+        if (syntaxNode.ChildNodes().FirstOrDefault() is MemberAccessExpressionSyntax)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Check if the syntax node references a generic name.
+    /// The <paramref name="syntaxNode"/> itself may not be the instance of
+    /// <see cref="GenericNameSyntax"/>.
+    /// </summary>
+    /// <param name="syntaxNode">The syntax node to check.</param>
+    /// <param name="typeArguments">
+    /// The type syntax nodes that represent the type arguments of the generic name.
+    /// </param>
+    /// <returns>Whether the syntax node references a generic name.</returns>
+    public static bool IsGenericNameSyntax(SyntaxNode syntaxNode, out IReadOnlyList<TypeSyntax>? typeArguments)
+    {
+        if (syntaxNode is GenericNameSyntax genericNameSyntax)
+        {
+            typeArguments = genericNameSyntax.TypeArgumentList.Arguments;
+            return true;
+        }
+        if (syntaxNode is MemberAccessExpressionSyntax { Name: GenericNameSyntax name })
+        {
+            typeArguments = name.TypeArgumentList.Arguments;
+            return true;
+        }
+        typeArguments = null;
+        return false;
+    }
+
+    /// <summary>
+    /// If <paramref name="syntaxNode"/> is just an identifier inside a longer
+    /// qualified name syntax or expression, tries to get the syntax node that
+    /// represents the fully-qualified name; otherwise, returns the same node.
+    /// </summary>
+    /// <param name="syntaxNode">The syntax node that represents a name.</param>
+    /// <returns>The syntax node that represents the fully-qualified name.</returns>
+    public static SyntaxNode GetFullNameSyntax(SyntaxNode syntaxNode)
+    {
+        if (syntaxNode.Parent is QualifiedNameSyntax qualifiedNameSyntax
+         && qualifiedNameSyntax.Right.IsEquivalentTo(syntaxNode))
+        {
+            return qualifiedNameSyntax;
+        }
+
+        if (syntaxNode.Parent is MemberAccessExpressionSyntax memberAccessExpressionSyntax
+         && memberAccessExpressionSyntax.Name.IsEquivalentTo(syntaxNode))
+        {
+            return memberAccessExpressionSyntax;
+        }
+
+        return syntaxNode;
+    }
+
 #if NET9_0_OR_GREATER
     /// <summary>
     /// Create a <see cref="QualifiedNameSyntax"/> to reference a type
@@ -109,6 +260,41 @@ internal static class SyntaxUtils
         return newSyntaxNode!;
     }
 #endif
+
+    /// <summary>
+    /// Create a <see cref="InvocationExpressionSyntax"/> to invoke the method
+    /// specified by the provided fully-qualified name. If <paramref name="await"/>
+    /// is <see langword="true"/>, the created invocation expression will be wrapped
+    /// in a <see cref="AwaitExpressionSyntax"/>.
+    /// </summary>
+    /// <remarks>
+    /// This method handles parsing the fully-qualified name, including generic type arguments,
+    /// so we can easily create method invocations.
+    /// If the old method invocation was an argument in another invocation expression, it will
+    /// preserve the other arguments in the parent invocation expression.
+    /// If the method is async and the containing method is declared with the <see langword="async"/>
+    /// keyword, it will wrap the invocation in an await expression.
+    /// </remarks>
+    /// <param name="methodFullName">The fully-qualified name of the method, including generic type arguments.</param>
+    /// <param name="arguments">The argument syntax nodes that will be added to the new invocation expression.</param>
+    /// <param name="await">Whether the invocation expression should be wrapped in an await expression.</param>
+    /// <returns>The <see cref="InvocationExpressionSyntax"/> or <see cref="AwaitExpressionSyntax"/> node.</returns>
+    public static ExpressionSyntax CreateInvocationExpression(string methodFullName, IEnumerable<ArgumentSyntax>? arguments = null, bool await = false)
+    {
+        InvocationExpressionSyntax newSyntaxNode = SyntaxFactory.InvocationExpression(SyntaxFactory.ParseExpression(methodFullName));
+
+        if (arguments is not null)
+        {
+            newSyntaxNode = newSyntaxNode.WithArgumentList(SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(arguments)));
+        }
+
+        if (await)
+        {
+            return SyntaxFactory.AwaitExpression(newSyntaxNode.WithLeadingTrivia(SyntaxFactory.ElasticSpace));
+        }
+
+        return newSyntaxNode;
+    }
 
 #if NET9_0_OR_GREATER
     /// <summary>
@@ -243,6 +429,67 @@ internal static class SyntaxUtils
         return compilationUnitSyntax.AddUsings([
             SyntaxFactory.UsingDirective(SyntaxFactory.IdentifierName(namespaceName)),
         ]);
+    }
+
+    /// <summary>
+    /// Adds comment to the provided syntax node or one of its ancestors that is better suited
+    /// for the comment trivia, and returns the modified syntax node.
+    /// </summary>
+    /// <param name="root">Root syntax node of the document to modify.</param>
+    /// <param name="syntaxNode">The target syntax node to add the comment to.</param>
+    /// <param name="comment">The text content of the comment without <c>//</c>.</param>
+    /// <returns>The changed root syntax node with the comment added.</returns>
+    public static SyntaxNode AddComment(SyntaxNode root, SyntaxNode syntaxNode, string comment)
+    {
+        SyntaxNode commentOwnerSyntax = GetCommentOwnerSyntax(syntaxNode);
+
+        // Add comment trivia preserving the existing leading trivia.
+        SyntaxTrivia commentTrivia = SyntaxFactory.Comment($"// {comment}");
+        SyntaxTriviaList triviaList = commentOwnerSyntax.GetLeadingTrivia()
+            .Add(commentTrivia).Add(SyntaxFactory.ElasticCarriageReturnLineFeed);
+
+        SyntaxNode newCommentOwnerSyntax = commentOwnerSyntax.WithLeadingTrivia(triviaList);
+        return root.ReplaceNode(commentOwnerSyntax, newCommentOwnerSyntax);
+
+        static SyntaxNode GetCommentOwnerSyntax(SyntaxNode syntaxNode)
+        {
+            UsingDirectiveSyntax? usingDirectiveSyntax = syntaxNode
+                .Ancestors()
+                .OfType<UsingDirectiveSyntax>()
+                .FirstOrDefault();
+            if (usingDirectiveSyntax is not null)
+            {
+                return usingDirectiveSyntax;
+            }
+
+            if (syntaxNode.Parent is AttributeListSyntax { Attributes.Count: 1 } attributeListSyntax)
+            {
+                // If the syntax node is an attribute and the attribute list
+                // only contains this attribute, the comment can be added to
+                // the attribute list.
+                return attributeListSyntax;
+            }
+
+            if (syntaxNode.Parent is VariableDeclarationSyntax { Parent: FieldDeclarationSyntax fieldDeclarationSyntax })
+            {
+                // If the syntax node belongs to a field declaration,
+                // the comment must be added to the field declaration.
+                return fieldDeclarationSyntax;
+            }
+
+            // Otherwise, try to find the closest statement syntax node and add the comment there.
+            StatementSyntax? statementSyntax = syntaxNode
+                .Ancestors()
+                .OfType<StatementSyntax>()
+                .FirstOrDefault();
+            if (statementSyntax is not null)
+            {
+                return statementSyntax;
+            }
+
+            // No better-suited syntax node found, just add the comment to the original syntax node.
+            return syntaxNode;
+        }
     }
 
     /// <summary>

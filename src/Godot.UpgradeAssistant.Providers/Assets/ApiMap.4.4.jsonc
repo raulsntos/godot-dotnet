@@ -1,0 +1,141 @@
+// This file contains the mapping for Godot APIs that changed from Godot 4.3 to 4.4.
+// APIs are sorted by kind and then alphabetically.
+{
+  ////////////////////////////////////////////////////////////
+  //                       NAMESPACES                       //
+  ////////////////////////////////////////////////////////////
+
+  ////////////////////////////////////////////////////////////
+  //                         TYPES                          //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.ExternalTexture": {
+    // Implemented in https://github.com/godotengine/godot/pull/96982
+    "value": "Godot.ExternalTexture",
+    "kind": "type",
+    "state": "Replaced",
+    "version": "4.4.0",
+  },
+
+  ////////////////////////////////////////////////////////////
+  //                         FIELDS                         //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.AudioStreamPlayer.MethodName._SetPlaying": {
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.4.0",
+  },
+  "Godot.AudioStreamPlayer2D.MethodName._SetPlaying": {
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.4.0",
+  },
+  "Godot.AudioStreamPlayer3D.MethodName._SetPlaying": {
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.4.0",
+  },
+  "Godot.ShapeCast2D.MethodName._GetCollisionResult": {
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.4.0",
+  },
+  "Godot.ShapeCast3D.MethodName._GetCollisionResult": {
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.4.0",
+  },
+
+  ////////////////////////////////////////////////////////////
+  //                       PROPERTIES                       //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.MultiMesh.PhysicsInterpolationQuality": {
+    // Implemented in https://github.com/godotengine/godot/pull/92391
+    "value": "Godot.MultiMesh.PhysicsInterpolationQuality",
+    "kind": "property",
+    "state": "Replaced",
+    "version": "4.4.0",
+  },
+  "Godot.SceneTree.PhysicsInterpolation": {
+    // Implemented in https://github.com/godotengine/godot/pull/92391
+    "value": "Godot.SceneTree.PhysicsInterpolation",
+    "kind": "property",
+    "state": "Replaced",
+    "version": "4.4.0",
+  },
+  "Godot.VisualShaderNodeCubemap.CubeMap": {
+    // Replaced in https://github.com/godotengine/godot/pull/95126
+    "value": "Godot.VisualShaderNodeCubemap.CubeMap",
+    "kind": "property",
+    "state": "Replaced",
+    "version": "4.4.0",
+  },
+  "Godot.VisualShaderNodeTexture2DArray.TextureArray": {
+    // Replaced in https://github.com/godotengine/godot/pull/95126
+    "value": "Godot.VisualShaderNodeTexture2DArray.TextureArray",
+    "kind": "property",
+    "state": "Replaced",
+    "version": "4.4.0",
+  },
+
+  ////////////////////////////////////////////////////////////
+  //                        METHODS                         //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.EditorTranslationParserPlugin._ParseFile": {
+    // Replaced in https://github.com/godotengine/godot/pull/99297
+    "value": "Godot.EditorTranslationParserPlugin._ParseFile",
+    "kind": "method",
+    "state": "Replaced",
+    "needsManualUpgrade": true,
+    "version": "4.4.0",
+  },
+  "Godot.Shader.GetDefaultTextureParameter": {
+    // Replaced in https://github.com/godotengine/godot/pull/95126
+    "value": "Godot.Shader.GetDefaultTextureParameter",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.4.0",
+  },
+  "Godot.Spatial.GetGlobalTransformInterpolated": {
+    // Implemented in https://github.com/godotengine/godot/pull/92391
+    "value": "Godot.Node3D.GetGlobalTransformInterpolated",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.4.0",
+  },
+  "Godot.VisualShaderNodeCubemap.GetCubeMap": {
+    // Replaced in https://github.com/godotengine/godot/pull/95126
+    "value": "Godot.VisualShaderNodeCubemap.GetCubeMap",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.4.0",
+  },
+  "Godot.VisualShaderNodeTexture2DArray.GetTextureArray": {
+    // Replaced in https://github.com/godotengine/godot/pull/95126
+    "value": "Godot.VisualShaderNodeTexture2DArray.GetTextureArray",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.4.0",
+  },
+
+  ////////////////////////////////////////////////////////////
+  //                        EVENTS                          //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.GraphEdit.FrameRectChanged": {
+    // Replaced in https://github.com/godotengine/godot/pull/102796
+    "value": "Godot.GraphEdit.FrameRectChanged",
+    "kind": "event",
+    "state": "Replaced",
+    "needsManualUpgrade": true,
+    "version": "4.4.0",
+  },
+}

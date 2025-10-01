@@ -1,0 +1,359 @@
+// This file contains the mapping for Godot APIs that changed from Godot 4.0 to 4.1.
+// APIs are sorted by kind and then alphabetically.
+{
+  ////////////////////////////////////////////////////////////
+  //                       NAMESPACES                       //
+  ////////////////////////////////////////////////////////////
+
+  ////////////////////////////////////////////////////////////
+  //                         TYPES                          //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.AnimationTrackEditPlugin": {
+    // Removed in https://github.com/godotengine/godot/pull/76413
+    "kind": "type",
+    "state": "Removed",
+    "version": "4.1.0",
+  },
+  "Godot.GLTFCollider": {
+    // Implemented in https://github.com/godotengine/godot/pull/69266 and renamed in https://github.com/godotengine/godot/pull/78352
+    "value": "Godot.GltfPhysicsShape",
+    "kind": "type",
+    "state": "Replaced",
+    "version": "4.1.0",
+  },
+  "Godot.GLTFPhysicsBody": {
+    // Implemented in https://github.com/godotengine/godot/pull/69266
+    "value": "Godot.GltfPhysicsBody",
+    "kind": "type",
+    "state": "Replaced",
+    "version": "4.1.0",
+  },
+
+  ////////////////////////////////////////////////////////////
+  //                         FIELDS                         //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.NavigationAgent3D.MethodName.GetAgentHeightOffset": {
+    // Renamed in https://github.com/godotengine/godot/pull/69988
+    "value": "Godot.NavigationAgent3D.MethodName.GetPathHeightOffset",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationAgent3D.MethodName.GetIgnoreY": {
+    // Removed in https://github.com/godotengine/godot/pull/69988
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationAgent3D.MethodName.SetAgentHeightOffset": {
+    // Renamed in https://github.com/godotengine/godot/pull/69988
+    "value": "Godot.NavigationAgent3D.MethodName.SetPathHeightOffset",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationAgent3D.MethodName.SetIgnoreY": {
+    // Removed in https://github.com/godotengine/godot/pull/69988
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationAgent3D.PropertyName.AgentHeightOffset": {
+    // Renamed in https://github.com/godotengine/godot/pull/69988
+    "value": "Godot.NavigationAgent3D.PropertyName.PathHeightOffset",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationAgent3D.PropertyName.IgnoreY": {
+    // Removed in https://github.com/godotengine/godot/pull/69988
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationObstacle2D.MethodName.IsRadiusEstimated": {
+    // Removed in https://github.com/godotengine/godot/pull/69988
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationObstacle2D.MethodName.SetEstimateRadius": {
+    // Removed in https://github.com/godotengine/godot/pull/69988
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationObstacle2D.PropertyName.EstimateRadius": {
+    // Removed in https://github.com/godotengine/godot/pull/69988
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationObstacle3D.MethodName.IsRadiusEstimated": {
+    // Removed in https://github.com/godotengine/godot/pull/69988
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationObstacle3D.MethodName.SetEstimateRadius": {
+    // Removed in https://github.com/godotengine/godot/pull/69988
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationObstacle3D.PropertyName.EstimateRadius": {
+    // Removed in https://github.com/godotengine/godot/pull/69988
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationServer2D.MethodName.AgentSetCallback": {
+    // Renamed in https://github.com/godotengine/godot/pull/69988
+    "value": "Godot.NavigationServer2D.MethodName.AgentSetAvoidanceCallback",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationServer2D.MethodName.AgentSetTargetVelocity": {
+    // Removed in https://github.com/godotengine/godot/pull/69988
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationServer3D.MethodName.AgentSetCallback": {
+    // Renamed in https://github.com/godotengine/godot/pull/69988
+    "value": "Godot.NavigationServer3D.MethodName.AgentSetAvoidanceCallback",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationServer3D.MethodName.AgentSetTargetVelocity": {
+    // Removed in https://github.com/godotengine/godot/pull/69988
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.PathFollow2D.MethodName.GetLookahead": {
+    // Removed in https://github.com/godotengine/godot/pull/72842
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.PathFollow2D.MethodName.SetLookahead": {
+    // Removed in https://github.com/godotengine/godot/pull/72842
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.PathFollow2D.PropertyName.Lookahead": {
+    // Removed in https://github.com/godotengine/godot/pull/72842
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+
+  ////////////////////////////////////////////////////////////
+  //                       PROPERTIES                       //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.GLTFCollider.ArrayMesh": {
+    // Renamed in https://github.com/godotengine/godot/pull/69266
+    "value": "Godot.GltfPhysicsShape.ImporterMesh",
+    "kind": "property",
+    "state": "Replaced",
+    "version": "4.1.0",
+  },
+  "Godot.InputEventMouseButton.Canceled": {
+    // Implemented in https://github.com/godotengine/godot/pull/76719
+    "value": "Godot.InputEventMouseButton.Canceled",
+    "kind": "property",
+    "state": "Replaced",
+    "version": "4.1.0",
+  },
+  "Godot.InputEventScreenTouch.Canceled": {
+    // Implemented in https://github.com/godotengine/godot/pull/76719
+    "value": "Godot.InputEventScreenTouch.Canceled",
+    "kind": "property",
+    "state": "Replaced",
+    "version": "4.1.0",
+  },
+  "Godot.ItemList.AllowSearch": {
+    // Implemented in https://github.com/godotengine/godot/pull/76199
+    "value": "Godot.ItemList.AllowSearch",
+    "kind": "property",
+    "state": "Replaced",
+    "version": "4.1.0",
+  },
+  "Godot.NavigationAgent3D.AgentHeightOffset": {
+    // Renamed in https://github.com/godotengine/godot/pull/69988
+    "value": "Godot.NavigationAgent3D.PathHeightOffset",
+    "kind": "property",
+    "state": "Replaced",
+    "version": "4.1.0",
+  },
+  "Godot.NavigationAgent3D.IgnoreY": {
+    // Removed in https://github.com/godotengine/godot/pull/69988
+    "kind": "property",
+    "state": "Removed",
+    "version": "4.1.0",
+  },
+  "Godot.NavigationObstacle2D.EstimateRadius": {
+    // Removed in https://github.com/godotengine/godot/pull/69988
+    "kind": "property",
+    "state": "Removed",
+    "version": "4.1.0",
+  },
+  "Godot.NavigationObstacle3D.EstimateRadius": {
+    // Removed in https://github.com/godotengine/godot/pull/69988
+    "kind": "property",
+    "state": "Removed",
+    "version": "4.1.0",
+  },
+  "Godot.PathFollow2D.Lookahead": {
+    // Removed in https://github.com/godotengine/godot/pull/72842
+    "kind": "property",
+    "state": "Removed",
+    "version": "4.1.0",
+  },
+  "Godot.Tree.AllowSearch": {
+    // Implemented in https://github.com/godotengine/godot/pull/76199
+    "value": "Godot.Tree.AllowSearch",
+    "kind": "property",
+    "state": "Replaced",
+    "version": "4.1.0",
+  },
+
+  ////////////////////////////////////////////////////////////
+  //                        METHODS                         //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.EditorInterface.IsMovieMakerEnabled": {
+    // Replaced in https://github.com/godotengine/godot/pull/76176
+    "value": "Godot.EditorInterface.MovieMakerEnabled",
+    "kind": "method",
+    "state": "Replaced",
+    "needsManualUpgrade": true,
+    "version": "4.1.0",
+  },
+  "Godot.EditorInterface.SetMovieMakerEnabled": {
+    // Replaced in https://github.com/godotengine/godot/pull/76176,
+    "value": "Godot.EditorInterface.MovieMakerEnabled",
+    "kind": "method",
+    "state": "Replaced",
+    "needsManualUpgrade": true,
+    "version": "4.1.0",
+  },
+  "Godot.InputEvent.IsCanceled": {
+    // Implemented in https://github.com/godotengine/godot/pull/76719
+    "value": "Godot.InputEvent.IsCanceled",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.1.0",
+  },
+  "Godot.InputEvent.IsReleased": {
+    // Implemented in https://github.com/godotengine/godot/pull/76719
+    "value": "Godot.InputEvent.IsReleased",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.1.0",
+  },
+  "Godot.NavigationAgent2D.SetVelocity": {
+    // Replaced in https://github.com/godotengine/godot/pull/69988
+    "value": "Godot.NavigationAgent2D.Velocity",
+    "kind": "method",
+    "state": "Replaced",
+    "needsManualUpgrade": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationAgent3D.SetVelocity": {
+    // Replaced in https://github.com/godotengine/godot/pull/69988
+    "value": "Godot.NavigationAgent2D.Velocity",
+    "kind": "method",
+    "state": "Replaced",
+    "needsManualUpgrade": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationServer2D.AgentSetCallback": {
+    // Renamed in https://github.com/godotengine/godot/pull/69988
+    "value": "Godot.NavigationServer2D.AgentSetAvoidanceCallback",
+    "kind": "method",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationServer2D.AgentSetTargetVelocity": {
+    // Removed in https://github.com/godotengine/godot/pull/69988
+    "kind": "method",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationServer3D.AgentSetCallback": {
+    // Renamed in https://github.com/godotengine/godot/pull/69988
+    "value": "Godot.NavigationServer3D.AgentSetAvoidanceCallback",
+    "kind": "method",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.NavigationServer3D.AgentSetTargetVelocity": {
+    // Removed in https://github.com/godotengine/godot/pull/69988
+    "kind": "method",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.1.0",
+  },
+  "Godot.TabContainer.GetTabMetadata": {
+    // Implemented in https://github.com/godotengine/godot/pull/75960
+    "value": "Godot.TabContainer.GetTabMetadata",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.1.0",
+  },
+  "Godot.TabContainer.SetTabMetadata": {
+    // Implemented in https://github.com/godotengine/godot/pull/75960
+    "value": "Godot.TabContainer.SetTabMetadata",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.1.0",
+  },
+  "Godot.Tabs.GetTabMetadata": {
+    // Implemented in https://github.com/godotengine/godot/pull/75960
+    "value": "Godot.TabBar.GetTabMetadata",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.1.0",
+  },
+  "Godot.Tabs.SetTabMetadata": {
+    // Implemented in https://github.com/godotengine/godot/pull/75960
+    "value": "Godot.TabBar.SetTabMetadata",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.1.0",
+  },
+
+  ////////////////////////////////////////////////////////////
+  //                        EVENTS                          //
+  ////////////////////////////////////////////////////////////
+}

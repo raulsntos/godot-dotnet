@@ -1,0 +1,657 @@
+// This file contains the mapping for Godot APIs that changed from Godot 4.1 to 4.2.
+// APIs are sorted by kind and then alphabetically.
+{
+  ////////////////////////////////////////////////////////////
+  //                       NAMESPACES                       //
+  ////////////////////////////////////////////////////////////
+
+  ////////////////////////////////////////////////////////////
+  //                         TYPES                          //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.AnimationPlayer.AnimationFinishedEventHandler": {
+    // Replaced in https://github.com/godotengine/godot/pull/80813
+    "value": "Godot.AnimationMixer.AnimationFinishedEventHandler",
+    "kind": "type",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.AnimationPlayer.AnimationMethodCallMode": {
+    // Replaced in https://github.com/godotengine/godot/pull/80813
+    "value": "Godot.AnimationMixer.AnimationCallbackModeMethod",
+    "kind": "type",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.AnimationPlayer.AnimationProcessCallback": {
+    // Replaced in https://github.com/godotengine/godot/pull/80813
+    "value": "Godot.AnimationMixer.AnimationCallbackModeProcess",
+    "kind": "type",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.AnimationPlayer.AnimationStartedEventHandler": {
+    // Replaced in https://github.com/godotengine/godot/pull/80813
+    "value": "Godot.AnimationMixer.AnimationStartedEventHandler",
+    "kind": "type",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.AnimationTree.AnimationFinishedEventHandler": {
+    // Replaced in https://github.com/godotengine/godot/pull/80813
+    "value": "Godot.AnimationMixer.AnimationFinishedEventHandler",
+    "kind": "type",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.AnimationTree.AnimationProcessCallback": {
+    // Replaced in https://github.com/godotengine/godot/pull/80813
+    "value": "Godot.AnimationMixer.AnimationCallbackModeProcess",
+    "kind": "type",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.AnimationTree.AnimationStartedEventHandler": {
+    // Replaced in https://github.com/godotengine/godot/pull/80813
+    "value": "Godot.AnimationMixer.AnimationStartedEventHandler",
+    "kind": "type",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.DraggedEventHandler": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphElement.DraggedEventHandler",
+    "kind": "type",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.OverlayEnum": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "type",
+    "state": "Removed",
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.ResizeRequestEventHandler": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphElement.ResizeRequestEventHandler",
+    "kind": "type",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.XRInterface.EnvironmentBlendMode": {
+    // Renamed in https://github.com/godotengine/godot/pull/81561
+    "value": "Godot.XRInterface.EnvironmentBlendModeEnum",
+    "kind": "type",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+
+  ////////////////////////////////////////////////////////////
+  //                         FIELDS                         //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.AnimationPlayer.PropertyName.MethodCallMode": {
+    // Renamed in https://github.com/godotengine/godot/pull/80813
+    "value": "Godot.AnimationMixer.PropertyName.CallbackModeMethod",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.AnimationPlayer.PropertyName.PlaybackActive": {
+    // Renamed in https://github.com/godotengine/godot/pull/80813
+    "value": "Godot.AnimationMixer.PropertyName.Active",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.AnimationPlayer.PropertyName.PlaybackProcessMode": {
+    // Renamed in https://github.com/godotengine/godot/pull/80813
+    "value": "Godot.AnimationMixer.PropertyName.CallbackModeProcess",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.AnimationTree.PropertyName.ProcessCallback": {
+    // Renamed in https://github.com/godotengine/godot/pull/80813
+    "value": "Godot.AnimationMixer.PropertyName.CallbackModeProcess",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphEdit.MethodName.GetScrollOfs": {
+    // Renamed in https://github.com/godotengine/godot/pull/79308
+    "value": "Godot.GraphEdit.MethodName.GetScrollOffset",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphEdit.MethodName.GetSnap": {
+    // Renamed in https://github.com/godotengine/godot/pull/79308
+    "value": "Godot.GraphEdit.MethodName.GetSnappingDistance",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphEdit.MethodName.GetZoomHBox": {
+    // Renamed in https://github.com/godotengine/godot/pull/79308
+    "value": "Godot.GraphEdit.MethodName.GetMenuHBox",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphEdit.MethodName.IsUsingSnap": {
+    // Renamed in https://github.com/godotengine/godot/pull/79308
+    "value": "Godot.GraphEdit.MethodName.IsSnappingEnabled",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphEdit.MethodName.SetScrollOfs": {
+    // Renamed in https://github.com/godotengine/godot/pull/79308
+    "value": "Godot.GraphEdit.MethodName.SetScrollOffset",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphEdit.MethodName.SetSnap": {
+    // Renamed in https://github.com/godotengine/godot/pull/79308
+    "value": "Godot.GraphEdit.MethodName.SetSnappingDistance",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphEdit.MethodName.SetUseSnap": {
+    // Renamed in https://github.com/godotengine/godot/pull/79308
+    "value": "Godot.GraphEdit.MethodName.SetSnappingEnabled",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphEdit.PropertyName.ArrangeNodesButtonHidden": {
+    // Renamed in https://github.com/godotengine/godot/pull/79308
+    "value": "Godot.GraphEdit.PropertyName.ShowArrangeButton",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "needsManualUpgrade": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphEdit.PropertyName.SnapDistance": {
+    // Renamed in https://github.com/godotengine/godot/pull/79308
+    "value": "Godot.GraphEdit.PropertyName.SnappingDistance",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphEdit.PropertyName.UseSnap": {
+    // Renamed in https://github.com/godotengine/godot/pull/79308
+    "value": "Godot.GraphEdit.PropertyName.SnappingEnabled",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.GetConnectionInputColor": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.MethodName.GetInputPortColor",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.GetConnectionInputCount": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.MethodName.GetInputPortCount",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.GetConnectionInputHeight": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.GetConnectionInputPosition": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.MethodName.GetInputPortPosition",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.GetConnectionInputSlot": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.MethodName.GetInputPortSlot",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.GetConnectionInputType": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.MethodName.GetInputPortType",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.GetConnectionOutputColor": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.MethodName.GetOutputPortColor",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.GetConnectionOutputCount": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.MethodName.GetOutputPortCount",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.GetConnectionOutputHeight": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.GetConnectionOutputPosition": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.MethodName.GetOutputPortPosition",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.GetConnectionOutputSlot": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.MethodName.GetOutputPortSlot",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.GetConnectionOutputType": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.MethodName.GetOutputPortType",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.GetLanguage": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.GetOverlay": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.GetTextDirection": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.IsCloseButtonVisible": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.IsComment": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.SetComment": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.SetLanguage": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.SetOverlay": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.SetShowCloseButton": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.MethodName.SetTextDirection": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.PropertyName.Comment": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.PropertyName.Language": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.PropertyName.Overlay": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.PropertyName.ShowClose": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.PropertyName.TextDirection": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.SignalName.CloseRequest": {
+    // Renamed in https://github.com/godotengine/godot/pull/82370
+    "value": "Godot.GraphElement.SignalName.DeleteRequest",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.Node.NotificationNodeRecacheRequested": {
+    // Removed in https://github.com/godotengine/godot/pull/84419
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.TileMap.PropertyName.CellQuadrantSize": {
+    // Renamed in https://github.com/godotengine/godot/pull/81070
+    "value": "Godot.TileMap.PropertyName.RenderingQuadrantSize",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+
+  ////////////////////////////////////////////////////////////
+  //                       PROPERTIES                       //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.AnimationPlayer.MethodCallMode": {
+    // Renamed in https://github.com/godotengine/godot/pull/80813
+    "value": "Godot.AnimationMixer.CallbackModeMethod",
+    "kind": "property",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.AnimationPlayer.PlaybackActive": {
+    // Renamed in https://github.com/godotengine/godot/pull/80813
+    "value": "Godot.AnimationMixer.Active",
+    "kind": "property",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.AnimationPlayer.PlaybackProcessMode": {
+    // Renamed in https://github.com/godotengine/godot/pull/80813
+    "value": "Godot.AnimationMixer.CallbackModeProcess",
+    "kind": "property",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.AnimationTree.ProcessCallback": {
+    // Renamed in https://github.com/godotengine/godot/pull/80813
+    "value": "Godot.AnimationMixer.CallbackModeProcess",
+    "kind": "property",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.GraphEdit.SnapDistance": {
+    // Renamed in https://github.com/godotengine/godot/pull/79308
+    "value": "Godot.GraphEdit.SnappingDistance",
+    "kind": "property",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.GraphEdit.UseSnap": {
+    // Renamed in https://github.com/godotengine/godot/pull/79308
+    "value": "Godot.GraphEdit.SnappingEnabled",
+    "kind": "property",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.Comment": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "property",
+    "state": "Removed",
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.Language": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "property",
+    "state": "Removed",
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.Overlay": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "property",
+    "state": "Removed",
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.ShowClose": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "property",
+    "state": "Removed",
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.TextDirection": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "property",
+    "state": "Removed",
+    "version": "4.2.0",
+  },
+  "Godot.TileMap.CellQuadrantSize": {
+    // Renamed in https://github.com/godotengine/godot/pull/81070
+    "value": "Godot.TileMap.RenderingQuadrantSize",
+    "kind": "property",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.VideoPlayer.Loop": {
+    // Implemented in https://github.com/godotengine/godot/pull/77857
+    "value": "Godot.VideoStreamPlayer.Loop",
+    "kind": "property",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+
+  ////////////////////////////////////////////////////////////
+  //                        METHODS                         //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.Font.GetFallbacks": {
+    // Replaced in https://github.com/godotengine/godot/pull/78266
+    "value": "Godot.Font.Fallbacks",
+    "kind": "method",
+    "state": "Replaced",
+    "needsManualUpgrade": true,
+    "version": "4.2.0",
+  },
+  "Godot.Font.SetFallbacks": {
+    // Replaced in https://github.com/godotengine/godot/pull/78266
+    "value": "Godot.Font.Fallbacks",
+    "kind": "method",
+    "state": "Replaced",
+    "needsManualUpgrade": true,
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.GetConnectionInputColor": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.GetInputPortColor",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.GetConnectionInputCount": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.GetInputPortCount",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.GetConnectionInputHeight": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "method",
+    "state": "Removed",
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.GetConnectionInputPosition": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.GetInputPortPosition",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.GetConnectionInputSlot": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.GetInputPortSlot",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.GetConnectionInputType": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.GetInputPortType",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.GetConnectionOutputColor": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.GetOutputPortColor",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.GetConnectionOutputCount": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.GetOutputPortCount",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.GetConnectionOutputHeight": {
+    // Removed in https://github.com/godotengine/godot/pull/79311
+    "kind": "method",
+    "state": "Removed",
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.GetConnectionOutputPosition": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.GetOutputPortPosition",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.GetConnectionOutputSlot": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.GetOutputPortSlot",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.GraphNode.GetConnectionOutputType": {
+    // Replaced in https://github.com/godotengine/godot/pull/79311
+    "value": "Godot.GraphNode.GetOutputPortType",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.Input.ShouldIgnoreDevice": {
+    // Implemented in https://github.com/godotengine/godot/pull/76045
+    "value": "Godot.Input.ShouldIgnoreDevice",
+    "kind": "method",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.2.0",
+  },
+  "Godot.Resource._SetupLocalToScene": {
+    // Implemented in https://github.com/godotengine/godot/pull/67080
+    "value": "Godot.Resource._SetupLocalToScene",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+  "Godot.XRInterface.SetEnvironmentBlendMode": {
+    // Replaced in https://github.com/godotengine/godot/pull/81561
+    "value": "Godot.XRInterface.EnvironmentBlendMode",
+    "kind": "method",
+    "state": "Replaced",
+    "needsManualUpgrade": true,
+    "version": "4.2.0",
+  },
+
+  ////////////////////////////////////////////////////////////
+  //                        EVENTS                          //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.GraphNode.CloseRequest": {
+    // Renamed in https://github.com/godotengine/godot/pull/82370
+    "value": "Godot.GraphElement.DeleteRequest",
+    "kind": "event",
+    "state": "Replaced",
+    "version": "4.2.0",
+  },
+}

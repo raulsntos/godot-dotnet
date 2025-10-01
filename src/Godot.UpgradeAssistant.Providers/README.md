@@ -6,6 +6,9 @@ A special pair of analysis and upgrade providers, `DotNetAnalyzersAnalyzeProvide
 
 ## Features
 
+- **API mappings** \
+	Simple upgrade mechanism for APIs that are renamed across different versions of Godot. If the API has been removed or can't be handled by the upgrade assistant, a comment will be added instead to let the user know that the old API is no longer available and they'll need to take manual steps to finish the upgrade. The comment can include information about why the API was removed, direct the user towards an available API that could serve as a replacement, or include a link to a documentation page explaining what steps the user could take to resolve the issue.
+
 - **Godot .NET SDK** \
 	The MSBuild SDK used by the `.csproj` will be upgraded to match the version required by the target Godot version.
 

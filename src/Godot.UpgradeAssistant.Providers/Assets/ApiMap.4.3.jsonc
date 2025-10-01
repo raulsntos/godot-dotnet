@@ -1,0 +1,300 @@
+// This file contains the mapping for Godot APIs that changed from Godot 4.2 to 4.3.
+// APIs are sorted by kind and then alphabetically.
+{
+  ////////////////////////////////////////////////////////////
+  //                       NAMESPACES                       //
+  ////////////////////////////////////////////////////////////
+
+  ////////////////////////////////////////////////////////////
+  //                         TYPES                          //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.EditorSceneFormatImporterFbx": {
+    // Renamed in https://github.com/godotengine/godot/pull/81746
+    "value": "Godot.EditorSceneFormatImporterFbx2Gltf",
+    "kind": "type",
+    "state": "Replaced",
+    "version": "4.3.0",
+  },
+  "Godot.GodotSharp": {
+    // Removed in https://github.com/godotengine/godot/pull/91557
+    "kind": "type",
+    "state": "Removed",
+    "messageId": "ApiMapMessage_RemovedInternals",
+    "version": "4.3.0",
+  },
+  "Godot.GodotSharpInstance": {
+    // Removed in https://github.com/godotengine/godot/pull/91557
+    "kind": "type",
+    "state": "Removed",
+    "messageId": "ApiMapMessage_RemovedInternals",
+    "version": "4.3.0",
+  },
+  "Godot.Skeleton3D.BonePoseChangedEventHandler": {
+    // Replaced in https://github.com/godotengine/godot/pull/90575
+    "kind": "type",
+    "state": "Removed",
+    "version": "4.3.0",
+  },
+
+  ////////////////////////////////////////////////////////////
+  //                         FIELDS                         //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.NavigationRegion2D.MethodName.GetAvoidanceLayers": {
+    // Renamed in https://github.com/godotengine/godot/pull/90747
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "messageId": "ApiMapMessage_RemovedExperimentalNavigationConstrainAvoidanceFeature",
+    "version": "4.3.0",
+  },
+  "Godot.NavigationRegion2D.MethodName.GetAvoidanceLayerValue": {
+    // Renamed in https://github.com/godotengine/godot/pull/90747
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "messageId": "ApiMapMessage_RemovedExperimentalNavigationConstrainAvoidanceFeature",
+    "version": "4.3.0",
+  },
+  "Godot.NavigationRegion2D.MethodName.GetConstrainAvoidance": {
+    // Renamed in https://github.com/godotengine/godot/pull/90747
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "messageId": "ApiMapMessage_RemovedExperimentalNavigationConstrainAvoidanceFeature",
+    "version": "4.3.0",
+  },
+  "Godot.NavigationRegion2D.MethodName.SetAvoidanceLayers": {
+    // Renamed in https://github.com/godotengine/godot/pull/90747
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "messageId": "ApiMapMessage_RemovedExperimentalNavigationConstrainAvoidanceFeature",
+    "version": "4.3.0",
+  },
+  "Godot.NavigationRegion2D.MethodName.SetAvoidanceLayerValue": {
+    // Renamed in https://github.com/godotengine/godot/pull/90747
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "messageId": "ApiMapMessage_RemovedExperimentalNavigationConstrainAvoidanceFeature",
+    "version": "4.3.0",
+  },
+  "Godot.NavigationRegion2D.MethodName.SetConstrainAvoidance": {
+    // Renamed in https://github.com/godotengine/godot/pull/90747
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "messageId": "ApiMapMessage_RemovedExperimentalNavigationConstrainAvoidanceFeature",
+    "version": "4.3.0",
+  },
+  "Godot.NavigationRegion2D.PropertyName.AvoidanceLayers": {
+    // Renamed in https://github.com/godotengine/godot/pull/90747
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "messageId": "ApiMapMessage_RemovedExperimentalNavigationConstrainAvoidanceFeature",
+    "version": "4.3.0",
+  },
+  "Godot.NavigationRegion2D.PropertyName.ConstrainAvoidance": {
+    // Renamed in https://github.com/godotengine/godot/pull/90747
+    "kind": "field",
+    "state": "Removed",
+    "isStatic": true,
+    "messageId": "ApiMapMessage_RemovedExperimentalNavigationConstrainAvoidanceFeature",
+    "version": "4.3.0",
+  },
+  "Godot.PhysicsServer3D.G6DofJointAxisFlag.AngularLimit": {
+    // Renamed in https://github.com/godotengine/godot/pull/89851
+    "value": "Godot.PhysicsServer3D.G6DofJointAxisFlag.EnableAngularLimit",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.3.0",
+  },
+  "Godot.PhysicsServer3D.G6DofJointAxisFlag.LinearLimit": {
+    // Renamed in https://github.com/godotengine/godot/pull/89851
+    "value": "Godot.PhysicsServer3D.G6DofJointAxisFlag.EnableLinearLimit",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.3.0",
+  },
+  "Godot.PhysicsServer3D.G6DofJointAxisFlag.LinearMotor": {
+    // Renamed in https://github.com/godotengine/godot/pull/89851
+    "value": "Godot.PhysicsServer3D.G6DofJointAxisFlag.EnableLinearMotor",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.3.0",
+  },
+  "Godot.PhysicsServer3D.G6DofJointAxisFlag.Motor": {
+    // Renamed in https://github.com/godotengine/godot/pull/89851
+    "value": "Godot.PhysicsServer3D.G6DofJointAxisFlag.EnableMotor",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.3.0",
+  },
+  "Godot.RenderingDevice.DriverResource.DescriptorSet": {
+    // Renamed in https://github.com/godotengine/godot/pull/83452
+    "value": "Godot.RenderingDevice.DriverResource.UniformSet",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.3.0",
+  },
+  "Godot.RenderingDevice.DriverResource.Device": {
+    // Renamed in https://github.com/godotengine/godot/pull/83452
+    "value": "Godot.RenderingDevice.DriverResource.LogicalDevice",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.3.0",
+  },
+  "Godot.RenderingDevice.DriverResource.Image": {
+    // Renamed in https://github.com/godotengine/godot/pull/83452
+    "value": "Godot.RenderingDevice.DriverResource.Texture",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.3.0",
+  },
+  "Godot.RenderingDevice.DriverResource.ImageNativeTextureFormat": {
+    // Renamed in https://github.com/godotengine/godot/pull/83452
+    "value": "Godot.RenderingDevice.DriverResource.TextureDataFormat",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.3.0",
+  },
+  "Godot.RenderingDevice.DriverResource.ImageView": {
+    // Renamed in https://github.com/godotengine/godot/pull/83452
+    "value": "Godot.RenderingDevice.DriverResource.TextureView",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.3.0",
+  },
+  "Godot.RenderingDevice.DriverResource.Instance": {
+    // Renamed in https://github.com/godotengine/godot/pull/83452
+    "value": "Godot.RenderingDevice.DriverResource.TopmostObject",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.3.0",
+  },
+  "Godot.RenderingDevice.DriverResource.Queue": {
+    // Renamed in https://github.com/godotengine/godot/pull/83452
+    "value": "Godot.RenderingDevice.DriverResource.CommandQueue",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.3.0",
+  },
+  "Godot.RenderingDevice.DriverResource.QueueFamilyIndex": {
+    // Renamed in https://github.com/godotengine/godot/pull/83452
+    "value": "Godot.RenderingDevice.DriverResource.QueueFamily",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "version": "4.3.0",
+  },
+  "Godot.Skeleton3D.SignalName.BonePoseChanged": {
+    // Replaced in https://github.com/godotengine/godot/pull/90575
+    "value": "Godot.Skeleton3D.SignalName.PoseUpdated",
+    "kind": "field",
+    "state": "Replaced",
+    "isStatic": true,
+    "needsManualUpgrade": true,
+    "version": "4.3.0",
+  },
+
+  ////////////////////////////////////////////////////////////
+  //                       PROPERTIES                       //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.NavigationRegion2D.AvoidanceLayers": {
+    // Removed in https://github.com/godotengine/godot/pull/90747
+    "kind": "property",
+    "state": "Removed",
+    "messageId": "ApiMapMessage_RemovedExperimentalNavigationConstrainAvoidanceFeature",
+    "version": "4.3.0",
+  },
+  "Godot.NavigationRegion2D.ConstrainAvoidance": {
+    // Removed in https://github.com/godotengine/godot/pull/90747
+    "kind": "property",
+    "state": "Removed",
+    "messageId": "ApiMapMessage_RemovedExperimentalNavigationConstrainAvoidanceFeature",
+    "version": "4.3.0",
+  },
+
+  ////////////////////////////////////////////////////////////
+  //                        METHODS                         //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.NavigationRegion2D.GetAvoidanceLayerValue": {
+    // Removed in https://github.com/godotengine/godot/pull/90747
+    "kind": "method",
+    "state": "Removed",
+    "messageId": "ApiMapMessage_RemovedExperimentalNavigationConstrainAvoidanceFeature",
+    "version": "4.3.0",
+  },
+  "Godot.NavigationRegion2D.SetAvoidanceLayerValue": {
+    // Removed in https://github.com/godotengine/godot/pull/90747
+    "kind": "method",
+    "state": "Removed",
+    "messageId": "ApiMapMessage_RemovedExperimentalNavigationConstrainAvoidanceFeature",
+    "version": "4.3.0",
+  },
+  "Godot.Node.IsPhysicsInterpolated": {
+    // Implemented in https://github.com/godotengine/godot/pull/88424
+    "value": "Godot.Node.IsPhysicsInterpolated",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.3.0",
+  },
+  "Godot.Node.IsPhysicsInterpolatedAndEnabled": {
+    // Implemented in https://github.com/godotengine/godot/pull/88424
+    "value": "Godot.Node.IsPhysicsInterpolatedAndEnabled",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.3.0",
+  },
+  "Godot.Node.ResetPhysicsInterpolation": {
+    // Implemented in https://github.com/godotengine/godot/pull/88424
+    "value": "Godot.Node.ResetPhysicsInterpolation",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.3.0",
+  },
+  "Godot.Skeleton.SetBonePose": {
+    // Implemented in https://github.com/godotengine/godot/pull/87888
+    "value": "Godot.Skeleton3D.SetBonePose",
+    "kind": "method",
+    "state": "Replaced",
+    "version": "4.3.0",
+  },
+  "Godot.StringExtensions.Replace": {
+    // Replaced in https://github.com/godotengine/godot/pull/87133
+    "value": "System.String.Replace",
+    "kind": "method",
+    "state": "Replaced",
+    "isExtension": true,
+    "version": "4.3.0",
+  },
+
+  ////////////////////////////////////////////////////////////
+  //                        EVENTS                          //
+  ////////////////////////////////////////////////////////////
+
+  "Godot.Skeleton3D.BonePoseChanged": {
+    // Replaced in https://github.com/godotengine/godot/pull/90575
+    "value": "Godot.Skeleton3D.PoseUpdated",
+    "kind": "event",
+    "state": "Replaced",
+    "needsManualUpgrade": true,
+    "version": "4.3.0",
+  },
+}

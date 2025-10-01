@@ -124,6 +124,48 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ApiMapMessage_CSharpClassesAreNoLongerScripts" xml:space="preserve">
+    <value>C# classes are no longer scripts, they are now registered as GDExtension classes instead.</value>
+  </data>
+  <data name="ApiMapMessage_EnumMaxRemoved" xml:space="preserve">
+    <value>Enums' MAX members were removed to follow .NET guidelines. In most cases it's much better to use 'Enum.IsDefined'.</value>
+  </data>
+  <data name="ApiMapMessage_RemovedExperimentalNavigationConstrainAvoidanceFeature" xml:space="preserve">
+    <value>API was part of the experimental constrain avoidance feature and has been removed. For more information see: https://github.com/godotengine/godot/pull/90747</value>
+  </data>
+  <data name="ApiMapMessage_RemovedGodotSharpAppDomain" xml:space="preserve">
+    <value>Godot 4.0 moved from Mono to modern .NET. This API used AppDomains which is now a deprecated feature and has been replaced with AssemblyLoadContexts. Use the existing .NET APIs to make your project ALC-aware, see: https://learn.microsoft.com/dotnet/core/dependency-loading/understanding-assemblyloadcontext</value>
+  </data>
+  <data name="ApiMapMessage_RemovedInternals" xml:space="preserve">
+    <value>API was internal and should have never been exposed, so it was removed.</value>
+  </data>
+  <data name="ApiMapMessage_RemovedPortalAndRoomOcclusionCulling" xml:space="preserve">
+    <value>Portal and room occlusion culling is replaced by raster occlusion.</value>
+  </data>
+  <data name="ApiMapMessage_SignalDelegateTypesRemoved" xml:space="preserve">
+    <value>Signal delegate types were removed in favor of 'Action&lt;&gt;' to follow .NET guidelines and avoid breaking compatibility in the future.</value>
+  </data>
+  <data name="ApiMapMessage_TextureFlagsMovedToShader" xml:space="preserve">
+    <value>Texture flags were moved to the Shader, so this API was removed.</value>
+  </data>
+  <data name="ApiNotImplementedComment" xml:space="preserve">
+    <value>API '{oldApi}' is no longer available.</value>
+  </data>
+  <data name="ApiNotImplementedCommentWithDocumentationUrl" xml:space="preserve">
+    <value>API '{oldApi}' is no longer available. For more information see: {documentationUrl}</value>
+  </data>
+  <data name="ApiRemovedComment" xml:space="preserve">
+    <value>API '{oldApi}' is no longer available.</value>
+  </data>
+  <data name="ApiRemovedCommentWithDocumentationUrl" xml:space="preserve">
+    <value>API '{oldApi}' is no longer available. For more information see: {documentationUrl}</value>
+  </data>
+  <data name="ApiReplacedComment" xml:space="preserve">
+    <value>API '{oldApi}' is no longer available, use '{newApi}' instead.</value>
+  </data>
+  <data name="ApiReplacedCommentWithDocumentationUrl" xml:space="preserve">
+    <value>API '{oldApi}' is no longer available, use '{newApi}' instead. For more information see: {documentationUrl}</value>
+  </data>
   <data name="Argument_InvalidPropertyElementNotTfm" xml:space="preserve">
     <value>Invalid property element. Expected: TargetFramework.</value>
   </data>
@@ -330,6 +372,21 @@
   </data>
   <data name="GUA1011_SystemArrayToPackedArray_Title" xml:space="preserve">
     <value>Use Godot Packed Array types with Godot APIs</value>
+  </data>
+  <data name="InvalidOperation_ApiMapEntryIsReadOnly" xml:space="preserve">
+    <value>API map entry is readonly and can't be modified.</value>
+  </data>
+  <data name="InvalidOperation_ApiMapEntryKindIsInvalid" xml:space="preserve">
+    <value>Invalid API map entry kind for: '{mappingKind}'.</value>
+  </data>
+  <data name="InvalidOperation_ApiMappingsNotAvailable" xml:space="preserve">
+    <value>API mappings not available.</value>
+  </data>
+  <data name="InvalidOperation_ApiMapEntryStateIsInvalid" xml:space="preserve">
+    <value>Invalid API map entry state: '{mappingState}'.</value>
+  </data>
+  <data name="InvalidOperation_ApiMapEntryValueIsInvalid" xml:space="preserve">
+    <value>API map entry for '{mappingKey}' is a replacement but has no value to replace with.</value>
   </data>
   <data name="InvalidOperation_GodotTfmInformationNotAvailable" xml:space="preserve">
     <value>Godot TargetFramework information not available.</value>
