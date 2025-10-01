@@ -8,38 +8,27 @@ namespace Godot.EditorIntegration.ProjectEditor;
 
 internal static class ProjectUtils
 {
-    private static string? _godotSdkAttrValue;
-
-    private static string GodotSdkAttrValue
-    {
-        get
-        {
-            if (string.IsNullOrEmpty(_godotSdkAttrValue))
-            {
-                _godotSdkAttrValue = $"Godot.NET.Sdk/{GodotBridge.GodotVersion.GetGodotDotNetVersion()}";
-            }
-
-            return _godotSdkAttrValue;
-        }
-    }
+    private const string GodotMSBuildSdk = "Godot.NET.Sdk";
 
     public static void MSBuildLocatorRegisterDefaults()
     {
         MSBuildLocator.RegisterDefaults();
     }
 
-    public static MSBuildProject GenerateProject(string projectName)
+    public static ProjectRootElement GenerateProject(string projectName)
     {
         ArgumentException.ThrowIfNullOrEmpty(projectName);
 
         var root = ProjectRootElement.Create(NewProjectFileOptions.None);
 
-        root.Sdk = GodotSdkAttrValue;
+        root.Sdk = $"{GodotMSBuildSdk}/{GodotBridge.GodotVersion.GetGodotDotNetVersion()}";
 
         var mainGroup = root.AddPropertyGroup();
         mainGroup.AddProperty("TargetFramework", "net9.0");
 
         mainGroup.AddProperty("EnableDynamicLoading", "true");
+
+        mainGroup.AddProperty("EnableGodotDotNetPreview", "true");
 
         string sanitizedName = IdentifierUtils.SanitizeQualifiedIdentifier(projectName);
 
@@ -49,22 +38,6 @@ internal static class ProjectUtils
             mainGroup.AddProperty("RootNamespace", sanitizedName);
         }
 
-        return new MSBuildProject(root);
-    }
-
-    public static void EnsureGodotSdkIsUpToDate(this MSBuildProject project)
-    {
-        var root = project.Root;
-        string godotSdkAttrValue = GodotSdkAttrValue;
-
-        string rootSdk = root.Sdk?.Trim() ?? string.Empty;
-
-        if (rootSdk.Equals(godotSdkAttrValue, StringComparison.OrdinalIgnoreCase))
-        {
-            return;
-        }
-
-        root.Sdk = godotSdkAttrValue;
-        project.HasUnsavedChanges = true;
+        return root;
     }
 }

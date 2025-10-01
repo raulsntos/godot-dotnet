@@ -205,6 +205,15 @@
   <data name="DotNetEditorPlugin_SaveSolutionFailed" xml:space="preserve">
     <value>Failed to save solution. Exception message: {exceptionMessage}</value>
   </data>
+  <data name="DotNetEditorPlugin_UpgradeSolutionEditorProgressLabel" xml:space="preserve">
+    <value>Upgrading C# solution...</value>
+  </data>
+  <data name="DotNetEditorPlugin_UpgradeSolutionEditorProgressStep_Prepare" xml:space="preserve">
+    <value>Preparing to upgrade C# project...</value>
+  </data>
+  <data name="DotNetEditorPlugin_UpgradeSolutionEditorProgressStep_Upgrade" xml:space="preserve">
+    <value>Upgrading C# project...</value>
+  </data>
   <data name="DotNetSdkFound" xml:space="preserve">
     <value>Found .NET SDK version '{sdkVersion}' at {sdkPath}</value>
   </data>
@@ -363,5 +372,8 @@
   </data>
   <data name="PlatformNotSupported_VisualStudio" xml:space="preserve">
     <value>Visual Studio not supported on this platform.</value>
+  </data>
+  <data name="UpgradeAssistant_CSharpScriptPathMustBePrefixedWithRes" xml:space="preserve">
+    <value>The C# script path must be prefixed with 'res://' for attached scripts.</value>
   </data>
 </root>
