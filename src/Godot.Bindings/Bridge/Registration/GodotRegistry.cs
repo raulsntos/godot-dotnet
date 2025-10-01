@@ -6,7 +6,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Threading;
 using Godot.NativeInterop;
 using Godot.NativeInterop.Marshallers;
 
@@ -21,6 +20,7 @@ public static partial class GodotRegistry
     private static readonly Dictionary<Type, ClassRegistrationContext> _registeredClassesByType = [];
     private static readonly Dictionary<StringName, ClassRegistrationContext> _registeredClasses = new(StringNameEqualityComparer.Default);
     private static readonly Stack<StringName> _classRegisterStack = [];
+    private static readonly HashSet<StringName> _manuallyUnregisteredClasses = new(StringNameEqualityComparer.Default);
 
     private readonly struct NotificationHandler
     {
@@ -206,6 +206,12 @@ public static partial class GodotRegistry
 
         while (_classRegisterStack.TryPop(out StringName? className))
         {
+            if (_manuallyUnregisteredClasses.Remove(className))
+            {
+                // This class was already unregistered manually, skip it.
+                continue;
+            }
+
             NativeGodotStringName* classNameNativePtr = className.NativeValue.DangerousSelfRef.GetUnsafeAddress();
 
             GodotBridge.GDExtensionInterface.classdb_unregister_extension_class(GodotBridge.LibraryPtr, classNameNativePtr);
@@ -213,6 +219,33 @@ public static partial class GodotRegistry
             _registeredClasses[className].Dispose();
             _registeredClasses.Remove(className);
         }
+    }
+
+    /// <summary>
+    /// Unregisters a single class that was previously registered.
+    /// Child classes must be unregistered before parent classes.
+    /// </summary>
+    /// <typeparam name="T">The type of the class.</typeparam>
+    internal static unsafe void UnregisterClass<T>() where T : GodotObject
+    {
+        StringName className = new StringName(typeof(T).Name);
+
+        if (!_registeredClasses.TryGetValue(className, out var context))
+        {
+            return;
+        }
+
+        NativeGodotStringName* classNameNativePtr = className.NativeValue.DangerousSelfRef.GetUnsafeAddress();
+
+        GodotBridge.GDExtensionInterface.classdb_unregister_extension_class(GodotBridge.LibraryPtr, classNameNativePtr);
+
+        context.Dispose();
+        _registeredClasses.Remove(className);
+        _registeredClassesByType.Remove(typeof(T));
+
+        // Track that this class was manually unregistered so
+        // 'UnregisterAllClasses' skips it when popping from the stack.
+        _manuallyUnregisteredClasses.Add(className);
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]

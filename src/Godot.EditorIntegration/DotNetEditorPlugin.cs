@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Godot.Bridge;
 using Godot.Collections;
 using Godot.EditorIntegration.Build;
 using Godot.EditorIntegration.Build.Cli;
@@ -10,6 +11,7 @@ using Godot.EditorIntegration.CodeEditors;
 using Godot.EditorIntegration.Export;
 using Godot.EditorIntegration.Internals;
 using Godot.EditorIntegration.ProjectEditor;
+using Godot.EditorIntegration.UpgradeAssistant;
 using Microsoft.VisualStudio.SolutionPersistence.Model;
 using Microsoft.VisualStudio.SolutionPersistence.Serializer;
 
@@ -94,31 +96,6 @@ internal sealed partial class DotNetEditorPlugin : EditorPlugin
         _toolBarBuildButton.Show();
 
         return true;
-    }
-
-    private static void ApplyNecessaryChangesToSolution()
-    {
-        try
-        {
-            var msbuildProject = MSBuildProject.Open(EditorPath.ProjectCSProjPath);
-            if (msbuildProject is null)
-            {
-                throw new InvalidOperationException(SR.DotNetEditorPlugin_InvalidOperation_CannotOpenCSharpProject);
-            }
-
-            // NOTE: The order in which changes are made to the project is important.
-
-            msbuildProject.EnsureGodotSdkIsUpToDate();
-
-            if (msbuildProject.HasUnsavedChanges)
-            {
-                msbuildProject.Save();
-            }
-        }
-        catch (Exception e)
-        {
-            GD.PushError(e.ToString());
-        }
     }
 
     private enum MenuOptions
@@ -266,7 +243,8 @@ internal sealed partial class DotNetEditorPlugin : EditorPlugin
 
         if (File.Exists(EditorPath.ProjectCSProjPath))
         {
-            ApplyNecessaryChangesToSolution();
+            var efs = EditorInterface.Singleton.GetResourceFilesystem();
+            efs.Connect(EditorFileSystem.SignalName.FilesystemChanged, Callable.From(RunUpgradeAssistant), (uint)ConnectFlags.OneShot);
         }
         else
         {
@@ -383,6 +361,45 @@ internal sealed partial class DotNetEditorPlugin : EditorPlugin
         }
 
         _sourceCodePlugin.Workspace.UpdateProjectPath(EditorPath.ProjectCSProjPath);
+    }
+
+    private void RunUpgradeAssistant()
+    {
+        if (!File.Exists(EditorPath.ProjectCSProjPath))
+        {
+            GD.Print("No C# project file found, skipping upgrade assistant.");
+            return;
+        }
+
+        // Register temporary classes needed for the upgrade.
+        // 'CSharpScript' must be registered before 'ResourceFormatLoaderCSharpScript'
+        // since the loader creates 'CSharpScript' instances.
+        GodotRegistry.RegisterInternalClass<CSharpScript>(CSharpScript.BindMembers);
+        GodotRegistry.RegisterInternalClass<ResourceFormatLoaderCSharpScript>(ResourceFormatLoaderCSharpScript.BindMembers);
+
+        try
+        {
+            EditorProgress.Invoke("upgrade_dotnet_project", SR.DotNetEditorPlugin_UpgradeSolutionEditorProgressLabel, 3, progress =>
+            {
+                var upgradeAssistant = new GodotUpgradeAssistant();
+
+                progress.Step(SR.DotNetEditorPlugin_UpgradeSolutionEditorProgressStep_Prepare, 0);
+                upgradeAssistant.Prepare();
+
+                progress.Step(SR.DotNetEditorPlugin_UpgradeSolutionEditorProgressStep_Upgrade, 1);
+                upgradeAssistant.Upgrade();
+            });
+        }
+        catch (Exception exception)
+        {
+            GD.PushError($"Upgrade assistant failed, the project may need manual migration. Exception: {exception}");
+        }
+        finally
+        {
+            // Unregister temporary classes in reverse order.
+            GodotRegistry.UnregisterClass<ResourceFormatLoaderCSharpScript>();
+            GodotRegistry.UnregisterClass<CSharpScript>();
+        }
     }
 
     protected override void _ExitTree()
