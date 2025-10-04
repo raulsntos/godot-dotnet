@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+  Microsoft ResX Schema
+
+  Version 2.0
+
+  The primary goals of this format is to allow a simple XML format
+  that is mostly human readable. The generation and parsing of the
+  various data types are done through the TypeConverter classes
+  associated with the data types.
+
+  Example:
+
+  ... ado.net/XML headers & schema ...
+  <resheader name="resmimetype">text/microsoft-resx</resheader>
+  <resheader name="version">2.0</resheader>
+  <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+  <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+  <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+  <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+  <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>[base64 mime encoded serialized .NET Framework object]</value>
+  </data>
+  <data name="Icon1" type="System.Drawing.Icon, System.Drawing"
+  mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>[base64 mime encoded string representing a byte array form of the .NET Framework
+  object]</value>
+    <comment>This is a comment</comment>
+  </data>
+
+  There are any number of "resheader" rows that contain simple
+  name/value pairs.
+
+  Each data row contains a name, and value. The row also contains a
+  type or mimetype. Type corresponds to a .NET class that support
+  text/value conversion through the TypeConverter architecture.
+  Classes that don't support this are serialized and stored with the
+  mimetype set.
+
+  The mimetype is used for serialized objects, and tells the
+  ResXResourceReader how to depersist the object. This is currently not
+  extensible. For a given mimetype the value must be set accordingly:
+
+  Note - application/x-microsoft.net.object.binary.base64 is the format
+  that the ResXResourceWriter will generate, however the reader can
+  read any of the formats listed below.
+
+  mimetype: application/x-microsoft.net.object.binary.base64
+  value   : The object must be serialized with
+      : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+      : and then encoded with base64 encoding.
+
+  mimetype: application/x-microsoft.net.object.soap.base64
+  value   : The object must be serialized with
+      : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+      : and then encoded with base64 encoding.
+
+  mimetype: application/x-microsoft.net.object.bytearray.base64
+  value   : The object must be serialized into a byte array
+      : using a System.ComponentModel.TypeConverter
+      : and then encoded with base64 encoding.
+  -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"
+                  msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0"
+                  msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"
+                msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"
+                  msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Argument_InvalidPropertyElementNotTfm" xml:space="preserve">
+    <value>Invalid property element. Expected: TargetFramework.</value>
+  </data>
+  <data name="GUA0001_DotNetProjectTfm_CodeFix" xml:space="preserve">
+    <value>Remove incompatible Target Frameworks and/or add required TFM '{requiredTfm}'</value>
+  </data>
+  <data name="GUA0001_DotNetProjectTfm_Description" xml:space="preserve">
+    <value>Godot .NET projects must target a supported .NET version.</value>
+  </data>
+  <data name="GUA0001_DotNetProjectTfm_MessageFormat" xml:space="preserve">
+    <value>Godot .NET project '{0}' targets TFM(s) '{1}'. Godot {2}+ projects must target at least TFM '{3}'.</value>
+  </data>
+  <data name="GUA0001_DotNetProjectTfm_Platform_MessageFormat" xml:space="preserve">
+    <value>Godot .NET project '{0}' targets TFM(s) '{1}' (for platform '{4}'). Godot {2}+ projects must target at least TFM '{3}' (for platform '{4}').</value>
+  </data>
+  <data name="GUA0001_DotNetProjectTfm_Title" xml:space="preserve">
+    <value>Godot .NET projects must target a supported .NET version</value>
+  </data>
+  <data name="GUA0002_DotNetProjectSdk_CodeFix" xml:space="preserve">
+    <value>Update Godot.NET.Sdk</value>
+  </data>
+  <data name="GUA0002_DotNetProjectSdk_Description" xml:space="preserve">
+    <value>Godot .NET projects must use the correct Godot.NET.Sdk version</value>
+  </data>
+  <data name="GUA0002_DotNetProjectSdk_MessageFormat" xml:space="preserve">
+    <value>Godot .NET project '{0}' uses SDK '{1}'. Godot {2} requires Godot.NET.Sdk version {2}.</value>
+  </data>
+  <data name="GUA0002_DotNetProjectSdk_Title" xml:space="preserve">
+    <value>Godot .NET projects must use the correct Godot.NET.Sdk version</value>
+  </data>
+  <data name="GUA0003_DotNetProjectReferencesTfm_Description" xml:space="preserve">
+    <value>Referenced projects and packages do not support target TFM.</value>
+  </data>
+  <data name="GUA0003_DotNetProjectReferencesTfm_MessageFormat" xml:space="preserve">
+    <value>Reference '{0}' does not support .NET {2} and needs to be updated. Referenced projects and packages need to be compatible with .NET {2}+ because that's the minimum TFM supported by Godot projects in {1}+.</value>
+  </data>
+  <data name="GUA0003_DotNetProjectReferencesTfm_Title" xml:space="preserve">
+    <value>Referenced projects and packages do not support target TFM</value>
+  </data>
+  <data name="GUA0004_DotNetProjectReferencesOldBindings_Description" xml:space="preserve">
+    <value>Referenced projects and packages reference old Godot bindings.</value>
+  </data>
+  <data name="GUA0004_DotNetProjectReferencesOldBindings_MessageFormat" xml:space="preserve">
+    <value>Reference '{0}' depends on the old Godot bindings and needs to be updated. Referenced projects and packages need to be compatible with the new Godot .NET bindings.</value>
+  </data>
+  <data name="GUA0004_DotNetProjectReferencesOldBindings_Title" xml:space="preserve">
+    <value>Referenced projects and packages do not support the new Godot .NET bindings</value>
+  </data>
+  <data name="GUA0005_DotNetSolutionConfiguration_CodeFix" xml:space="preserve">
+    <value>Update solution configurations</value>
+  </data>
+  <data name="GUA0005_DotNetSolutionConfiguration_Description" xml:space="preserve">
+    <value>Solutions must define the 'Debug', 'ExportDebug', and 'ExportRelease' build configurations.</value>
+  </data>
+  <data name="GUA0005_DotNetSolutionConfiguration_MessageFormat" xml:space="preserve">
+    <value>Solution must define the 'Debug', 'ExportDebug', and 'ExportRelease' build configurations.</value>
+  </data>
+  <data name="GUA0005_DotNetSolutionConfiguration_Title" xml:space="preserve">
+    <value>Solutions must define the 'Debug', 'ExportDebug', and 'ExportRelease' build configurations</value>
+  </data>
+  <data name="GUA0006_DotNetProjectEnablePreview_CodeFix" xml:space="preserve">
+    <value>Enable new Godot .NET packages</value>
+  </data>
+  <data name="GUA0006_DotNetProjectEnablePreview_Description" xml:space="preserve">
+    <value>Godot .NET projects can opt-in into the new Godot .NET packages.</value>
+  </data>
+  <data name="GUA0006_DotNetProjectEnablePreview_MessageFormat" xml:space="preserve">
+    <value>Godot .NET project '{0}' has not enabled the new Godot .NET packages.</value>
+  </data>
+  <data name="GUA0006_DotNetProjectEnablePreview_Title" xml:space="preserve">
+    <value>Godot .NET projects can opt-in into the new Godot .NET packages</value>
+  </data>
+  <data name="GUA1001_AddPartialKeywordToGodotClasses_CodeFix" xml:space="preserve">
+    <value>Add partial modifier</value>
+  </data>
+  <data name="GUA1001_AddPartialKeywordToGodotClasses_Description" xml:space="preserve">
+    <value>Godot 4 uses source generators to implement functionality directly in user classes that used to be executed on runtime, this way the code is executed on build time making the game more performant on runtime.</value>
+  </data>
+  <data name="GUA1001_AddPartialKeywordToGodotClasses_MessageFormat" xml:space="preserve">
+    <value>Type '{0}' needs to be partial so Godot source generators can inject extra code</value>
+  </data>
+  <data name="GUA1001_AddPartialKeywordToGodotClasses_Title" xml:space="preserve">
+    <value>Godot classes need to be partial</value>
+  </data>
+  <data name="GUA1002_NotImplementedSymbol_CodeFix" xml:space="preserve">
+    <value>Add comment with additional information</value>
+  </data>
+  <data name="GUA1002_NotImplementedSymbol_Description" xml:space="preserve">
+    <value>The target Godot version does not implement this API.</value>
+  </data>
+  <data name="GUA1002_NotImplementedSymbol_MessageFormat" xml:space="preserve">
+    <value>'{0}' has been removed</value>
+  </data>
+  <data name="GUA1002_NotImplementedSymbol_Title" xml:space="preserve">
+    <value>Godot API has not been implemented</value>
+  </data>
+  <data name="GUA1003_RemovedSymbol_CodeFix" xml:space="preserve">
+    <value>Add comment with additional information</value>
+  </data>
+  <data name="GUA1003_RemovedSymbol_Description" xml:space="preserve">
+    <value>The target Godot version has removed this API.</value>
+  </data>
+  <data name="GUA1003_RemovedSymbol_MessageFormat" xml:space="preserve">
+    <value>'{0}' has been removed</value>
+  </data>
+  <data name="GUA1003_RemovedSymbol_Title" xml:space="preserve">
+    <value>Godot API has been removed</value>
+  </data>
+  <data name="GUA1004_ReplacedSymbol_CodeFix" xml:space="preserve">
+    <value>Replace with '{newSymbolName}'</value>
+  </data>
+  <data name="GUA1004_ReplacedSymbol_Description" xml:space="preserve">
+    <value>The target Godot version has renamed this API.</value>
+  </data>
+  <data name="GUA1004_ReplacedSymbol_MessageFormat" xml:space="preserve">
+    <value>'{0}' has been renamed to '{1}'</value>
+  </data>
+  <data name="GUA1004_ReplacedSymbol_Title" xml:space="preserve">
+    <value>Godot API has been renamed</value>
+  </data>
+  <data name="GUA1005_MergedRpcAttributes_CodeFix" xml:space="preserve">
+    <value>Replace with new Rpc attribute</value>
+  </data>
+  <data name="GUA1005_MergedRpcAttributes_Description" xml:space="preserve">
+    <value>Godot 4 merges all the RPC attributes into the single RpcAttribute.</value>
+  </data>
+  <data name="GUA1005_MergedRpcAttributes_MessageFormat" xml:space="preserve">
+    <value>'{0}' attribute has been replaced with 'RpcAttribute'</value>
+  </data>
+  <data name="GUA1005_MergedRpcAttributes_Title" xml:space="preserve">
+    <value>RPC attributes have been merged into the single RpcAttribute</value>
+  </data>
+  <data name="GUA1006_AddGodotClassAttribute_CodeFix" xml:space="preserve">
+    <value>Add GodotClass attribute</value>
+  </data>
+  <data name="GUA1006_AddGodotClassAttribute_Description" xml:space="preserve">
+    <value>Godot .NET uses a GodotClass attribute to register C# classes.</value>
+  </data>
+  <data name="GUA1006_AddGodotClassAttribute_MessageFormat" xml:space="preserve">
+    <value>Type '{0}' needs to use the GodotClass attribute</value>
+  </data>
+  <data name="GUA1006_AddGodotClassAttribute_Title" xml:space="preserve">
+    <value>Godot classes need to use the GodotClass attribute</value>
+  </data>
+  <data name="GUA1007_AddBindPropertyAttribute_CodeFix" xml:space="preserve">
+    <value>Add BindProperty attribute</value>
+  </data>
+  <data name="GUA1007_AddBindPropertyAttributeReplaceExport_CodeFix" xml:space="preserve">
+    <value>Replace Export attribute with BindProperty attribute</value>
+  </data>
+  <data name="GUA1007_AddBindPropertyAttribute_Description" xml:space="preserve">
+    <value>Godot .NET uses a BindProperty attribute to register C# properties and fields.</value>
+  </data>
+  <data name="GUA1007_AddBindPropertyAttribute_MessageFormat" xml:space="preserve">
+    <value>Member '{0}' needs to use the BindProperty attribute</value>
+  </data>
+  <data name="GUA1007_AddBindPropertyAttribute_Title" xml:space="preserve">
+    <value>Godot properties need to use the BindProperty attribute</value>
+  </data>
+  <data name="GUA1008_AddBindMethodAttribute_CodeFix" xml:space="preserve">
+    <value>Add BindMethod attribute</value>
+  </data>
+  <data name="GUA1008_AddBindMethodAttribute_Description" xml:space="preserve">
+    <value>Godot .NET uses a BindMethod attribute to register C# methods.</value>
+  </data>
+  <data name="GUA1008_AddBindMethodAttribute_MessageFormat" xml:space="preserve">
+    <value>Method '{0}' needs to use the BindMethod attribute</value>
+  </data>
+  <data name="GUA1008_AddBindMethodAttribute_Title" xml:space="preserve">
+    <value>Godot methods need to use the BindMethod attribute</value>
+  </data>
+  <data name="GUA1009_VirtualMethodAccessibility_CodeFix" xml:space="preserve">
+    <value>Fix virtual method declared accessibility</value>
+  </data>
+  <data name="GUA1009_VirtualMethodAccessibility_Description" xml:space="preserve">
+    <value>Godot .NET changes virtual methods' accessibility to 'protected'.</value>
+  </data>
+  <data name="GUA1009_VirtualMethodAccessibility_MessageFormat" xml:space="preserve">
+    <value>Virtual method '{0}' has to be declared with 'protected' accessibility</value>
+  </data>
+  <data name="GUA1009_VirtualMethodAccessibility_Title" xml:space="preserve">
+    <value>Virtual methods need to be protected accessibility</value>
+  </data>
+  <data name="GUA1010_DeltaParameterType_CodeFix" xml:space="preserve">
+    <value>Fix delta parameter type</value>
+  </data>
+  <data name="GUA1010_DeltaParameterType_Description" xml:space="preserve">
+    <value>Godot 4 changes the delta parameter type from 'float' to 'double'.</value>
+  </data>
+  <data name="GUA1010_DeltaParameterType_MessageFormat" xml:space="preserve">
+    <value>Delta parameter in method '{0}' must be of type 'double'</value>
+  </data>
+  <data name="GUA1010_DeltaParameterType_Title" xml:space="preserve">
+    <value>Delta parameter type needs to be double</value>
+  </data>
+  <data name="GUA1011_SystemArrayToPackedArray_CodeFix" xml:space="preserve">
+    <value>Fix parameter type</value>
+  </data>
+  <data name="GUA1011_SystemArrayToPackedArray_Description" xml:space="preserve">
+    <value>Godot .NET uses new Packed Array types in APIs that used C# arrays or spans in the past, the new types match the native representation resulting in cheaper marshalling.</value>
+  </data>
+  <data name="GUA1011_SystemArrayToPackedArray_MessageFormat" xml:space="preserve">
+    <value>'{0}' parameter in method '{1}' must be a Packed Array</value>
+  </data>
+  <data name="GUA1011_SystemArrayToPackedArray_Title" xml:space="preserve">
+    <value>Use Godot Packed Array types with Godot APIs</value>
+  </data>
+  <data name="InvalidOperation_GodotTfmInformationNotAvailable" xml:space="preserve">
+    <value>Godot TargetFramework information not available.</value>
+  </data>
+  <data name="InvalidOperation_RequiredProjectIsNotAvailable" xml:space="preserve">
+    <value>Project with ID {projectId} is required but it's not available from the solution.</value>
+  </data>
+  <data name="InvalidOperation_UnsupportedFixOfType" xml:space="preserve">
+    <value>Unsupported fix of type {fixType}.</value>
+  </data>
+  <data name="Log_AnalyzersAvailableEnabled" xml:space="preserve">
+    <value>Analyzers enabled: {analyzersCount}.</value>
+  </data>
+  <data name="Log_AnalyzersAvailableTotal" xml:space="preserve">
+    <value>Analyzers available: {analyzersCount}.</value>
+  </data>
+  <data name="Log_AnalyzersAvailableZero" xml:space="preserve">
+    <value>No analyzers available.</value>
+  </data>
+  <data name="Log_FoundDotNetDiagnosticWithoutDocument" xml:space="preserve">
+    <value>Found .NET diagnostic without a document: {diagnostic}</value>
+  </data>
+  <data name="Log_FoundMultipleDocumentsOnlyOneWillBeUsed" xml:space="preserve">
+    <value>Found {documentsCount} documents for path '{filePath}'. Only the first document will be used.</value>
+  </data>
+  <data name="Log_FoundUnknownSdk" xml:space="preserve">
+    <value>Found unknown SDK '{sdk}'.</value>
+  </data>
+  <data name="Log_MultipleFixesAvailableFirstWillBeUsed" xml:space="preserve">
+    <value>There are {availableFixesCount} fixes available for analysis result with ID {diagnosticId}. Automatically using the first one.</value>
+  </data>
+  <data name="Log_UnableToGetCompilationForProject" xml:space="preserve">
+    <value>Unable to get compilation for project {projectName} [{projectPath}]. Skipping diagnostics.</value>
+  </data>
+  <data name="Log_UnableToGetRequiredTfm" xml:space="preserve">
+    <value>Unable to find the required TargetFramework for Godot {targetGodotVersion}.</value>
+  </data>
+</root>

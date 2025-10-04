@@ -1,6 +1,7 @@
 using System;
-using System.Linq;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using Godot.Collections;
 using Godot.EditorIntegration.Build;
 using Godot.EditorIntegration.Build.Cli;
@@ -11,7 +12,6 @@ using Godot.EditorIntegration.Internals;
 using Godot.EditorIntegration.ProjectEditor;
 using Microsoft.VisualStudio.SolutionPersistence.Model;
 using Microsoft.VisualStudio.SolutionPersistence.Serializer;
-using System.Threading;
 
 namespace Godot.EditorIntegration;
 

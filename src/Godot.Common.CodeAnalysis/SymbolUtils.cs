@@ -45,6 +45,26 @@ internal static class SymbolUtils
     }
 
     /// <summary>
+    /// Get the fully-qualified name, omitting the global namespace, for the given symbol.
+    /// </summary>
+    /// <param name="symbol">Symbol to get the fully-qualified name for.</param>
+    /// <returns>Fully-qualified name of the symbol.</returns>
+    public static string FullQualifiedNameOmitGlobal(this ISymbol symbol)
+    {
+        return symbol switch
+        {
+            ITypeSymbol typeSymbol =>
+                typeSymbol.ToDisplayString(NullableFlowState.NotNull, _fullyQualifiedOmitGlobalFormat),
+
+            _ when symbol.ContainingType is not null =>
+                $"{symbol.ContainingType.ToDisplayString(_fullyQualifiedOmitGlobalFormat)}.{symbol.ToDisplayString(_fullyQualifiedOmitGlobalFormat)}",
+
+            _ =>
+                symbol.ToDisplayString(_fullyQualifiedOmitGlobalFormat),
+        };
+    }
+
+    /// <summary>
     /// Get the fully-qualified name, including the global namespace, for the given type.
     /// </summary>
     /// <param name="typeSymbol">Type to get the fully-qualified name for.</param>
@@ -125,6 +145,77 @@ internal static class SymbolUtils
     }
 
     /// <summary>
+    /// Check if the original definition for the generic type represented by
+    /// <paramref name="typeSymbol"/> has a fully-qualified name that matches
+    /// <paramref name="assemblyName"/> and <paramref name="fullyQualifiedTypeName"/>.
+    /// </summary>
+    /// <param name="typeSymbol">The type to check.</param>
+    /// <param name="assemblyName">
+    /// The name of the assembly that contains the type to compare against.
+    /// If <see langword="null"/>, the assembly name is not checked.
+    /// </param>
+    /// <param name="fullyQualifiedTypeName">
+    /// The fully-qualified name of the type to compare against.
+    /// </param>
+    /// <returns>Whether the type matches the specified name.</returns>
+    public static bool EqualsGenericType(this ITypeSymbol? typeSymbol, string fullyQualifiedTypeName, string? assemblyName = null)
+    {
+        if (typeSymbol is not INamedTypeSymbol { IsGenericType: true })
+        {
+            return false;
+        }
+
+        return typeSymbol.OriginalDefinition.EqualsType(fullyQualifiedTypeName, assemblyName);
+    }
+
+    /// <summary>
+    /// Check if <paramref name="methodSymbol"/> overrides a method declared in
+    /// the assembly specified by <paramref name="assemblyName"/>.
+    /// </summary>
+    /// <param name="methodSymbol">The method to check.</param>
+    /// <param name="assemblyName">The name of the assembly to compare against.</param>
+    /// <returns>Whether the method overrides a method declared in the specified assembly.</returns>
+    public static bool OverridesFromAssembly(this IMethodSymbol? methodSymbol, string assemblyName)
+    {
+        if (methodSymbol is null || !methodSymbol.IsOverride)
+        {
+            return false;
+        }
+
+        methodSymbol = methodSymbol.GetOverrideOriginalSymbol();
+        return methodSymbol.ContainingAssembly.Name == assemblyName;
+    }
+
+    /// <summary>
+    /// Try to get the declaration syntax in source code for the given symbol.
+    /// </summary>
+    /// <param name="symbol">The symbol to retrieve the declaration syntax for.</param>
+    /// <typeparam name="TDeclarationSyntax">Type of the declaration syntax.</typeparam>
+    /// <returns>The found declaration syntax node.</returns>
+    public static TDeclarationSyntax? GetInSourceDeclarationSyntax<TDeclarationSyntax>(this ISymbol symbol) where TDeclarationSyntax : MemberDeclarationSyntax
+    {
+        foreach (var syntaxReference in symbol.DeclaringSyntaxReferences)
+        {
+            var syntaxNode = syntaxReference.GetSyntax();
+
+            if (symbol is IFieldSymbol && syntaxNode is VariableDeclaratorSyntax variableDeclaratorSyntax)
+            {
+                // For fields, the syntax node is a VariableDeclaratorSyntax,
+                // but we want the parent FieldDeclarationSyntax instead.
+                syntaxNode = variableDeclaratorSyntax.Parent?.Parent;
+            }
+
+            // Check that the syntax node matches the expected type and is declared in source.
+            if (syntaxNode is TDeclarationSyntax declarationSyntax && declarationSyntax.GetLocation().IsInSource)
+            {
+                return declarationSyntax;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
     /// Gets the <see cref="Location"/> of the type syntax for the specified symbol, if available.
     /// </summary>
     /// <remarks>
@@ -173,6 +264,27 @@ internal static class SymbolUtils
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Get the original overridden method symbol for <paramref name="methodSymbol"/>.
+    /// </summary>
+    /// <param name="methodSymbol">The method override to get the original method.</param>
+    /// <returns>The original overridden method for the given method override.</returns>
+    /// <exception cref="ArgumentException"><paramref name="methodSymbol"/> is not an override.</exception>
+    public static IMethodSymbol GetOverrideOriginalSymbol(this IMethodSymbol methodSymbol)
+    {
+        if (!methodSymbol.IsOverride)
+        {
+            throw new ArgumentException("Method must be an override.", nameof(methodSymbol));
+        }
+
+        while (methodSymbol.OverriddenMethod is not null)
+        {
+            methodSymbol = methodSymbol.OverriddenMethod;
+        }
+
+        return methodSymbol;
     }
 
     /// <summary>

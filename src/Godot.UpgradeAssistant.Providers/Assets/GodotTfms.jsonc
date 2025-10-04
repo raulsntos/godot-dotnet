@@ -1,0 +1,27 @@
+{
+  "tfms": [
+    {
+      "tfm": "net6.0",
+      "version": "4.0.0",
+    },
+    {
+      "tfm": "net7.0",
+      "version": "4.2.0",
+      "platform": "android",
+    },
+    {
+      "tfm": "net8.0",
+      "version": "4.2.0",
+      "platform": "ios",
+    },
+    {
+      "tfm": "net8.0",
+      "version": "4.4.0-beta.1",
+    },
+    {
+      "tfm": "net9.0",
+      "version": "4.5.0",
+      "platform": "android",
+    },
+  ]
+}

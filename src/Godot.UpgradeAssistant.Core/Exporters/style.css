@@ -1,0 +1,606 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap');
+
+:root {
+  color-scheme: light dark;
+
+  --transparent-cover: rgba(51, 63, 103, 0.4);
+  --transparent-cover-darker: rgba(51, 63, 103, 0.9);
+
+  --base-color: #eff1f5;
+  --base-color-text: #4a5365;
+  --base-color-text-hl: #454b59;
+  --base-color-text-title: #546b99;
+  --base-color-text-subtitle: #778ab3;
+  --base-color-text-subtitle-date: #9aacd2;
+
+  --dark-color: #333f67;
+  --dark-color-text: lightsteelblue;
+  --dark-color-text-hl: #d4e3f6;
+  --dark-color-text-title: white;
+
+  --primary-color: hsl(206, 58%, 52%);
+  --primary-color-text: #d4edff;
+  --primary-color-text-hl: white;
+  --primary-color-text-title: white;
+  --primary-color-subdued: #1f3c5e;
+  --accent-color: #f57389;
+
+  --secondary-color-text: #546b99;
+  --post-recent-highlight-color: #ea580c;
+
+  --link-color: hsl(206, 58%, 50%);
+  --link-underline-color: hsla(206, 58%, 50%, 0.3);
+  --navbar-link-color: var(--dark-color);
+  --navbar-link-current-color: var(--primary-color);
+  --tab-active-color: var(--primary-color);
+
+  --big-button-color: #478cbf;
+
+  --fund-color: #F35774;
+
+  --base-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  --more-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  --background-color: #d5daea;
+  --navbar-background-color: #ffffff;
+  --head-background-color: var(--primary-color);
+  --card-background-color: #ffffff;
+  --card-footer-color: #eeeeee;
+  --button-background-color: #ffffff;
+  --button-card-background-color: #d7dee6;
+  --pagination-active-color: #284786;
+  --placeholder-text-color: #7a87a2;
+
+  --hero-text-background-color: #1a1a1a7a;
+
+  --code-background-color: #dcdfe2;
+  --codeblock-background-color: #282b2e;
+  --codeblock-color: #e0e2e4;
+
+  --download-hero-color: hsla(0, 0%, 100%, 0.9);
+  --download-main-details-color: #f1f1f1;
+  --download-table-color: rgba(22, 22, 22, 0.08);
+  --platform-note-background-color: rgba(212, 237, 255, 0.9);
+  --platform-code-background-color: #e5ebf1;
+  --download-mono-background-color: rgba(43, 58, 76, 0.82);
+
+  --feature-heading-color: #2d76ad;
+  --feature-note-color: #e53e3e;
+
+  --teams-odd-color: rgba(160, 160, 160, 0.15);
+  --teams-even-color: rgba(160, 160, 160, 0.05);
+  --teams-subteams-color: rgba(255, 255, 255, 0.4);
+
+  --table-divider-color: rgba(0, 0, 0, 0.1);
+
+  --info-background-color: rgba(212, 237, 255, 0.9);
+  --info-color: #404040;
+
+  --default-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  --header-font-family: "Montserrat", sans-serif;
+
+  --button-border-radius: 12px;
+
+  --success-color: #4b9d53;
+  --warning-color: #a69042;
+  --error-color: #bf5a50;
+  --success-text-color: #214525;
+  --warning-text-color: #493f1d;
+  --error-text-color: #4a1f1c;
+  --success-background-color: #73f280;
+  --warning-background-color: #ffde66;
+  --error-background-color: #ff786b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+		--transparent-cover: rgba(51, 63, 103, 0.4);
+    --transparent-cover-darker: rgba(51, 63, 103, 0.9);
+
+    --base-color: #25282b;
+    --base-color-text: hsla(0, 0%, 100%, 0.9);
+    --base-color-text-hl: hsla(0, 0%, 100%, 1);
+    --base-color-text-title: hsla(200, 00%, 100%, 0.85);
+    --base-color-text-subtitle: hsla(200, 00%, 100%, 0.7);
+    --base-color-text-subtitle-date: hsla(200, 00%, 100%, 0.5);
+
+    --dark-color: #263256;
+    --dark-color-text: lightsteelblue;
+    --dark-color-text-hl: #d4e3f6;
+    --dark-color-text-title: white;
+
+    --primary-color: #4d9fdc;
+    --primary-color-text: #d4edff;
+    --primary-color-text-hl: white;
+    --primary-color-text-title: white;
+    --primary-color-subdued: #1f3c5e;
+    --accent-color: #5b5491;
+
+    --secondary-color-text: #a6a6a6;
+    --post-recent-highlight-color: #fb923c;
+
+    --link-color: hsl(200, 60%, 70%);
+    --link-underline-color: hsla(200, 60%, 70%, 0.3);
+    --navbar-link-color: hsla(0, 0%, 100%, 0.9);
+    --navbar-link-current-color: hsl(200, 100%, 80%);
+    --tab-active-color: white;
+
+    --big-button-color: #478cbf;
+
+    --fund-color: #F35774;
+
+    --base-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+    --more-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    --background-color: #202326;
+    --navbar-background-color: #333639;
+    --head-background-color: #232f57;
+    --card-background-color: #333639;
+    --card-footer-color: #505356;
+    --button-background-color: #333639;
+    --button-card-background-color: #55595e;
+    --pagination-active-color: #4080ff;
+    --placeholder-text-color: #a6a6a6;
+
+    --code-background-color: #333639;
+    --codeblock-background-color: #333639;
+    --codeblock-color: hsla(0, 0%, 100%, 0.9);
+
+    --download-hero-color: hsla(0, 0%, 100%, 0.9);
+    --download-main-details-color: #f1f1f1;
+    --download-table-color: rgba(0, 0, 0, 0.2);
+    --platform-note-background-color: rgba(150, 150, 150, 0.9);
+    --platform-code-background-color: #282b2e;
+    --download-mono-background-color: rgba(132, 151, 174, 0.68);
+
+    --feature-heading-color: #57b3f8;
+    --feature-note-color: #ef6767;
+
+    --teams-odd-color: rgba(120, 120, 120, 0.15);
+    --teams-even-color: rgba(120, 120, 120, 0.05);
+    --teams-subteams-color: rgba(0, 0, 0, 0.2);
+
+    --table-divider-color: rgba(255, 255, 255, 0.1);
+
+    --info-background-color: rgba(47, 54, 58, 0.9);
+    --info-color: rgb(162, 216, 255);
+
+    --success-color: #73f280;
+    --warning-color: #ffde66;
+    --error-color: #ff786b;
+    --success-text-color: #d0fbd5;
+    --warning-text-color: #fff4cc;
+    --error-text-color: #ffd0cc;
+    --success-background-color: #4b9d53;
+    --warning-background-color: #a69042;
+    --error-background-color: #bf5a50;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    scroll-behavior: smooth;
+  }
+}
+
+*,
+::after,
+::before {
+  box-sizing: border-box;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--default-font-family);
+  font-size: 18px;
+
+  background-color: var(--base-color);
+  color: var(--base-color-text);
+
+  margin: 0;
+}
+
+*:focus {
+  /* More visible outline for better keyboard navigation. */
+  outline: 0.125rem solid hsl(220, 100%, 62.5%);
+  outline-color: currentcolor;
+  /* Make the outline always appear above other elements. */
+  /* Otherwise, one of its sides can be hidden by tabs in the Download and More layouts. */
+  position: relative;
+}
+
+h1,
+h2,
+h3,
+h4,
+nav a,
+.btn,
+a.btn,
+.title-font {
+  font-family: var(--header-font-family);
+  font-weight: 800;
+  color: var(--base-color-text-title);
+  margin-top: 0px;
+}
+
+h1 {
+  font-size: 42px;
+}
+
+h2 {
+  font-size: 36px;
+}
+
+h3 {
+  font-size: 28px;
+}
+
+h4 {
+  font-size: 22px;
+}
+
+body a {
+  outline: none;
+  color: var(--link-color);
+  text-decoration: underline;
+  text-decoration-color: var(--link-underline-color);
+  /* Prevent color transitions from being too fast (for epilepsy). */
+  transition: 0.1s filter;
+}
+
+body a,
+.btn {
+  line-height: normal;
+  /* Use `filter` on all states to prevent the clickable area from changing */
+  /* when an image is hovered (see GH-369). */
+  filter: brightness(100%);
+}
+
+body a:hover,
+.btn:hover {
+  filter: brightness(117.5%);
+}
+
+body a:active,
+.btn:active {
+  filter: brightness(82.5%);
+}
+
+.btn {
+  cursor: pointer;
+  background-color: var(--button-background-color);
+  box-shadow: var(--base-shadow);
+  font-size: 18px;
+  padding: 16px 32px 16px 32px;
+  display: inline-block;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: var(--base-border-radius);
+  transition: box-shadow 0.1s ease-in-out;
+}
+
+.btn:hover {
+  box-shadow: var(--more-shadow);
+}
+
+.btn.flat {
+  box-shadow: none;
+  background-color: transparent;
+  color: var(--link-color);
+  margin: 16px 32px 16px 32px;
+}
+
+.btn.flat:hover {
+  background-color: hsla(0, 0%, 50%, 0.1);
+}
+
+.btn.flat.btn-white-text {
+  color: hsla(0, 0%, 100%, 0.95);
+}
+
+.btn-primary {
+  background-color: var(--primary-color) !important;
+  color: var(--primary-color-text-title) !important;
+}
+
+.btn-secondary {
+  background-color: white !important;
+  color: var(--dark-color) !important;
+}
+
+header {
+  position: relative;
+  z-index: 10;
+  background-color: var(--navbar-background-color);
+  box-shadow: var(--base-shadow);
+}
+
+footer {
+  background-color: var(--footer-background-color);
+  color: var(--footer-color);
+  font-size: 0.9em;
+  margin-top: 64px;
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+
+footer .container {
+  display: flex;
+}
+
+footer p {
+  margin-top: 0;
+}
+
+footer ul {
+  list-style: none;
+  margin: 0px;
+  float: left;
+  overflow-wrap: break-word;
+  margin-left: 32px;
+  padding-left: 0px;
+}
+
+footer li {
+  line-height: 20px;
+  margin-bottom: 10px;
+}
+
+footer a {
+  color: var(--footer-link-color);
+  text-decoration-color: var(--footer-link-underline-color);
+}
+
+.text-muted {
+  color: var(--base-color-text-subtitle);
+}
+
+.small,
+small {
+  font-size: 80%;
+  font-weight: 400;
+}
+
+strong {
+  font-weight: 800;
+}
+
+dl,
+ol,
+ul {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+dt {
+  font-weight: 700;
+}
+
+dd {
+  margin: 0;
+  margin-bottom: .5rem;
+}
+
+img {
+  vertical-align: middle;
+  border-style: none;
+}
+
+.head {
+  background-color: var(--head-background-color);
+  color: var(--primary-color-text);
+}
+
+.head h1 {
+  margin: 32px 0;
+}
+
+.head h1,
+.head h2,
+.head h3 {
+  color: var(--primary-color-text-title);
+}
+
+.navbar {
+  padding: 0;
+  padding-top: 2px;
+}
+
+.navbar .navbar-collapse {
+  display: flex;
+  flex-basis: 100%;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.navbar .navbar-collapse:not(.show) {
+  display: none;
+}
+
+@media(min-width: 576px) {
+  .navbar .navbar-collapse {
+    display: flex !important;
+    flex-basis: auto;
+  }
+}
+
+.head>.container,
+.navbar>.container {
+  display: flex;
+  flex-wrap: inherit;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar .navbar-nav {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+
+.navbar .navbar-brand {
+  margin-right: 1rem;
+}
+
+.navbar a {
+  display: block;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--navbar-link-color);
+  /* Make links easier to click. */
+  padding: 1.3175rem 1rem !important;
+}
+
+.navbar a:hover {
+  background-color: hsla(0, 0%, 50%, 0.1);
+}
+
+.navbar a:focus,
+.navbar .nav-link.active {
+  color: var(--navbar-link-current-color);
+}
+
+.container {
+  width: 100%;
+  padding-right: .75rem;
+  padding-left: .75rem;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+
+table {
+  text-align: left;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  width: 100%;
+}
+
+table td,
+table th {
+  padding: .75rem;
+  vertical-align: top;
+  border-top: 1px solid var(--table-divider-color);
+}
+
+table td.numeric {
+  text-align: right;
+}
+
+.card {
+  background-color: var(--card-background-color);
+  color: var(--base-color-text);
+  border-radius: var(--base-border-radius);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+}
+
+.card hr {
+  border-color: rgba(0, 0, 0, 0.05);
+}
+
+.card .footer {
+  background-color: var(--card-footer-color);
+}
+
+.card:hover {
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2), 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+a.card {
+  text-decoration: none;
+  display: flex;
+}
+
+.card .card-content {
+  padding: 16px;
+}
+
+.summary-result {
+  padding: 16px;
+  margin: 16px 0;
+  font-size: 140%;
+  box-shadow: var(--base-shadow);
+  border-radius: var(--base-border-radius);
+  border: 1px solid var(--link-color);
+  background-color: var(--button-background-color);
+}
+
+.success {
+  color: var(--success-text-color);
+  border-color: var(--success-color);
+  background-color: var(--success-background-color);
+}
+
+.warning {
+  color: var(--warning-text-color);
+  border-color: var(--warning-color);
+  background-color: var(--warning-background-color);
+}
+
+.error {
+  color: var(--error-text-color);
+  border-color: var(--error-color);
+  background-color: var(--error-background-color);
+}
+
+.problems ul,
+.fixes ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-wrap: break-word;
+}
+
+.problem.card {
+  margin-bottom: 16px;
+}
+
+.problem.fixable h3 {
+  color: var(--warning-color);
+}
+
+.problem.unfixable h3 {
+  color: var(--error-color);
+}
+
+.fix {
+  margin-bottom: 16px;
+  padding: 8px;
+  background: var(--card-background-color);
+  border-radius: var(--base-border-radius);
+}
+
+.fix.applied {
+  background-color: var(--primary-color);
+  color: var(--primary-color-text);
+}

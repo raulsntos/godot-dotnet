@@ -61,6 +61,9 @@
     <ProjectReference Include="..\Godot.EditorIntegration.MSBuildLogger\Godot.EditorIntegration.MSBuildLogger.csproj" PrivateAssets="all" ReferenceOutputAssembly="false">
       <IncludeOutputInThisPackage>true</IncludeOutputInThisPackage>
     </ProjectReference>
+    <ProjectReference Include="..\Godot.UpgradeAssistant.Cli\Godot.UpgradeAssistant.Cli.csproj" PrivateAssets="all" ReferenceOutputAssembly="false">
+      <IncludeOutputInThisPackage>true</IncludeOutputInThisPackage>
+    </ProjectReference>
   </ItemGroup>
 
   <!-- Include certain project reference binaries into this package. -->
@@ -81,6 +84,9 @@
       </_AdditionalProjectReferences>
       <_AdditionalProjectReferences Include="..\Godot.EditorIntegration.MSBuildLogger\Godot.EditorIntegration.MSBuildLogger.csproj">
         <ContentFolderName>Godot.EditorIntegration.MSBuildLogger</ContentFolderName>
+      </_AdditionalProjectReferences>
+      <_AdditionalProjectReferences Include="..\Godot.UpgradeAssistant.Cli\Godot.UpgradeAssistant.Cli.csproj">
+        <ContentFolderName>Godot.UpgradeAssistant.Cli</ContentFolderName>
       </_AdditionalProjectReferences>
     </ItemGroup>
 

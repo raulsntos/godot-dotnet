@@ -10,8 +10,8 @@
     <!-- System -->
     <SystemCommandLineVersion>2.0.0-beta5.25306.1</SystemCommandLineVersion>
     <!-- MSBuild -->
-    <MicrosoftBuildVersion>17.10.4</MicrosoftBuildVersion>
-    <MicrosoftBuildLocatorVersion>1.7.8</MicrosoftBuildLocatorVersion>
+    <MicrosoftBuildVersion>17.14.8</MicrosoftBuildVersion>
+    <MicrosoftBuildLocatorVersion>1.9.1</MicrosoftBuildLocatorVersion>
     <MicrosoftBuildUtilitiesCoreVersion>$(MicrosoftBuildVersion)</MicrosoftBuildUtilitiesCoreVersion>
     <!-- Roslyn -->
     <!--
@@ -19,7 +19,7 @@
       included in the most recent Visual Studio version or the most recent .NET SDK version. If it were to go ahead,
       then any components (analyzers, source generators) depending on this version would not work in Visual Studio.
     -->
-    <MicrosoftCodeAnalysisVersion_LatestVS>4.8.0</MicrosoftCodeAnalysisVersion_LatestVS>
+    <MicrosoftCodeAnalysisVersion_LatestVS>4.13.0</MicrosoftCodeAnalysisVersion_LatestVS>
     <MicrosoftCodeAnalysisCSharpVersion>$(MicrosoftCodeAnalysisVersion_LatestVS)</MicrosoftCodeAnalysisCSharpVersion>
     <MicrosoftCodeAnalysisCSharpWorkspacesVersion>$(MicrosoftCodeAnalysisVersion_LatestVS)</MicrosoftCodeAnalysisCSharpWorkspacesVersion>
     <MicrosoftCodeAnalysisWorkspacesMSBuildVersion>$(MicrosoftCodeAnalysisVersion_LatestVS)</MicrosoftCodeAnalysisWorkspacesMSBuildVersion>
@@ -32,8 +32,9 @@
     <!-- NuGet -->
     <NuGetVersioningVersion>6.13.1</NuGetVersioningVersion>
     <NuGetProjectModelVersion>6.13.1</NuGetProjectModelVersion>
+    <NuGetProtocolVersion>6.13.1</NuGetProtocolVersion>
     <!-- Solution Persistence -->
-    <MicrosoftVisualStudioSolutionPersistenceVersion>1.0.9</MicrosoftVisualStudioSolutionPersistenceVersion>
+    <MicrosoftVisualStudioSolutionPersistenceVersion>1.0.52</MicrosoftVisualStudioSolutionPersistenceVersion>
     <!-- MSTest -->
     <MicrosoftNETTestSdkVersion>17.10.0</MicrosoftNETTestSdkVersion>
     <!-- XUnit -->
@@ -50,5 +51,13 @@
     <EnvDTEVersion>17.8.37221</EnvDTEVersion>
     <!-- JetBrains -->
     <JetBrainsRiderPathLocatorVersion>1.0.11</JetBrainsRiderPathLocatorVersion>
+    <!-- Microsoft.Extensions -->
+    <MicrosoftExtensionsHostingVersion>9.0.0</MicrosoftExtensionsHostingVersion>
+    <!-- Serilog -->
+    <SerilogVersion>4.2.0</SerilogVersion>
+    <SerilogExtensionsHostingVersion>9.0.0</SerilogExtensionsHostingVersion>
+    <SerilogFormattingCompactVersion>3.0.0</SerilogFormattingCompactVersion>
+    <SerilogSinksConsoleVersion>6.0.0</SerilogSinksConsoleVersion>
+    <SerilogSinksFileVersion>6.0.0</SerilogSinksFileVersion>
   </PropertyGroup>
 </Project>

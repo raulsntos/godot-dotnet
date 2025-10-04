@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!--
+      Suppress warnings about implement analyzers and source generators in projects
+      that also reference the workspaces package. The upgrade assistant analyzers
+      are executed by a custom driver and aren't subject to the same limitations of
+      traditional analyzers.
+    -->
+    <NoWarn>$(NoWarn);RS1038;RS1041</NoWarn>
+    <IncludeSymbols>false</IncludeSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Embed assets. -->
+    <EmbeddedResource Include="Assets\**\*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Godot.UpgradeAssistant.Cli" />
+    <InternalsVisibleTo Include="Godot.UpgradeAssistant.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Godot.UpgradeAssistant.Core\Godot.UpgradeAssistant.Core.csproj" />
+  </ItemGroup>
+
+  <Import Project="..\Godot.Common.CodeAnalysis\Godot.Common.CodeAnalysis.projitems" />
+
+  <ItemGroup>
+    <PackageReference Include="NuGet.Protocol" Version="$(NuGetProtocolVersion)" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="NuGet.ProjectModel" Version="$(NuGetProjectModelVersion)" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="Serilog" Version="$(SerilogVersion)" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Strings.resx">
+      <ClassName>Godot.UpgradeAssistant.Providers.SR</ClassName>
+      <EmitFormatMethods>true</EmitFormatMethods>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

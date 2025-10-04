@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!--
+  Microsoft ResX Schema
+
+  Version 2.0
+
+  The primary goals of this format is to allow a simple XML format
+  that is mostly human readable. The generation and parsing of the
+  various data types are done through the TypeConverter classes
+  associated with the data types.
+
+  Example:
+
+  ... ado.net/XML headers & schema ...
+  <resheader name="resmimetype">text/microsoft-resx</resheader>
+  <resheader name="version">2.0</resheader>
+  <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+  <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+  <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+  <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+  <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>[base64 mime encoded serialized .NET Framework object]</value>
+  </data>
+  <data name="Icon1" type="System.Drawing.Icon, System.Drawing"
+  mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>[base64 mime encoded string representing a byte array form of the .NET Framework
+  object]</value>
+    <comment>This is a comment</comment>
+  </data>
+
+  There are any number of "resheader" rows that contain simple
+  name/value pairs.
+
+  Each data row contains a name, and value. The row also contains a
+  type or mimetype. Type corresponds to a .NET class that support
+  text/value conversion through the TypeConverter architecture.
+  Classes that don't support this are serialized and stored with the
+  mimetype set.
+
+  The mimetype is used for serialized objects, and tells the
+  ResXResourceReader how to depersist the object. This is currently not
+  extensible. For a given mimetype the value must be set accordingly:
+
+  Note - application/x-microsoft.net.object.binary.base64 is the format
+  that the ResXResourceWriter will generate, however the reader can
+  read any of the formats listed below.
+
+  mimetype: application/x-microsoft.net.object.binary.base64
+  value   : The object must be serialized with
+      : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+      : and then encoded with base64 encoding.
+
+  mimetype: application/x-microsoft.net.object.soap.base64
+  value   : The object must be serialized with
+      : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+      : and then encoded with base64 encoding.
+
+  mimetype: application/x-microsoft.net.object.bytearray.base64
+  value   : The object must be serialized into a byte array
+      : using a System.ComponentModel.TypeConverter
+      : and then encoded with base64 encoding.
+  -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"
+                  msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0"
+                  msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"
+                msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"
+                  msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AnalyzeCommand_Description" xml:space="preserve">
+    <value>Analyze the upgradability of a Godot .NET project.</value>
+  </data>
+  <data name="AssistantCommandBase_ArgumentGodotProjectDescription" xml:space="preserve">
+    <value>The path to the project.godot file to be used.</value>
+  </data>
+  <data name="AssistantCommandBase_OptionDotNetProjectDescription" xml:space="preserve">
+    <value>The path to the .NET project file to be used.</value>
+  </data>
+  <data name="AssistantCommandBase_OptionDotNetSolutionDescription" xml:space="preserve">
+    <value>The path to the .NET solution file to be used.</value>
+  </data>
+  <data name="AssistantCommandBase_OptionEnableGodotDotNetDescription" xml:space="preserve">
+    <value>Enable new Godot .NET packages instead of GodotSharp.</value>
+  </data>
+  <data name="AssistantCommandBase_OptionNoSummaryDescription" xml:space="preserve">
+    <value>Skip exporting a summary reporting the results.</value>
+  </data>
+  <data name="AssistantCommandBase_OptionOutputDescription" xml:space="preserve">
+    <value>The path to the file that the results summary will be exported to. The name may include '{TimeStamp}' which will be replaced with the timestamp at the time of executing the assistant and '{TargetGodotVersion}' which will be replaced with the target Godot version that the assistant tried to upgrade to.</value>
+  </data>
+  <data name="AssistantCommandBase_OptionTargetGodotVersionDescription" xml:space="preserve">
+    <value>Version of Godot to upgrade the project to.</value>
+  </data>
+  <data name="AssistantCommandBase_OptionTargetGodotVersionError_InvalidFormat" xml:space="preserve">
+    <value>Invalid Godot version format: '{versionString}'.</value>
+  </data>
+  <data name="AssistantCommandBase_OptionTargetGodotVersionError_MoreThanOneVersionSpecified" xml:space="preserve">
+    <value>Can't specify more than one target Godot version.</value>
+  </data>
+  <data name="AssistantCommandBase_OptionTargetGodotVersionError_UnsupportedVersion" xml:space="preserve">
+    <value>Unsupported Godot version '{targetGodotVersion}'. Latest supported version is '{latestSupportedGodotVersion}'.</value>
+  </data>
+  <data name="AssistantCommandBase_OptionVerboseDescription" xml:space="preserve">
+    <value>Enable verbose console logging.</value>
+  </data>
+  <data name="InvalidOperation_ProviderServiceIsReadOnly" xml:space="preserve">
+    <value>Providers service is readonly and can't be modified.</value>
+  </data>
+  <data name="Log_AnalyzeStepStarting" xml:space="preserve">
+    <value>Starting Analyze step with {analyzeProvidersCount} providers.</value>
+  </data>
+  <data name="Log_AnalyzeStepReportedResult" xml:space="preserve">
+    <value>Reported analysis result {analysisResult}.</value>
+  </data>
+  <data name="Log_AnalyzeStepReportedResultsCount" xml:space="preserve">
+    <value>Analysis step reported {analysisResultsCount} analysis results.</value>
+  </data>
+  <data name="Log_ApplyStepFinished" xml:space="preserve">
+    <value>Upgrade changes applied to the project.</value>
+  </data>
+  <data name="Log_ApplyStepStarting" xml:space="preserve">
+    <value>Starting Apply Upgrade step with {upgradeFixesCount} upgrade actions.</value>
+  </data>
+  <data name="Log_ExportStepStarting" xml:space="preserve">
+    <value>Starting Export step.</value>
+  </data>
+  <data name="Log_ExportStepSummaryExportedToFilePath" xml:space="preserve">
+    <value>Summary exported to file '{outputPath}'.</value>
+  </data>
+  <data name="Log_FailedToOpenWorkspace" xml:space="preserve">
+    <value>Failed to open Godot project workspace.</value>
+  </data>
+  <data name="Log_GodotProjectFileNotFoundInPath" xml:space="preserve">
+    <value>File 'project.godot' not found in path '{godotProjectFilePath}'.</value>
+  </data>
+  <data name="Log_GodotProjectFileUnableToOpen" xml:space="preserve">
+    <value>Unable to open Godot project with 'project.godot' file in path '{godotProjectFilePath}'. File may be invalid or unsupported, make sure the Godot project uses a supported Godot version (3.6+).</value>
+  </data>
+  <data name="Log_RestorePackagesStepFailed" xml:space="preserve">
+    <value>Restoring packages failed.</value>
+  </data>
+  <data name="Log_RestorePackagesStepThrewAnException" xml:space="preserve">
+    <value>Exception thrown when restoring packages: {exceptionMessage}</value>
+  </data>
+  <data name="Log_RestorePackagesStepStarting" xml:space="preserve">
+    <value>Starting Restore Packages step.</value>
+  </data>
+  <data name="Log_RestorePackagesStepSuccessful" xml:space="preserve">
+    <value>Restored packages successfully.</value>
+  </data>
+  <data name="Log_UpgradeStepRegisteredAction" xml:space="preserve">
+    <value>Registered upgrade action {upgradeAction}.</value>
+  </data>
+  <data name="Log_UpgradeStepRegisteredActionsCount" xml:space="preserve">
+    <value>Upgrade step registered {upgradeFixesCount} upgrade actions.</value>
+  </data>
+  <data name="Log_UpgradeStepStarting" xml:space="preserve">
+    <value>Starting Upgrade step with {upgradeProvidersCount} providers.</value>
+  </data>
+  <data name="Log_UpgradingGodotProject" xml:space="preserve">
+    <value>Upgrading project '{godotProjectPath}' to Godot {targetGodotVersion}.</value>
+  </data>
+  <data name="UpgradeCommand_Description" xml:space="preserve">
+    <value>Upgrade a Godot .NET project.</value>
+  </data>
+</root>

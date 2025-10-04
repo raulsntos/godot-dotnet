@@ -10,6 +10,9 @@
     <Project Path="src/Godot.EditorIntegration.MSBuildLogger/Godot.EditorIntegration.MSBuildLogger.csproj" />
     <Project Path="src/Godot.EditorIntegration.OpenVisualStudio/Godot.EditorIntegration.OpenVisualStudio.csproj" />
     <Project Path="src/Godot.PluginLoader/Godot.PluginLoader.csproj" />
+    <Project Path="src/Godot.UpgradeAssistant.Cli/Godot.UpgradeAssistant.Cli.csproj" />
+    <Project Path="src/Godot.UpgradeAssistant.Core/Godot.UpgradeAssistant.Core.csproj" />
+    <Project Path="src/Godot.UpgradeAssistant.Providers/Godot.UpgradeAssistant.Providers.csproj" />
     <Project Path="src/Godot.Analyzers/Godot.Analyzers.csproj" />
     <Project Path="src/Godot.SourceGenerators/Godot.SourceGenerators.csproj" />
     <Project Path="src/Godot.Common/Godot.Common.csproj" />

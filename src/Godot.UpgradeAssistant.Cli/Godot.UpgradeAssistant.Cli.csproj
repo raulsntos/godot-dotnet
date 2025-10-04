@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <UseAppHost>false</UseAppHost>
+    <IsPackable>true</IsPackable>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>godot-upgrade-assistant</ToolCommandName>
+    <Description>CLI tool to upgrade Godot .NET projects.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Godot.UpgradeAssistant.Core\Godot.UpgradeAssistant.Core.csproj" />
+    <ProjectReference Include="..\Godot.UpgradeAssistant.Providers\Godot.UpgradeAssistant.Providers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="$(MicrosoftExtensionsHostingVersion)" />
+    <PackageReference Include="NuGet.Protocol" Version="$(NuGetProtocolVersion)" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="Serilog" Version="$(SerilogVersion)" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="$(SerilogExtensionsHostingVersion)" />
+    <PackageReference Include="Serilog.Formatting.Compact" Version="$(SerilogFormattingCompactVersion)" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="$(SerilogSinksConsoleVersion)" />
+    <PackageReference Include="Serilog.Sinks.File" Version="$(SerilogSinksFileVersion)" />
+    <PackageReference Include="System.CommandLine" Version="$(SystemCommandLineVersion)" />
+  </ItemGroup>
+
+  <!-- Don't include assemblies that MSBuild ships with. -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build" Version="$(MicrosoftBuildVersion)" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="$(MicrosoftBuildVersion)" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="$(MicrosoftBuildVersion)" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="$(MicrosoftBuildVersion)" ExcludeAssets="runtime" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Strings.resx">
+      <ClassName>Godot.UpgradeAssistant.Cli.SR</ClassName>
+      <EmitFormatMethods>true</EmitFormatMethods>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
