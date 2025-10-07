@@ -71,13 +71,17 @@ internal class UpgradeProviderTest<TUpgradeProvider, TAnalysisProvider> : Analys
         // Verify the project matches the expected fixed project.
         {
             string message = "The upgraded project does not match the expected fixed project.";
-            verifier.EqualOrDiff(FixedProject ?? TestProject ?? DefaultProject, workspace.DotNetWorkspace.ProjectFile.Content, message);
+            string expected = (FixedProject ?? TestProject ?? DefaultProject).ReplaceLineEndings();
+            string actual = workspace.DotNetWorkspace.ProjectFile.Content.ReplaceLineEndings();
+            verifier.EqualOrDiff(expected, actual, message);
         }
 
         // Verify the solution matches the expected fixed solution.
         {
             string message = "The upgraded solution does not match the expected fixed solution.";
-            verifier.EqualOrDiff(FixedSolution ?? TestSolution ?? DefaultSolution, workspace.DotNetWorkspace.SolutionFile.Content, message);
+            string expected = (FixedSolution ?? TestSolution ?? DefaultSolution).ReplaceLineEndings();
+            string actual = workspace.DotNetWorkspace.SolutionFile.Content.ReplaceLineEndings();
+            verifier.EqualOrDiff(expected, actual, message);
         }
 
         // Verify the 'global.json' matches the expected fixed 'global.json'.
@@ -85,7 +89,9 @@ internal class UpgradeProviderTest<TUpgradeProvider, TAnalysisProvider> : Analys
             if (FixedGlobalJson is not null)
             {
                 string message = "The upgraded global.json does not match the expected fixed global.json.";
-                verifier.EqualOrDiff(FixedGlobalJson ?? TestGlobalJson ?? "", workspace.DotNetWorkspace.GlobalJsonFile?.Content ?? "", message);
+                string expected = (FixedGlobalJson ?? TestGlobalJson ?? "").ReplaceLineEndings();
+                string actual = (workspace.DotNetWorkspace.GlobalJsonFile?.Content ?? "").ReplaceLineEndings();
+                verifier.EqualOrDiff(expected, actual, message);
             }
             else
             {

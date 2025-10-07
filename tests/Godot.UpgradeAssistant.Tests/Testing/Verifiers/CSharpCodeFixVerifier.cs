@@ -41,8 +41,8 @@ internal static class CSharpCodeFixVerifier<TCodeFix, TAnalyzer>
     {
         var verifier = new Test(beforeReferences, afterReferences);
 
-        verifier.TestCode = File.ReadAllText(Path.Combine(Constants.SourceFolderPath, source));
-        verifier.FixedCode = File.ReadAllText(Path.Combine(Constants.GeneratedSourceFolderPath, results));
+        verifier.TestCode = File.ReadAllText(Path.Combine(Constants.SourceFolderPath, source)).ReplaceLineEndings();
+        verifier.FixedCode = File.ReadAllText(Path.Combine(Constants.GeneratedSourceFolderPath, results)).ReplaceLineEndings();
 
         return verifier;
     }

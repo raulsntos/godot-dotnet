@@ -41,31 +41,31 @@ internal class AnalysisProviderTest<TAnalysisProvider>
 
     public List<DiagnosticResult> ExpectedDiagnostics { get; } = [];
 
-    private readonly List<DiagnosticResult> _realExpectedDiagnostics = [];
-
     private readonly List<AnalysisResult> _results = [];
 
     public IReadOnlyList<AnalysisResult> AnalysisResults => _results;
 
     public Task RunAsync(CancellationToken cancellationToken = default)
     {
-        _realExpectedDiagnostics.Clear();
-
         List<(string FileName, SourceText Content)> sources = [];
+
+        string solutionPath = $"{DefaultPathPrefix}/{DefaultSolutionName}.{TestSolutionExtension}";
+        string projectPath = $"{DefaultPathPrefix}/{DefaultProjectName}.csproj";
+        string globalJsonPath = $"{DefaultPathPrefix}/global.json";
 
         if (TestSolution is not null)
         {
-            sources.Add(($"{DefaultPathPrefix}/{DefaultSolutionName}.{TestSolutionExtension}", SourceText.From(TestSolution)));
+            sources.Add((solutionPath, SourceText.From(TestSolution.ReplaceLineEndings(), Encoding.UTF8)));
         }
 
         if (TestProject is not null)
         {
-            sources.Add(($"{DefaultPathPrefix}/{DefaultProjectName}.csproj", SourceText.From(TestProject)));
+            sources.Add((projectPath, SourceText.From(TestProject.ReplaceLineEndings(), Encoding.UTF8)));
         }
 
         if (TestGlobalJson is not null)
         {
-            sources.Add(($"{DefaultPathPrefix}/global.json", SourceText.From(TestGlobalJson)));
+            sources.Add((globalJsonPath, SourceText.From(TestGlobalJson.ReplaceLineEndings(), Encoding.UTF8)));
         }
 
         var markupLocations = ImmutableDictionary<string, FileLinePositionSpan>.Empty;
@@ -78,13 +78,13 @@ internal class AnalysisProviderTest<TAnalysisProvider>
 
         TestFile processedTestSolution = new()
         {
-            FileName = $"{DefaultPathPrefix}/{DefaultSolutionName}.{TestSolutionExtension}",
-            Content = DefaultSolution
+            FileName = solutionPath,
+            Content = DefaultSolution,
         };
 
         TestFile processedTestProject = new()
         {
-            FileName = $"{DefaultPathPrefix}/{DefaultProjectName}.csproj",
+            FileName = projectPath,
             Content = DefaultProject,
         };
 
@@ -92,21 +92,21 @@ internal class AnalysisProviderTest<TAnalysisProvider>
 
         foreach (var (fileName, content) in processedSources)
         {
-            if (fileName == processedTestSolution.FileName)
+            if (fileName == solutionPath)
             {
                 processedTestSolution = processedTestSolution with { Content = content.ToString() };
             }
 
-            if (fileName == processedTestProject.FileName)
+            if (fileName == projectPath)
             {
                 processedTestProject = processedTestProject with { Content = content.ToString() };
             }
 
-            if (fileName == $"{DefaultPathPrefix}/global.json")
+            if (fileName == globalJsonPath)
             {
                 processedGlobalJson = new TestFile()
                 {
-                    FileName = fileName,
+                    FileName = globalJsonPath,
                     Content = content.ToString(),
                 };
             }
@@ -189,8 +189,7 @@ internal class AnalysisProviderTest<TAnalysisProvider>
             var actualSpan = actual.GetFileLinePositionSpan();
             var expectedLocation = expected.Spans[0];
 
-            bool assert = actualSpan.Path == expectedLocation.Span.Path
-                || (actualSpan.Path?.Contains("Test0.") == true && expectedLocation.Span.Path.Contains("Test."));
+            bool assert = NormalizePath(actualSpan.Path) == expectedLocation.Span.Path;
 
             string message = FormatVerifierMessage(actual, expected, $"Expected diagnostic to be in file \"{expectedLocation.Span.Path}\" was actually in file \"{actualSpan.Path}\"");
             verifier.True(assert, message);
@@ -208,6 +207,26 @@ internal class AnalysisProviderTest<TAnalysisProvider>
 
                 message = FormatVerifierMessage(actual, expected, $"Expected diagnostic to {positionText} at column \"{expectedLinePosition.Character + 1}\" was actually at column \"{actualLinePosition.Character + 1}\"");
                 verifier.Equal(expectedLinePosition.Character, actualLinePosition.Character, message);
+            }
+
+            static string NormalizePath(string path)
+            {
+                // ProjectRootElement always normalizes the path, so when analysis providers report a diagnostic
+                // the location is always normalized. In Windows this means it will change the path separators and
+                // add a drive letter, so we need to change it back so it matches the expected diagnostic location.
+                if (OperatingSystem.IsWindows())
+                {
+                    int driveSeparator = path.IndexOf(':');
+                    if (driveSeparator != -1)
+                    {
+                        path = path.Substring(driveSeparator + 1);
+                    }
+                    return path.Replace("\\", "/", StringComparison.Ordinal);
+                }
+                else
+                {
+                    return path;
+                }
             }
         }
 
