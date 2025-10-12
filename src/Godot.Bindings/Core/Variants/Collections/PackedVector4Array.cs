@@ -210,7 +210,7 @@ public sealed class PackedVector4Array :
     /// This is also known as the size or length of the array.
     /// </summary>
     /// <returns>The number of elements.</returns>
-    public int Count => NativeValue.DangerousSelfRef.Size;
+    public int Count => checked((int)NativeGodotPackedVector4Array.GetSize(in NativeValue.DangerousSelfRef));
 
     bool ICollection<Vector4>.IsReadOnly => false;
 

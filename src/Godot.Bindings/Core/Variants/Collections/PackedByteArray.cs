@@ -210,7 +210,7 @@ public sealed class PackedByteArray :
     /// This is also known as the size or length of the array.
     /// </summary>
     /// <returns>The number of elements.</returns>
-    public int Count => NativeValue.DangerousSelfRef.Size;
+    public int Count => checked((int)NativeGodotPackedByteArray.GetSize(in NativeValue.DangerousSelfRef));
 
     bool ICollection<byte>.IsReadOnly => false;
 

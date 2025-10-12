@@ -210,7 +210,7 @@ public sealed class PackedInt64Array :
     /// This is also known as the size or length of the array.
     /// </summary>
     /// <returns>The number of elements.</returns>
-    public int Count => NativeValue.DangerousSelfRef.Size;
+    public int Count => checked((int)NativeGodotPackedInt64Array.GetSize(in NativeValue.DangerousSelfRef));
 
     bool ICollection<long>.IsReadOnly => false;
 

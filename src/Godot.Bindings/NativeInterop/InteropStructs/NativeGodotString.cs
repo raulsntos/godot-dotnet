@@ -21,11 +21,7 @@ partial struct NativeGodotString
     internal readonly unsafe int Size
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get
-        {
-            // This code must match the method 'CowData::get_size' in the engine side.
-            return _ptr != 0 ? (int)*((ulong*)_ptr - 1) : 0;
-        }
+        get => checked((int)GetSize(in this));
     }
 
     internal static unsafe NativeGodotString Create(scoped ReadOnlySpan<byte> utf8)

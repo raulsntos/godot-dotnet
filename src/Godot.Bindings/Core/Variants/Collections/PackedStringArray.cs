@@ -166,7 +166,7 @@ public sealed class PackedStringArray :
     /// This is also known as the size or length of the array.
     /// </summary>
     /// <returns>The number of elements.</returns>
-    public int Count => NativeValue.DangerousSelfRef.Size;
+    public int Count => checked((int)NativeGodotPackedStringArray.GetSize(in NativeValue.DangerousSelfRef));
 
     bool ICollection<string>.IsReadOnly => false;
 
