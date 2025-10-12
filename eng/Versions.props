@@ -10,7 +10,7 @@
     <!-- System -->
     <SystemCommandLineVersion>2.0.0-beta5.25306.1</SystemCommandLineVersion>
     <!-- MSBuild -->
-    <MicrosoftBuildVersion>17.14.28</MicrosoftBuildVersion>
+    <MicrosoftBuildVersion>17.10.46</MicrosoftBuildVersion>
     <MicrosoftBuildLocatorVersion>1.9.1</MicrosoftBuildLocatorVersion>
     <MicrosoftBuildUtilitiesCoreVersion>$(MicrosoftBuildVersion)</MicrosoftBuildUtilitiesCoreVersion>
     <!-- Roslyn -->
@@ -19,7 +19,7 @@
       included in the most recent Visual Studio version or the most recent .NET SDK version. If it were to go ahead,
       then any components (analyzers, source generators) depending on this version would not work in Visual Studio.
     -->
-    <MicrosoftCodeAnalysisVersion_LatestVS>4.13.0</MicrosoftCodeAnalysisVersion_LatestVS>
+    <MicrosoftCodeAnalysisVersion_LatestVS>4.8.0</MicrosoftCodeAnalysisVersion_LatestVS>
     <MicrosoftCodeAnalysisCSharpVersion>$(MicrosoftCodeAnalysisVersion_LatestVS)</MicrosoftCodeAnalysisCSharpVersion>
     <MicrosoftCodeAnalysisCSharpWorkspacesVersion>$(MicrosoftCodeAnalysisVersion_LatestVS)</MicrosoftCodeAnalysisCSharpWorkspacesVersion>
     <MicrosoftCodeAnalysisWorkspacesMSBuildVersion>$(MicrosoftCodeAnalysisVersion_LatestVS)</MicrosoftCodeAnalysisWorkspacesMSBuildVersion>
