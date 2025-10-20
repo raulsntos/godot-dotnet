@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Godot.Common.CodeAnalysis;
@@ -38,6 +39,17 @@ internal sealed class DotNetWorkspace : IDisposable
     public Document? GetDocumentForSyntax(SyntaxNode syntaxNode)
     {
         return _workspace.CurrentSolution.GetDocument(syntaxNode.SyntaxTree);
+    }
+
+    public Document? GetDocumentForFilePath(string filePath)
+    {
+        var documentId = _workspace.CurrentSolution.GetDocumentIdsWithFilePath(filePath).FirstOrDefault();
+        if (documentId is null)
+        {
+            return null;
+        }
+
+        return _workspace.CurrentSolution.GetDocument(documentId);
     }
 
     public IEnumerable<ITypeSymbol> FindTypeSymbols(string typeName)
