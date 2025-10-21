@@ -10,7 +10,7 @@
     <!-- System -->
     <SystemCommandLineVersion>2.0.0-beta5.25306.1</SystemCommandLineVersion>
     <!-- MSBuild -->
-    <MicrosoftBuildVersion>17.14.8</MicrosoftBuildVersion>
+    <MicrosoftBuildVersion>17.14.28</MicrosoftBuildVersion>
     <MicrosoftBuildLocatorVersion>1.9.1</MicrosoftBuildLocatorVersion>
     <MicrosoftBuildUtilitiesCoreVersion>$(MicrosoftBuildVersion)</MicrosoftBuildUtilitiesCoreVersion>
     <!-- Roslyn -->
