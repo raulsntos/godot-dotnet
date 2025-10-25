@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Godot;
 
-internal sealed class GodotSynchronizationContext : SynchronizationContext, IDisposable
+public sealed class GodotSynchronizationContext : SynchronizationContext, IDisposable
 {
     private readonly BlockingCollection<(SendOrPostCallback Callback, object? State)> _queue = [];
 
@@ -65,11 +65,16 @@ internal sealed class GodotSynchronizationContext : SynchronizationContext, IDis
     }
 
     /// <summary>
+    /// A singleton instance of the synchronization context.
+    /// </summary>
+    public static readonly GodotSynchronizationContext Singleton = new();
+
+    /// <summary>
     /// Initializes the synchronization context. This should be called before any user code is executed.
     /// </summary>
     internal static void InitializeSynchronizationContext()
     {
-        SynchronizationContext.SetSynchronizationContext(new GodotSynchronizationContext());
+        SynchronizationContext.SetSynchronizationContext(Singleton);
     }
 
     /// <summary>
