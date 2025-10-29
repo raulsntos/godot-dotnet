@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -60,7 +61,9 @@ internal static unsafe class Main
         {
             _loadContexts.Add(assemblyPath, new WeakGodotLoadContext(alc));
 
-            var assembly = alc.LoadFromAssemblyPath(assemblyPath);
+            // Load the assembly in memory to prevent locking the file on Windows.
+            using var assemblyStream = File.OpenRead(assemblyPath);
+            var assembly = alc.LoadFromStream(assemblyStream);
 
             if (IsGodotSharpAssembly(assembly))
             {
