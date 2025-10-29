@@ -321,6 +321,11 @@ public static partial class GodotRegistry
             // Convert internal property info to the public managed type.
             VariantType type = (VariantType)refProperty->type;
             StringName? name = StringNameMarshaller.ConvertFromUnmanaged(refProperty->name);
+            if (name is null)
+            {
+                // TODO(@raulsntos): I didn't consider that we may receive GROUP_START/END properties which have no name. Handle those cases properly.
+                return false;
+            }
             Debug.Assert(name is not null);
             var propertyInfo = new PropertyInfo(name, type)
             {
