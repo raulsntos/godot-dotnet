@@ -24,7 +24,7 @@ internal static unsafe class StringNameMarshaller
     {
         Debug.Assert(value is not null);
         return value->IsAllocated
-            ? StringName.CreateTakingOwnership(*value)
+            ? StringName.CreateCopying(*value)
             : null;
     }
 
