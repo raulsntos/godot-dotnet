@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <IsShippingPackage>false</IsShippingPackage>
     <IsPackable>true</IsPackable>
     <Description>
       Godot Engine – Multi-platform 2D and 3D game engine.
