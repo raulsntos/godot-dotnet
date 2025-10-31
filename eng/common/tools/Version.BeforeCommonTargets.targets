@@ -109,7 +109,7 @@
         "release"    1.2.3
     -->
     <VersionSuffix Condition="'$(FinalVersionKind)' == 'release'"/>
-    <VersionSuffix Condition="'$(FinalVersionKind)' == 'prerelease'">$(_PreReleaseLabel).final</VersionSuffix>
+    <VersionSuffix Condition="'$(FinalVersionKind)' == 'prerelease'">$(_PreReleaseLabel)</VersionSuffix>
     <VersionSuffix Condition="'$(FinalVersionKind)' == ''">$(_PreReleaseLabel)$(_BuildNumberLabels)</VersionSuffix>
 
     <!--
