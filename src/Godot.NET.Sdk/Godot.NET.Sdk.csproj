@@ -11,6 +11,13 @@
     <!-- Exclude target framework from the package dependencies as we don't include the build output -->
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <IncludeBuildOutput>false</IncludeBuildOutput>
+
+    <!--
+      TODO: Workaround to avoid NU5017 apparently caused because there are no symbols in this project.
+      This is expected, but our default symbol configuration makes it report an error and fail to build.
+      See: https://github.com/NuGet/Home/issues/10372
+    -->
+    <IncludeSymbols>false</IncludeSymbols>
   </PropertyGroup>
 
   <PropertyGroup>
