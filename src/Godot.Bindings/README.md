@@ -19,8 +19,8 @@ private static bool MyLibraryInit(nint getProcAddress, nint library, nint initia
 	GodotBridge.Initialize(getProcAddress, library, initialization, config =>
 	{
 		config.SetMinimumLibraryInitializationLevel(InitializationLevel.Scene);
-		config.RegisterInitializer(InitializeMyLibrary),
-		config.RegisterTerminator(DeinitializeMyLibrary),
+		config.RegisterInitializer(InitializeMyLibrary);
+		config.RegisterTerminator(DeinitializeMyLibrary);
 	});
 
 	return true;
