@@ -223,7 +223,7 @@ internal sealed class BuiltInClassesBindingsDataCollector : BindingsDataCollecto
                         ReturnParameter = ReturnInfo.FromType(KnownTypes.SystemInt32),
                         Body = MethodBody.CreateUnsafe(writer =>
                         {
-                            writer.WriteLine("return _vector.Size;");
+                            writer.WriteLine("return checked((int)GetSize(in this));");
                         }),
                     },
                 };
