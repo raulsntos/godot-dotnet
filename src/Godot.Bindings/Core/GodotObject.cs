@@ -33,6 +33,7 @@ partial class GodotObject : IDisposable
         // If this object is RefCounted, initialize the reference count.
         if (this is RefCounted rc)
         {
+            // TODO(@raulsntos): If this object is constructed from a returned value from a generated method (like 'FileAccess.Open'), we should NOT call 'InitRef' here. See godot-cpp's `_gde_internal_constructor`.
             rc.InitRef();
         }
 
@@ -201,6 +202,16 @@ partial class GodotObject : IDisposable
         if (NativePtr != 0)
         {
             GodotBridge.GDExtensionInterface.object_free_instance_binding((void*)NativePtr, GodotBridge.LibraryPtr);
+
+            if (this is RefCounted rc)
+            {
+                // If this object is RefCounted, decrease the reference count.
+                if (rc.Unreference())
+                {
+                    // If the reference count reached zero, we need to free the native instance.
+                    GodotBridge.GDExtensionInterface.object_destroy((void*)NativePtr);
+                }
+            }
 
             _gcHandle.Free();
             NativePtr = 0;
