@@ -173,7 +173,27 @@ internal abstract class PtrCallMethodBody<TContext> : CallMethodBody<TContext> w
 
     protected override void Return(TContext context, IndentedTextWriter writer)
     {
+        // TODO(@raulsntos): For methods that return RefCounted types (like 'FileAccess.Open'), we should NOT call 'InitRef'. The GodotObject constructor always calls InitRef, so for now we'll just call 'Unreference' to compensate.
+        if (IsRefCountedType(context.ReturnType))
+        {
+            writer.WriteLine($"{context.ReturnVariableName}.Unreference();");
+        }
         writer.WriteLine($"return {context.ReturnVariableName};");
+
+        static bool IsRefCountedType(TypeInfo? type)
+        {
+            while (type is not null)
+            {
+                if (type.FullName == "Godot.RefCounted")
+                {
+                    return true;
+                }
+
+                type = type.BaseType;
+            }
+
+            return false;
+        }
     }
 
     protected override void Cleanup(TContext context, IndentedTextWriter writer)
