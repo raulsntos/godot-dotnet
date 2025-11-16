@@ -106,7 +106,6 @@ internal static unsafe class Main
         }
 
         alc.Unload();
-        _loadContexts.Remove(assemblyPath);
 
         for (int i = 0; alc.IsAlive && (i < 10); i++)
         {
@@ -119,6 +118,8 @@ internal static unsafe class Main
             // If the ALC is still alive, then something is keeping it alive and can't be unloaded.
             throw new InvalidOperationException($"Failed to unload assembly '{assemblyPath}'. Possible causes: Strong GC handles, running threads, etc.");
         }
+
+        _loadContexts.Remove(assemblyPath);
     }
 
     private static bool IsGodotSharpAssembly(Assembly assembly)
