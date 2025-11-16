@@ -7,9 +7,13 @@ namespace Godot.Bridge;
 /// <summary>
 /// Context for registering classes and their members within the Godot engine.
 /// </summary>
-public partial class ClassRegistrationContext
+public sealed partial class ClassRegistrationContext : IDisposable
 {
-    internal GCHandle GCHandle { get; }
+    private bool _disposed;
+
+    private GCHandle _gcHandle;
+
+    internal GCHandle GCHandle => _gcHandle;
 
     internal StringName ClassName { get; }
 
@@ -17,7 +21,7 @@ public partial class ClassRegistrationContext
 
     internal ClassRegistrationContext(StringName className)
     {
-        GCHandle = GCHandle.Alloc(this, GCHandleType.Normal);
+        _gcHandle = GCHandle.Alloc(this, GCHandleType.Normal);
         ClassName = className;
     }
 
@@ -27,5 +31,20 @@ public partial class ClassRegistrationContext
         {
             register();
         }
+    }
+
+    /// <summary>
+    /// Disposes of this <see cref="ClassRegistrationContext"/>.
+    /// </summary>
+    public void Dispose()
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        _disposed = true;
+
+        _gcHandle.Free();
     }
 }

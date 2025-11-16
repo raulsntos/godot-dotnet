@@ -175,6 +175,7 @@ public static partial class GodotRegistry
 
             GodotBridge.GDExtensionInterface.classdb_unregister_extension_class(GodotBridge.LibraryPtr, classNameNativePtr);
 
+            _registeredClasses[className].Dispose();
             _registeredClasses.Remove(className);
         }
     }
