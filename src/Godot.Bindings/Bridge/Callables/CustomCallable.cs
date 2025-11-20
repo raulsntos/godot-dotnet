@@ -13,8 +13,20 @@ namespace Godot.Bridge;
 /// API to allow implementing custom behavior for special cases and it's used
 /// internally to implement delegate-based Callables.
 /// </summary>
-public abstract class CustomCallable
+public abstract class CustomCallable : IDisposable
 {
+    private bool _disposed;
+
+    private GCHandle _gcHandle;
+
+    /// <summary>
+    /// Constructs a <see cref="CustomCallable"/>.
+    /// </summary>
+    public CustomCallable()
+    {
+        _gcHandle = GCHandle.Alloc(this, GCHandleType.Normal);
+    }
+
     /// <summary>
     /// Convert a <see cref="CustomCallable"/> into a <see cref="Callable"/>.
     /// </summary>
@@ -25,11 +37,9 @@ public abstract class CustomCallable
 
     internal unsafe NativeGodotCallable ConstructCallable()
     {
-        var gcHandle = GCHandle.Alloc(this, GCHandleType.Normal);
-
         var info = new GDExtensionCallableCustomInfo2()
         {
-            callable_userdata = (void*)GCHandle.ToIntPtr(gcHandle),
+            callable_userdata = (void*)GCHandle.ToIntPtr(_gcHandle),
             token = GodotBridge.LibraryPtr,
             object_id = GetObjectId(),
             call_func = &Call_Native,
@@ -101,6 +111,38 @@ public abstract class CustomCallable
 
         *outRet = result.NativeValue.DangerousSelfRef;
         outError->error = GDExtensionCallErrorType.GDEXTENSION_CALL_OK;
+    }
+
+    /// <summary>
+    /// Releases the unmanaged <see cref="CustomCallable"/> instance.
+    /// </summary>
+    ~CustomCallable()
+    {
+        Dispose(false);
+    }
+
+    /// <summary>
+    /// Disposes of this <see cref="CustomCallable"/>.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// Disposes implementation of this <see cref="CustomCallable"/>.
+    /// </summary>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        _disposed = true;
+
+        _gcHandle.Free();
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
