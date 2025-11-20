@@ -11,6 +11,8 @@ partial class ClassRegistrationContext
 {
     private readonly HashSet<StringName> _registeredMethods = new(StringNameEqualityComparer.Default);
 
+    private readonly Dictionary<StringName, GCHandle> _registeredMethodHandles = [];
+
     // The MethodInfo must be referenced somewhere so the GC doesn't release it.
     // We need to keep it alive because it contains the MethodBindInvoker that
     // invokes the method in the 'call_func' and 'ptrcall_func' callbacks.
@@ -126,8 +128,9 @@ partial class ClassRegistrationContext
             }
 
             var methodGCHandle = GCHandle.Alloc(methodInfo, GCHandleType.Normal);
-            var methodInfoPtr = GCHandle.ToIntPtr(methodGCHandle);
+            _registeredMethodHandles.Add(methodInfo.Name, methodGCHandle);
 
+            nint methodInfoPtr = GCHandle.ToIntPtr(methodGCHandle);
             methodInfoNative.call_func = &CallWithVariantArgs_Native;
             methodInfoNative.ptrcall_func = &CallWithPtrArgs_Native;
             methodInfoNative.method_userdata = (void*)methodInfoPtr;

@@ -45,6 +45,12 @@ public sealed partial class ClassRegistrationContext : IDisposable
 
         _disposed = true;
 
+        foreach (var handle in _registeredMethodHandles.Values)
+        {
+            handle.Free();
+        }
+        _registeredMethodHandles.Clear();
+
         _gcHandle.Free();
     }
 }
