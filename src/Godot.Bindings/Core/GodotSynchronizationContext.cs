@@ -9,9 +9,7 @@ internal sealed class GodotSynchronizationContext : SynchronizationContext, IDis
 {
     private readonly BlockingCollection<(SendOrPostCallback Callback, object? State)> _queue = [];
 
-    private GodotSynchronizationContext()
-    {
-    }
+    private GodotSynchronizationContext() { }
 
     /// <inheritdoc />
     public override void Send(SendOrPostCallback d, object? state)
@@ -62,14 +60,17 @@ internal sealed class GodotSynchronizationContext : SynchronizationContext, IDis
     public void Dispose()
     {
         _queue.Dispose();
+        SynchronizationContext.SetSynchronizationContext(null);
     }
 
     /// <summary>
     /// Initializes the synchronization context. This should be called before any user code is executed.
     /// </summary>
-    internal static void InitializeSynchronizationContext()
+    internal static GodotSynchronizationContext InitializeSynchronizationContext()
     {
-        SynchronizationContext.SetSynchronizationContext(new GodotSynchronizationContext());
+        var syncContext = new GodotSynchronizationContext();
+        SynchronizationContext.SetSynchronizationContext(syncContext);
+        return syncContext;
     }
 
     /// <summary>

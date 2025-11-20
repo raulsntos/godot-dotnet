@@ -40,6 +40,8 @@ public static partial class GodotBridge
 
     private static GodotVersion? _godotVersion;
 
+    private static GodotSynchronizationContext? _syncContext;
+
     private static GDExtensionInterface _gdextensionInterface;
 
     internal static unsafe void* LibraryPtr => _libraryPtr;
@@ -77,15 +79,6 @@ public static partial class GodotBridge
             deinitialize = &DeinitializeLevel_Native,
             minimum_initialization_level = (GDExtensionInitializationLevel)configuration.MinimumInitLevel,
         };
-
-        GodotSynchronizationContext.InitializeSynchronizationContext();
-
-        var mainLoopCallbacks = new GDExtensionMainLoopCallbacks()
-        {
-            frame_func = (nint)(delegate* unmanaged[Cdecl]<void>)(&Frame_Native)
-        };
-
-        _gdextensionInterface.register_main_loop_callbacks(_libraryPtr, &mainLoopCallbacks);
 
         _initialized = true;
     }
@@ -128,6 +121,19 @@ public static partial class GodotBridge
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
     private static unsafe void InitializeLevel_Native(void* userData, GDExtensionInitializationLevel level)
     {
+        // Only initialize everything once at the first level.
+        if (level == 0)
+        {
+            _syncContext = GodotSynchronizationContext.InitializeSynchronizationContext();
+
+            var mainLoopCallbacks = new GDExtensionMainLoopCallbacks()
+            {
+                frame_func = (nint)(delegate* unmanaged[Cdecl]<void>)(&Frame_Native)
+            };
+
+            _gdextensionInterface.register_main_loop_callbacks(_libraryPtr, &mainLoopCallbacks);
+        }
+
         _initCallback?.Invoke((InitializationLevel)level);
     }
 
@@ -139,6 +145,9 @@ public static partial class GodotBridge
         // Only free everything once at the last level.
         if (level == 0)
         {
+            _syncContext?.Dispose();
+            _syncContext = null;
+
             GodotRegistry.RemoveAllEditorPlugins();
             GodotRegistry.UnregisterAllClasses();
 
