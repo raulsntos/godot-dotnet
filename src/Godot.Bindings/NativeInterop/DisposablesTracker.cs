@@ -10,11 +10,15 @@ internal static class DisposablesTracker
 
     private static readonly ConcurrentDictionary<WeakReference<IDisposable>, byte> _otherInstances = [];
 
+    private static bool? _isStdOutVerbose;
+
     internal static void DisposeAll()
     {
-        bool isStdOutVerbose = OS.Singleton.IsStdOutVerbose();
+        // We cache the result of IsStdOutVerbose() because the next time we call it,
+        // the OS singleton would already be disposed. And stdout verbosity won't change.
+        _isStdOutVerbose ??= OS.Singleton.IsStdOutVerbose();
 
-        if (isStdOutVerbose)
+        if (_isStdOutVerbose.Value)
         {
             GD.Print("Disposing tracked instances...");
         }
@@ -39,7 +43,7 @@ internal static class DisposablesTracker
             }
         }
 
-        if (isStdOutVerbose)
+        if (_isStdOutVerbose.Value)
         {
             GD.Print("Finished disposing tracked instances.");
         }
