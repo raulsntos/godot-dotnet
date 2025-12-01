@@ -108,14 +108,14 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                     IsStatic = true,
                     Body = MethodBody.Create(writer =>
                     {
-                        writer.WriteLine($"var createHelpers = new global::System.Collections.Generic.Dictionary<global::Godot.StringName, global::System.Func<nint, global::Godot.GodotObject>>(capacity: {context.Api.Classes.Length});");
+                        writer.WriteLine($"var createHelpers = new global::System.Collections.Generic.Dictionary<global::Godot.StringName, global::System.Func<nint, bool, global::Godot.GodotObject>>(capacity: {context.Api.Classes.Length});");
                         writer.WriteLine($"var registerVirtualOverridesHelpers = new global::System.Collections.Generic.Dictionary<global::Godot.StringName, global::Godot.NativeInterop.InteropUtils.RegisterVirtualOverrideHelper>(capacity: {context.Api.Classes.Length});");
 
                         foreach (var engineClass in context.Api.Classes)
                         {
                             var type = context.TypeDB.GetTypeFromEngineName(engineClass.Name);
 
-                            writer.WriteLine($"createHelpers.Add({type.FullNameWithGlobal}.NativeName, nativePtr => new {type.FullNameWithGlobal}(nativePtr));");
+                            writer.WriteLine($"createHelpers.Add({type.FullNameWithGlobal}.NativeName, (nativePtr, memoryOwn) => new {type.FullNameWithGlobal}(nativePtr, memoryOwn));");
                             writer.WriteLine($"registerVirtualOverridesHelpers.Add({type.FullNameWithGlobal}.NativeName, {type.FullNameWithGlobal}.RegisterVirtualOverrides);");
                         }
 
@@ -191,10 +191,14 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                 var nativePtrCtor = new ConstructorInfo()
                 {
                     VisibilityAttributes = VisibilityAttributes.FamilyOrAssembly,
-                    Initializer = "base(nativePtr)",
+                    Initializer = "base(nativePtr, memoryOwn)",
                     Parameters =
                     {
                         new ParameterInfo("nativePtr", KnownTypes.SystemIntPtr),
+                        new ParameterInfo("memoryOwn", KnownTypes.SystemBoolean)
+                        {
+                            DefaultValue = "true",
+                        },
                     },
                 };
                 type.DeclaredConstructors.Add(nativePtrCtor);

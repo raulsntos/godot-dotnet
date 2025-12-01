@@ -24,16 +24,19 @@ partial class GodotObject : IDisposable
     /// Constructs a <see cref="GodotObject"/> with the given <paramref name="nativePtr"/>.
     /// </summary>
     /// <param name="nativePtr">The pointer to the native object in the engine's side.</param>
-    protected internal GodotObject(nint nativePtr)
+    /// <param name="memoryOwn">
+    /// Indicates whether the managed instance is a new object and should initialize the reference count
+    /// if it's a <see cref="RefCounted"/> instance.
+    /// </param>
+    protected internal GodotObject(nint nativePtr, bool memoryOwn = true)
     {
         _gcHandle = GCHandle.Alloc(this, GCHandleType.Normal);
 
         NativePtr = nativePtr;
 
         // If this object is RefCounted, initialize the reference count.
-        if (this is RefCounted rc)
+        if (this is RefCounted rc && memoryOwn)
         {
-            // TODO(@raulsntos): If this object is constructed from a returned value from a generated method (like 'FileAccess.Open'), we should NOT call 'InitRef' here. See godot-cpp's `_gde_internal_constructor`.
             rc.InitRef();
         }
 
@@ -197,8 +200,6 @@ partial class GodotObject : IDisposable
             return;
         }
 
-        _disposed = true;
-
         if (NativePtr != 0)
         {
             GodotBridge.GDExtensionInterface.object_free_instance_binding((void*)NativePtr, GodotBridge.LibraryPtr);
@@ -209,9 +210,47 @@ partial class GodotObject : IDisposable
                 if (rc.Unreference())
                 {
                     // If the reference count reached zero, we need to free the native instance.
+                    // Make sure we mark this object as disposed to avoid re-entrancy issues.
+                    _disposed = true;
                     GodotBridge.GDExtensionInterface.object_destroy((void*)NativePtr);
                 }
             }
+
+            _gcHandle.Free();
+            NativePtr = 0;
+        }
+
+        _disposed = true;
+
+        if (_weakReferenceToSelf is not null)
+        {
+            DisposablesTracker.UnregisterGodotObject(_weakReferenceToSelf);
+        }
+    }
+
+    /// <summary>
+    /// Destroyes the <see cref="GodotObject"/> instance in the Godot engine.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Object is a <see cref="RefCounted"/> and cannot be freed manually.
+    /// </exception>
+    public unsafe void Free()
+    {
+        if (this is RefCounted)
+        {
+            throw new InvalidOperationException("RefCounted objects are freed automatically when their reference count reaches zero.");
+        }
+
+        if (_disposed)
+        {
+            return;
+        }
+
+        _disposed = true;
+
+        if (NativePtr != 0)
+        {
+            GodotBridge.GDExtensionInterface.object_destroy((void*)NativePtr);
 
             _gcHandle.Free();
             NativePtr = 0;

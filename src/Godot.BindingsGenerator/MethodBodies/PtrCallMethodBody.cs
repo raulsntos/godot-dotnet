@@ -168,17 +168,14 @@ internal abstract class PtrCallMethodBody<TContext> : CallMethodBody<TContext> w
             return;
         }
 
-        marshaller.WriteConvertFromUnmanaged(writer, context.ReturnType, $"{context.ReturnVariableName}Ptr", context.ReturnVariableName);
-    }
-
-    protected override void Return(TContext context, IndentedTextWriter writer)
-    {
-        // TODO(@raulsntos): For methods that return RefCounted types (like 'FileAccess.Open'), we should NOT call 'InitRef'. The GodotObject constructor always calls InitRef, so for now we'll just call 'Unreference' to compensate.
+        string returnVariableName = $"{context.ReturnVariableName}Ptr";
         if (IsRefCountedType(context.ReturnType))
         {
-            writer.WriteLine($"{context.ReturnVariableName}.Unreference();");
+            // TODO(@raulsntos): Hack to avoid increasing the reference count when unmarshalling returned RefCounted instances.
+            returnVariableName += ", memoryOwn: false";
         }
-        writer.WriteLine($"return {context.ReturnVariableName};");
+
+        marshaller.WriteConvertFromUnmanaged(writer, context.ReturnType, returnVariableName, context.ReturnVariableName);
 
         static bool IsRefCountedType(TypeInfo? type)
         {
@@ -194,6 +191,11 @@ internal abstract class PtrCallMethodBody<TContext> : CallMethodBody<TContext> w
 
             return false;
         }
+    }
+
+    protected override void Return(TContext context, IndentedTextWriter writer)
+    {
+        writer.WriteLine($"return {context.ReturnVariableName};");
     }
 
     protected override void Cleanup(TContext context, IndentedTextWriter writer)
