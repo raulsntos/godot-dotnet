@@ -13,10 +13,14 @@ internal unsafe class GodotObjectMarshaller
     /// for the unmanaged instance referenced by the native pointer.
     /// </summary>
     /// <param name="nativePtr">Pointer to the unmanaged <see cref="GodotObject"/> instance.</param>
+    /// <param name="memoryOwn">
+    /// Indicates whether the managed instance is a new object and should initialize the reference count
+    /// if it's a <see cref="RefCounted"/> instance.
+    /// </param>
     /// <returns>
     /// A managed <see cref="GodotObject"/> instance that represents the unmanaged instance in C#.
     /// </returns>
-    internal static GodotObject? GetOrCreateManagedInstance(nint nativePtr)
+    internal static GodotObject? GetOrCreateManagedInstance(nint nativePtr, bool memoryOwn = true)
     {
         if (nativePtr == 0)
         {
@@ -28,7 +32,12 @@ internal unsafe class GodotObjectMarshaller
         if (instance is not null)
         {
             var gcHandle = GCHandle.FromIntPtr((nint)instance);
-            return (GodotObject?)gcHandle.Target;
+            var target = (GodotObject?)gcHandle.Target;
+            if (target is RefCounted refCounted)
+            {
+                refCounted.Unreference();
+            }
+            return target;
         }
 
         // Otherwise, try to look up the create helper.
@@ -39,7 +48,7 @@ internal unsafe class GodotObjectMarshaller
             Debug.Assert(InteropUtils.CreateHelpers.ContainsKey(nativeClassNameManaged), $"Create helper for class named '{nativeClassNameManaged}' not found.");
             if (InteropUtils.CreateHelpers.TryGetValue(nativeClassNameManaged, out var createHelper))
             {
-                return createHelper(nativePtr);
+                return createHelper(nativePtr, memoryOwn);
             }
         }
 
@@ -61,10 +70,10 @@ internal unsafe class GodotObjectMarshaller
         return ptr;
     }
 
-    public static GodotObject? ConvertFromUnmanaged(nint* value)
+    public static GodotObject? ConvertFromUnmanaged(nint* value, bool memoryOwn = true)
     {
         Debug.Assert(value is not null);
-        return GetOrCreateManagedInstance(*value);
+        return GetOrCreateManagedInstance(*value, memoryOwn);
     }
 
     public static void Free(nint* value)
@@ -79,12 +88,12 @@ internal unsafe class GodotObjectMarshaller
         return ptr;
     }
 
-    public static GodotObject? ConvertFromVariant(NativeGodotVariant* value)
+    public static GodotObject? ConvertFromVariant(NativeGodotVariant* value, bool memoryOwn = true)
     {
         Debug.Assert(value is not null);
         Debug.Assert(value->Type == VariantType.Object);
         nint nativePtr = value->Object;
-        return GetOrCreateManagedInstance(nativePtr);
+        return GetOrCreateManagedInstance(nativePtr, memoryOwn);
     }
 
     public static void FreeVariant(NativeGodotVariant* value)
