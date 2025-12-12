@@ -236,6 +236,14 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                 continue;
             }
 
+            // TODO: Add support for methods with parameter types defined outside of the API dump?
+            // See: https://github.com/godot-rust/gdext/pull/1363
+            if (type.FullName == "Godot.GDExtensionManager" && engineMethod.Name == "load_extension_from_function")
+            {
+                // Skipping this method because it contains a parameter of type 'const GDExtensionInitializationFunction*' which is not defined in the API dump.
+                continue;
+            }
+
             var method = new MethodInfo(NamingUtils.SnakeToPascalCase(engineMethod.Name))
             {
                 VisibilityAttributes = VisibilityAttributes.Public,

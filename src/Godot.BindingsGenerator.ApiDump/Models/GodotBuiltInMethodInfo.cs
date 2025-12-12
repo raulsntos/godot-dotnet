@@ -46,6 +46,12 @@ public class GodotBuiltInMethodInfo
     public required uint Hash { get; set; }
 
     /// <summary>
+    /// Collection of hashes of compatibility methods provided for this method.
+    /// </summary>
+    [JsonPropertyName("hash_compatibility")]
+    public uint[]? HashCompatibility { get; set; }
+
+    /// <summary>
     /// Collection of argument information for the method.
     /// </summary>
     [JsonPropertyName("arguments")]
