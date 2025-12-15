@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Threading;
 using Godot.NativeInterop;
 using Godot.NativeInterop.Marshallers;
 
@@ -125,7 +126,7 @@ public static partial class GodotRegistry
             unreference_func = null,
             create_instance_func = &Create_Native,
             free_instance_func = &Free_Native,
-            // recreate_instance_func = null, // TODO: We should implement this for GDExtension reloading.
+            recreate_instance_func = &Recreate_Native,
             get_virtual_func = null,
             get_virtual_call_data_func = &GetVirtualMethodUserData_Native,
             call_virtual_with_data_func = &CallVirtualMethod_Native,
@@ -402,6 +403,38 @@ public static partial class GodotRegistry
         }
 
         return (void*)instance.NativePtr;
+    }
+
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
+    private static unsafe void* Recreate_Native(void* userData, void* instanceNativePtr)
+    {
+        var gcHandleContext = GCHandle.FromIntPtr((nint)userData);
+        var context = (ClassRegistrationContext?)gcHandleContext.Target;
+
+        Debug.Assert(context is not null);
+
+        if (context.RegisteredConstructor is null)
+        {
+            throw new InvalidOperationException(SR.FormatInvalidOperation_CantInstantiateTypeConstructorNotRegistered(context.ClassName));
+        }
+
+        try
+        {
+            // TODO(@raulsntos): This is a bit of a hack to pass the native pointer to the constructor.
+            // It also creates a bit of a mess in GodotObject since we have to handle this special case,
+            // and the chaining constructors become a bit more complicated to handle all the scenarios:
+            // - User creating a new instance using the parameterless constructor.
+            // - Unmarshalling an instance from an existing native pointer.
+            // - Recreating an instance from an existing native pointer after reload.
+            GodotObject.ConstructingRecreateNativePtr.Value = (nint)instanceNativePtr;
+            var instance = context.RegisteredConstructor.Invoke();
+            Debug.Assert((nint)instanceNativePtr == instance.NativePtr);
+            return (void*)GCHandle.ToIntPtr(instance.GCHandle);
+        }
+        finally
+        {
+            GodotObject.ConstructingRecreateNativePtr.Value = 0;
+        }
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]

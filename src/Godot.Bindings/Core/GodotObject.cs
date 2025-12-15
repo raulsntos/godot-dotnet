@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using System.Threading;
 using Godot.Bridge;
 using Godot.NativeInterop;
 using Godot.NativeInterop.Marshallers;
@@ -11,9 +12,11 @@ namespace Godot;
 partial class GodotObject : IDisposable
 {
     internal nint NativePtr;
-    private readonly GCHandle _gcHandle;
+    internal readonly GCHandle GCHandle;
 
     private readonly WeakReference<GodotObject>? _weakReferenceToSelf;
+
+    internal static ThreadLocal<nint> ConstructingRecreateNativePtr = new();
 
     private bool _disposed;
 
@@ -28,9 +31,16 @@ partial class GodotObject : IDisposable
     /// Indicates whether the managed instance is a new object and should initialize the reference count
     /// if it's a <see cref="RefCounted"/> instance.
     /// </param>
-    protected internal GodotObject(nint nativePtr, bool memoryOwn = true)
+    /// <param name="userConstructed">
+    /// Indicates whether the managed instance is being constructed by user code.
+    /// </param>
+    /// <param name="recreating">
+    /// Indicates whether the managed instance is being recreated from an existing native instance
+    /// after reloading the assembly.
+    /// </param>
+    protected internal GodotObject(nint nativePtr, bool memoryOwn = true, bool userConstructed = false, bool recreating = false)
     {
-        _gcHandle = GCHandle.Alloc(this, GCHandleType.Normal);
+        GCHandle = GCHandle.Alloc(this, GCHandleType.Normal);
 
         NativePtr = nativePtr;
 
@@ -42,8 +52,19 @@ partial class GodotObject : IDisposable
 
         _weakReferenceToSelf = DisposablesTracker.RegisterGodotObject(this);
 
-        PostInitialize();
+        if (!recreating)
+        {
+            PostInitialize();
+
+            if (userConstructed)
+            {
+                // We need to emit this notification manually to finish initialization of user-constructed objects.
+                Notification((int)NotificationPostinitialize);
+            }
+        }
     }
+
+    private GodotObject((nint NativePtr, bool Recreating) nr) : this(nr.NativePtr, recreating: nr.Recreating, userConstructed: true, memoryOwn: !nr.Recreating) { }
 
     /// <summary>
     /// Constructs a <see cref="GodotObject"/> with the given <paramref name="nativeClassName"/>.
@@ -51,15 +72,18 @@ partial class GodotObject : IDisposable
     /// <param name="nativeClassName">The name of the Godot engine class.</param>
     private protected GodotObject(scoped NativeGodotStringName nativeClassName) : this(ConstructGodotObject(nativeClassName))
     {
-        // We need to emit this notification manually to finish initialization of user-constructed objects.
-        // The nint constructor doesn't emit this notification because it's used when creating instances from
-        // marshalled objects that have already been initialized.
-        Notification((int)NotificationPostinitialize);
     }
 
-    private static unsafe nint ConstructGodotObject(scoped NativeGodotStringName nativeClassName)
+    private static unsafe (nint NativePtr, bool Recreating) ConstructGodotObject(scoped NativeGodotStringName nativeClassName)
     {
-        return (nint)GodotBridge.GDExtensionInterface.classdb_construct_object2(&nativeClassName);
+        if (ConstructingRecreateNativePtr.Value != 0)
+        {
+            nint ptr = ConstructingRecreateNativePtr.Value;
+            ConstructingRecreateNativePtr.Value = 0;
+            return (ptr, true);
+        }
+
+        return ((nint)GodotBridge.GDExtensionInterface.classdb_construct_object2(&nativeClassName), false);
     }
 
     /// <summary>
@@ -69,7 +93,7 @@ partial class GodotObject : IDisposable
 
     private unsafe void PostInitialize()
     {
-        nint gcHandlePtr = GCHandle.ToIntPtr(_gcHandle);
+        nint gcHandlePtr = GCHandle.ToIntPtr(GCHandle);
 
         if (IsUserDefinedType())
         {
@@ -216,7 +240,7 @@ partial class GodotObject : IDisposable
                 }
             }
 
-            _gcHandle.Free();
+            GCHandle.Free();
             NativePtr = 0;
         }
 
@@ -252,7 +276,7 @@ partial class GodotObject : IDisposable
         {
             GodotBridge.GDExtensionInterface.object_destroy((void*)NativePtr);
 
-            _gcHandle.Free();
+            GCHandle.Free();
             NativePtr = 0;
         }
 
