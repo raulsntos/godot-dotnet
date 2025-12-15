@@ -30,7 +30,7 @@ internal sealed class CallMethodBindVararg : VarargCallMethodBody<VarargCallMeth
 
     protected override void SetupInstanceParameter(VarargCallMethodBodyContext context, IndentedTextWriter writer)
     {
-        writer.WriteLine("void* __instance = (void*)NativePtr;");
+        writer.WriteLine("void* __instance = (void*)GetNativePtr(this);");
     }
 
     protected override void RetrieveMethodBind(VarargCallMethodBodyContext context, IndentedTextWriter writer)

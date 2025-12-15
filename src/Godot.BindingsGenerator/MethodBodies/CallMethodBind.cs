@@ -29,7 +29,7 @@ internal sealed class CallMethodBind : PtrCallMethodBody<PtrCallMethodBodyContex
 
     protected override void SetupInstanceParameter(PtrCallMethodBodyContext context, IndentedTextWriter writer)
     {
-        writer.WriteLine($"void* {context.InstanceVariableName} = (void*)NativePtr;");
+        writer.WriteLine($"void* {context.InstanceVariableName} = (void*)GetNativePtr(this);");
     }
 
     protected override void RetrieveMethodBind(PtrCallMethodBodyContext context, IndentedTextWriter writer)
