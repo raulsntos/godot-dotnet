@@ -16,7 +16,9 @@ internal static class DisposablesTracker
     {
         // We cache the result of IsStdOutVerbose() because the next time we call it,
         // the OS singleton would already be disposed. And stdout verbosity won't change.
-        _isStdOutVerbose ??= OS.Singleton.IsStdOutVerbose();
+        // _isStdOutVerbose ??= OS.Singleton.IsStdOutVerbose();
+        // TODO(@raulsntos): There's currently a bug where the OS singleton instance is shared by multiple extensions so disposing it from Godot.EditorIntegration would break for the user project. If we never access the instance, we can avoid the issue for now.
+        _isStdOutVerbose ??= false;
 
         if (_isStdOutVerbose.Value)
         {
