@@ -48,14 +48,22 @@ internal static class PropertyUsageFlagsExtensions
 {
     public static string FullNameWithGlobal(this PropertyUsageFlags propertyUsageFlags)
     {
+#if NET9_0_OR_GREATER
+        PropertyUsageFlags[] values = Enum.GetValues<PropertyUsageFlags>();
+#else
         PropertyUsageFlags[] values = (PropertyUsageFlags[])Enum.GetValues(typeof(PropertyUsageFlags));
+#endif
 
         if (TryGetSingleFlagName(propertyUsageFlags, values, out string? name))
         {
             return GetFlagFullNameWithGlobal(name);
         }
 
+#if NET9_0_OR_GREATER
+        string[] names = Enum.GetNames<PropertyUsageFlags>();
+#else
         string[] names = Enum.GetNames(typeof(PropertyUsageFlags));
+#endif
 
         // With a ulong result value, regardless of the enum's base type, the maximum
         // possible number of consistent name/values we could have is 64, since every
@@ -93,7 +101,11 @@ internal static class PropertyUsageFlagsExtensions
             // Shortcut for default value.
             if (value == PropertyUsageFlags.None)
             {
+#if NET9_0_OR_GREATER
+                name = Enum.GetName(PropertyUsageFlags.None)!;
+#else
                 name = Enum.GetName(typeof(PropertyUsageFlags), PropertyUsageFlags.None);
+#endif
                 return true;
             }
 
@@ -105,7 +117,11 @@ internal static class PropertyUsageFlagsExtensions
                     if (values[i] == value)
                     {
                         // The value matches exactly, so there is only one flag and we found it.
+#if NET9_0_OR_GREATER
+                        name = Enum.GetName(value)!;
+#else
                         name = Enum.GetName(typeof(PropertyUsageFlags), value);
+#endif
                         return true;
                     }
 

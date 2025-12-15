@@ -133,7 +133,7 @@ internal static class SymbolUtils
     /// is not available as a symbol, such as when analyzing code that references
     /// an assembly that is not available during the analysis.
     /// When the attribute type is a valid symbol, prefer using
-    /// <see cref="Shared.CodeAnalysis.SymbolUtils.HasAttribute(ISymbol, string)"/>
+    /// <see cref="Common.CodeAnalysis.SymbolUtils.HasAttribute(ISymbol, string)"/>
     /// which ensures the attribute type name matches the fully-qualified name exactly.
     /// </remarks>
     /// <param name="symbol">Symbol to check for the attribute.</param>

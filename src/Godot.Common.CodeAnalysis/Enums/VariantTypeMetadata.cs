@@ -25,11 +25,19 @@ internal static class VariantTypeMetadataExtensions
 {
     public static string FullNameWithGlobal(this VariantTypeMetadata variantTypeMetadata)
     {
+#if NET9_0_OR_GREATER
+        if (!Enum.IsDefined(variantTypeMetadata))
+#else
         if (!Enum.IsDefined(typeof(VariantTypeMetadata), variantTypeMetadata))
+#endif
         {
             throw new ArgumentOutOfRangeException(nameof(variantTypeMetadata), $"Unrecognized VariantTypeMetadata value '{variantTypeMetadata}'.");
         }
 
+#if NET9_0_OR_GREATER
+        return $"global::Godot.Bridge.VariantTypeMetadata.{Enum.GetName(variantTypeMetadata)}";
+#else
         return $"global::Godot.Bridge.VariantTypeMetadata.{Enum.GetName(typeof(VariantTypeMetadata), variantTypeMetadata)}";
+#endif
     }
 }
