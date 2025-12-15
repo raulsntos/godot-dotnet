@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Godot.Analyzers;
 
-[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(RemoveConstModifierCodeFix))]
+[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(AddToolToGodotClassCodeFix))]
 internal sealed class AddToolToGodotClassCodeFix : CodeFixProvider
 {
     public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create([
