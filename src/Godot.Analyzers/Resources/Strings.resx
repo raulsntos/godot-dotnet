@@ -166,6 +166,18 @@
   <data name="GODOT0004_GodotClassWithEditorCallbacksShouldBeTool_Title" xml:space="preserve">
     <value>Class contains Godot editor callbacks but it's not marked as tool.</value>
   </data>
+  <data name="GODOT0005_AvoidImplicitStringConversion_Description" xml:space="preserve">
+    <value>Implicit conversion from 'string' to 'StringName' or 'NodePath' has a performance cost. Consider caching the value in a static readonly field or use an explicit conversion to make the cost clear.</value>
+  </data>
+  <data name="GODOT0005_AvoidImplicitStringConversion_MessageFormat" xml:space="preserve">
+    <value>Avoid implicit conversion from 'string' to '{0}'</value>
+  </data>
+  <data name="GODOT0005_AvoidImplicitStringConversion_Title" xml:space="preserve">
+    <value>Avoid implicit conversion from 'string' to 'StringName' or 'NodePath'</value>
+  </data>
+  <data name="GODOT0005_CacheStringNameOrNodePath_CodeFix" xml:space="preserve">
+    <value>Extract to cached static readonly field</value>
+  </data>
   <data name="GODOT0101_GodotClassMustDeriveFromGodotObject_Description" xml:space="preserve">
     <value>Registered classes must derive from 'GodotObject'. Change the base class to derive from 'GodotObject' or remove the '[GodotClass]' attribute.</value>
   </data>

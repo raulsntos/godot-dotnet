@@ -67,6 +67,16 @@ internal static class Descriptors
         isEnabledByDefault: true,
         helpLinkUri: FormatHelpLink("GODOT0004"));
 
+    public static readonly DiagnosticDescriptor GODOT0005_AvoidImplicitStringConversion = new(
+        id: "GODOT0005",
+        title: SR.GODOT0005_AvoidImplicitStringConversion_Title,
+        messageFormat: SR.GODOT0005_AvoidImplicitStringConversion_MessageFormat,
+        description: SR.GODOT0005_AvoidImplicitStringConversion_Description,
+        category: Category.Performance,
+        defaultSeverity: DiagnosticSeverity.Warning,
+        isEnabledByDefault: true,
+        helpLinkUri: FormatHelpLink("GODOT0005"));
+
     #endregion
 
     #region 01XX: Rules about the [GodotClass] attribute.

@@ -120,14 +120,14 @@ public sealed class NodePath : IDisposable, IEquatable<NodePath?>
     /// </summary>
     /// <param name="from">The string to convert.</param>
     [return: NotNullIfNotNull(nameof(from))]
-    public static explicit operator NodePath?(string? from) => from is not null ? new NodePath(from) : null;
+    public static implicit operator NodePath?(string? from) => from is not null ? new NodePath(from) : null;
 
     /// <summary>
     /// Converts this <see cref="NodePath"/> to a string.
     /// </summary>
     /// <param name="from">The <see cref="NodePath"/> to convert.</param>
     [return: NotNullIfNotNull(nameof(from))]
-    public static explicit operator string?(NodePath? from) => from?.ToString();
+    public static implicit operator string?(NodePath? from) => from?.ToString();
 
     /// <summary>
     /// Releases the unmanaged <see cref="StringName"/> instance.

@@ -119,14 +119,14 @@ public sealed class StringName : IDisposable, IEquatable<StringName?>
     /// </summary>
     /// <param name="from">The string to convert.</param>
     [return: NotNullIfNotNull(nameof(from))]
-    public static explicit operator StringName?(string? from) => from is not null ? new StringName(from) : null;
+    public static implicit operator StringName?(string? from) => from is not null ? new StringName(from) : null;
 
     /// <summary>
     /// Converts a <see cref="StringName"/> to a string.
     /// </summary>
     /// <param name="from">The <see cref="StringName"/> to convert.</param>
     [return: NotNullIfNotNull(nameof(from))]
-    public static explicit operator string?(StringName? from) => from?.ToString();
+    public static implicit operator string?(StringName? from) => from?.ToString();
 
     /// <summary>
     /// Releases the unmanaged <see cref="StringName"/> instance.
