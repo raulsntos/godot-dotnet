@@ -189,14 +189,6 @@ internal sealed class BuiltInClassesBindingsDataCollector : BindingsDataCollecto
                     _ => context.TypeDB.GetUnmanagedType(indexerType),
                 };
 
-                var vectorField = new FieldInfo("_vector", KnownTypes.NativeGodotVectorOf(indexerTypeUnmanaged))
-                {
-                    VisibilityAttributes = VisibilityAttributes.Private,
-                    Attributes = { "[global::System.Runtime.InteropServices.FieldOffset(0)]" },
-                    RequiresUnsafeCode = true,
-                };
-                type.DeclaredFields.Add(vectorField);
-
                 var isAllocatedProperty = new PropertyInfo("IsAllocated", KnownTypes.SystemBoolean)
                 {
                     VisibilityAttributes = VisibilityAttributes.Assembly,
@@ -207,7 +199,7 @@ internal sealed class BuiltInClassesBindingsDataCollector : BindingsDataCollecto
                         ReturnParameter = ReturnInfo.FromType(KnownTypes.SystemBoolean),
                         Body = MethodBody.CreateUnsafe(writer =>
                         {
-                            writer.WriteLine("return _vector.GetPtrw() is not null;");
+                            writer.WriteLine("return GetPtrw() is not null;");
                         }),
                     },
                 };
@@ -223,24 +215,42 @@ internal sealed class BuiltInClassesBindingsDataCollector : BindingsDataCollecto
                         ReturnParameter = ReturnInfo.FromType(KnownTypes.SystemInt32),
                         Body = MethodBody.CreateUnsafe(writer =>
                         {
-                            writer.WriteLine("return _vector.Size;");
+                            writer.WriteLine("return checked((int)GetSize(in this));");
                         }),
                     },
                 };
                 type.DeclaredProperties.Add(sizeProperty);
 
-                var getPtrwMethod = new MethodInfo("GetPtrw")
+                string? packedArrayName = engineClass.Name switch
                 {
-                    Attributes = { "[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]" },
-                    VisibilityAttributes = VisibilityAttributes.Assembly,
-                    IsReadOnly = true,
-                    ReturnParameter = ReturnInfo.FromType(indexerTypeUnmanaged.MakePointerType()),
-                    Body = MethodBody.CreateUnsafe(writer =>
-                    {
-                        writer.WriteLine($"return _vector.GetPtrw();");
-                    }),
+                    "PackedByteArray" => "packed_byte_array",
+                    "PackedInt32Array" => "packed_int32_array",
+                    "PackedInt64Array" => "packed_int64_array",
+                    "PackedFloat32Array" => "packed_float32_array",
+                    "PackedFloat64Array" => "packed_float64_array",
+                    "PackedStringArray" => "packed_string_array",
+                    "PackedVector2Array" => "packed_vector2_array",
+                    "PackedVector3Array" => "packed_vector3_array",
+                    "PackedColorArray" => "packed_color_array",
+                    "PackedVector4Array" => "packed_vector4_array",
+                    _ => null,
                 };
-                type.DeclaredMethods.Add(getPtrwMethod);
+                if (!string.IsNullOrEmpty(packedArrayName))
+                {
+                    var indexerTypePointer = indexerTypeUnmanaged.MakePointerType();
+                    var getPtrwMethod = new MethodInfo("GetPtrw")
+                    {
+                        Attributes = { "[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]" },
+                        VisibilityAttributes = VisibilityAttributes.Assembly,
+                        IsReadOnly = true,
+                        ReturnParameter = ReturnInfo.FromType(indexerTypePointer),
+                        Body = MethodBody.CreateUnsafe(writer =>
+                        {
+                            writer.WriteLine($"return ({indexerTypePointer.FullNameWithGlobal})global::Godot.Bridge.GodotBridge.GDExtensionInterface.{packedArrayName}_operator_index(GetUnsafeAddress(), 0);");
+                        }),
+                    };
+                    type.DeclaredMethods.Add(getPtrwMethod);
+                }
 
                 // Skip the AsSpan method for PackedStringArray because the generic T in Span<T> would need to be
                 // NativeGodotString which is a ref struct and Span<T> doesn't support it.
@@ -256,7 +266,7 @@ internal sealed class BuiltInClassesBindingsDataCollector : BindingsDataCollecto
                         ReturnParameter = ReturnInfo.FromType(spanType),
                         Body = MethodBody.CreateUnsafe(writer =>
                         {
-                            writer.WriteLine($"return new {spanType.FullNameWithGlobal}(_vector.GetPtrw(), Size);");
+                            writer.WriteLine($"return new {spanType.FullNameWithGlobal}(GetPtrw(), Size);");
                         }),
                     };
                     type.DeclaredMethods.Add(asSpanMethod);
@@ -315,6 +325,7 @@ internal sealed class BuiltInClassesBindingsDataCollector : BindingsDataCollecto
                 method.Name = method.Name switch
                 {
                     "Size" => "GetSize",
+                    "Length" => "GetLength",
                     "IsEmpty" => "GetIsEmpty",
                     "IsReadOnly" => "GetIsReadOnly",
                     _ => method.Name,

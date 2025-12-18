@@ -13,23 +13,7 @@ namespace Godot.NativeInterop;
 partial struct NativeGodotDictionary
 {
     [FieldOffset(0)]
-    private unsafe DictionaryPrivate* _p;
-
-    [StructLayout(LayoutKind.Sequential)]
-    private readonly ref struct DictionaryPrivate
-    {
-        private readonly uint _safeRefCount;
-
-        private readonly unsafe NativeGodotVariant* _readOnly;
-
-        // There are more fields here, but we don't care as we never store this in C#
-
-        internal readonly unsafe bool IsReadOnly
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => _readOnly is not null;
-        }
-    }
+    private unsafe void* _p;
 
     internal readonly unsafe bool IsAllocated
     {
@@ -40,7 +24,7 @@ partial struct NativeGodotDictionary
     internal readonly unsafe bool IsReadOnly
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => _p is not null && _p->IsReadOnly;
+        get => _p is not null && GetIsReadOnly(in this);
     }
 
     internal readonly unsafe NativeGodotVariant* GetPtrw(scoped in NativeGodotVariant key)

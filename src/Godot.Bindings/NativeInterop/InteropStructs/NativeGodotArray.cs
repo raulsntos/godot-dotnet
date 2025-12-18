@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Godot.Bridge;
 
 namespace Godot.NativeInterop;
 
@@ -11,37 +12,7 @@ namespace Godot.NativeInterop;
 partial struct NativeGodotArray
 {
     [FieldOffset(0)]
-    private unsafe ArrayPrivate* _p;
-
-    [StructLayout(LayoutKind.Sequential)]
-    private readonly ref struct ArrayPrivate
-    {
-        private readonly uint _safeRefCount;
-
-        private readonly NativeGodotVector<NativeGodotVariant> _vector;
-
-        private readonly unsafe NativeGodotVariant* _readOnly;
-
-        // There are more fields here, but we don't care as we never store this in C#
-
-        internal readonly int Size
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => _vector.Size;
-        }
-
-        internal readonly unsafe bool IsReadOnly
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => _readOnly is not null;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal readonly unsafe NativeGodotVariant* GetPtrw()
-        {
-            return _vector.GetPtrw();
-        }
-    }
+    private unsafe void* _p;
 
     internal readonly unsafe bool IsAllocated
     {
@@ -52,18 +23,18 @@ partial struct NativeGodotArray
     internal readonly unsafe int Size
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => _p is not null ? _p->Size : 0;
+        get => _p is not null ? checked((int)GetSize(in this)) : 0;
     }
 
     internal readonly unsafe bool IsReadOnly
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => _p is not null && _p->IsReadOnly;
+        get => _p is not null && GetIsReadOnly(in this);
     }
 
     internal readonly unsafe NativeGodotVariant* GetPtrw()
     {
-        return _p->GetPtrw();
+        return GodotBridge.GDExtensionInterface.array_operator_index(GetUnsafeAddress(), 0);
     }
 
     internal static unsafe NativeGodotArray Create<[MustBeVariant] T>(ReadOnlySpan<T> value)

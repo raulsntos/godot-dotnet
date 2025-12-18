@@ -17,18 +17,14 @@ partial struct NativeGodotString
         get => _ptr != 0;
     }
 
-    // Size including the null termination character.
-    internal readonly unsafe int Size
+    // Size NOT including the null termination character.
+    internal readonly int Length
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get
-        {
-            // This code must match the method 'CowData::get_size' in the engine side.
-            return _ptr != 0 ? (int)*((ulong*)_ptr - 1) : 0;
-        }
+        get => checked((int)GetLength(in this));
     }
 
-    internal static unsafe NativeGodotString Create(scoped ReadOnlySpan<byte> utf8)
+    internal static NativeGodotString Create(scoped ReadOnlySpan<byte> utf8)
     {
         if (!TryCreate(utf8, out NativeGodotString dest))
         {
@@ -38,7 +34,7 @@ partial struct NativeGodotString
         return dest;
     }
 
-    internal static unsafe NativeGodotString Create(scoped ReadOnlySpan<char> utf16)
+    internal static NativeGodotString Create(scoped ReadOnlySpan<char> utf16)
     {
         if (!TryCreate(utf16, out NativeGodotString dest))
         {
@@ -101,17 +97,14 @@ partial struct NativeGodotString
             return string.Empty;
         }
 
-        int size = Size;
-        if (size == 0)
+        int length = Length;
+        if (length == 0)
         {
             return string.Empty;
         }
 
-        // Size of the string without the null termination character.
-        size -= 1;
-
         const int SizeOfChar32 = 4;
-        int sizeInBytes = size * SizeOfChar32;
+        int sizeInBytes = length * SizeOfChar32;
         return Encoding.UTF32.GetString((byte*)_ptr, sizeInBytes);
     }
 }
