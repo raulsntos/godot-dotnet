@@ -50,7 +50,7 @@ internal sealed class NativeStructuresBindingsDataCollector : BindingsDataCollec
         {
             if (!_nativeStructures.TryGetValue(nativeStructure.Name, out var type))
             {
-                return;
+                continue;
             }
             Debug.Assert(context.IsTypeGenerated(type));
 
@@ -86,7 +86,7 @@ internal sealed class NativeStructuresBindingsDataCollector : BindingsDataCollec
                     {
                         IsReadOnly = true,
                         ReturnParameter = ReturnInfo.FromType(fieldType),
-                        Body = MethodBody.Create(writer =>
+                        Body = MethodBody.CreateUnsafe(writer =>
                         {
                             writer.WriteLine($"return _{fieldName};");
                         }),
@@ -97,7 +97,7 @@ internal sealed class NativeStructuresBindingsDataCollector : BindingsDataCollec
                         {
                             new ParameterInfo("value", fieldType),
                         },
-                        Body = MethodBody.Create(writer =>
+                        Body = MethodBody.CreateUnsafe(writer =>
                         {
                             writer.WriteLine($"_{fieldName} = value;");
                         }),
