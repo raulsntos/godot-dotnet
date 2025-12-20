@@ -85,7 +85,7 @@ internal sealed class NativeStructureFormatParser
                 int idx = buffer.IndexOf(' ');
                 if ((uint)idx >= (uint)buffer.Length)
                 {
-                    throw new InvalidOperationException($"Invalid native structure format, expected space character after type name (buffer: '{buffer}').");
+                    throw new FormatException($"Invalid native structure format, expected space character after type name (buffer: '{buffer}').");
                 }
 
                 if (buffer[idx + 1] == '*')
@@ -123,7 +123,7 @@ internal sealed class NativeStructureFormatParser
                     idx = fieldName.LastIndexOf('[');
                     if ((uint)idx >= (uint)fieldName.Length)
                     {
-                        throw new InvalidOperationException($"Invalid native structure format, expected array size after field name (buffer: '({typeName}) {fieldName}')");
+                        throw new FormatException($"Invalid native structure format, expected array size after field name (buffer: '({typeName}) {fieldName}')");
                     }
 
                     ReadOnlySpan<char> arraySizeSpan = fieldName[(idx + 1)..^1];
@@ -138,13 +138,13 @@ internal sealed class NativeStructureFormatParser
             {
                 if (!buffer.StartsWith("= "))
                 {
-                    throw new InvalidOperationException($"Invalid native structure format, expected default value after field name (buffer: '{buffer}').");
+                    throw new FormatException($"Invalid native structure format, expected default value after field name (buffer: '{buffer}').");
                 }
 
                 defaultValue = buffer["= ".Length..];
                 if (defaultValue.IsEmpty)
                 {
-                    throw new InvalidOperationException($"Invalid native structure format, expected default value after field name (buffer: '{buffer}').");
+                    throw new FormatException($"Invalid native structure format, expected default value after field name (buffer: '{buffer}').");
                 }
 
                 hasDefaultValue = true;
