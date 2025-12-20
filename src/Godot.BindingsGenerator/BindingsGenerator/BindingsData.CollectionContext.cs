@@ -88,6 +88,12 @@ partial class BindingsData
         /// <returns>An inline array type of the requested length.</returns>
         public TypeInfo GetOrAddInlineArray(int length)
         {
+            if (length is >= 2 and <= 16)
+            {
+                // Use runtime provided inline arrays for lengths 2 to 16.
+                return KnownTypes.InlineArrayOf(length);
+            }
+
             if (_data._inlineArrays.TryGetValue(length, out var inlineArrayType))
             {
                 // Inline array already defined for this length.

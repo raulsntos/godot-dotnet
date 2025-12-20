@@ -222,6 +222,30 @@ internal static class KnownTypes
         return Nullable.MakeGenericType([valueType]);
     }
 
+    private static readonly Dictionary<int, TypeInfo> _inlineArrays = [];
+
+    public static TypeInfo InlineArrayOf(int length)
+    {
+        if (_inlineArrays.TryGetValue(length, out var inlineArrayType))
+        {
+            return inlineArrayType;
+        }
+
+        if (length is < 2 or > 16)
+        {
+            // The runtime only provides InlineArray support for lengths 2 to 16.
+            throw new InvalidOperationException("Inline arrays are only supported for lengths 2 to 16.");
+        }
+
+        inlineArrayType = new TypeInfo($"InlineArray{length}", "System.Runtime.CompilerServices")
+        {
+            TypeAttributes = TypeAttributes.ValueType,
+            GenericTypeArgumentCount = 1,
+        };
+        _inlineArrays[length] = inlineArrayType;
+        return inlineArrayType;
+    }
+
     // Godot types.
 
     public static TypeInfo GodotAabb { get; } = new TypeInfo("Aabb", "Godot")
