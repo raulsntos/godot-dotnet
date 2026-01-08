@@ -87,17 +87,15 @@ internal sealed class CacheStringNameOrNodePathCodeFix : CodeFixProvider
             return;
         }
 
-        var annotation1 = new SyntaxAnnotation();
-        var annotatedNode = syntaxNode.WithAdditionalAnnotations(annotation1);
+        var annotation = new SyntaxAnnotation();
+        var annotatedNode = syntaxNode.WithAdditionalAnnotations(annotation);
         var newRoot = root.ReplaceNode(syntaxNode, annotatedNode);
         var newDocument = context.Document.WithSyntaxRoot(newRoot);
-
-        // TODO: Also add an annotation to the containing type declaration syntax.
 
         var codeAction = CodeAction.Create(
             title: SR.GODOT0005_CacheStringNameOrNodePath_CodeFix,
             equivalenceKey: nameof(CacheStringNameOrNodePathCodeFix),
-            createChangedDocument: cancellationToken => ApplyFix(newDocument, annotation1, stringValue, targetType, cancellationToken));
+            createChangedDocument: cancellationToken => ApplyFix(newDocument, annotation, stringValue, targetType, cancellationToken));
 
         context.RegisterCodeFix(codeAction, diagnostic);
     }
