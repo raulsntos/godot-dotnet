@@ -11,6 +11,7 @@ Param(
   [switch][Alias('b')] $build,
   [switch] $rebuild,
   [switch][Alias('t')] $test,
+  [switch][Alias('g')] $generate,
   [switch] $pack,
   [switch] $publish,
   [switch] $clean,
@@ -43,6 +44,7 @@ function Print-Usage() {
   Write-Host "  -build                  Build solution (short: -b)"
   Write-Host "  -rebuild                Rebuild solution"
   Write-Host "  -test                   Run all unit tests in the solution (short: -t)"
+  Write-Host "  -generate               Generate Godot bindings (short: -g)"
   Write-Host "  -pack                   Package build outputs into NuGet packages"
   Write-Host "  -clean                  Clean the solution"
   Write-Host "  -publish                Publish artifacts (e.g. packages, symbols)"
@@ -90,6 +92,9 @@ if ($rebuild) {
 }
 if ($test) {
   $_args += @("--test")
+}
+if ($generate) {
+  $_args += @("--generate")
 }
 if ($pack) {
   $_args += @("--pack")
