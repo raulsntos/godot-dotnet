@@ -95,7 +95,14 @@ public static partial class GodotRegistry
             return;
         }
 
-        context = new ClassRegistrationContext(className);
+        StringName? godotNativeName = GodotObject.GetGodotNativeName(typeof(T));
+
+        // The 'BaseType' will never be null becase T has a constraint that
+        // it must derive from GodotObject, but we assert this anyway so the
+        // null analysis doesn't complain about it being null.
+        Debug.Assert(godotNativeName is not null, $"Type '{typeof(T)}' must derive from a Godot type.");
+
+        context = new ClassRegistrationContext(className, godotNativeName);
         _registeredClasses[className] = context;
         _classRegisterStack.Push(className);
 
@@ -133,13 +140,6 @@ public static partial class GodotRegistry
             class_userdata = (void*)GCHandle.ToIntPtr(context.GCHandle),
             icon_path = &iconPathNative,
         };
-
-        StringName? godotNativeName = GodotObject.GetGodotNativeName(typeof(T));
-
-        // The 'BaseType' will never be null becase T has a constraint that
-        // it must derive from GodotObject, but we assert this anyway so the
-        // null analysis doesn't complain about it being null.
-        Debug.Assert(godotNativeName is not null, $"Type '{typeof(T)}' must derive from a Godot type.");
 
         StringName baseClassName;
         if (typeof(T).BaseType?.Assembly != typeof(GodotObject).Assembly)
@@ -395,7 +395,14 @@ public static partial class GodotRegistry
             throw new InvalidOperationException(SR.FormatInvalidOperation_CantInstantiateTypeConstructorNotRegistered(context.ClassName));
         }
 
-        var instance = context.RegisteredConstructor.Invoke();
+        Debug.Assert(context.NativeClassName is not null);
+
+        var instance = GodotObject.Create(context.RegisteredConstructor, new()
+        {
+            NativeClassName = context.NativeClassName,
+            EmitPostInitializeNotification = false,
+            InitRef = false,
+        });
 
         if (notifyPostInitialize)
         {
@@ -418,23 +425,17 @@ public static partial class GodotRegistry
             throw new InvalidOperationException(SR.FormatInvalidOperation_CantInstantiateTypeConstructorNotRegistered(context.ClassName));
         }
 
-        try
+        Debug.Assert(context.NativeClassName is not null);
+
+        var instance = GodotObject.Create(context.RegisteredConstructor, new()
         {
-            // TODO(@raulsntos): This is a bit of a hack to pass the native pointer to the constructor.
-            // It also creates a bit of a mess in GodotObject since we have to handle this special case,
-            // and the chaining constructors become a bit more complicated to handle all the scenarios:
-            // - User creating a new instance using the parameterless constructor.
-            // - Unmarshalling an instance from an existing native pointer.
-            // - Recreating an instance from an existing native pointer after reload.
-            GodotObject.ConstructingRecreateNativePtr.Value = (nint)instanceNativePtr;
-            var instance = context.RegisteredConstructor.Invoke();
-            Debug.Assert((nint)instanceNativePtr == instance.NativePtr);
-            return (void*)GCHandle.ToIntPtr(instance.GCHandle);
-        }
-        finally
-        {
-            GodotObject.ConstructingRecreateNativePtr.Value = 0;
-        }
+            NativePtr = (nint)instanceNativePtr,
+            NativeClassName = context.NativeClassName,
+            EmitPostInitializeNotification = true,
+            InitRef = false,
+        });
+
+        return (void*)GCHandle.ToIntPtr(instance.GCHandle);
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
@@ -455,6 +456,32 @@ public static partial class GodotRegistry
 
             instanceObj.Dispose();
         }
+    }
+
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
+    internal static unsafe void FreeBindingCallback_Native(void* token, void* nativePtr, void* instance)
+    {
+        if (instance is not null)
+        {
+            var gcHandle = GCHandle.FromIntPtr((nint)instance);
+            var instanceObj = (GodotObject?)gcHandle.Target;
+
+            Debug.Assert(instanceObj is not null);
+
+            // The 'free' callback is called when the unmanaged object is released,
+            // clear the native pointer so the Dispose doesn't try to release it again.
+            // Also free the GCHandle so it can be released on the managed side.
+            instanceObj.NativePtr = 0;
+            gcHandle.Free();
+
+            instanceObj.Dispose();
+        }
+    }
+
+    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
+    internal static unsafe bool ReferenceBindingCallback_Native(void* token, void* nativePtr, bool reference)
+    {
+        return true;
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]

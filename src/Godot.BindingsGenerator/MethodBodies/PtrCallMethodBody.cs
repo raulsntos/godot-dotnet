@@ -168,29 +168,7 @@ internal abstract class PtrCallMethodBody<TContext> : CallMethodBody<TContext> w
             return;
         }
 
-        string returnVariableName = $"{context.ReturnVariableName}Ptr";
-        if (IsRefCountedType(context.ReturnType))
-        {
-            // TODO(@raulsntos): Hack to avoid increasing the reference count when unmarshalling returned RefCounted instances.
-            returnVariableName += ", memoryOwn: false";
-        }
-
-        marshaller.WriteConvertFromUnmanaged(writer, context.ReturnType, returnVariableName, context.ReturnVariableName);
-
-        static bool IsRefCountedType(TypeInfo? type)
-        {
-            while (type is not null)
-            {
-                if (type.FullName == "Godot.RefCounted")
-                {
-                    return true;
-                }
-
-                type = type.BaseType;
-            }
-
-            return false;
-        }
+        marshaller.WriteConvertFromUnmanaged(writer, context.ReturnType, $"{context.ReturnVariableName}Ptr", context.ReturnVariableName);
     }
 
     protected override void Return(TContext context, IndentedTextWriter writer)

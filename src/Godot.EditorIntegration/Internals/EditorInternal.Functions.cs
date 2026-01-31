@@ -180,7 +180,7 @@ unsafe partial class EditorInternal
         using NativeGodotString nameNative = NativeGodotString.Create(name);
         nint dest = default;
         _editor_def_shortcut(&pathNative, &nameNative, (long)keycode, physical, &dest);
-        return (Shortcut)GodotObjectMarshaller.GetOrCreateManagedInstance(dest, memoryOwn: false)!;
+        return (Shortcut)GodotObjectMarshaller.ConvertFromUnmanaged(&dest)!;
     }
 
     private static delegate* unmanaged[Cdecl]<NativeGodotString*, NativeGodotString*, long, bool, void> _editor_shortcut_override;

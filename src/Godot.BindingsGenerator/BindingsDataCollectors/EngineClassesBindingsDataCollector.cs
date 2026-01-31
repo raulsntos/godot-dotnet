@@ -102,25 +102,25 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                     VisibilityAttributes = VisibilityAttributes.Private,
                     Attributes =
                     {
-                        "[global::System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(CreateHelpers))]",
+                        "[global::System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(BindingCallbacks))]",
                         "[global::System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(RegisterVirtualOverridesHelpers))]",
                     },
                     IsStatic = true,
                     Body = MethodBody.Create(writer =>
                     {
-                        writer.WriteLine($"var createHelpers = new global::System.Collections.Generic.Dictionary<global::Godot.StringName, global::System.Func<nint, bool, global::Godot.GodotObject>>(capacity: {context.Api.Classes.Length});");
+                        writer.WriteLine($"var bindingCallbacks = new global::System.Collections.Generic.Dictionary<global::Godot.StringName, global::Godot.NativeInterop.GDExtensionInstanceBindingCallbacks>(capacity: {context.Api.Classes.Length});");
                         writer.WriteLine($"var registerVirtualOverridesHelpers = new global::System.Collections.Generic.Dictionary<global::Godot.StringName, global::Godot.NativeInterop.InteropUtils.RegisterVirtualOverrideHelper>(capacity: {context.Api.Classes.Length});");
 
                         foreach (var engineClass in context.Api.Classes)
                         {
                             var type = context.TypeDB.GetTypeFromEngineName(engineClass.Name);
 
-                            writer.WriteLine($"createHelpers.Add({type.FullNameWithGlobal}.NativeName, (nativePtr, memoryOwn) => new {type.FullNameWithGlobal}(nativePtr, memoryOwn));");
+                            writer.WriteLine($"bindingCallbacks.Add({type.FullNameWithGlobal}.NativeName, {type.FullNameWithGlobal}.BindingCallbacks);");
                             writer.WriteLine($"registerVirtualOverridesHelpers.Add({type.FullNameWithGlobal}.NativeName, {type.FullNameWithGlobal}.RegisterVirtualOverrides);");
                         }
 
-                        writer.WriteLine("CreateHelpers = global::System.Collections.Frozen.FrozenDictionary.ToFrozenDictionary(createHelpers);");
-                        writer.WriteLine("RegisterVirtualOverridesHelpers = global::System.Collections.Frozen.FrozenDictionary.ToFrozenDictionary(registerVirtualOverridesHelpers);");
+                        writer.WriteLine("BindingCallbacks = global::System.Collections.Frozen.FrozenDictionary.ToFrozenDictionary(bindingCallbacks, global::Godot.NativeInterop.StringNameEqualityComparer.Default);");
+                        writer.WriteLine("RegisterVirtualOverridesHelpers = global::System.Collections.Frozen.FrozenDictionary.ToFrozenDictionary(registerVirtualOverridesHelpers, global::Godot.NativeInterop.StringNameEqualityComparer.Default);");
                     }),
                 },
             }
@@ -150,6 +150,60 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
             type.DeclaredFields.Add(nativeNameField);
         }
 
+        // Binding callbacks.
+        {
+            var bindingCallbacksProperty = new PropertyInfo("BindingCallbacks", new TypeInfo("GDExtensionInstanceBindingCallbacks", "Godot.NativeInterop"))
+            {
+                VisibilityAttributes = VisibilityAttributes.Assembly,
+                IsStatic = true,
+                IsNew = engineClass.Name != "Object",
+                Getter = new MethodInfo("get_BindingCallbacks")
+                {
+                    ReturnParameter = ReturnInfo.FromType(new TypeInfo("GDExtensionInstanceBindingCallbacks", "Godot.NativeInterop")),
+                    Body = MethodBody.CreateUnsafe(writer =>
+                    {
+                        writer.WriteLine("return new global::Godot.NativeInterop.GDExtensionInstanceBindingCallbacks()");
+                        writer.WriteLine('{');
+                        writer.Indent++;
+                        writer.WriteLine("create_callback = &CreateBindingCallback_Native,");
+                        writer.WriteLine("free_callback = &global::Godot.Bridge.GodotRegistry.FreeBindingCallback_Native,");
+                        writer.WriteLine("reference_callback = &global::Godot.Bridge.GodotRegistry.ReferenceBindingCallback_Native,");
+                        writer.Indent--;
+                        writer.WriteLine("};");
+                    }),
+                },
+            };
+            type.DeclaredProperties.Add(bindingCallbacksProperty);
+
+            var createBindingCallbackMethod = new MethodInfo("CreateBindingCallback_Native")
+            {
+                VisibilityAttributes = VisibilityAttributes.Private,
+                IsStatic = true,
+                Attributes = { "[global::System.Runtime.InteropServices.UnmanagedCallersOnly(CallConvs = [typeof(global::System.Runtime.CompilerServices.CallConvCdecl)])]" },
+                Parameters =
+                {
+                    new ParameterInfo("token", KnownTypes.SystemVoidPtr),
+                    new ParameterInfo("nativePtr", KnownTypes.SystemVoidPtr),
+                },
+                ReturnParameter = ReturnInfo.FromType(KnownTypes.SystemVoidPtr),
+                Body = MethodBody.CreateUnsafe(writer =>
+                {
+                    writer.WriteLine($"var instance = global::Godot.GodotObject.Create(() => new {type.FullNameWithGlobal}(), new()");
+                    writer.WriteLine('{');
+                    writer.Indent++;
+                    writer.WriteLine("NativePtr = (nint)nativePtr,");
+                    writer.WriteLine("InstanceBindingAlreadyBound = true,");
+                    writer.WriteLine("NativeClassName = NativeName,");
+                    writer.WriteLine("EmitPostInitializeNotification = false,");
+                    writer.WriteLine("InitRef = false,");
+                    writer.Indent--;
+                    writer.WriteLine("});");
+                    writer.WriteLine($"return (void*)global::System.Runtime.InteropServices.GCHandle.ToIntPtr(instance.GCHandle);");
+                }),
+            };
+            type.DeclaredMethods.Add(createBindingCallbackMethod);
+        }
+
         // Singleton property.
         if (context.Singletons.TryGetValue(engineClass.Name, out var singleton))
         {
@@ -172,8 +226,13 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
                         writer.WriteLine("if (_singleton is null)");
                         writer.OpenBlock();
                         writer.WriteLine($"using global::Godot.NativeInterop.NativeGodotStringName nameNative = global::Godot.NativeInterop.NativeGodotStringName.Create(\"{singleton.Name}\"u8);");
-                        writer.WriteLine("nint singletonPtr = (nint)global::Godot.Bridge.GodotBridge.GDExtensionInterface.global_get_singleton(&nameNative);");
-                        writer.WriteLine($"_singleton = ({type.FullNameWithGlobal})global::Godot.NativeInterop.Marshallers.GodotObjectMarshaller.GetOrCreateManagedInstance(singletonPtr);");
+                        writer.WriteLine("void* singletonPtr = global::Godot.Bridge.GodotBridge.GDExtensionInterface.global_get_singleton(&nameNative);");
+                        writer.WriteLine("global::System.Diagnostics.Debug.Assert(singletonPtr is not null);");
+                        writer.WriteLine($"global::Godot.NativeInterop.GDExtensionInstanceBindingCallbacks bindingCallbacks = {type.FullNameWithGlobal}.BindingCallbacks;");
+                        writer.WriteLine("void* gcHandlePtr = global::Godot.Bridge.GodotBridge.GDExtensionInterface.object_get_instance_binding(singletonPtr, global::Godot.Bridge.GodotBridge.LibraryPtr, &bindingCallbacks);");
+                        writer.WriteLine("global::System.Runtime.InteropServices.GCHandle gcHandle = global::System.Runtime.InteropServices.GCHandle.FromIntPtr((nint)gcHandlePtr);");
+                        writer.WriteLine($"_singleton = ({type.FullNameWithGlobal}?)gcHandle.Target;");
+                        writer.WriteLine("global::System.Diagnostics.Debug.Assert(_singleton is not null);");
                         writer.CloseBlock();
                         writer.WriteLine($"return _singleton;");
                     }),
@@ -188,21 +247,6 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
             // and only need to be generated for the generated classes.
             if (engineClass.Name != "Object")
             {
-                var nativePtrCtor = new ConstructorInfo()
-                {
-                    VisibilityAttributes = VisibilityAttributes.FamilyOrAssembly,
-                    Initializer = "base(nativePtr, memoryOwn)",
-                    Parameters =
-                    {
-                        new ParameterInfo("nativePtr", KnownTypes.SystemIntPtr),
-                        new ParameterInfo("memoryOwn", KnownTypes.SystemBoolean)
-                        {
-                            DefaultValue = "true",
-                        },
-                    },
-                };
-                type.DeclaredConstructors.Add(nativePtrCtor);
-
                 var nativeClassNameCtor = new ConstructorInfo()
                 {
                     VisibilityAttributes = VisibilityAttributes.FamilyAndAssembly,

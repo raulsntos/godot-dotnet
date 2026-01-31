@@ -214,6 +214,9 @@
   <data name="InvalidOperation_ArrayIsReadOnly" xml:space="preserve">
     <value>Array instance is read-only.</value>
   </data>
+  <data name="InvalidOperation_BindingCallbacksNotFound" xml:space="preserve">
+    <value>Binding callbacks not found for type '{typeName}'.</value>
+  </data>
   <data name="InvalidOperation_CantInstantiateTypeConstructorNotRegistered" xml:space="preserve">
     <value>Can't instantiate type '{typeName}'. A constructor has not been registered for the type.</value>
   </data>

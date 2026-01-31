@@ -7,7 +7,7 @@ namespace Godot.NativeInterop;
 
 internal static partial class InteropUtils
 {
-    internal static FrozenDictionary<StringName, Func<nint, bool, GodotObject>> CreateHelpers { get; private set; }
+    internal static FrozenDictionary<StringName, GDExtensionInstanceBindingCallbacks> BindingCallbacks { get; private set; }
 
     internal delegate void RegisterVirtualOverrideHelper([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)] Type type, ClassRegistrationContext context);
     internal static FrozenDictionary<StringName, RegisterVirtualOverrideHelper> RegisterVirtualOverridesHelpers { get; private set; }

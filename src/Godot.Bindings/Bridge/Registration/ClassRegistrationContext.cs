@@ -17,12 +17,15 @@ public sealed partial class ClassRegistrationContext : IDisposable
 
     internal StringName ClassName { get; }
 
+    internal StringName NativeClassName { get; }
+
     private readonly ConcurrentQueue<Action> _registerBindingActions = [];
 
-    internal ClassRegistrationContext(StringName className)
+    internal ClassRegistrationContext(StringName className, StringName nativeClassName)
     {
         _gcHandle = GCHandle.Alloc(this, GCHandleType.Normal);
         ClassName = className;
+        NativeClassName = nativeClassName;
     }
 
     internal void RegisterBindings()
