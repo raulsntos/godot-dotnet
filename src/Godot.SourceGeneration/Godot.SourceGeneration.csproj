@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <Description>C# source generators for the Godot game engine .NET bindings.</Description>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <AutoGenerateAssemblyVersion>true</AutoGenerateAssemblyVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Nothing in lib but that's expected. -->
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <IncludeSymbols>false</IncludeSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Godot.SourceGeneration.Tests" />
+  </ItemGroup>
+
+  <Import Project="..\Godot.Common.CodeAnalysis\Godot.Common.CodeAnalysis.projitems" />
+
+  <!-- Package the project as a source generator. -->
+  <ItemGroup>
+    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+  </ItemGroup>
+
+</Project>

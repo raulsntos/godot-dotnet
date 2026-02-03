@@ -194,7 +194,8 @@ internal sealed class DotNetProjectReferencesAnalysisProvider : IAnalysisProvide
         {
             // When using Godot .NET, check for GodotSharp assemblies.
             return referenceIdentity.Equals("GodotSharp", StringComparison.OrdinalIgnoreCase)
-                || referenceIdentity.Equals("GodotSharpEditor", StringComparison.OrdinalIgnoreCase);
+                || referenceIdentity.Equals("GodotSharpEditor", StringComparison.OrdinalIgnoreCase)
+                || referenceIdentity.Equals("Godot.SourceGenerators", StringComparison.OrdinalIgnoreCase);
         }
         else
         {

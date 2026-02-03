@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="$(RepoRoot)src\Godot.Bindings\Godot.Bindings.csproj" />
-    <ProjectReference Include="$(RepoRoot)src\Godot.SourceGenerators\Godot.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="$(RepoRoot)src\Godot.SourceGeneration\Godot.SourceGeneration.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
 </Project>
