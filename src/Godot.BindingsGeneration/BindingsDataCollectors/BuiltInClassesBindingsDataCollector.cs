@@ -18,6 +18,12 @@ internal sealed class BuiltInClassesBindingsDataCollector : BindingsDataCollecto
 
     public override void Initialize(BindingsData.CollectionContext context)
     {
+        if (context.IsExtension)
+        {
+            // Built-in classes are only generated for the core API, not for GDExtensions.
+            return;
+        }
+
         foreach (var engineClass in context.Api.BuiltInClasses)
         {
             if (!ShouldGenerateBuiltInClass(engineClass.Name) && !ShouldGenerateBuiltInClassHelpers(engineClass.Name))
@@ -65,6 +71,12 @@ internal sealed class BuiltInClassesBindingsDataCollector : BindingsDataCollecto
 
     public override void Populate(BindingsData.CollectionContext context)
     {
+        if (context.IsExtension)
+        {
+            // Built-in classes are only generated for the core API, not for GDExtensions.
+            return;
+        }
+
         foreach (var engineClass in context.Api.BuiltInClasses)
         {
             if (!_builtinClasses.TryGetValue(engineClass.Name, out var type))

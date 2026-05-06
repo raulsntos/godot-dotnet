@@ -25,6 +25,11 @@ partial class BindingsData
         public GodotApi Api { get; }
 
         /// <summary>
+        /// Indicates whether the API being generated is a GDExtension instead of the core engine API.
+        /// </summary>
+        public bool IsExtension { get; init; }
+
+        /// <summary>
         /// Options that were provided to the generator to configure how the
         /// bindings should be generated.
         /// </summary>

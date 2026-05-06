@@ -9,6 +9,12 @@ internal sealed class VariadicGenericsBindingsDataCollector : BindingsDataCollec
 {
     public override void Populate(BindingsData.CollectionContext context)
     {
+        if (context.IsExtension)
+        {
+            // Variadic generics are only generated for the core API, not for GDExtensions.
+            return;
+        }
+
         // Generate GodotObject.TryCallVirtualMethod<T..> and GodotObject.CallVirtualMethod<T..>
         {
             var type = new TypeInfo("GodotObject", context.Options.Namespace)

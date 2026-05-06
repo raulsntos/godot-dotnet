@@ -7,6 +7,12 @@ internal sealed class UtilityFunctionsBindingsDataCollector : BindingsDataCollec
 {
     public override void Populate(BindingsData.CollectionContext context)
     {
+        if (context.IsExtension)
+        {
+            // Utility functions are only generated for the core API, not for GDExtensions.
+            return;
+        }
+
         var utilityFunctionsType = new TypeInfo("UtilityFunctions", context.Options.Namespace)
         {
             VisibilityAttributes = VisibilityAttributes.Assembly,

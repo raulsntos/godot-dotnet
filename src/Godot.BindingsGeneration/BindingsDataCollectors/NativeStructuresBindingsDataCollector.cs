@@ -14,6 +14,12 @@ internal sealed class NativeStructuresBindingsDataCollector : BindingsDataCollec
 
     public override void Initialize(BindingsData.CollectionContext context)
     {
+        if (context.IsExtension)
+        {
+            // Native structures are only generated for the core API, not for GDExtensions.
+            return;
+        }
+
         // Native structures format use C/C++ type names.
         RegisterPrimitiveType("uint8_t", KnownTypes.SystemByte);
         RegisterPrimitiveType("uint16_t", KnownTypes.SystemUInt16);
@@ -57,6 +63,12 @@ internal sealed class NativeStructuresBindingsDataCollector : BindingsDataCollec
 
     public override void Populate(BindingsData.CollectionContext context)
     {
+        if (context.IsExtension)
+        {
+            // Native structures are only generated for the core API, not for GDExtensions.
+            return;
+        }
+
         foreach (var nativeStructure in context.Api.NativeStructures)
         {
             if (!_nativeStructures.TryGetValue(nativeStructure.Name, out var type))

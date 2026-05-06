@@ -7,6 +7,12 @@ internal sealed class GlobalConstantsBindingsDataCollector : BindingsDataCollect
 {
     public override void Populate(BindingsData.CollectionContext context)
     {
+        if (context.IsExtension)
+        {
+            // Global constants are only generated for the core API, not for GDExtensions.
+            return;
+        }
+
         var globals = new TypeInfo("GlobalConstants", context.Options.Namespace)
         {
             VisibilityAttributes = VisibilityAttributes.Assembly,

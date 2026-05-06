@@ -90,6 +90,53 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
             PopulateEngineClassEnumsAndConstants(context, engineClass);
         }
 
+        if (context.IsExtension)
+        {
+            // InteropUtils is only generated for the core API, not for GDExtensions.
+            // Instead, we generate a module initializer in each for each GDExtension that populates InteropUtils.
+            context.AddGeneratedType("NativeInterop/InteropUtils.cs", new TypeInfo("InteropUtils", context.Options.Namespace)
+            {
+                VisibilityAttributes = VisibilityAttributes.Assembly,
+                TypeAttributes = TypeAttributes.ReferenceType,
+                IsStatic = true,
+                DeclaredFields =
+                {
+                    new FieldInfo("_isInitialized", KnownTypes.SystemBoolean)
+                    {
+                        VisibilityAttributes = VisibilityAttributes.Private,
+                        IsStatic = true,
+                    },
+                },
+                DeclaredMethods =
+                {
+                    new MethodInfo("EnsureHelpersInitialized")
+                    {
+                        VisibilityAttributes = VisibilityAttributes.Assembly,
+                        Attributes =
+                        {
+                            "[global::System.Runtime.CompilerServices.ModuleInitializer]",
+                        },
+                        IsStatic = true,
+                        Body = MethodBody.Create(writer =>
+                        {
+                            writer.WriteLine("if (global::System.Threading.Interlocked.Exchange(ref _isInitialized, true))");
+                            writer.WriteLine("{");
+                            writer.WriteLine("    return;");
+                            writer.WriteLine("}");
+
+                            foreach (var engineClass in context.Api.Classes)
+                            {
+                                var type = context.TypeDB.GetTypeFromEngineName(engineClass.Name);
+
+                                writer.WriteLine($"global::Godot.NativeInterop.InteropUtils.RegisterExtensionBindingCallbacks({type.FullNameWithGlobal}.NativeName, {type.FullNameWithGlobal}.BindingCallbacks);");
+                            }
+                        }),
+                    },
+                }
+            });
+            return;
+        }
+
         // Generate method in InteropUtils to initialize the dictionary with helpers
         // used to access constructors and static methods for a Godot class from the
         // native class name.
@@ -587,6 +634,10 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
         foreach (var engineSignal in engineClass.Signals)
         {
             string eventName = NamingUtils.SnakeToPascalCase(engineSignal.Name);
+            if (context.IsExtension)
+            {
+                eventName = $"{eventName}Signal";
+            }
 
             List<TypeInfo> signalParameterTypes = [];
             List<ParameterInfo> signalParameters = [];
@@ -954,15 +1005,19 @@ internal sealed class EngineClassesBindingsDataCollector : BindingsDataCollector
 
                 foreach (var engineSignal in engineClass.Signals)
                 {
-                    AddCachedStringName(signalNamesType, engineSignal.Name);
+                    AddCachedStringName(signalNamesType, engineSignal.Name, context.IsExtension ? "Signal" : null);
                 }
 
                 type.NestedTypes.Add(signalNamesType);
             }
 
-            static void AddCachedStringName(TypeInfo cacheType, string engineName)
+            static void AddCachedStringName(TypeInfo cacheType, string engineName, string? suffix = null)
             {
                 string name = NamingUtils.SnakeToPascalCase(engineName);
+                if (!string.IsNullOrEmpty(suffix))
+                {
+                    name = $"{name}{suffix}";
+                }
 
                 var nameField = new FieldInfo($"_{engineName}_Value", KnownTypes.GodotStringName)
                 {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Frozen;
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 using Godot.Bridge;
 
@@ -25,6 +26,8 @@ internal static partial class InteropUtils
 
     private static FrozenDictionary<StringName, GDExtensionInstanceBindingCallbacks> _bindingCallbacks;
 
+    private static ConcurrentDictionary<StringName, GDExtensionInstanceBindingCallbacks> _extensionBindingCallbacks { get; } = new(StringNameEqualityComparer.Default);
+
     private static FrozenDictionary<StringName, RegisterVirtualOverrideHandler> _registerVirtualOverridesHelpers;
 
     static InteropUtils()
@@ -35,6 +38,11 @@ internal static partial class InteropUtils
     internal static bool TryGetBindingCallbacks(StringName className, [NotNullWhen(true)] out GDExtensionInstanceBindingCallbacks bindingCallbacks)
     {
         if (_bindingCallbacks.TryGetValue(className, out bindingCallbacks))
+        {
+            return true;
+        }
+
+        if (_extensionBindingCallbacks.TryGetValue(className, out bindingCallbacks))
         {
             return true;
         }
@@ -50,7 +58,23 @@ internal static partial class InteropUtils
             return true;
         }
 
+        var extensionBindingCallbacksLookup = _extensionBindingCallbacks.GetAlternateLookup<NativeGodotStringName>();
+        if (extensionBindingCallbacksLookup.TryGetValue(className, out bindingCallbacks))
+        {
+            return true;
+        }
+
         return false;
+    }
+
+    internal static void RegisterExtensionBindingCallbacks(StringName extensionClassName, GDExtensionInstanceBindingCallbacks bindingCallbacks)
+    {
+        if (_bindingCallbacks.ContainsKey(extensionClassName) || _extensionBindingCallbacks.ContainsKey(extensionClassName))
+        {
+            throw new InvalidOperationException($"Binding callbacks for '{extensionClassName}' are already registered.");
+        }
+
+        _extensionBindingCallbacks[extensionClassName] = bindingCallbacks;
     }
 
     internal static void RegisterVirtualOverrides([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)] Type type, ClassRegistrationContext context)

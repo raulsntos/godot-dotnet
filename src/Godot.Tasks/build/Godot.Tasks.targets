@@ -51,4 +51,38 @@
       UsesGodotDotNet="true" />
   </Target>
 
+  <!-- Automatically find and generate bindings for GDExtensions used by the project. -->
+  <UsingTask TaskName="Godot.Tasks.PrepareGDExtensionsTask" AssemblyFile="$(_GodotTasksAssemblyPath)" TaskFactory="TaskHostFactory" />
+  <UsingTask TaskName="Godot.Tasks.GenerateGDExtensionBindingsTask" AssemblyFile="$(_GodotTasksAssemblyPath)" TaskFactory="TaskHostFactory" />
+  <Target Name="_PrepareGDExtensions" BeforeTargets="BeforeResolveReferences">
+    <Godot.Tasks.PrepareGDExtensionsTask GDExtensionFiles="@(GDExtension)">
+      <Output TaskParameter="ExtensionApiPaths" ItemName="_ExtensionApiFiles" />
+    </Godot.Tasks.PrepareGDExtensionsTask>
+    <RemoveDir Directories=".godot\dotnet\GDExtensionBindings" />
+  </Target>
+  <Target Name="_GenerateGDExtensionBindings" AfterTargets="ResolveReferences" BeforeTargets="BeforeCompile" DependsOnTargets="_PrepareGDExtensions" Condition="'@(_ExtensionApiFiles)' != ''">
+    <Godot.Tasks.GenerateGDExtensionBindingsTask
+      ReferencePath="@(ReferencePath)"
+      ExtensionApiFiles="@(_ExtensionApiFiles)"
+      OutputPath="$(IntermediateOutputPath)GDExtensionBindings\"
+      EmitGeneratedFiles="$(EmitCompilerGeneratedFiles)">
+      <Output TaskParameter="GeneratedAssemblyPath" PropertyName="GDExtensionBindingsAssemblyPath" />
+    </Godot.Tasks.GenerateGDExtensionBindingsTask>
+    <!--
+      Add the generated GDExtension bindings assembly to the project's references.
+      We have to use ReferencePath because ResolveReferences has already run.
+    -->
+    <ItemGroup Condition="'$(GDExtensionBindingsAssemblyPath)' != ''">
+      <ReferencePath Include="$(GDExtensionBindingsAssemblyPath)">
+        <CopyLocal>true</CopyLocal>
+        <Private>true</Private>
+        <IncludeRuntimeDependency>true</IncludeRuntimeDependency>
+      </ReferencePath>
+      <ReferenceCopyLocalPaths Include="$(GDExtensionBindingsAssemblyPath)">
+        <Private>true</Private>
+      </ReferenceCopyLocalPaths>
+      <FileWrites Include="$(GDExtensionBindingsAssemblyPath)" />
+    </ItemGroup>
+  </Target>
+
 </Project>

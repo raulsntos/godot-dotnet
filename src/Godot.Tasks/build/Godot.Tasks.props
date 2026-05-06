@@ -40,4 +40,12 @@
     <_GodotPlatformConstants Condition="'$(GodotTargetPlatform)' == 'web'">GODOT_JAVASCRIPT;GODOT_HTML5;GODOT_WASM;GODOT_WEB</_GodotPlatformConstants>
   </PropertyGroup>
 
+  <!-- Look for GDExtension files to include in binding generation. -->
+  <PropertyGroup>
+    <EnableDefaultGDExtensionItems Condition="'$(EnableDefaultGDExtensionItems)' == ''">true</EnableDefaultGDExtensionItems>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(EnableDefaultGDExtensionItems)' == 'true'">
+     <GDExtension Include="**\*.gdextension" />
+  </ItemGroup>
+
 </Project>

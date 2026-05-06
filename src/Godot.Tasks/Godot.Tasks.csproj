@@ -17,4 +17,15 @@
     <PackageReference Include="NuGet.Versioning" Version="$(NuGetVersioningVersion)" />
   </ItemGroup>
 
+  <Import Project="..\Godot.Common.CodeAnalysis\Godot.Common.CodeAnalysis.projitems" />
+
+  <ItemGroup>
+    <ProjectReference Include="..\Godot.BindingsGeneration\Godot.BindingsGeneration.csproj" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!-- Embed the engine's extension_api.json so the GDExtension bindings generator can identify built-in types. -->
+  <ItemGroup>
+    <EmbeddedResource Include="$(RepoRoot)gdextension\extension_api.json" LogicalName="Godot.Tasks.extension_api.json" />
+  </ItemGroup>
+
 </Project>

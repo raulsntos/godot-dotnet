@@ -61,7 +61,7 @@ internal sealed partial class BindingsData
     /// <summary>
     /// Constructs a <see cref="BindingsData"/> instance and populate it with the
     /// necessary information from the given <paramref name="api"/> to generate
-    /// the C# API.
+    /// the C# bindings for the engine core API.
     /// </summary>
     /// <param name="api">API information deserialized from the JSON dump.</param>
     /// <param name="options">Options that configure the bindings generation.</param>
@@ -74,6 +74,43 @@ internal sealed partial class BindingsData
         var data = new BindingsData(api.Header);
 
         var context = new CollectionContext(data, api, options, logger);
+
+        // First create all the TypeInfo instances, then populate them as a second step
+        // so we can retrieve references to other TypeInfo instances when populating.
+        data.InitializeTypes(context);
+        data.PopulateTypes(context);
+
+        return data;
+    }
+
+    /// <summary>
+    /// Constructs a <see cref="BindingsData"/> instance and populate it with the
+    /// necessary information from the given <paramref name="coreApi"/> and
+    /// <paramref name="extensionApi"/> to generate the C# bindings for the extension API.
+    /// </summary>
+    /// <param name="coreApi">API information deserialized from the JSON dump for the engine core API.</param>
+    /// <param name="extensionApi">API information deserialized from the JSON dump for the extension.</param>
+    /// <param name="options">Options that configure the bindings generation.</param>
+    /// <param name="logger">Logger that logs information messages, warnings, and errors.</param>
+    /// <returns>A populated instance of <see cref="BindingsData"/>.</returns>
+    internal static BindingsData CreateForGDExtension(GodotApi coreApi, GodotApi extensionApi, BindingsGeneratorOptions options, ILogger? logger = null)
+    {
+        logger ??= ConsoleLogger.Instance;
+
+        // First populate the data with the core API so the extension API
+        // can reference the generated types from the core API.
+        var data = CreateForCore(coreApi, new BindingsGeneratorOptions(), NullLogger.Instance);
+
+        // Clear the generated types added for the core API, since we'll only
+        // generate the extension API types.
+        data._generatedTypes.Clear();
+        data._generatedTypesByPath.Clear();
+        data._generatedTestTypesByPath.Clear();
+
+        var context = new CollectionContext(data, extensionApi, options, logger)
+        {
+            IsExtension = true,
+        };
 
         // First create all the TypeInfo instances, then populate them as a second step
         // so we can retrieve references to other TypeInfo instances when populating.

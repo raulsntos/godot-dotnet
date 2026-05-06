@@ -109,7 +109,7 @@ partial class GodotObject : IDisposable
             GodotBridge.GDExtensionInterface.object_set_instance((void*)NativePtr, &extensionClassName, (void*)gcHandlePtr);
         }
 
-        if (!options.InstanceBindingAlreadyBound)
+        if (!options.InstanceBindingAlreadyBound && !IsGDExtensionDefinedType())
         {
             var bindingCallbacks = GDExtensionInstanceBindingCallbacks.Default;
             if (!IsUserDefinedType())
@@ -149,6 +149,13 @@ partial class GodotObject : IDisposable
         {
             // If this type is not defined in this assembly, it must be a user-defined type.
             return GetType().Assembly != typeof(GodotObject).Assembly;
+        }
+
+        bool IsGDExtensionDefinedType()
+        {
+            // If this type is defined in the GDExtensionBindings assembly,
+            // it must be a type defined by a GDExtension that we generated bindings for.
+            return GetType().Assembly.GetName().Name == "GDExtensionBindings";
         }
     }
 

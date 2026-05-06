@@ -27,6 +27,11 @@
     <InternalsVisibleTo Include="Godot.Bindings.IntegrationTests.TestGame" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- The generated GDExtension bindings need to use internal API. -->
+    <InternalsVisibleTo Include="GDExtensionBindings" />
+  </ItemGroup>
+
   <!-- Reference the project that contains the MSBuild task to ensure the build order is correct. -->
   <ItemGroup>
     <ProjectReference Include="..\Godot.BindingsGeneration.Tasks\Godot.BindingsGeneration.Tasks.csproj" ReferenceOutputAssembly="false" />
