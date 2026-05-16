@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using Godot.EditorIntegration.Internals;
+using Godot.EditorIntegration.Workspace;
 
 namespace Godot.EditorIntegration;
 
@@ -14,11 +15,29 @@ internal sealed partial class StatusIndicatorPanel : VBoxContainer
     private Label _dotnetSdkInfoLabel;
     private LinkButton _dotnetSdkInfoButton;
 
+    private Label _workspaceInfoLabel;
+    private TextureRect _workspaceInfoIcon;
+
     private Label _assemblyInfoLabel;
     private TextureRect _assemblyInfoIcon;
 
+    private LinkButton _selectProjectButton;
+    private ProjectSelectorDialog _projectSelectorDialog;
+
     private LinkButton _buildButton;
 #nullable restore
+
+    private DotNetWorkspace? _workspace;
+
+    public DotNetWorkspace? Workspace
+    {
+        get => _workspace;
+        set
+        {
+            _workspace = value;
+            EditorInternal.StatusIndicatorNotifyStateChanged();
+        }
+    }
 
     public StatusIndicatorPanel()
     {
@@ -27,6 +46,8 @@ internal sealed partial class StatusIndicatorPanel : VBoxContainer
 
     protected override void _Ready()
     {
+        _projectSelectorDialog = new ProjectSelectorDialog();
+
         // Find the parent PopupPanel to be able to hide it as a response to certain actions.
         {
             var current = GetParent();
@@ -100,6 +121,38 @@ internal sealed partial class StatusIndicatorPanel : VBoxContainer
             _dotnetSdkInfoButton.Pressed += CopyDotNetSdkToClipboard;
             _dotnetSdkInfoButton.Hide();
             hbox.AddChild(_dotnetSdkInfoButton);
+        }
+
+        // Workspace line.
+        {
+            var hbox = new HBoxContainer();
+            AddChild(hbox);
+
+            _workspaceInfoIcon = new TextureRect()
+            {
+                StretchMode = TextureRect.StretchModeEnum.KeepCentered,
+            };
+            _workspaceInfoIcon.Hide();
+            hbox.AddChild(_workspaceInfoIcon);
+
+            _workspaceInfoLabel = new Label()
+            {
+                Text = SR.StatusIndicatorPanel_WorkspaceOpenState_None,
+                AutowrapMode = TextServer.AutowrapMode.WordSmart,
+                CustomMinimumSize = new Vector2(512, 1),
+                SizeFlagsVertical = SizeFlags.ShrinkCenter,
+            };
+            hbox.AddChild(_workspaceInfoLabel);
+
+            hbox.AddSpacer(begin: false);
+
+            _selectProjectButton = new LinkButton()
+            {
+                Text = SR.StatusIndicatorPanel_ProjectOpen,
+                SizeFlagsVertical = SizeFlags.ShrinkCenter,
+            };
+            _selectProjectButton.Pressed += SelectProject;
+            hbox.AddChild(_selectProjectButton);
         }
 
         // Assembly line.
@@ -183,6 +236,65 @@ internal sealed partial class StatusIndicatorPanel : VBoxContainer
             _dotnetSdkInfoButton.Show();
         }
 
+        // Workspace line.
+        {
+            _selectProjectButton.Text = SR.StatusIndicatorPanel_ProjectOpen;
+            _selectProjectButton.Disabled = false;
+            _workspaceInfoIcon.Hide();
+
+            switch (_workspace.State)
+            {
+                case DotNetWorkspaceState.NotOpened:
+                case DotNetWorkspaceState.ProjectNotFound:
+                {
+                    // This is an acceptable scenario if there is no .csproj files at all in the workspace.
+                    // It indicates it's likely a project that doesn't use C# (i.e., a GDScript-only project).
+                    // But if there are .csproj files somewhere, it means the project settings need to be
+                    // configured to point to the right one.
+                    // IMPORTANT: We only support .csproj files in the root directory, but we still show
+                    // a warning if there are .csproj files in subdirectories, in case the user accidentally
+                    // misplaced them.
+                    if (WorkspaceHasProjects())
+                    {
+                        severity.Update(StatusIndicatorSeverity.Warning);
+                        _workspaceInfoIcon.Show();
+                        _workspaceInfoIcon.Texture = GetThemeIcon(EditorThemeNames.StatusWarning, EditorThemeNames.EditorIcons);
+                        _workspaceInfoLabel.Text = SR.StatusIndicatorPanel_WorkspaceOpenState_None_FoundProjects;
+                    }
+                    else
+                    {
+                        _workspaceInfoLabel.Text = SR.StatusIndicatorPanel_WorkspaceOpenState_None;
+                    }
+                    break;
+                }
+
+                case DotNetWorkspaceState.Opening:
+                {
+                    severity.Update(StatusIndicatorSeverity.Loading);
+                    _workspaceInfoLabel.Text = SR.StatusIndicatorPanel_WorkspaceOpenState_Opening;
+                    _selectProjectButton.Disabled = true;
+                    break;
+                }
+
+                case DotNetWorkspaceState.Opened:
+                {
+                    string csprojName = Path.GetFileName(_workspace.ProjectPath);
+                    _workspaceInfoLabel.Text = csprojName;
+                    _selectProjectButton.Text = SR.StatusIndicatorPanel_ProjectChange;
+                    break;
+                }
+
+                case DotNetWorkspaceState.FailedToOpen:
+                {
+                    severity.Update(StatusIndicatorSeverity.Error);
+                    _workspaceInfoIcon.Show();
+                    _workspaceInfoIcon.Texture = GetThemeIcon(EditorThemeNames.StatusError, EditorThemeNames.EditorIcons);
+                    _workspaceInfoLabel.Text = SR.StatusIndicatorPanel_WorkspaceOpenState_Failed;
+                    break;
+                }
+            }
+        }
+
         // Assembly line.
         {
             _buildButton.Hide();
@@ -256,6 +368,22 @@ internal sealed partial class StatusIndicatorPanel : VBoxContainer
         EditorInternal.StatusIndicatorUpdateSeverity(severity.Value);
     }
 
+    private static bool WorkspaceHasProjects()
+    {
+        string rootPath = ProjectSettings.Singleton.GlobalizePath("res://");
+
+        return Directory.EnumerateFiles(rootPath, "*.csproj", new EnumerationOptions()
+        {
+            RecurseSubdirectories = true,
+        }).Any();
+    }
+
+    private void OpenUrl(string url)
+    {
+        _panelParent?.Hide();
+        OS.Singleton.ShellOpen(url);
+    }
+
     private static void CopyEditorIntegrationVersionToClipboard()
     {
         DisplayServer.Singleton.ClipboardSet($"Godot.EditorIntegration {EditorIntegrationState.Version}");
@@ -266,6 +394,18 @@ internal sealed partial class StatusIndicatorPanel : VBoxContainer
         DisplayServer.Singleton.ClipboardSet($"{EditorIntegrationState.DotNetSdkVersion} [{EditorIntegrationState.DotNetSdkPath}]");
     }
 
+    private void SelectProject()
+    {
+        _panelParent?.Hide();
+        _projectSelectorDialog.PopupDialog(LoadProject);
+    }
+
+    private static void LoadProject(string projectPath)
+    {
+        string assemblyName = Path.GetFileNameWithoutExtension(projectPath);
+        EditorInternal.ModuleChangeProjectAssembly(assemblyName);
+    }
+
     private void BuildAssembly()
     {
         _panelParent?.Hide();
@@ -274,6 +414,7 @@ internal sealed partial class StatusIndicatorPanel : VBoxContainer
 
     protected override void Dispose(bool disposing)
     {
+        _projectSelectorDialog?.QueueFree();
         EditorInternal.StatusPanelSetContent(null);
         base.Dispose(disposing);
     }

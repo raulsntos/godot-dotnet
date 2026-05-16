@@ -25,6 +25,9 @@ internal static class Main
         GodotRegistry.RegisterInternalClass<DotNetExportPlugin>(DotNetExportPlugin.BindMembers);
 
         GodotRegistry.RegisterInternalClass<StatusIndicatorPanel>(StatusIndicatorPanel.BindMembers);
+        GodotRegistry.RegisterInternalClass<ProjectSelectorDialog>(ProjectSelectorDialog.BindMembers);
+
+        GodotRegistry.RegisterInternalClass<DotNetEditorExtensionSourceCodePlugin>(DotNetEditorExtensionSourceCodePlugin.BindMembers);
 
         GodotRegistry.RegisterInternalClass<MSBuildPanel>(MSBuildPanel.BindMembers);
         GodotRegistry.RegisterInternalClass<BuildProblemsView>(BuildProblemsView.BindMembers);

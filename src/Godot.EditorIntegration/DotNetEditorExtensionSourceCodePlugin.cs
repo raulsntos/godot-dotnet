@@ -1,0 +1,795 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Godot.Collections;
+using Godot.Common;
+using Godot.Common.CodeAnalysis;
+using Godot.EditorIntegration.CodeEditors;
+using Godot.EditorIntegration.Internals;
+using Godot.EditorIntegration.Workspace;
+using Godot.NativeInterop;
+using Godot.NativeInterop.Marshallers;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Formatting;
+
+namespace Godot.EditorIntegration;
+
+[GodotClass]
+internal sealed partial class DotNetEditorExtensionSourceCodePlugin : EditorExtensionSourceCodePlugin, IDisposable
+{
+    private bool _disposed;
+
+    private readonly DotNetWorkspace _workspace;
+
+    internal DotNetWorkspace Workspace => _workspace;
+
+    private struct ParsedTemplateFile
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Content { get; set; }
+        public DateTimeOffset LastModified { get; set; }
+    }
+
+    private readonly Dictionary<string, ParsedTemplateFile> _parsedTemplates = [];
+
+    public DotNetEditorExtensionSourceCodePlugin()
+    {
+        _workspace = DotNetWorkspace.Create(EditorPath.ProjectCSProjPath);
+
+        EditorInternal.RegisterDotNetSourceCodePlugin(this);
+    }
+
+    protected override string _GetSourcePath(StringName className)
+    {
+        try
+        {
+            ThrowIfWorkspaceNotAvailable();
+            return GetSourcePathCore(_workspace, className.ToString());
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr($"Error getting source code for {className}: {e}");
+            return "";
+        }
+
+        static string GetSourcePathCore(DotNetWorkspace workspace, string className)
+        {
+            // There can't be multiple symbols with the same name registered in Godot,
+            // so if we found more than one symbol, we are in an invalid state and we
+            // can just return an empty string.
+            var symbol = workspace.FindTypeSymbols(className).SingleOrDefault();
+            if (symbol is null)
+            {
+                return "";
+            }
+
+            var classDeclarationSyntax = symbol.GetInSourceDeclarationSyntax<ClassDeclarationSyntax>();
+            if (classDeclarationSyntax is null)
+            {
+                return "";
+            }
+
+            return classDeclarationSyntax.SyntaxTree.FilePath;
+        }
+    }
+
+    protected override unsafe bool _GetLocationInSource(StringName className, StringName methodName, void* rSourcePath, int* rLine, int* rColumn)
+    {
+        try
+        {
+            ThrowIfWorkspaceNotAvailable();
+            return GetLocationInSourceCore(_workspace, className.ToString(), methodName.ToString(), (NativeGodotString*)rSourcePath, rLine, rColumn);
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr($"Error getting source code location for {className}.{methodName}: {e}");
+            return false;
+        }
+
+        static bool GetLocationInSourceCore(DotNetWorkspace workspace, string className, string methodName, NativeGodotString* rSourcePath, int* rLine, int* rColumn, CancellationToken cancellationToken = default)
+        {
+            // There can't be multiple symbols with the same name registered in Godot,
+            // so if we found more than one symbol, we are in an invalid state and we
+            // can just return false.
+            var symbol = workspace.FindTypeSymbols(className).SingleOrDefault();
+            if (symbol is null)
+            {
+                return false;
+            }
+
+            var methodSymbols = symbol.GetMembers(methodName);
+            if (methodSymbols.Length == 0)
+            {
+                return false;
+            }
+
+            foreach (var methodSymbol in methodSymbols)
+            {
+                if (!methodSymbol.HasAttribute(KnownTypeNames.BindMethodAttribute))
+                {
+                    continue;
+                }
+
+                var syntaxReference = methodSymbol.DeclaringSyntaxReferences.FirstOrDefault();
+                if (syntaxReference is null)
+                {
+                    continue;
+                }
+
+                var methodDeclarationSyntax = syntaxReference.GetSyntax(cancellationToken) as MethodDeclarationSyntax;
+                if (methodDeclarationSyntax is null)
+                {
+                    continue;
+                }
+
+                var lineSpan = methodDeclarationSyntax.SyntaxTree.GetLineSpan(methodDeclarationSyntax.Identifier.Span, cancellationToken);
+
+                // Godot's line and column numbers are 0-based, which matches Roslyn's LinePosition.
+                string filePath = methodDeclarationSyntax.SyntaxTree.FilePath;
+                int line = lineSpan.StartLinePosition.Line;
+                int column = lineSpan.StartLinePosition.Character;
+
+                StringMarshaller.WriteUnmanaged(rSourcePath, filePath);
+                *rLine = line;
+                *rColumn = column;
+
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    protected override StringName _GetClassNameFromSourcePath(string sourcePath)
+    {
+        try
+        {
+            ThrowIfWorkspaceNotAvailable();
+            return GetClassNameFromSourcePathCore(_workspace, sourcePath);
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr($"Error getting class name for source path '{sourcePath}': {e}");
+            return StringName.Empty;
+        }
+
+        static StringName GetClassNameFromSourcePathCore(DotNetWorkspace workspace, string sourcePath)
+        {
+            var document = workspace.GetDocumentForFilePath(sourcePath);
+            if (document is null)
+            {
+                // The file path does not correspond to any document in the project.
+                return StringName.Empty;
+            }
+
+            if (!workspace.TryGetCachedTypeSymbolsForDocument(document.Id, out var cachedSymbols))
+            {
+                // The document has no type symbols or the cache is outdated.
+                // This is unlikely to happen because the cache should be updated on every change.
+                return StringName.Empty;
+            }
+
+            // Try to get the syntax tree from the document to use when checking if a symbol
+            // belongs to this file and avoid comparing file paths which can be unreliable
+            // (e.g. due to case sensitivity or symbolic links).
+            // If the syntax tree is not available, we will fall back to comparing file paths,
+            // but it should be rare because we always create a compilation when loading the workspace.
+            document.TryGetSyntaxTree(out var documentSyntaxTree);
+
+            // Sort symbols by their declaration position within the file,
+            // so that we always get the same one if there are multiple.
+            var sortedTypeSymbols = cachedSymbols
+                .Select(symbol =>
+                {
+                    var syntaxReferences = symbol.DeclaringSyntaxReferences;
+                    foreach (var syntaxReference in syntaxReferences)
+                    {
+                        bool isInDocument = documentSyntaxTree is not null
+                            ? syntaxReference.SyntaxTree == documentSyntaxTree
+                            : string.Equals(syntaxReference.SyntaxTree.FilePath, document.FilePath, StringComparison.Ordinal);
+
+                        if (isInDocument)
+                        {
+                            return (Symbol: symbol, Position: syntaxReference.Span.Start);
+                        }
+                    }
+                    return (Symbol: symbol, Position: int.MaxValue);
+                })
+                .Where(x => x.Position < int.MaxValue)
+                .OrderBy(x => x.Position)
+                .Select(x => x.Symbol);
+
+            INamedTypeSymbol? firstTypeSymbolDeclaredInDocument = null;
+            foreach (var symbol in sortedTypeSymbols)
+            {
+                if (firstTypeSymbolDeclaredInDocument is null)
+                {
+                    firstTypeSymbolDeclaredInDocument = symbol;
+                }
+                else
+                {
+                    GD.PushWarning($"Found more than one class declaration with [GodotClass] attribute in file '{sourcePath}', selecting the first one.");
+                    break;
+                }
+            }
+
+            if (firstTypeSymbolDeclaredInDocument is null)
+            {
+                return StringName.Empty;
+            }
+
+            return new StringName(firstTypeSymbolDeclaredInDocument.Name);
+        }
+    }
+
+    protected override bool _OverridesExternalEditor()
+    {
+        var editorSettings = EditorInterface.Singleton.GetEditorSettings();
+        return editorSettings.GetSetting(EditorSettingNames.ExternalEditor).As<CodeEditorId>() != CodeEditorId.None;
+    }
+
+    protected override Error _OpenInExternalEditor(string sourcePath, int line, int col)
+    {
+        // Godot's line and column numbers are 0-based, but CodeEditorManager API expects 1-based numbers.
+        return DotNetEditorPlugin.Singleton.CodeEditorManager.OpenInCurrentEditor(sourcePath, line + 1, col + 1);
+    }
+
+    protected override void _ConfigureSelectPathDialog(int pathIndex, EditorFileDialog dialog)
+    {
+        dialog.SetFilters([".cs"]);
+    }
+
+    protected override string _AdjustPath(int pathIndex, string className, string basePath, string oldPath)
+    {
+        if (!string.IsNullOrEmpty(oldPath))
+        {
+            // If the old path is not empty, the user selected a specific path, so take it as the base path.
+            basePath = Path.GetDirectoryName(ProjectSettings.Singleton.GlobalizePath(oldPath));
+            basePath = ProjectSettings.Singleton.LocalizePath(basePath);
+        }
+
+        // The AdjustScriptNameCasing API also looks at the editor setting,
+        // in case the user overrides the language preference.
+        // Default preference is 'Auto' to match the casing of the class name provided by the user.
+        var preferredNameCasing = ScriptLanguage.ScriptNameCasing.Auto;
+        string fileName = AdjustScriptNameCasing(className, preferredNameCasing);
+
+        return Path.Combine(basePath, $"{fileName}.cs");
+    }
+
+    protected override PackedStringArray _GetAvailableTemplates(string baseClassName)
+    {
+        baseClassName = NamingUtils.PascalToPascalCase(baseClassName);
+        return [.. Templates.GetTemplateIds(baseClassName)];
+    }
+
+    protected override string _GetTemplateDisplayName(string templateId)
+    {
+        return Templates.GetTemplateDisplayName(templateId);
+    }
+
+    protected override string _GetTemplateDescription(string templateId)
+    {
+        return Templates.GetTemplateDescription(templateId);
+    }
+
+    protected override GodotArray<GodotDictionary> _GetTemplateOptions(string templateId)
+    {
+        return [];
+    }
+
+    protected override bool _CanHandleTemplateFile(string templatePath)
+    {
+        return TryParseTemplateFile(templatePath, out _);
+    }
+
+    protected override string _GetTemplateFileDisplayName(string templatePath)
+    {
+        if (TryParseTemplateFile(templatePath, out var parsedTemplate))
+        {
+            return parsedTemplate.Name;
+        }
+
+        return "";
+    }
+
+    protected override string _GetTemplateFileDescription(string templatePath)
+    {
+        if (TryParseTemplateFile(templatePath, out var parsedTemplate))
+        {
+            return parsedTemplate.Description;
+        }
+
+        return "";
+    }
+
+    private static bool ValidateCreateClassSourcePaths(PackedStringArray paths, [NotNullWhen(true)] out string? path)
+    {
+        path = null;
+        if (paths.Count != 1)
+        {
+            GD.PrintErr($"Expected only one path for the C# file, but got {paths.Count}.");
+            return false;
+        }
+
+        path = paths[0];
+        if (!path.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
+        {
+            GD.PrintErr($"Expected a .cs file, but got '{path}'.");
+            return false;
+        }
+
+        return true;
+    }
+
+    private static bool CreateProjectSolutionIfNeeded()
+    {
+        if (!File.Exists(EditorPath.ProjectCSProjPath))
+        {
+            return DotNetEditorPlugin.Singleton.CreateProjectSolution();
+        }
+
+        return true;
+    }
+
+    protected override Error _CreateClassSource(string className, string baseClassName, PackedStringArray paths)
+    {
+        // When no template is specified, use the default template that works for all classes.
+        return _CreateClassSourceFromTemplateId(className, baseClassName, paths, Templates.DefaultTemplateId, []);
+    }
+
+    protected override Error _CreateClassSourceFromTemplateId(string className, string baseClassName, PackedStringArray paths, string templateId, GodotDictionary options)
+    {
+        if (!ValidateCreateClassSourcePaths(paths, out string? filePath))
+        {
+            return Error.InvalidParameter;
+        }
+
+        filePath = ProjectSettings.Singleton.GlobalizePath(filePath);
+
+        if (!CreateProjectSolutionIfNeeded())
+        {
+            GD.PrintErr($"Failed to create C# project.");
+            return Error.Unavailable;
+        }
+
+        if (!Templates.ContainsTemplate(templateId))
+        {
+
+            GD.PrintErr($"Unknown template ID: {templateId}");
+            return Error.InvalidParameter;
+        }
+
+        baseClassName = NamingUtils.PascalToPascalCase(baseClassName);
+        if (baseClassName == className)
+        {
+            baseClassName = $"Godot.{baseClassName}";
+        }
+
+        using var file = File.Create(filePath);
+        using var writer = new StreamWriter(file);
+        try
+        {
+            writer.Write(Templates.GetTemplateContent(templateId, className, baseClassName));
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr($"Failed to create class source file: {e}");
+            return Error.CantCreate;
+        }
+
+        return Error.Ok;
+    }
+
+    protected override Error _CreateClassSourceFromTemplateFile(string className, string baseClassName, PackedStringArray paths, string templateFilePath)
+    {
+        if (!ValidateCreateClassSourcePaths(paths, out string? filePath))
+        {
+            return Error.InvalidParameter;
+        }
+
+        filePath = ProjectSettings.Singleton.GlobalizePath(filePath);
+
+        // This will attempt to retrieve the parsed template from the cache, if the template has been parsed before.
+        // Otherwise, it will parse it and cache it for the next time.
+        if (!TryParseTemplateFile(templateFilePath, out var parsedTemplate))
+        {
+            GD.PrintErr($"Failed to parse template file: {templateFilePath}");
+            return Error.InvalidParameter;
+        }
+
+        if (!CreateProjectSolutionIfNeeded())
+        {
+            GD.PrintErr($"Failed to create C# project.");
+            return Error.Unavailable;
+        }
+
+        var editorSettings = EditorInterface.Singleton.GetEditorSettings();
+
+        string indentation = "\t";
+        bool useSpaceIndentation = editorSettings.GetSetting("text_editor/behavior/indent/type").AsBool();
+        if (useSpaceIndentation)
+        {
+            int indentSize = editorSettings.GetSetting("text_editor/behavior/indent/size").AsInt32();
+            indentation = new string(' ', indentSize);
+        }
+
+        string classNameStr = className.ToString().Replace(" ", "_");
+
+        string baseClassNameStr = NamingUtils.PascalToPascalCase(baseClassName.ToString());
+        if (baseClassNameStr == classNameStr)
+        {
+            baseClassNameStr = $"Godot.{baseClassNameStr}";
+        }
+
+        string processedTemplate = parsedTemplate.Content
+            .Replace("_BINDINGS_NAMESPACE_", "Godot")
+            .Replace("_BASE_", baseClassNameStr)
+            .Replace("_CLASS_", classNameStr)
+            .Replace("_TS_", indentation);
+
+        using var file = File.Create(filePath);
+        using var writer = new StreamWriter(file);
+        try
+        {
+            writer.Write(processedTemplate);
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr($"Failed to create class source file: {e}");
+            return Error.CantCreate;
+        }
+
+        return Error.Ok;
+    }
+
+    private static bool ClassNameOnlyContainsLowercaseAscii(ReadOnlySpan<char> className)
+    {
+        foreach (char c in className)
+        {
+            if (!IsLowercaseAscii(c))
+            {
+                return false;
+            }
+        }
+
+        return true;
+
+        static bool IsLowercaseAscii(char c) => c >= 'a' && c <= 'z';
+    }
+
+    private static bool IsReservedWord(string value)
+    {
+        return value switch
+        {
+            // Reserved keywords.
+            "abstract" or "as" or "base" or "bool" or "break" or "byte" or "case" or "catch" or
+            "char" or "checked" or "class" or "const" or "continue" or "decimal" or "default" or
+            "delegate" or "do" or "double" or "else" or "enum" or "event" or "explicit" or
+            "extern" or "false" or "finally" or "fixed" or "float" or "for" or "foreach" or
+            "goto" or "if" or "implicit" or "in" or "int" or "interface" or "internal" or "is" or
+            "lock" or "long" or "namespace" or "new" or "null" or "object" or "operator" or
+            "out" or "override" or "params" or "private" or "protected" or "public" or
+            "readonly" or "ref" or "return" or "sbyte" or "sealed" or "short" or "sizeof" or
+            "stackalloc" or "static" or "string" or "struct" or "switch" or "this" or "throw" or
+            "true" or "try" or "typeof" or "uint" or "ulong" or "unchecked" or "unsafe" or
+            "ushort" or "using" or "virtual" or "void" or "volatile" or "while" or
+
+            // Contextual keywords. Not reserved words, but I guess we should include
+            // them because this seems to be used only for syntax highlighting.
+            "add" or "alias" or "ascending" or "async" or "await" or "by" or "descending" or
+            "dynamic" or "equals" or "from" or "get" or "global" or "group" or "into" or
+            "join" or "let" or "nameof" or "on" or "orderby" or "partial" or "remove" or
+            "select" or "set" or "value" or "var" or "when" or "where" or "yield"
+
+            => true,
+
+            _ => false,
+        };
+    }
+
+    protected override void _ValidateClassName(EditorValidationContext validationContext, string className)
+    {
+        if (!SyntaxFacts.IsValidIdentifier(className))
+        {
+            validationContext.AddValidation(EditorValidationContext.ValidationSeverity.Error, SR.DotNetEditorExtensionSourceCodePlugin_ClassNameMustBeAValidIdentifier);
+            return;
+        }
+
+        if (IsReservedWord(className))
+        {
+            validationContext.AddValidation(EditorValidationContext.ValidationSeverity.Error, SR.DotNetEditorExtensionSourceCodePlugin_ClassNameCannotBeAReservedWord);
+            return;
+        }
+
+        // Check for diagnostic CS8981.
+        if (ClassNameOnlyContainsLowercaseAscii(className))
+        {
+            validationContext.AddValidation(EditorValidationContext.ValidationSeverity.Warning, SR.DotNetEditorExtensionSourceCodePlugin_ClassNameOnlyContainsLowercaseAsciiCharacters);
+        }
+    }
+
+    protected override void _ValidatePath(EditorValidationContext validationContext, int pathIndex, string path)
+    {
+        if (!path.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
+        {
+            validationContext.AddValidation(EditorValidationContext.ValidationSeverity.Error, SR.DotNetEditorExtensionSourceCodePlugin_PathMustEndWithCSharpExtension);
+        }
+    }
+
+    protected override void _ValidateTemplateOption(EditorValidationContext validationContext, string templateId, string optionName, Variant value) { }
+
+    protected override Error _AddMethodFunc(StringName className, string methodName, PackedStringArray args)
+    {
+        try
+        {
+            ThrowIfWorkspaceNotAvailable();
+            AddMethodFuncCoreAsync(_workspace, className.ToString(), methodName, args).Wait();
+            return Error.Ok;
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr($"Error adding method '{methodName}' to class '{className}': {e}");
+            return Error.Unavailable;
+        }
+
+        static async Task AddMethodFuncCoreAsync(DotNetWorkspace workspace, string className, string methodName, PackedStringArray args, CancellationToken cancellationToken = default)
+        {
+            var symbolCandidates = workspace.FindTypeSymbols(className);
+
+            // There can't be multiple symbols with the same name registered in Godot,
+            // so if we found more than one symbol, we are in an invalid state and we
+            // can just return an empty string.
+            var symbol = symbolCandidates.SingleOrDefault();
+            if (symbol is null)
+            {
+                throw new InvalidOperationException($"Could not find type symbol for class '{className}'.");
+            }
+
+            var classDeclarationSyntax = symbol.GetInSourceDeclarationSyntax<ClassDeclarationSyntax>();
+            if (classDeclarationSyntax is null)
+            {
+                throw new InvalidOperationException($"Could not find class declaration syntax for class '{className}'.");
+            }
+
+            var document = workspace.GetDocumentForSyntax(classDeclarationSyntax);
+            if (document is null)
+            {
+                throw new InvalidOperationException($"Could not find document for class '{className}'.");
+            }
+
+            var newDocument = await AddMethodDeclaration(document, classDeclarationSyntax, methodName, args, cancellationToken).ConfigureAwait(false);
+            if (newDocument == document)
+            {
+                // No changes were made.
+                return;
+            }
+
+            if (!workspace.TryApplyChanges(newDocument.Project.Solution))
+            {
+                throw new InvalidOperationException($"Could not apply changes to add method '{methodName}' to class '{className}'.");
+            }
+        }
+
+        static async Task<Document> AddMethodDeclaration(Document document, ClassDeclarationSyntax classDeclarationSyntax, string methodName, PackedStringArray args, CancellationToken cancellationToken = default)
+        {
+            var newSyntaxNode = classDeclarationSyntax
+                .AddMembers(CreateMethodDeclaration(methodName, args));
+
+            var root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
+            if (root is null)
+            {
+                throw new InvalidOperationException("Could not get syntax root.");
+            }
+
+            var newRoot = root.ReplaceNode(classDeclarationSyntax, newSyntaxNode);
+            return await Formatter.FormatAsync(document.WithSyntaxRoot(newRoot), cancellationToken: cancellationToken).ConfigureAwait(false);
+        }
+
+        static MethodDeclarationSyntax CreateMethodDeclaration(string methodName, PackedStringArray args)
+        {
+            var returnType = SyntaxFactory.PredefinedType(SyntaxFactory.Token(SyntaxKind.VoidKeyword));
+
+            List<ParameterSyntax> parameters = [];
+            foreach (string arg in args)
+            {
+                ReadOnlySpan<char> argSpan = arg;
+                int indexOfSeparator = argSpan.IndexOf(':');
+                if (indexOfSeparator < 0)
+                {
+                    throw new InvalidOperationException($"Invalid argument format: '{arg}'. Expected format is 'name:type'.");
+                }
+
+                string name = argSpan[..indexOfSeparator].Trim().ToString();
+                string type = argSpan[(indexOfSeparator + 1)..].Trim().ToString();
+                type = NamingUtils.PascalToPascalCase(type);
+
+                var parameterName = SyntaxFactory.Identifier(name);
+                var parameterType = SyntaxFactory.ParseTypeName(type);
+
+                parameters.Add(SyntaxFactory.Parameter(parameterName).WithType(parameterType));
+            }
+
+            var parameterList = SyntaxFactory.ParameterList(SyntaxFactory.SeparatedList(parameters));
+
+            var commentTrivia = SyntaxFactory.Comment($"// {SR.DotNetEditorExtensionSourceCodePlugin_ReplaceWithMethodBody}");
+
+            var body = SyntaxFactory.Block()
+                .WithCloseBraceToken(
+                    SyntaxFactory.Token(
+                        SyntaxFactory.TriviaList(commentTrivia),
+                        SyntaxKind.CloseBraceToken,
+                        SyntaxFactory.TriviaList()
+                    )
+                );
+
+            var attributeSyntax = SyntaxFactory.Attribute(SyntaxFactory.IdentifierName("BindMethod"));
+            var attributeListSyntax = SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(attributeSyntax));
+
+            return SyntaxFactory.MethodDeclaration(returnType, methodName)
+                .AddAttributeLists(attributeListSyntax)
+                .AddModifiers(SyntaxFactory.Token(SyntaxKind.PrivateKeyword))
+                .WithParameterList(parameterList)
+                .WithBody(body)
+                .NormalizeWhitespace(elasticTrivia: true)
+                .WithLeadingTrivia(SyntaxFactory.ElasticCarriageReturnLineFeed)
+                .WithAdditionalAnnotations(Formatter.Annotation);
+        }
+    }
+
+    private bool TryParseTemplateFile(string templateFilePath, [MaybeNullWhen(false)] out ParsedTemplateFile parsedTemplateFile)
+    {
+        parsedTemplateFile = default;
+
+        if (!templateFilePath.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        ulong lastModifiedTimeUnix = FileAccess.GetModifiedTime(templateFilePath);
+        var lastModifiedTime = DateTimeOffset.FromUnixTimeSeconds((long)lastModifiedTimeUnix);
+
+        // Check if the template has already been parsed before and is cached.
+        if (_parsedTemplates.TryGetValue(templateFilePath, out parsedTemplateFile))
+        {
+            if (lastModifiedTime <= parsedTemplateFile.LastModified)
+            {
+                // The template file has not been modified since it was last parsed, so we can use the cached value.
+                return true;
+            }
+
+            // Otherwise, remove from the cache and parse it again.
+            _parsedTemplates.Remove(templateFilePath);
+            parsedTemplateFile = default;
+        }
+
+        using FileAccess templateFile = FileAccess.Open(templateFilePath, FileAccess.ModeFlags.Read);
+        if (templateFile is null)
+        {
+#if DEBUG
+            GD.PrintErr($"Failed to open template file '{templateFilePath}'.");
+#endif
+            return false;
+        }
+
+        var content = new StringBuilder();
+
+        // Parse file for meta-information and content.
+        const string MetaPrefix = "// meta-";
+        int spaceIndentSize = 4;
+        while (!templateFile.EofReached())
+        {
+            string line = templateFile.GetLine();
+            if (line.StartsWith(MetaPrefix, StringComparison.Ordinal))
+            {
+                // Store meta information.
+                line = line.Substring(MetaPrefix.Length);
+                if (line.StartsWith("name:", StringComparison.Ordinal))
+                {
+                    parsedTemplateFile.Name = line["name:".Length..].Trim();
+                }
+                else if (line.StartsWith("description:", StringComparison.Ordinal))
+                {
+                    parsedTemplateFile.Description = line["description:".Length..].Trim();
+                }
+                else if (line.StartsWith("space-indent:", StringComparison.Ordinal))
+                {
+                    string indentValue = line["space-indent:".Length..].Trim();
+                    if (int.TryParse(indentValue, out int indentSize))
+                    {
+                        if (indentSize >= 0)
+                        {
+                            spaceIndentSize = indentSize;
+                        }
+                        else
+                        {
+                            GD.PushWarning($"Template meta-space-indent needs to be a non-negative integer value. Found {indentValue}.");
+                        }
+                    }
+                    else
+                    {
+                        GD.PushWarning($"Template meta-space-indent needs to be a valid integer value. Found '{indentValue}'.");
+                    }
+                }
+            }
+            else
+            {
+                // Replace indentation.
+                int i = 0;
+                int spaceCount = 0;
+                for (; i < line.Length; i++)
+                {
+                    if (line[i] == '\t')
+                    {
+                        if (spaceCount > 0)
+                        {
+                            content.Append(new string(' ', spaceCount));
+                            spaceCount = 0;
+                        }
+                        content.Append("_TS_");
+                    }
+                    else if (line[i] == ' ')
+                    {
+                        spaceCount++;
+                        if (spaceCount == spaceIndentSize)
+                        {
+                            content.Append("_TS_");
+                            spaceCount = 0;
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                if (spaceCount > 0)
+                {
+                    content.Append(new string(' ', spaceCount));
+                }
+                content.AppendLine(line[i..]);
+            }
+        }
+
+        parsedTemplateFile.Content = content.ToString();
+        parsedTemplateFile.LastModified = lastModifiedTime;
+
+        // Cache parsed template so we don't have to do it again for the same file path.
+        _parsedTemplates[templateFilePath] = parsedTemplateFile;
+
+        return true;
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        _disposed = true;
+
+        if (disposing)
+        {
+            _workspace.Dispose();
+        }
+
+        EditorInternal.UnregisterDotNetSourceCodePlugin(this);
+        base.Dispose(disposing);
+    }
+
+    private void ThrowIfWorkspaceNotAvailable()
+    {
+        if (!_workspace.IsAvailable)
+        {
+            throw new InvalidOperationException("C# workspace is not available.");
+        }
+    }
+}

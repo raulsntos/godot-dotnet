@@ -41,6 +41,8 @@
     <PackageReference Include="JetBrains.Rider.PathLocator" Version="$(JetBrainsRiderPathLocatorVersion)" />
     <PackageReference Include="Microsoft.Build" Version="$(MicrosoftBuildVersion)" ExcludeAssets="runtime" />
     <PackageReference Include="Microsoft.Build.Locator" Version="$(MicrosoftBuildLocatorVersion)" ExcludeAssets="buildTransitive" />
+    <PackageReference Update="Microsoft.CodeAnalysis.CSharp.Workspaces" PrivateAssets="contentfiles;analyzers;build" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="$(MicrosoftCodeAnalysisWorkspacesMSBuildVersion)" />
     <PackageReference Include="Microsoft.VisualStudio.SolutionPersistence" Version="$(MicrosoftVisualStudioSolutionPersistenceVersion)" />
   </ItemGroup>
 
