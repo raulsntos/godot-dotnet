@@ -25,6 +25,7 @@ internal static partial class EditorInternal
         _status_indicator_notify_state_changed = (delegate* unmanaged[Cdecl]<void>)LoadProcAddress("status_indicator_notify_state_changed"u8);
         _status_indicator_update_severity = (delegate* unmanaged[Cdecl]<long, void>)LoadProcAddress("status_indicator_update_severity"u8);
         _status_panel_set_content = (delegate* unmanaged[Cdecl]<nint, void>)LoadProcAddress("status_panel_set_content"u8);
+        _editor_resume_startup_scene_opening = (delegate* unmanaged[Cdecl]<void>)LoadProcAddress("editor_resume_startup_scene_opening"u8);
         _get_editor_assemblies_path = (delegate* unmanaged[Cdecl]<NativeGodotString*, void>)LoadProcAddress("get_editor_assemblies_path"u8);
         _get_project_assemblies_path = (delegate* unmanaged[Cdecl]<NativeGodotString*, void>)LoadProcAddress("get_project_assemblies_path"u8);
         _get_project_output_path = (delegate* unmanaged[Cdecl]<NativeGodotString*, NativeGodotString*, void>)LoadProcAddress("get_project_output_path"u8);

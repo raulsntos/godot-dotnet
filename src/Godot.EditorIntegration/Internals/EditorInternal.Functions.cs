@@ -95,6 +95,14 @@ unsafe partial class EditorInternal
         _status_panel_set_content(content?.NativePtr ?? 0);
     }
 
+    private static delegate* unmanaged[Cdecl]<void> _editor_resume_startup_scene_opening;
+
+    public static void EditorResumeStartupSceneOpening()
+    {
+        Debug.Assert(_editor_resume_startup_scene_opening is not null);
+        _editor_resume_startup_scene_opening();
+    }
+
     private static delegate* unmanaged[Cdecl]<NativeGodotString*, void> _get_editor_assemblies_path;
 
     public static string GetEditorAssembliesPath()

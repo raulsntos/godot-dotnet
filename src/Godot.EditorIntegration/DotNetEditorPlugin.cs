@@ -243,11 +243,11 @@ internal sealed partial class DotNetEditorPlugin : EditorPlugin
 
         if (File.Exists(EditorPath.ProjectCSProjPath))
         {
-            var efs = EditorInterface.Singleton.GetResourceFilesystem();
-            efs.Connect(EditorFileSystem.SignalName.FilesystemChanged, Callable.From(RunUpgradeAssistant), (uint)ConnectFlags.OneShot);
+            RunUpgradeAssistant();
         }
         else
         {
+            EditorInternal.EditorResumeStartupSceneOpening();
             _msbuildPanel.Close();
             _toolBarBuildButton.Hide();
         }
@@ -365,6 +365,22 @@ internal sealed partial class DotNetEditorPlugin : EditorPlugin
 
     private void RunUpgradeAssistant()
     {
+        var efs = EditorInterface.Singleton.GetResourceFilesystem();
+        if (efs.IsScanning())
+        {
+            // If the filesystem is still scanning, we delay running the upgrade assistant
+            // until it's done so we know the scenes and resources are ready.
+            efs.Connect(EditorFileSystem.SignalName.FilesystemChanged, Callable.From(RunUpgradeAssistantCore), (uint)ConnectFlags.OneShot);
+        }
+        else
+        {
+            // Otherwise, we just run it directly.
+            RunUpgradeAssistantCore();
+        }
+    }
+
+    private void RunUpgradeAssistantCore()
+    {
         if (!File.Exists(EditorPath.ProjectCSProjPath))
         {
             GD.Print("No C# project file found, skipping upgrade assistant.");
@@ -399,6 +415,8 @@ internal sealed partial class DotNetEditorPlugin : EditorPlugin
             // Unregister temporary classes in reverse order.
             GodotRegistry.UnregisterClass<ResourceFormatLoaderCSharpScript>();
             GodotRegistry.UnregisterClass<CSharpScript>();
+
+            EditorInternal.EditorResumeStartupSceneOpening();
         }
     }
 
