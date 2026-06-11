@@ -115,6 +115,40 @@ internal static class ClassSpecCollector
             }
         }
 
+        // Collect shared enum constants from [BindSharedEnum] attributes.
+        foreach (var attributeData in typeSymbol.GetAttributes())
+        {
+            if (attributeData.AttributeClass?.FullQualifiedNameOmitGlobal() != KnownTypeNames.BindSharedEnumAttribute)
+            {
+                continue;
+            }
+
+            if (attributeData.ConstructorArguments.Length < 1)
+            {
+                continue;
+            }
+
+            if (attributeData.ConstructorArguments[0].Value is not INamedTypeSymbol enumTypeSymbol)
+            {
+                continue;
+            }
+
+            string? enumNameOverride = null;
+            foreach (var (key, constant) in attributeData.NamedArguments)
+            {
+                if (key == "Name")
+                {
+                    enumNameOverride = constant.Value as string;
+                }
+            }
+
+            var sharedConstantSpecs = ConstantSpecCollector.CollectShared(compilation, enumTypeSymbol, enumNameOverride, cancellationToken);
+            foreach (var constantSpec in sharedConstantSpecs)
+            {
+                constants.Add(constantSpec);
+            }
+        }
+
         // Collect property specs.
         foreach (var symbol in members)
         {

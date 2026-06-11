@@ -62,6 +62,25 @@ internal static class ConstantSpecCollector
         }
     }
 
+    public static IEnumerable<GodotConstantSpec> CollectShared(Compilation compilation, ITypeSymbol enumTypeSymbol, string? enumNameOverride = null, CancellationToken cancellationToken = default)
+    {
+        if (enumTypeSymbol.TypeKind != TypeKind.Enum)
+        {
+            yield break;
+        }
+
+        string? effectiveEnumName = enumNameOverride ?? enumTypeSymbol.Name;
+
+        bool isFlagsEnum = enumTypeSymbol.HasAttribute(KnownTypeNames.SystemFlagsAttribute);
+
+        foreach (var fieldSymbol in enumTypeSymbol.GetMembers().OfType<IFieldSymbol>())
+        {
+            fieldSymbol.TryGetAttribute(KnownTypeNames.BindConstantAttribute, out var constantAttribute);
+
+            yield return CollectCore(compilation, fieldSymbol.Name, enumTypeSymbol.Name, effectiveEnumName, isFlagsEnum, constantAttribute, cancellationToken);
+        }
+    }
+
     private static GodotConstantSpec CollectCore(Compilation compilation, string symbolName, string? enumSymbolName, string? enumNameOverride, bool isFlagsEnum, AttributeData? attribute, CancellationToken cancellationToken = default)
     {
         string? nameOverride = null;
