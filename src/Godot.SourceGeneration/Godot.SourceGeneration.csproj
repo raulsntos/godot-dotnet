@@ -16,6 +16,12 @@
   <PropertyGroup>
     <!-- Nothing in lib but that's expected. -->
     <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <!--
+      Suppress RS1038: the shared Godot.Common.CodeAnalysis code (imported below) is also used
+      by projects that require the Workspaces package, so it references it. This generator does
+      not use any Workspaces APIs, so the reference is harmless during command-line compilation.
+    -->
+    <NoWarn>$(NoWarn);RS1038</NoWarn>
     <IncludeSymbols>false</IncludeSymbols>
   </PropertyGroup>
 

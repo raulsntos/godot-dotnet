@@ -16,6 +16,12 @@
   <PropertyGroup>
     <!-- Nothing in lib but that's expected. -->
     <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <!--
+      Suppress RS1038: this project also ships code-fix providers (see CodeFixers/) which
+      require the Workspaces package. Code fixes run in the IDE where Workspaces is available,
+      so the analyzers in this assembly aren't subject to the command-line-compilation limitation.
+    -->
+    <NoWarn>$(NoWarn);RS1038</NoWarn>
     <IncludeSymbols>false</IncludeSymbols>
   </PropertyGroup>
 
