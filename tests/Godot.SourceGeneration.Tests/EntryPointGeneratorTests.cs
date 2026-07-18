@@ -32,4 +32,13 @@ public class EntryPointGeneratorTests
             [("Main.generated.cs", "MainWithInheritance.generated.cs")]
         );
     }
+
+    [Fact]
+    public async Task BaseTypesRegisteredBeforeDerivedTypesWhenDeclaredDerivedFirst()
+    {
+        await Verifier.Verify(
+            ["NodesWithInheritanceReversed.cs"],
+            [("Main.generated.cs", "MainWithInheritanceReversed.generated.cs")]
+        );
+    }
 }

@@ -34,11 +34,9 @@ internal static class ClassDBExtensions
         {
             return;
         }
-        global::Godot.Bridge.GodotRegistry.RegisterRuntimeClass<global::NS.BaseType>(global::NS.BaseType.BindMembers);
-        global::Godot.Bridge.GodotRegistry.RegisterRuntimeClass<global::NS.DerivedType>(global::NS.DerivedType.BindMembers);
-        global::Godot.Bridge.GodotRegistry.RegisterRuntimeClass<global::NS.DerivedType2>(global::NS.DerivedType2.BindMembers);
-        global::Godot.Bridge.GodotRegistry.RegisterRuntimeClass<global::NS.DerivedType3>(global::NS.DerivedType3.BindMembers);
-        global::Godot.Bridge.GodotRegistry.RegisterRuntimeClass<global::NS.HighlyDerivedType>(global::NS.HighlyDerivedType.BindMembers);
+        global::Godot.Bridge.GodotRegistry.RegisterRuntimeClass<global::NS.Mob>(global::NS.Mob.BindMembers);
+        global::Godot.Bridge.GodotRegistry.RegisterRuntimeClass<global::NS.Enemy>(global::NS.Enemy.BindMembers);
+        global::Godot.Bridge.GodotRegistry.RegisterRuntimeClass<global::NS.Bat>(global::NS.Bat.BindMembers);
     }
     internal static void DeinitializeUserTypes(global::Godot.Bridge.InitializationLevel level)
     {

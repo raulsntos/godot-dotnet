@@ -35,36 +35,32 @@ internal sealed class EntryPointGenerator : IIncrementalGenerator
             .Where(spec => spec is not null)
             .Select((spec, ct) => spec!.Value)
             .Collect()
-            // Sort for base classes to to be registered before derived classes.
+            // Sort for base classes to be registered before derived classes.
             .Select((specs, ct) =>
             {
                 Dictionary<string, GodotRegistrationSpec> specByTypeName = [];
-                Dictionary<string, int> derivedTypeCountByBaseTypeName = [];
-
                 foreach (var spec in specs)
                 {
-                    specByTypeName.Add(spec.FullyQualifiedSymbolName, spec);
-
-                    if (!derivedTypeCountByBaseTypeName.TryGetValue(spec.FullyQualifiedSymbolName, out int derivedTypeCount))
-                    {
-                        derivedTypeCountByBaseTypeName.Add(spec.FullyQualifiedSymbolName, 0);
-                        derivedTypeCount++;
-                    }
-
-                    string baseTypeName = spec.FullyQualifiedBaseSymbolName;
-                    while (specByTypeName.TryGetValue(baseTypeName, out var baseTypeNameType))
-                    {
-                        derivedTypeCountByBaseTypeName[baseTypeName] += derivedTypeCount;
-                        baseTypeName = baseTypeNameType.FullyQualifiedBaseSymbolName;
-                    }
-
-                    derivedTypeCountByBaseTypeName.TryGetValue(baseTypeName, out int oldDerivedTypeCount);
-                    derivedTypeCountByBaseTypeName[baseTypeName] = oldDerivedTypeCount + derivedTypeCount;
+                    specByTypeName[spec.FullyQualifiedSymbolName] = spec;
                 }
 
-                return specByTypeName
-                    .OrderByDescending(kvp => derivedTypeCountByBaseTypeName[kvp.Key])
-                    .Select(kvp => kvp.Value)
+                // Number of ancestors (transitively) that are also registered in this assembly.
+                // A base type therefore has a strictly lower depth than any type deriving from it,
+                // so ordering by depth guarantees base classes register before derived classes.
+                int GetRegisteredAncestorDepth(GodotRegistrationSpec spec)
+                {
+                    int depth = 0;
+                    string baseTypeName = spec.FullyQualifiedBaseSymbolName;
+                    while (specByTypeName.TryGetValue(baseTypeName, out var baseSpec))
+                    {
+                        depth++;
+                        baseTypeName = baseSpec.FullyQualifiedBaseSymbolName;
+                    }
+                    return depth;
+                }
+
+                return specs
+                    .OrderBy(GetRegisteredAncestorDepth)
                     .ToImmutableArray();
             });
 
