@@ -99,6 +99,176 @@ public class XmlDocConverterTests
     }
 
     [Fact]
+    public void CodeblockTagPreservesArraySubscripts()
+    {
+        var xmlDocConverter = new XmlDocConverter(new TypeDB());
+
+        string? actual = xmlDocConverter.Convert("""
+            [codeblock]
+            result[i] = a[i] + b[i];
+            [/codeblock]
+            """);
+
+        string expected = """
+            <summary>
+            <para><code>
+            result[i] = a[i] + b[i];
+            </code></para>
+            </summary>
+
+            """;
+
+        Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
+    }
+
+    [Fact]
+    public void CodeblockTagPreservesRecognizedInlineTags()
+    {
+        var xmlDocConverter = new XmlDocConverter(new TypeDB());
+
+        string? actual = xmlDocConverter.Convert("""
+            [codeblock]
+            x[b]y[i]z
+            [/codeblock]
+            """);
+
+        string expected = """
+            <summary>
+            <para><code>
+            x[b]y[i]z
+            </code></para>
+            </summary>
+
+            """;
+
+        Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
+    }
+
+    [Theory]
+    [InlineData("[code]a[i][/code]", "<c>a[i]</c>")]
+    [InlineData("[code]x[b]y[/code]", "<c>x[b]y</c>")]
+    public void InlineCodeTagPreservesBBCode(string input, string expected)
+    {
+        // The converter wraps the output in a <summary> and <para> tags for each line.
+        expected = $"""
+            <summary>
+            <para>{expected}</para>
+            </summary>
+
+            """;
+
+        var xmlDocConverter = new XmlDocConverter(new TypeDB());
+        string? actual = xmlDocConverter.Convert(input);
+        Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
+    }
+
+    [Fact]
+    public void CodeblocksTagKeepsCSharpAndDropsGDScript()
+    {
+        var xmlDocConverter = new XmlDocConverter(new TypeDB());
+
+        // The [gdscript] half is dropped and only the [csharp] half becomes a <code> block.
+        // The array subscripts in the C# code must be preserved literally (no <i> elements).
+        string? actual = xmlDocConverter.Convert(
+            "[codeblocks][gdscript]result[i] = gd[i];[/gdscript][csharp]result[i] = a[i];[/csharp][/codeblocks]");
+
+        string expected = """
+            <summary>
+            <para><code>result[i] = a[i];</code></para>
+            </summary>
+
+            """;
+
+        Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
+    }
+
+    [Fact]
+    public void CodeblocksTagDoesNotLeakCodeStateIntoTrailingProse()
+    {
+        var xmlDocConverter = new XmlDocConverter(new TypeDB());
+
+        // After the [codeblocks] block closes, the code state must be fully reset so the trailing
+        // prose is parsed normally: the [b] tag renders as <b>, not as literal text.
+        string? actual = xmlDocConverter.Convert("""
+            [codeblocks][csharp]x[i];[/csharp][/codeblocks]
+            See [b]bold[/b].
+            """);
+
+        string expected = """
+            <summary>
+            <para><code>x[i];</code></para>
+            <para>See <b>bold</b>.</para>
+            </summary>
+
+            """;
+
+        Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
+    }
+
+    [Fact]
+    public void TopLevelCSharpTagDoesNotDropTrailingProse()
+    {
+        var xmlDocConverter = new XmlDocConverter(new TypeDB());
+
+        // A top-level [csharp] block (not wrapped in [codeblocks]) must not leave the code state
+        // stuck: after [/csharp] closes the block, the trailing prose is parsed normally and the
+        // [b] tag renders as <b>, not dropped as if we were still inside a [codeblocks] wrapper.
+        string? actual = xmlDocConverter.Convert("""
+            [csharp]var x = 1;[/csharp]
+            See [b]docs[/b].
+            """);
+
+        string expected = """
+            <summary>
+            <para><code>var x = 1;</code></para>
+            <para>See <b>docs</b>.</para>
+            </summary>
+
+            """;
+
+        Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
+    }
+
+    [Fact]
+    public void UnclosedCSharpInCodeblocksClosesCodeElement()
+    {
+        var xmlDocConverter = new XmlDocConverter(new TypeDB());
+
+        // Malformed input: the [csharp] block is never closed with [/csharp] before [/codeblocks].
+        // The [/codeblocks] end tag must close the still-open <code> element so we don't emit
+        // unbalanced XML (a dangling <code> would produce CS1570).
+        string? actual = xmlDocConverter.Convert("[codeblocks][csharp]code[/codeblocks]");
+
+        string expected = """
+            <summary>
+            <para><code>code</code></para>
+            </summary>
+
+            """;
+
+        Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
+    }
+
+    [Fact]
+    public void CodeblockNestedInCodeblocksPreservesBody()
+    {
+        var xmlDocConverter = new XmlDocConverter(new TypeDB());
+
+        // A singular [codeblock] nested inside a [codeblocks] wrapper is an active code section,
+        // so its body must be preserved inside <code>, not dropped as non-active [codeblocks] text.
+        string? actual = xmlDocConverter.Convert("[codeblocks][codeblock]example[/codeblock][/codeblocks]");
+
+        string expected = """
+            <summary>
+            <para><code>example</code></para>
+            </summary>
+
+            """;
+
+        Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
+    }
+
+    [Fact]
     public void References()
     {
         var typeDB = new TypeDB();
