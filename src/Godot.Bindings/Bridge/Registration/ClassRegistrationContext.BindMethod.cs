@@ -36,96 +36,78 @@ partial class ClassRegistrationContext
 
         _registerBindingActions.Enqueue(() =>
         {
+            int parameterCount = methodDefinition.Parameters.Count;
+
             // Convert managed method info to the internal unmanaged type.
+            // The engine reads the pointers stored in 'methodInfoNative' when the method
+            // is registered at the end, so every value that is pointed to must be kept
+            // alive, in its own stack slot, until then. Block or loop scoped locals must
+            // not be used for these values because their stack slots could be reused,
+            // leaving dangling or aliased pointers behind.
             var methodInfoNative = new GDExtensionClassMethodInfo();
+
+            NativeGodotStringName nameNative = methodDefinition.Name.NativeValue.DangerousSelfRef;
+            methodInfoNative.name = &nameNative;
+
+            var methodFlags = GDExtensionClassMethodFlags.GDEXTENSION_METHOD_FLAGS_DEFAULT;
+            if (methodDefinition.IsStatic)
             {
-                NativeGodotStringName nameNative = methodDefinition.Name.NativeValue.DangerousSelfRef;
-                methodInfoNative.name = &nameNative;
-
-                var methodFlags = GDExtensionClassMethodFlags.GDEXTENSION_METHOD_FLAGS_DEFAULT;
-                if (methodDefinition.IsStatic)
-                {
-                    methodFlags |= GDExtensionClassMethodFlags.GDEXTENSION_METHOD_FLAG_STATIC;
-                }
-                methodInfoNative.method_flags = (uint)methodFlags;
-
-                // Return
-
-                if (methodDefinition.Return is not null)
-                {
-                    // Convert managed property info to the internal unmanaged type.
-                    GDExtensionPropertyInfo ret;
-                    {
-                        NativeGodotStringName returnNameNative = methodDefinition.Return.Name.NativeValue.DangerousSelfRef;
-                        NativeGodotStringName returnClassNameNative = (methodDefinition.Return.ClassName?.NativeValue ?? default).DangerousSelfRef;
-                        NativeGodotString hintStringNative = NativeGodotString.Create(methodDefinition.Return.HintString);
-
-                        ret = new GDExtensionPropertyInfo()
-                        {
-                            type = (GDExtensionVariantType)methodDefinition.Return.Type,
-                            name = &returnNameNative,
-
-                            hint = (uint)methodDefinition.Return.Hint,
-                            hint_string = &hintStringNative,
-                            class_name = &returnClassNameNative,
-                            usage = (uint)methodDefinition.Return.Usage,
-                        };
-                    }
-
-                    methodInfoNative.has_return_value = true;
-                    methodInfoNative.return_value_info = &ret;
-                    methodInfoNative.return_value_metadata = (GDExtensionClassMethodArgumentMetadata)methodDefinition.Return.TypeMetadata;
-                }
-
-                // Parameters
-
-                var args = stackalloc GDExtensionPropertyInfo[methodDefinition.Parameters.Count];
-                var argsMetadata = stackalloc GDExtensionClassMethodArgumentMetadata[methodDefinition.Parameters.Count];
-                var argsDefaultValues = stackalloc NativeGodotVariant*[methodDefinition.Parameters.Count];
-
-                uint optionalParameterCount = 0;
-                for (int i = 0; i < methodDefinition.Parameters.Count; i++)
-                {
-                    var parameter = methodDefinition.Parameters[i];
-
-                    if (optionalParameterCount > 0 && parameter.DefaultValue is null)
-                    {
-                        throw new InvalidOperationException(SR.InvalidOperation_MethodOptionalParametersMustAppearAfterRequiredParameters);
-                    }
-
-                    if (parameter.DefaultValue is not null)
-                    {
-                        NativeGodotVariant defaultValue = parameter.DefaultValue.Value.NativeValue.DangerousSelfRef;
-                        argsDefaultValues[optionalParameterCount++] = &defaultValue;
-                    }
-
-                    // Convert managed parameter info to the internal unmanaged type.
-                    {
-                        NativeGodotStringName parameterNameNative = parameter.Name.NativeValue.DangerousSelfRef;
-                        NativeGodotStringName parameterClassNameNative = (parameter.ClassName?.NativeValue ?? default).DangerousSelfRef;
-                        NativeGodotString hintStringNative = NativeGodotString.Create(parameter.HintString);
-
-                        args[i] = new GDExtensionPropertyInfo()
-                        {
-                            type = (GDExtensionVariantType)parameter.Type,
-                            name = &parameterNameNative,
-
-                            hint = (uint)parameter.Hint,
-                            hint_string = &hintStringNative,
-                            class_name = &parameterClassNameNative,
-                            usage = (uint)parameter.Usage,
-                        };
-                    }
-                    argsMetadata[i] = (GDExtensionClassMethodArgumentMetadata)parameter.TypeMetadata;
-                }
-
-                methodInfoNative.argument_count = (uint)methodDefinition.Parameters.Count;
-                methodInfoNative.arguments_info = args;
-                methodInfoNative.arguments_metadata = argsMetadata;
-
-                methodInfoNative.default_argument_count = optionalParameterCount;
-                methodInfoNative.default_arguments = argsDefaultValues;
+                methodFlags |= GDExtensionClassMethodFlags.GDEXTENSION_METHOD_FLAG_STATIC;
             }
+            methodInfoNative.method_flags = (uint)methodFlags;
+
+            // Return
+
+            GDExtensionPropertyInfo returnInfoNative = default;
+            NativeGodotStringName returnNameNative = default;
+            NativeGodotStringName returnClassNameNative = default;
+            NativeGodotString returnHintStringNative = default;
+
+            if (methodDefinition.Return is not null)
+            {
+                // Convert managed property info to the internal unmanaged type.
+                returnNameNative = methodDefinition.Return.Name.NativeValue.DangerousSelfRef;
+                returnClassNameNative = (methodDefinition.Return.ClassName?.NativeValue ?? default).DangerousSelfRef;
+                returnHintStringNative = NativeGodotString.Create(methodDefinition.Return.HintString);
+
+                returnInfoNative = new GDExtensionPropertyInfo()
+                {
+                    type = (GDExtensionVariantType)methodDefinition.Return.Type,
+                    name = &returnNameNative,
+
+                    hint = (uint)methodDefinition.Return.Hint,
+                    hint_string = &returnHintStringNative,
+                    class_name = &returnClassNameNative,
+                    usage = (uint)methodDefinition.Return.Usage,
+                };
+
+                methodInfoNative.has_return_value = true;
+                methodInfoNative.return_value_info = &returnInfoNative;
+                methodInfoNative.return_value_metadata = (GDExtensionClassMethodArgumentMetadata)methodDefinition.Return.TypeMetadata;
+            }
+
+            // Parameters
+
+            var args = stackalloc GDExtensionPropertyInfo[parameterCount];
+            var argsMetadata = stackalloc GDExtensionClassMethodArgumentMetadata[parameterCount];
+            var argsDefaultValues = stackalloc NativeGodotVariant*[parameterCount];
+
+            // Parallel buffers with one slot for each parameter, so the pointers stored
+            // in 'args' and 'argsDefaultValues' remain distinct and valid until the
+            // method is registered below.
+            var argsNamesNative = stackalloc NativeGodotStringName[parameterCount];
+            var argsClassNamesNative = stackalloc NativeGodotStringName[parameterCount];
+            var argsHintStringsNative = stackalloc NativeGodotString[parameterCount];
+            var argsDefaultValuesNative = stackalloc NativeGodotVariant[parameterCount];
+
+            uint optionalParameterCount = ConvertParameterInfosToNative(methodDefinition.Parameters, args, argsMetadata, argsDefaultValues, argsNamesNative, argsClassNamesNative, argsHintStringsNative, argsDefaultValuesNative);
+
+            methodInfoNative.argument_count = (uint)parameterCount;
+            methodInfoNative.arguments_info = args;
+            methodInfoNative.arguments_metadata = argsMetadata;
+
+            methodInfoNative.default_argument_count = optionalParameterCount;
+            methodInfoNative.default_arguments = argsDefaultValues;
 
             var methodGCHandle = new GCHandle<MethodDefinition>(methodDefinition);
             _registeredMethodHandles.Add(methodDefinition.Name, methodGCHandle);
@@ -138,7 +120,73 @@ partial class ClassRegistrationContext
             NativeGodotStringName classNameNative = ClassName.NativeValue.DangerousSelfRef;
 
             GodotBridge.GDExtensionInterface.classdb_register_extension_class_method(GodotBridge.LibraryPtr, &classNameNative, &methodInfoNative);
+
+            // The engine copies the data when the method is registered, so the native
+            // strings created for the conversion can be destroyed now.
+            returnHintStringNative.Dispose();
+            for (int i = 0; i < parameterCount; i++)
+            {
+                argsHintStringsNative[i].Dispose();
+            }
         });
+    }
+
+    /// <summary>
+    /// Converts the managed parameter definitions to the internal unmanaged type,
+    /// filling the buffers provided by the caller. All the buffers must have one
+    /// slot for each parameter and must be pinned or stack allocated because
+    /// <paramref name="args"/> and <paramref name="argsDefaultValues"/> store
+    /// pointers to the slots of the other buffers, which must remain valid for
+    /// as long as the converted parameter information is in use.
+    /// </summary>
+    /// <returns>The number of optional parameters (i.e.: parameters with a default value).</returns>
+    internal static unsafe uint ConvertParameterInfosToNative(List<ParameterDefinition> parameters, GDExtensionPropertyInfo* args, GDExtensionClassMethodArgumentMetadata* argsMetadata, NativeGodotVariant** argsDefaultValues, NativeGodotStringName* argsNamesNative, NativeGodotStringName* argsClassNamesNative, NativeGodotString* argsHintStringsNative, NativeGodotVariant* argsDefaultValuesNative)
+    {
+        // Validate the parameter ordering up front, before any native strings are
+        // created, so an invalid definition throws without leaking them.
+        bool seenOptionalParameter = false;
+        for (int i = 0; i < parameters.Count; i++)
+        {
+            if (parameters[i].DefaultValue is not null)
+            {
+                seenOptionalParameter = true;
+            }
+            else if (seenOptionalParameter)
+            {
+                throw new InvalidOperationException(SR.InvalidOperation_MethodOptionalParametersMustAppearAfterRequiredParameters);
+            }
+        }
+
+        uint optionalParameterCount = 0;
+        for (int i = 0; i < parameters.Count; i++)
+        {
+            var parameter = parameters[i];
+
+            if (parameter.DefaultValue is not null)
+            {
+                argsDefaultValuesNative[i] = parameter.DefaultValue.Value.NativeValue.DangerousSelfRef;
+                argsDefaultValues[optionalParameterCount++] = &argsDefaultValuesNative[i];
+            }
+
+            // Convert managed parameter info to the internal unmanaged type.
+            argsNamesNative[i] = parameter.Name.NativeValue.DangerousSelfRef;
+            argsClassNamesNative[i] = (parameter.ClassName?.NativeValue ?? default).DangerousSelfRef;
+            argsHintStringsNative[i] = NativeGodotString.Create(parameter.HintString);
+
+            args[i] = new GDExtensionPropertyInfo()
+            {
+                type = (GDExtensionVariantType)parameter.Type,
+                name = &argsNamesNative[i],
+
+                hint = (uint)parameter.Hint,
+                hint_string = &argsHintStringsNative[i],
+                class_name = &argsClassNamesNative[i],
+                usage = (uint)parameter.Usage,
+            };
+            argsMetadata[i] = (GDExtensionClassMethodArgumentMetadata)parameter.TypeMetadata;
+        }
+
+        return optionalParameterCount;
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
