@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security;
 using System.Text;
@@ -22,8 +23,15 @@ internal sealed class XmlDocConverter
     /// </summary>
     /// <param name="bbCode">Original BBCode documentation.</param>
     /// <param name="currentType">Current type to resolve member references that aren't fully qualified.</param>
+    /// <param name="parameters">
+    /// The parameter list for the member whose documentation is being converted.
+    /// Used to decide whether a <c>[param]</c> reference can be emitted as a <c>&lt;paramref&gt;</c>.
+    /// When <see langword="null"/> (e.g. for signals/events, which declare no parameters, or for
+    /// members without parameters), <c>[param]</c> references fall back to <c>&lt;c&gt;</c> to avoid
+    /// emitting a <c>&lt;paramref&gt;</c> that doesn't match any parameter (CS1734).
+    /// </param>
     /// <returns>Converted XMLDoc string.</returns>
-    public string? Convert(string? bbCode, TypeInfo? currentType = null)
+    public string? Convert(string? bbCode, TypeInfo? currentType = null, IReadOnlyList<ParameterInfo>? parameters = null)
     {
         if (string.IsNullOrEmpty(bbCode))
         {
@@ -105,9 +113,7 @@ internal sealed class XmlDocConverter
                         case "kbd":
                         {
                             scoped ReadOnlySpan<char> content = ConsumeToMatchingEndTag(ref parser);
-                            sb.Append("<c>");
-                            sb.AppendEscapedXml(content);
-                            sb.Append("</c>");
+                            AppendCode(sb, content);
                             break;
                         }
 
@@ -153,15 +159,11 @@ internal sealed class XmlDocConverter
 
                                 case "^\"\"":
                                     // Special case for an empty StringName when using GDScript syntax.
-                                    sb.Append("<c>");
-                                    sb.AppendEscapedXml("\"\"");
-                                    sb.Append("</c>");
+                                    AppendCode(sb, "\"\"");
                                     break;
 
                                 default:
-                                    sb.Append("<c>");
-                                    sb.AppendEscapedXml(content);
-                                    sb.Append("</c>");
+                                    AppendCode(sb, content);
                                     break;
                             }
                             break;
@@ -199,7 +201,7 @@ internal sealed class XmlDocConverter
                             }
 
                             // Check if this tag is one of the reference tags.
-                            if (TryAppendReference(sb, startTag, currentType))
+                            if (TryAppendReference(sb, startTag, currentType, parameters))
                             {
                                 // Successfully appended a reference for this tag,
                                 // so we can move on to the next token.
@@ -309,7 +311,7 @@ internal sealed class XmlDocConverter
         }
     }
 
-    private bool TryAppendReference(StringBuilder sb, BBCodeStartTag startTag, TypeInfo? currentType)
+    private bool TryAppendReference(StringBuilder sb, BBCodeStartTag startTag, TypeInfo? currentType, IReadOnlyList<ParameterInfo>? parameters)
     {
         // HARDCODED: Special case for '@GlobalScope' and '@GDScript' references.
         if (!startTag.HasAttributes() && startTag.TagName.StartsWith('@'))
@@ -325,14 +327,25 @@ internal sealed class XmlDocConverter
 
         if (startTag.TagName.SequenceEqual("param") && startTag.HasAttributes())
         {
-            // We'll just assume the parameter corresponds to a parameter on the current method
-            // and the name will match after converting to follow C# naming conventions.
+            // The parameter name follows C# naming conventions after converting from snake_case.
             string parameterName = startTag.EnumerateAttributes().First().ToString();
             parameterName = NamingUtils.SnakeToCamelCase(parameterName);
 
-            sb.Append("<paramref name=\"");
-            sb.Append(parameterName);
-            sb.Append("\"/>");
+            // Only emit a '<paramref>' when the enclosing member actually has a parameter by
+            // that name. Otherwise (e.g. signals/events which declare no parameters, or a typo
+            // in the engine documentation) we emit a '<c>' instead to avoid generating an
+            // invalid '<paramref>' that would trigger CS1734. This matches how upstream Godot's
+            // own C# glue renders signal parameters (see godotengine/godot#65529).
+            if (parameters is not null && ContainsParameter(parameters, parameterName))
+            {
+                sb.Append("<paramref name=\"");
+                sb.Append(parameterName);
+                sb.Append("\"/>");
+            }
+            else
+            {
+                AppendCode(sb, parameterName);
+            }
             return true;
         }
 
@@ -395,9 +408,7 @@ internal sealed class XmlDocConverter
         {
             // The reference did not have a matching C# type or member,
             // so we'll just output the engine type or member name as-is.
-            sb.Append("<c>");
-            sb.Append(reference.Value);
-            sb.Append("</c>");
+            AppendCode(sb, reference.Value);
             return true;
         }
 
@@ -528,6 +539,26 @@ internal sealed class XmlDocConverter
         }
 
         return content;
+    }
+
+    private static bool ContainsParameter(IReadOnlyList<ParameterInfo> parameters, string parameterName)
+    {
+        foreach (var parameter in parameters)
+        {
+            if (string.Equals(parameter.Name, parameterName, StringComparison.Ordinal))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static void AppendCode(StringBuilder sb, ReadOnlySpan<char> text)
+    {
+        sb.Append("<c>");
+        sb.AppendEscapedXml(text);
+        sb.Append("</c>");
     }
 }
 
