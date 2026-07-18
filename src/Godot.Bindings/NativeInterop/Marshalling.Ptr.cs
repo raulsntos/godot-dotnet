@@ -365,6 +365,14 @@ partial class Marshalling
 
         if (typeof(GodotObject).IsAssignableFrom(typeof(T)))
         {
+            if (typeof(RefCounted).IsAssignableFrom(typeof(T)))
+            {
+                // A RefCounted-typed ptrcall return slot is an engine-side Ref<T> object; assign
+                // through ref_set_object so the engine holds its own counted reference. Writing the
+                // raw pointer (as the Object* branch does) would drop the reference (use-after-free).
+                GodotObjectMarshaller.WriteUnmanagedRefCounted(destination, UnsafeAs<GodotObject?>(value));
+                return;
+            }
             GodotObjectMarshaller.WriteUnmanaged((nint*)destination, UnsafeAs<GodotObject?>(value));
             return;
         }

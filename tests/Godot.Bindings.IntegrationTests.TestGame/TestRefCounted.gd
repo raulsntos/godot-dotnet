@@ -7,7 +7,15 @@ func _ready():
 	assert_equal(refcounted1.get_reference_count(), 1)
 
 	# Test getting the reference count on the GDScript side after crossing the interop boundary.
+	# The count is 2: the C# wrapper for the object created in create_from_csharp() holds one
+	# reference, and the engine's Ref<T> that received the ptrcall return holds another. Before
+	# the reference-counting fix the return dropped the engine's reference (leaving an un-counted
+	# reference held by GDScript), so this read 1 and the object could be freed out from under it.
 	var refcounted2 = TestRefCounted.create_from_csharp()
+	assert_equal(refcounted2.get_reference_count(), 2)
+	# Disposing the C# wrapper releases only its reference; the engine's counted reference survives,
+	# so the object is still alive at count 1 (this is exactly what the fix guarantees).
+	TestRefCounted.test_dispose_refcounted(refcounted2)
 	assert_equal(refcounted2.get_reference_count(), 1)
 
 	# Test getting the reference count on the C# side after crossing the interop boundary.
