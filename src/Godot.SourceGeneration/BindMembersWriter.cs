@@ -49,6 +49,8 @@ internal static class BindMembersWriter
         sb.AppendLineNoTabs("#pragma warning restore CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.");
         sb.OpenBlock();
 
+        WriteForceCollectionMarshallingRegistration(sb, spec);
+
         WriteSetIcon(sb, spec);
 
         WriteBindConstructor(sb, spec);
@@ -302,6 +304,90 @@ internal static class BindMembersWriter
         {
             sb.AppendLine($"context.BindConstructor(() => {constructor.FullyQualifiedBuilderTypeName}.@{constructor.MethodSymbolName}());");
         }
+    }
+
+    private static void WriteForceCollectionMarshallingRegistration(IndentedStringBuilder sb, GodotClassSpec spec)
+    {
+        // GodotArray<T> and GodotDictionary<TKey, TValue> register their Variant marshalling
+        // callbacks lazily, from their static constructors. Under trimming/NativeAOT nothing
+        // guarantees those static constructors run before the members that use them are marshalled,
+        // which would otherwise result in an 'InvalidOperationException' (marshalling not supported).
+        // Force them to run here using a concrete (trim-safe) type literal, once per distinct
+        // collection type used by a bound member (property, method parameter, method return,
+        // or signal parameter).
+
+        HashSet<string> seenTypeNames = [];
+        List<string> orderedTypeNames = [];
+
+        void Collect(MarshalInfo marshalInfo)
+        {
+            string? collectionTypeName = GetLazilyRegisteredCollectionTypeName(marshalInfo);
+            if (collectionTypeName is not null && seenTypeNames.Add(collectionTypeName))
+            {
+                orderedTypeNames.Add(collectionTypeName);
+            }
+        }
+
+        foreach (var property in spec.Properties)
+        {
+            Collect(property.MarshalInfo);
+        }
+        foreach (var method in spec.Methods)
+        {
+            foreach (var parameter in method.Parameters)
+            {
+                Collect(parameter.MarshalInfo);
+            }
+            if (method.ReturnParameter is not null)
+            {
+                Collect(method.ReturnParameter.Value.MarshalInfo);
+            }
+        }
+        foreach (var signal in spec.Signals)
+        {
+            foreach (var parameter in signal.Parameters)
+            {
+                Collect(parameter.MarshalInfo);
+            }
+        }
+
+        foreach (string collectionTypeName in orderedTypeNames)
+        {
+            sb.AppendLine($"global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof({collectionTypeName}).TypeHandle);");
+        }
+    }
+
+    /// <summary>
+    /// If <paramref name="marshalInfo"/> is marshalled as a generic <c>GodotArray&lt;...&gt;</c> or
+    /// <c>GodotDictionary&lt;...&gt;</c> (the only collection types that register their marshalling
+    /// callbacks lazily), returns a type name usable in a <c>typeof</c> expression; otherwise
+    /// returns <see langword="null"/>.
+    /// </summary>
+    private static string? GetLazilyRegisteredCollectionTypeName(MarshalInfo marshalInfo)
+    {
+        if (marshalInfo.VariantType is not (VariantType.Array or VariantType.Dictionary))
+        {
+            // Only Array/Dictionary Variant types are marshalled as GodotArray<...>/GodotDictionary<...>.
+            return null;
+        }
+
+        // The non-generic GodotArray/GodotDictionary are core Variant types that register their
+        // marshalling eagerly, so only the generic variants (with type arguments) need to be forced.
+        const string GodotArrayPrefix = "global::" + KnownTypeNames.GodotArray + "<";
+        const string GodotDictionaryPrefix = "global::" + KnownTypeNames.GodotDictionary + "<";
+
+        string marshalAsTypeName = marshalInfo.FullyQualifiedMarshalAsTypeName;
+        if (!marshalAsTypeName.StartsWith(GodotArrayPrefix, StringComparison.Ordinal)
+         && !marshalAsTypeName.StartsWith(GodotDictionaryPrefix, StringComparison.Ordinal))
+        {
+            return null;
+        }
+
+        // Strip nullable reference type annotations ('?'): 'typeof' rejects them, and e.g.
+        // 'GodotArray<GodotObject?>' and 'GodotArray<GodotObject>' are the same runtime type (so
+        // this also dedupes them). Nullable value types (e.g. 'int?') can't be Variant-marshalable
+        // collection type arguments, so removing every '?' is safe for these type names.
+        return marshalAsTypeName.Replace("?", "");
     }
 
     private static void WriteBindMembers(IndentedStringBuilder sb, GodotClassSpec spec)

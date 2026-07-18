@@ -26,6 +26,7 @@ partial class @NodeWithNullableProperties
     internal static void BindMembers(global::Godot.Bridge.ClassRegistrationContext context)
 #pragma warning restore CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.
     {
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotArray<global::Godot.GodotObject>).TypeHandle);
         context.BindConstructor(() => new global::NS.NodeWithNullableProperties());
         context.BindProperty(new global::Godot.Bridge.PropertyDefinition(PropertyName.@MyNullableString, global::Godot.VariantType.String)
             {
