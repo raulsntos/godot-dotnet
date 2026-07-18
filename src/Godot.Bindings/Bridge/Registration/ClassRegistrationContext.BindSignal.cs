@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Godot.NativeInterop;
 
 namespace Godot.Bridge;
@@ -29,38 +30,96 @@ partial class ClassRegistrationContext
 
         _registerBindingActions.Enqueue(() =>
         {
+            int parameterCount = signalDefinition.Parameters.Count;
+
             // Convert managed signal info to the internal unmanaged type.
-            Span<GDExtensionPropertyInfo> parameters = signalDefinition.Parameters.Count <= ParameterSpanThreshold
-                ? stackalloc GDExtensionPropertyInfo[ParameterSpanThreshold].Slice(0, signalDefinition.Parameters.Count)
-                : new GDExtensionPropertyInfo[signalDefinition.Parameters.Count];
-            for (int i = 0; i < parameters.Length; i++)
+            Span<GDExtensionPropertyInfo> parameters = parameterCount <= ParameterSpanThreshold
+                ? stackalloc GDExtensionPropertyInfo[ParameterSpanThreshold].Slice(0, parameterCount)
+                : new GDExtensionPropertyInfo[parameterCount];
+
+            // Parallel buffers with one slot for each parameter, so the pointers stored
+            // in 'parameters' remain distinct and valid until the signal is registered
+            // below. Loop scoped locals must not be used for these values because their
+            // stack slots would be reused by every iteration, leaving all the pointers
+            // aliasing the same address. The slot types are ref structs, so the buffers
+            // can't use managed arrays like 'parameters' does; when the parameter count
+            // exceeds 'ParameterSpanThreshold' allocate the buffers from native memory
+            // instead, which doesn't require pinning.
+            var parameterNamesStackBuffer = stackalloc NativeGodotStringName[ParameterSpanThreshold];
+            var parameterClassNamesStackBuffer = stackalloc NativeGodotStringName[ParameterSpanThreshold];
+            var parameterHintStringsStackBuffer = stackalloc NativeGodotString[ParameterSpanThreshold];
+
+            NativeGodotStringName* parameterNamesNative = parameterNamesStackBuffer;
+            NativeGodotStringName* parameterClassNamesNative = parameterClassNamesStackBuffer;
+            NativeGodotString* parameterHintStringsNative = parameterHintStringsStackBuffer;
+
+            if (parameterCount > ParameterSpanThreshold)
             {
-                var parameterDefinition = signalDefinition.Parameters[i];
-
-                NativeGodotStringName parameterNameNative = parameterDefinition.Name.NativeValue.DangerousSelfRef;
-                NativeGodotStringName parameterClassNameNative = (parameterDefinition.ClassName?.NativeValue ?? default).DangerousSelfRef;
-                NativeGodotString hintStringNative = NativeGodotString.Create(parameterDefinition.HintString);
-
-                parameters[i] = new GDExtensionPropertyInfo()
-                {
-                    type = (GDExtensionVariantType)parameterDefinition.Type,
-                    name = &parameterNameNative,
-
-                    hint = (uint)parameterDefinition.Hint,
-                    hint_string = &hintStringNative,
-                    class_name = &parameterClassNameNative,
-                    usage = (uint)parameterDefinition.Usage,
-                };
+                parameterNamesNative = (NativeGodotStringName*)NativeMemory.Alloc((nuint)parameterCount, (nuint)sizeof(NativeGodotStringName));
+                parameterClassNamesNative = (NativeGodotStringName*)NativeMemory.Alloc((nuint)parameterCount, (nuint)sizeof(NativeGodotStringName));
+                parameterHintStringsNative = (NativeGodotString*)NativeMemory.Alloc((nuint)parameterCount, (nuint)sizeof(NativeGodotString));
             }
 
-            NativeGodotStringName signalNameNative = signalDefinition.Name.NativeValue.DangerousSelfRef;
-
-            NativeGodotStringName classNameNative = ClassName.NativeValue.DangerousSelfRef;
-
-            fixed (GDExtensionPropertyInfo* parametersPtr = parameters)
+            try
             {
-                GodotBridge.GDExtensionInterface.classdb_register_extension_class_signal(GodotBridge.LibraryPtr, &classNameNative, &signalNameNative, parametersPtr, parameters.Length);
+                fixed (GDExtensionPropertyInfo* parametersPtr = parameters)
+                {
+                    ConvertSignalParameterInfosToNative(signalDefinition.Parameters, parametersPtr, parameterNamesNative, parameterClassNamesNative, parameterHintStringsNative);
+
+                    NativeGodotStringName signalNameNative = signalDefinition.Name.NativeValue.DangerousSelfRef;
+
+                    NativeGodotStringName classNameNative = ClassName.NativeValue.DangerousSelfRef;
+
+                    GodotBridge.GDExtensionInterface.classdb_register_extension_class_signal(GodotBridge.LibraryPtr, &classNameNative, &signalNameNative, parametersPtr, parameterCount);
+
+                    // The engine copies the data when the signal is registered, so the native
+                    // strings created for the conversion can be destroyed now.
+                    for (int i = 0; i < parameterCount; i++)
+                    {
+                        parameterHintStringsNative[i].Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (parameterCount > ParameterSpanThreshold)
+                {
+                    NativeMemory.Free(parameterNamesNative);
+                    NativeMemory.Free(parameterClassNamesNative);
+                    NativeMemory.Free(parameterHintStringsNative);
+                }
             }
         });
+    }
+
+    /// <summary>
+    /// Converts the managed parameter definitions to the internal unmanaged type,
+    /// filling the buffers provided by the caller. All the buffers must have one
+    /// slot for each parameter and must be pinned or stack allocated because
+    /// <paramref name="parameters"/> stores pointers to the slots of the other
+    /// buffers, which must remain valid for as long as the converted parameter
+    /// information is in use.
+    /// </summary>
+    internal static unsafe void ConvertSignalParameterInfosToNative(List<ParameterDefinition> parameterDefinitions, GDExtensionPropertyInfo* parameters, NativeGodotStringName* parameterNamesNative, NativeGodotStringName* parameterClassNamesNative, NativeGodotString* parameterHintStringsNative)
+    {
+        for (int i = 0; i < parameterDefinitions.Count; i++)
+        {
+            var parameterDefinition = parameterDefinitions[i];
+
+            parameterNamesNative[i] = parameterDefinition.Name.NativeValue.DangerousSelfRef;
+            parameterClassNamesNative[i] = (parameterDefinition.ClassName?.NativeValue ?? default).DangerousSelfRef;
+            parameterHintStringsNative[i] = NativeGodotString.Create(parameterDefinition.HintString);
+
+            parameters[i] = new GDExtensionPropertyInfo()
+            {
+                type = (GDExtensionVariantType)parameterDefinition.Type,
+                name = &parameterNamesNative[i],
+
+                hint = (uint)parameterDefinition.Hint,
+                hint_string = &parameterHintStringsNative[i],
+                class_name = &parameterClassNamesNative[i],
+                usage = (uint)parameterDefinition.Usage,
+            };
+        }
     }
 }
