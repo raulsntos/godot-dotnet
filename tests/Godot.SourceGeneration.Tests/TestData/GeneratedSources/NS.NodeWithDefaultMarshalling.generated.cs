@@ -102,6 +102,35 @@ partial class @NodeWithDefaultMarshalling
     internal static void BindMembers(global::Godot.Bridge.ClassRegistrationContext context)
 #pragma warning restore CS0108 // Method might already be defined higher in the hierarchy, that's not an issue.
     {
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotArray<byte>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotArray<int>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotArray<long>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotArray<float>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotArray<double>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotArray<string>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotArray<global::NS.NodeWithDefaultMarshalling.MyEnum>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotArray<global::NS.NodeWithDefaultMarshalling.MyFlagsEnum>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotArray<global::Godot.Variant>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotArray<global::Godot.GodotObject>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotDictionary<int, int>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotDictionary<int, byte>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotDictionary<int, long>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotDictionary<int, float>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotDictionary<int, double>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotDictionary<int, string>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotDictionary<int, global::NS.NodeWithDefaultMarshalling.MyEnum>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotDictionary<int, global::NS.NodeWithDefaultMarshalling.MyFlagsEnum>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotDictionary<int, global::Godot.Variant>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotDictionary<int, global::Godot.GodotObject>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotDictionary<byte, int>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotDictionary<long, int>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotDictionary<float, int>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotDictionary<double, int>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotDictionary<string, int>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotDictionary<global::NS.NodeWithDefaultMarshalling.MyEnum, int>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotDictionary<global::NS.NodeWithDefaultMarshalling.MyFlagsEnum, int>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotDictionary<global::Godot.Variant, int>).TypeHandle);
+        global::System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(global::Godot.Collections.GodotDictionary<global::Godot.GodotObject, int>).TypeHandle);
         context.BindConstructor(() => new global::NS.NodeWithDefaultMarshalling());
         context.BindProperty(new global::Godot.Bridge.PropertyDefinition(PropertyName.@PropertyByte, global::Godot.VariantType.Int, global::Godot.Bridge.VariantTypeMetadata.Byte)
             {

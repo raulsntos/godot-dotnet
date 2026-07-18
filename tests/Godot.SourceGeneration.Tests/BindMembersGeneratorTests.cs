@@ -124,6 +124,18 @@ public class BindMembersGeneratorTests
     }
 
     [Fact]
+    public async Task CollectionMarshalling()
+    {
+        // Regression test for godot-dotnet#36: the generated BindMembers must force the static
+        // constructor of every distinct generic GodotArray<...>/GodotDictionary<...> used by a
+        // bound member (so their lazy marshalling registration runs under trimming/NativeAOT).
+        await Verifier.Verify(
+            ["NodeWithCollectionMarshalling.cs"],
+            ["NS.NodeWithCollectionMarshalling.generated.cs"]
+        );
+    }
+
+    [Fact]
     public async Task NestedNamespaces()
     {
         await Verifier.Verify(
