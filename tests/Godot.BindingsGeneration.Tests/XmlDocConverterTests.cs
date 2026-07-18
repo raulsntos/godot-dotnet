@@ -99,6 +99,63 @@ public class XmlDocConverterTests
     }
 
     [Fact]
+    public void ParamReferenceWithValidParameterNameEmitsParamref()
+    {
+        var xmlDocConverter = new XmlDocConverter(new TypeDB());
+
+        // The parameter 'some_arg' converts to 'someArg' which is a valid parameter,
+        // so it should be emitted as a '<paramref>'.
+        string? actual = xmlDocConverter.Convert("[param some_arg]", parameters: [new ParameterInfo("someArg", KnownTypes.SystemInt32)]);
+
+        string expected = """
+            <summary>
+            <para><paramref name="someArg"/></para>
+            </summary>
+
+            """;
+
+        Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
+    }
+
+    [Fact]
+    public void ParamReferenceWithUnknownParameterNameEmitsCode()
+    {
+        var xmlDocConverter = new XmlDocConverter(new TypeDB());
+
+        // The parameter 'some_arg' converts to 'someArg' which is NOT in the valid set,
+        // so it should fall back to '<c>' instead of emitting an invalid '<paramref>'.
+        string? actual = xmlDocConverter.Convert("[param some_arg]", parameters: []);
+
+        string expected = """
+            <summary>
+            <para><c>someArg</c></para>
+            </summary>
+
+            """;
+
+        Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
+    }
+
+    [Fact]
+    public void ParamReferenceWithoutValidParameterNamesEmitsCode()
+    {
+        var xmlDocConverter = new XmlDocConverter(new TypeDB());
+
+        // Signals (C# events) declare no parameters and pass no valid set, so the
+        // '[param]' reference should collapse to '<c>' rather than an invalid '<paramref>'.
+        string? actual = xmlDocConverter.Convert("[param some_arg]", parameters: null);
+
+        string expected = """
+            <summary>
+            <para><c>someArg</c></para>
+            </summary>
+
+            """;
+
+        Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
+    }
+
+    [Fact]
     public void References()
     {
         var typeDB = new TypeDB();

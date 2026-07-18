@@ -148,7 +148,9 @@ internal sealed partial class BindingsData
             {
                 if (!string.IsNullOrEmpty(constructor.Documentation))
                 {
-                    constructor.Documentation = converter.Convert(constructor.Documentation, currentType);
+                    // Pass the constructor's parameters so '[param]' references can be
+                    // resolved to '<paramref>' only when they match an actual parameter.
+                    constructor.Documentation = converter.Convert(constructor.Documentation, currentType, constructor.Parameters);
                 }
             }
 
@@ -156,7 +158,9 @@ internal sealed partial class BindingsData
             {
                 if (!string.IsNullOrEmpty(method.Documentation))
                 {
-                    method.Documentation = converter.Convert(method.Documentation, currentType);
+                    // Pass the method's parameters so '[param]' references can be
+                    // resolved to '<paramref>' only when they match an actual parameter.
+                    method.Documentation = converter.Convert(method.Documentation, currentType, method.Parameters);
                 }
             }
 
