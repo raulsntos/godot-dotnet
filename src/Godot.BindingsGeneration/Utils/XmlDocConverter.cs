@@ -44,36 +44,46 @@ internal sealed class XmlDocConverter
             switch (parser.TokenType)
             {
                 case BBCodeTokenType.Text:
+                    if (inCodeTag)
+                    {
+                        // Inside a [code]/[codeblock]/[csharp] block, preserve the text exactly as-is.
+                        sb.AppendEscapedXml(parser.ValueSpan);
+                        break;
+                    }
+
                     if (inCodeBlocksTag)
                     {
-                        // We are inside a [codeblocks] tag, ignore all text until we find
-                        // the end tag [/codeblocks] or the [csharp][/csharp] tags.
+                        // Inside a [codeblocks] wrapper but not its active code section (e.g. the
+                        // [gdscript] block); ignore the text.
                         continue;
                     }
 
+                    // Normal prose: split into paragraphs.
                     ReadOnlySpan<char> textSpan = parser.ValueSpan;
-                    if (inCodeTag)
+                    int newLineIndex;
+                    while ((newLineIndex = textSpan.IndexOf('\n')) != -1)
                     {
-                        // We are inside a [code] or [csharp] tag, preserve the text exactly as-is.
-                        sb.AppendEscapedXml(textSpan);
+                        sb.AppendEscapedXml(textSpan.Slice(0, newLineIndex));
+                        sb.AppendLine("</para>");
+                        sb.Append("<para>");
+                        textSpan = textSpan.Slice(newLineIndex + 1);
                     }
-                    else
-                    {
-                        // We are outside of a [code] or [csharp] tag, so we need to split the text into paragraphs.
-                        int newLineIndex;
-                        while ((newLineIndex = textSpan.IndexOf('\n')) != -1)
-                        {
-                            sb.AppendEscapedXml(textSpan.Slice(0, newLineIndex));
-                            sb.AppendLine("</para>");
-                            sb.Append("<para>");
-                            textSpan = textSpan.Slice(newLineIndex + 1);
-                        }
-                        sb.AppendEscapedXml(textSpan);
-                    }
+                    sb.AppendEscapedXml(textSpan);
                     break;
 
                 case BBCodeTokenType.StartTag:
                     var startTag = parser.GetStartTag();
+
+                    // When we're inside a code context, recognized inline tags (e.g. [b], [i], [url])
+                    // must be preserved as literal text instead of being emitted as XML elements.
+                    // Otherwise an array subscript like 'a[i]' would emit a stray <i> element and
+                    // produce malformed XML doc comments (CS1570). Only the tags that manage the code
+                    // state fall through to the switch below so the block can still be opened/closed.
+                    if (TryHandleTagInCodeContext(sb, startTag.TagName, parser.ValueSpan, inCodeTag, inCodeBlocksTag))
+                    {
+                        continue;
+                    }
+
                     switch (startTag.TagName)
                     {
                         case "b":
@@ -178,26 +188,10 @@ internal sealed class XmlDocConverter
 
                         case "csharp":
                             sb.Append("<code>");
-                            inCodeBlocksTag = false;
                             inCodeTag = true;
                             break;
 
                         default:
-                            if (inCodeBlocksTag)
-                            {
-                                // We are inside a [codeblocks] tag, ignore all text until we find
-                                // the end tag [/codeblocks] or the [csharp][/csharp] tags.
-                                continue;
-                            }
-
-                            if (inCodeTag)
-                            {
-                                // We are inside a [codeblock] or [csharp] tag,
-                                // preserve the text exactly as-is, including unrecognized tags.
-                                sb.AppendEscapedXml(parser.ValueSpan);
-                                continue;
-                            }
-
                             // Check if this tag is one of the reference tags.
                             if (TryAppendReference(sb, startTag, currentType))
                             {
@@ -217,6 +211,16 @@ internal sealed class XmlDocConverter
                     // We only need to check for the end tags that aren't self-closing.
                     // We also consume some end tags in the StartTag case, so those won't show up here either.
                     var endTag = parser.GetEndTag();
+
+                    // Mirror the StartTag handling: inside a code context, recognized inline end tags
+                    // (e.g. [/b], [/i]) must be preserved as literal text instead of being emitted as
+                    // XML elements. Only the tags that manage the code state fall through to the switch
+                    // below so the code block can still be closed correctly.
+                    if (TryHandleTagInCodeContext(sb, endTag.TagName, parser.ValueSpan, inCodeTag, inCodeBlocksTag))
+                    {
+                        continue;
+                    }
+
                     switch (endTag.TagName)
                     {
                         case "b":
@@ -247,21 +251,21 @@ internal sealed class XmlDocConverter
 
                         case "codeblocks":
                             inCodeBlocksTag = false;
+                            if (inCodeTag)
+                            {
+                                // A [csharp]/[codeblock] block was left open (malformed input); close its
+                                // <code> element so we don't emit unbalanced XML.
+                                sb.Append("</code>");
+                                inCodeTag = false;
+                            }
                             break;
 
                         case "csharp":
                             sb.Append("</code>");
-                            inCodeBlocksTag = true;
+                            inCodeTag = false;
                             break;
 
                         default:
-                            if (inCodeBlocksTag)
-                            {
-                                // We are inside a [codeblocks] tag, ignore all text until we find
-                                // the end tag [/codeblocks] or the [csharp][/csharp] tags.
-                                continue;
-                            }
-
                             // Unrecognized end tag, just output the raw text.
                             sb.AppendEscapedXml(parser.ValueSpan);
                             break;
@@ -273,6 +277,39 @@ internal sealed class XmlDocConverter
         sb.AppendLine("</para>");
         sb.AppendLine("</summary>");
         return sb.ToString();
+    }
+
+    private static bool IsCodeStateTag(ReadOnlySpan<char> tagName) => tagName switch
+    {
+        // These tags open or close a code context, so they must always be handled (to emit or
+        // close the <code> element and toggle the state flags) even while we're inside a code
+        // context passing every other tag through as literal text.
+        "codeblock" => true,
+        "codeblocks" => true,
+        "csharp" => true,
+        _ => false,
+    };
+
+    /// <summary>
+    /// Handles a tag encountered while inside a code context. Recognized tags are preserved as
+    /// literal text inside a [code]/[codeblock]/[csharp] block, or ignored inside the non-active
+    /// section of a [codeblocks] block. Returns <see langword="true"/> if the tag was handled and
+    /// the caller should skip its normal processing.
+    /// </summary>
+    private static bool TryHandleTagInCodeContext(StringBuilder sb, ReadOnlySpan<char> tagName, ReadOnlySpan<char> rawTag, bool inCodeTag, bool inCodeBlocksTag)
+    {
+        if ((!inCodeTag && !inCodeBlocksTag) || IsCodeStateTag(tagName))
+        {
+            return false;
+        }
+
+        if (inCodeTag)
+        {
+            // Inside a code block: preserve the tag as literal text.
+            sb.AppendEscapedXml(rawTag);
+        }
+        // else: inside a [codeblocks] wrapper but not its active code section -> ignore.
+        return true;
     }
 
     private ref struct Reference
