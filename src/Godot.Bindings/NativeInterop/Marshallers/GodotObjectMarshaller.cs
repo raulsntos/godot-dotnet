@@ -104,6 +104,26 @@ internal unsafe class GodotObjectMarshaller
         *destination = GodotObject.GetNativePtr(value);
     }
 
+    /// <summary>
+    /// Writes a <see cref="RefCounted"/>-derived return value into an engine-side <c>Ref&lt;T&gt;</c>
+    /// slot for a ptrcall return. Unlike <see cref="WriteUnmanaged(nint*, GodotObject?)"/> (which
+    /// writes a raw object pointer, correct for <c>Object*</c> slots and for encoding arguments), a
+    /// <c>Ref&lt;T&gt;</c> return slot must be populated through <c>ref_set_object</c> so the engine
+    /// takes its own counted reference; writing the raw pointer would leave the engine with an
+    /// un-counted reference and free the object once the managed reference is released
+    /// (use-after-free). Mirrors godot-cpp's <c>PtrToArg&lt;Ref&lt;T&gt;&gt;::encode</c>.
+    /// </summary>
+    public static void WriteUnmanagedRefCounted(void* destination, GodotObject? value)
+    {
+        nint nativePtr = GodotObject.GetNativePtr(value);
+        if (nativePtr == 0)
+        {
+            // The engine's return slot starts as an unset (null) Ref<T>; leave it for a null return.
+            return;
+        }
+        GodotBridge.GDExtensionInterface.ref_set_object(destination, (void*)nativePtr);
+    }
+
     public static nint* ConvertToUnmanaged(GodotObject? value)
     {
         nint* ptr = (nint*)NativeMemory.Alloc((nuint)sizeof(nint));
