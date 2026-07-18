@@ -208,4 +208,27 @@ public class XmlDocConverterTests
 
         Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
     }
+
+    [Fact]
+    public void ReferencesGlobalMemberMappingWithSignatureIsEmittedVerbatim()
+    {
+        // Global member mappings may point at overloaded C# helpers (e.g. Mathf.Abs(int/float/double)).
+        // In that case the mapped value already contains a parameter signature so the emitted
+        // <see cref="..."/> resolves to a single overload instead of triggering CS0419.
+        var typeDB = new TypeDB();
+        var xmlDocConverter = new XmlDocConverter(typeDB);
+
+        typeDB.RegisterGlobalMemberMapping("@GlobalScope.abs", "global::Godot.Mathf.Abs(float)");
+
+        string? actual = xmlDocConverter.Convert("[method @GlobalScope.abs]");
+
+        string expected = """
+            <summary>
+            <para><see cref="global::Godot.Mathf.Abs(float)"/></para>
+            </summary>
+
+            """;
+
+        Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
+    }
 }
